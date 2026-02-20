@@ -30,13 +30,12 @@
             --design-bg:       #f5f3ff;
             --design-border:   #ddd6fe;
 
-            /* 마감일 상태 색상 */
-            --due-safe:    #059669;
-            --due-safe-bg: #ecfdf5;
-            --due-warn:    #d97706;
-            --due-warn-bg: #fffbeb;
-            --due-over:    #dc2626;
-            --due-over-bg: #fef2f2;
+            --due-safe:    #059669; --due-safe-bg: #ecfdf5;
+            --due-warn:    #d97706; --due-warn-bg: #fffbeb;
+            --due-over:    #dc2626; --due-over-bg: #fef2f2;
+
+            --status-progress-color: #2563eb; --status-progress-bg: #eff6ff;
+            --status-requested-color: #d97706; --status-requested-bg: #fffbeb;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -74,13 +73,10 @@
         }
 
         .logo-icon {
-            width: 28px;
-            height: 28px;
+            width: 28px; height: 28px;
             background: var(--text);
             border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
         }
 
         .btn-new {
@@ -98,13 +94,8 @@
             cursor: pointer;
             text-decoration: none;
             transition: background 0.15s, transform 0.15s;
-            letter-spacing: -0.2px;
         }
-        .btn-new:hover {
-            background: #374151;
-            color: #fff;
-            transform: translateY(-1px);
-        }
+        .btn-new:hover { background: #374151; color: #fff; transform: translateY(-1px); }
 
         /* ── Page top ── */
         .page-top {
@@ -113,38 +104,22 @@
             align-items: flex-end;
             justify-content: space-between;
         }
-
-        .page-title {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            margin-bottom: 4px;
-        }
-
-        .page-meta {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
+        .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+        .page-meta  { font-size: 13px; color: var(--text-muted); }
 
         .view-tabs {
-            display: flex;
-            gap: 2px;
+            display: flex; gap: 2px;
             background: var(--border-soft);
-            padding: 3px;
-            border-radius: 8px;
+            padding: 3px; border-radius: 8px;
         }
         .view-tab {
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-sub);
-            cursor: pointer;
+            padding: 5px 12px; border-radius: 6px;
+            font-size: 12px; font-weight: 500;
+            color: var(--text-sub); cursor: pointer;
             transition: all 0.15s;
         }
         .view-tab.active {
-            background: white;
-            color: var(--text);
+            background: white; color: var(--text);
             box-shadow: 0 1px 3px rgba(0,0,0,0.08);
         }
 
@@ -169,19 +144,13 @@
         .col-header {
             padding: 14px 16px 12px;
             border-bottom: 1px solid var(--border-soft);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: flex; align-items: center; gap: 8px;
         }
 
         .team-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 3px 9px;
-            border-radius: 5px;
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12px; font-weight: 600;
+            padding: 3px 9px; border-radius: 5px;
         }
         .team-dot { width: 7px; height: 7px; border-radius: 50%; }
 
@@ -194,8 +163,7 @@
 
         .col-count {
             margin-left: auto;
-            font-size: 12px;
-            font-weight: 500;
+            font-size: 12px; font-weight: 500;
             color: var(--text-muted);
             background: var(--bg);
             padding: 2px 8px;
@@ -205,10 +173,8 @@
 
         .col-body {
             padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-height: 180px;
+            display: flex; flex-direction: column;
+            gap: 8px; min-height: 180px;
         }
 
         /* ── Card ── */
@@ -222,6 +188,9 @@
                         transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
                         border-color 0.18s ease;
         }
+        /* COMPLETED는 JS가 숨김 처리 */
+        .board-card[data-status="COMPLETED"] { display: none; }
+
         .board-card.is-hovered {
             transform: scale(1.025) translateY(-2px);
             box-shadow: 0 8px 24px rgba(0,0,0,0.09);
@@ -229,121 +198,95 @@
         }
 
         .card-team-line {
-            width: 100%;
-            height: 3px;
-            border-radius: 2px;
-            margin-bottom: 10px;
+            width: 100%; height: 3px;
+            border-radius: 2px; margin-bottom: 10px;
         }
         .col-backend  .card-team-line { background: var(--backend-color);  opacity: 0.2; }
         .col-frontend .card-team-line { background: var(--frontend-color); opacity: 0.2; }
         .col-design   .card-team-line { background: var(--design-color);   opacity: 0.2; }
 
-        /* 제목 + 마감일 한 줄 */
+        /* 제목 행 */
         .card-top {
-            display: flex;
-            align-items: flex-start;
+            display: flex; align-items: flex-start;
             justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 6px;
+            gap: 8px; margin-bottom: 6px;
         }
 
         .card-title {
-            font-weight: 600;
-            font-size: 13.5px;
-            line-height: 1.45;
-            color: var(--text);
-            letter-spacing: -0.2px;
-            flex: 1;
+            font-weight: 600; font-size: 13.5px;
+            line-height: 1.45; color: var(--text);
+            letter-spacing: -0.2px; flex: 1;
         }
 
         /* 마감일 칩 */
         .due-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 7px;
-            border-radius: 5px;
-            white-space: nowrap;
-            flex-shrink: 0;
-            letter-spacing: -0.1px;
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 11px; font-weight: 600;
+            padding: 3px 7px; border-radius: 5px;
+            white-space: nowrap; flex-shrink: 0;
         }
         .due-chip svg { width: 10px; height: 10px; }
-
-        /* 상태별 색상 — JS가 클래스 붙여줌 */
         .due-chip.safe { background: var(--due-safe-bg); color: var(--due-safe); }
         .due-chip.warn { background: var(--due-warn-bg); color: var(--due-warn); }
         .due-chip.over { background: var(--due-over-bg); color: var(--due-over); }
-        .due-chip.none { background: var(--bg);          color: var(--text-muted); border: 1px solid var(--border); }
+        .due-chip.none { background: var(--bg); color: var(--text-muted); border: 1px solid var(--border); }
 
         .card-content {
-            font-size: 12.5px;
-            color: var(--text-sub);
-            line-height: 1.55;
-            margin-bottom: 12px;
+            font-size: 12.5px; color: var(--text-sub);
+            line-height: 1.55; margin-bottom: 12px;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2; -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
+        /* 상태 + 작성자 + 날짜 푸터 */
         .card-footer {
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center;
             justify-content: space-between;
             padding-top: 10px;
             border-top: 1px solid var(--border-soft);
+            gap: 8px;
         }
 
+        .card-left { display: flex; align-items: center; gap: 8px; }
+
+        /* status 칩 */
+        .status-chip {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 11px; font-weight: 600;
+            padding: 2px 7px; border-radius: 4px;
+            white-space: nowrap;
+        }
+        .status-chip.progress   { background: var(--status-progress-bg);   color: var(--status-progress-color); }
+        .status-chip.requested  { background: var(--status-requested-bg);  color: var(--status-requested-color); }
+
         .card-writer {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-sub);
-            font-weight: 500;
+            display: flex; align-items: center; gap: 5px;
+            font-size: 12px; color: var(--text-sub); font-weight: 500;
         }
 
         .avatar {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+            width: 20px; height: 20px; border-radius: 50%;
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 700;
-            color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 700; color: white;
         }
 
-        .card-created {
-            font-size: 11.5px;
-            color: var(--text-muted);
-        }
+        .card-date { font-size: 11.5px; color: var(--text-muted); }
 
         .empty-col {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
             padding: 36px 20px;
-            color: var(--text-muted);
-            font-size: 12.5px;
-            gap: 6px;
-            text-align: center;
+            color: var(--text-muted); font-size: 12.5px;
+            gap: 6px; text-align: center;
         }
         .empty-icon {
-            width: 36px;
-            height: 36px;
+            width: 36px; height: 36px;
             border: 1.5px dashed var(--border);
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            margin-bottom: 4px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; margin-bottom: 4px;
         }
     </style>
 </head>
@@ -361,7 +304,7 @@
         </div>
         Team Board
     </div>
-    <a href="/board/new" class="btn-new">
+    <a href="/post/new" class="btn-new">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
         </svg>
@@ -372,7 +315,11 @@
 <div class="page-top">
     <div>
         <div class="page-title">팀별 작업 현황</div>
-        <div class="page-meta" th:text="'전체 ' + ${#lists.size(boardList)} + '개의 작업 · 모든 팀원이 조회 가능'">전체 0개의 작업</div>
+        <!--
+            postList에서 COMPLETED 제외한 수를 subtotal로 Controller에서 넘겨주거나,
+            간단하게 전체 수만 표시해도 됩니다.
+        -->
+        <div class="page-meta" th:text="'전체 ' + ${#lists.size(postList)} + '개의 작업 · 완료 승인된 항목은 숨김 처리됩니다'">전체 0개</div>
     </div>
     <div class="view-tabs">
         <div class="view-tab active">보드</div>
@@ -383,56 +330,58 @@
 <div class="kanban-wrap">
     <div class="row g-3">
 
-        <!-- Backend팀 — 모든 게시글 -->
+        <!-- ── Backend팀 (boardId=1) ── -->
         <div class="col-12 col-md-4">
             <div class="kanban-col col-backend">
                 <div class="col-header">
                     <span class="team-badge"><span class="team-dot"></span>Backend팀</span>
-                    <span class="col-count" th:text="${#lists.size(boardList)} + '개'">0개</span>
+                    <span class="col-count" id="count-backend">0개</span>
                 </div>
-                <div class="col-body">
+                <div class="col-body" id="body-backend">
 
-                    <div class="empty-col" th:if="${#lists.isEmpty(boardList)}">
+                    <div class="empty-col" th:if="${#lists.isEmpty(postList)}">
                         <div class="empty-icon">＋</div>
                         <span>등록된 작업이 없습니다</span>
                     </div>
 
-                    <!--
-                        th:data-due 에 ISO 포맷으로 넘겨주면
-                        JS가 오늘 날짜와 비교해서 due-chip 색상을 결정합니다.
-                    -->
                     <div class="board-card"
-                         th:each="board : ${boardList}"
-                         th:data-id="${board.id}"
-                         th:data-due="${board.dueDate != null ? #temporals.format(board.dueDate, 'yyyy-MM-dd') : ''}">
+                         th:each="post : ${postList}"
+                         th:if="${post.boardId == 1}"
+                         th:data-id="${post.id}"
+                         th:data-status="${post.status}"
+                         th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
 
                         <div class="card-team-line"></div>
 
                         <div class="card-top">
-                            <div class="card-title" th:text="${board.title}">작업 제목</div>
-                            <!-- 마감일 칩: JS가 상태 클래스(safe/warn/over/none) 주입 -->
+                            <div class="card-title" th:text="${post.title}">작업 제목</div>
                             <span class="due-chip"
-                                  th:data-due="${board.dueDate != null ? #temporals.format(board.dueDate, 'yyyy-MM-dd') : ''}">
+                                  th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
                                 <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
                                     <rect x="1" y="1.5" width="8" height="7.5" rx="1"/>
                                     <path d="M3 1v1M7 1v1M1 4h8"/>
                                 </svg>
                                 <span class="due-label"
-                                      th:text="${board.dueDate != null ? #temporals.format(board.dueDate, 'MM.dd') : '기한 없음'}">
-                                    MM.dd
+                                      th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}">
                                 </span>
                             </span>
                         </div>
 
-                        <div class="card-content" th:text="${board.content}">내용 미리보기</div>
+                        <div class="card-content" th:text="${post.content}">내용</div>
 
                         <div class="card-footer">
-                            <div class="card-writer">
-                                <div class="avatar" th:text="${#strings.substring(board.writer, 0, 1)}">U</div>
-                                <span th:text="${board.writer}">작성자</span>
+                            <div class="card-left">
+                                <span class="status-chip"
+                                      th:data-status="${post.status}"
+                                      th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status}">
+                                </span>
+                                <div class="card-writer">
+                                    <div class="avatar" th:text="${#strings.substring(post.memberId.toString(), 0, 1)}">U</div>
+                                    <span th:text="'#' + ${post.memberId}">작성자</span>
+                                </div>
                             </div>
-                            <span class="card-created"
-                                  th:text="${#temporals.format(board.createdAt, 'MM.dd 등록')}">01.01 등록</span>
+                            <span class="card-date"
+                                  th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
                         </div>
                     </div>
 
@@ -440,15 +389,54 @@
             </div>
         </div>
 
-        <!-- Frontend팀 -->
+        <!-- ── Frontend팀 (boardId=2) ── -->
         <div class="col-12 col-md-4">
             <div class="kanban-col col-frontend">
                 <div class="col-header">
                     <span class="team-badge"><span class="team-dot"></span>Frontend팀</span>
-                    <span class="col-count">0개</span>
+                    <span class="col-count" id="count-frontend">0개</span>
                 </div>
-                <div class="col-body">
-                    <div class="empty-col">
+                <div class="col-body" id="body-frontend">
+
+                    <div class="board-card"
+                         th:each="post : ${postList}"
+                         th:if="${post.boardId == 2}"
+                         th:data-id="${post.id}"
+                         th:data-status="${post.status}"
+                         th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+
+                        <div class="card-team-line"></div>
+                        <div class="card-top">
+                            <div class="card-title" th:text="${post.title}">작업 제목</div>
+                            <span class="due-chip"
+                                  th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+                                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
+                                    <rect x="1" y="1.5" width="8" height="7.5" rx="1"/>
+                                    <path d="M3 1v1M7 1v1M1 4h8"/>
+                                </svg>
+                                <span class="due-label"
+                                      th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}">
+                                </span>
+                            </span>
+                        </div>
+                        <div class="card-content" th:text="${post.content}">내용</div>
+                        <div class="card-footer">
+                            <div class="card-left">
+                                <span class="status-chip"
+                                      th:data-status="${post.status}"
+                                      th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status}">
+                                </span>
+                                <div class="card-writer">
+                                    <div class="avatar" th:text="${#strings.substring(post.memberId.toString(), 0, 1)}">U</div>
+                                    <span th:text="'#' + ${post.memberId}">작성자</span>
+                                </div>
+                            </div>
+                            <span class="card-date"
+                                  th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
+                        </div>
+                    </div>
+
+                    <div class="empty-col" id="empty-frontend" style="display:none;">
                         <div class="empty-icon">＋</div>
                         <span>등록된 작업이 없습니다</span>
                     </div>
@@ -456,15 +444,54 @@
             </div>
         </div>
 
-        <!-- Design팀 -->
+        <!-- ── Design팀 (boardId=3) ── -->
         <div class="col-12 col-md-4">
             <div class="kanban-col col-design">
                 <div class="col-header">
                     <span class="team-badge"><span class="team-dot"></span>Design팀</span>
-                    <span class="col-count">0개</span>
+                    <span class="col-count" id="count-design">0개</span>
                 </div>
-                <div class="col-body">
-                    <div class="empty-col">
+                <div class="col-body" id="body-design">
+
+                    <div class="board-card"
+                         th:each="post : ${postList}"
+                         th:if="${post.boardId == 3}"
+                         th:data-id="${post.id}"
+                         th:data-status="${post.status}"
+                         th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+
+                        <div class="card-team-line"></div>
+                        <div class="card-top">
+                            <div class="card-title" th:text="${post.title}">작업 제목</div>
+                            <span class="due-chip"
+                                  th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+                                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
+                                    <rect x="1" y="1.5" width="8" height="7.5" rx="1"/>
+                                    <path d="M3 1v1M7 1v1M1 4h8"/>
+                                </svg>
+                                <span class="due-label"
+                                      th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : '기한 없음'}">
+                                </span>
+                            </span>
+                        </div>
+                        <div class="card-content" th:text="${post.content}">내용</div>
+                        <div class="card-footer">
+                            <div class="card-left">
+                                <span class="status-chip"
+                                      th:data-status="${post.status}"
+                                      th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status}">
+                                </span>
+                                <div class="card-writer">
+                                    <div class="avatar" th:text="${#strings.substring(post.memberId.toString(), 0, 1)}">U</div>
+                                    <span th:text="'#' + ${post.memberId}">작성자</span>
+                                </div>
+                            </div>
+                            <span class="card-date"
+                                  th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
+                        </div>
+                    </div>
+
+                    <div class="empty-col" id="empty-design" style="display:none;">
                         <div class="empty-icon">＋</div>
                         <span>등록된 작업이 없습니다</span>
                     </div>
@@ -480,42 +507,80 @@
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // 마감일 칩 상태 계산
+    // ── 1. COMPLETED 카드 숨기기 + 카운트 업데이트 ──
+    const colMap = {
+        backend:  { bodyId: 'body-backend',  countId: 'count-backend'  },
+        frontend: { bodyId: 'body-frontend', countId: 'count-frontend', emptyId: 'empty-frontend' },
+        design:   { bodyId: 'body-design',   countId: 'count-design',   emptyId: 'empty-design'   },
+    };
+
+    Object.values(colMap).forEach(({ bodyId, countId, emptyId }) => {
+        const body = document.getElementById(bodyId);
+        if (!body) return;
+
+        const cards = body.querySelectorAll('.board-card');
+        let visible = 0;
+
+        cards.forEach(card => {
+            if (card.dataset.status === 'COMPLETED') {
+                card.style.display = 'none';
+            } else {
+                visible++;
+            }
+        });
+
+        // 카운트 업데이트
+        document.getElementById(countId).textContent = visible + '개';
+
+        // 빈 상태 처리
+        if (emptyId && visible === 0) {
+            document.getElementById(emptyId).style.display = 'flex';
+        }
+    });
+
+    // ── 2. 마감일 칩 상태 계산 ──
     document.querySelectorAll('.due-chip').forEach(chip => {
         const due = chip.dataset.due;
-        if (!due) {
-            chip.classList.add('none');
-            return;
-        }
+        if (!due) { chip.classList.add('none'); return; }
+
         const dueDate = new Date(due);
         const diffDays = Math.floor((dueDate - today) / (1000 * 60 * 60 * 24));
+        const label = chip.querySelector('.due-label');
 
         if (diffDays < 0) {
-            // 마감 초과
             chip.classList.add('over');
-            chip.querySelector('.due-label').textContent =
-                chip.querySelector('.due-label').textContent + ' 초과';
-        } else if (diffDays <= 3) {
-            // 3일 이내 경고
+            label.textContent = label.textContent + ' 초과';
+        } else if (diffDays === 0) {
             chip.classList.add('warn');
-            if (diffDays === 0) chip.querySelector('.due-label').textContent = '오늘 마감';
-            else if (diffDays === 1) chip.querySelector('.due-label').textContent = '내일 마감';
+            label.textContent = '오늘 마감';
+        } else if (diffDays === 1) {
+            chip.classList.add('warn');
+            label.textContent = '내일 마감';
+        } else if (diffDays <= 3) {
+            chip.classList.add('warn');
         } else {
             chip.classList.add('safe');
         }
     });
 
-    // 카드 호버 & 클릭
+    // ── 3. status 칩 클래스 ──
+    document.querySelectorAll('.status-chip').forEach(chip => {
+        const s = chip.dataset.status;
+        if (s === 'PROGRESS')   chip.classList.add('progress');
+        if (s === 'REQUESTED')  chip.classList.add('requested');
+    });
+
+    // ── 4. 카드 호버 & 클릭 ──
     document.querySelectorAll('.board-card').forEach(card => {
         card.addEventListener('mouseenter', () => card.classList.add('is-hovered'));
         card.addEventListener('mouseleave', () => card.classList.remove('is-hovered'));
         card.addEventListener('click', () => {
             const id = card.dataset.id;
-            if (id) location.href = `/board/${id}`;
+            if (id) location.href = `/post/${id}`;
         });
     });
 
-    // 보드/목록 탭
+    // ── 5. 보드/목록 탭 ──
     document.querySelectorAll('.view-tab').forEach(tab => {
         tab.addEventListener('click', () => {
             document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));

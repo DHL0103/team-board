@@ -1,17 +1,11 @@
 package kr.co.promptech.springboottutorial.board;
 
-
-import jakarta.persistence.Entity;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 public class Board {
     private Long id;
-    private String title;
-    private String content;
-    private String writer;
-    private LocalDateTime createdAt;
-    private LocalDateTime dueDate;
+    private String name;        // 팀명
+    private String slug;        // URL용 이름
+    private String description; // 팀 설명
 }
