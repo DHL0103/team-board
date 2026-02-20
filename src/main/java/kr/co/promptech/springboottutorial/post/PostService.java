@@ -14,4 +14,8 @@ public class PostService {
         return postMapper.getAllPost();
     }
 
+    public Post getPostById(Long id){
+        return postMapper.getPostById(id);
+    }
+
 }

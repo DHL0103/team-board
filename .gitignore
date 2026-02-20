@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+#db로그 문제 해결
+mysql_data/

@@ -9,4 +9,7 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
 
     @Select("SELECT * FROM post")
     List<Post> getAllPost();
+
+    @Select("SELECT * FROM post WHERE id = #{id}")
+    Post getPostById(Long id);
 }
