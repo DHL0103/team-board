@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Board</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg:           #f5f5f4;
+            --surface:      #ffffff;
+            --border:       #e5e7eb;
+            --border-soft:  #f0f0ef;
+            --text:         #111827;
+            --text-sub:     #6b7280;
+            --text-muted:   #9ca3af;
+
+            --backend-color:   #2563eb;
+            --backend-bg:      #eff6ff;
+            --backend-border:  #bfdbfe;
+
+            --frontend-color:  #d97706;
+            --frontend-bg:     #fffbeb;
+            --frontend-border: #fde68a;
+
+            --design-color:    #7c3aed;
+            --design-bg:       #f5f3ff;
+            --design-border:   #ddd6fe;
+
+            /* 마감일 상태 색상 */
+            --due-safe:    #059669;
+            --due-safe-bg: #ecfdf5;
+            --due-warn:    #d97706;
+            --due-warn-bg: #fffbeb;
+            --due-over:    #dc2626;
+            --due-over-bg: #fef2f2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            font-size: 14px;
+        }
+
+        /* ── Header ── */
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+
+        .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: var(--text);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-new {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--text);
+            color: #fff;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s, transform 0.15s;
+            letter-spacing: -0.2px;
+        }
+        .btn-new:hover {
+            background: #374151;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* ── Page top ── */
+        .page-top {
+            padding: 32px 32px 20px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+
+        .page-meta {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .view-tabs {
+            display: flex;
+            gap: 2px;
+            background: var(--border-soft);
+            padding: 3px;
+            border-radius: 8px;
+        }
+        .view-tab {
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .view-tab.active {
+            background: white;
+            color: var(--text);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        /* ── Kanban ── */
+        .kanban-wrap { padding: 0 32px 40px; }
+
+        .kanban-col {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeUp 0.4s ease both;
+        }
+        .kanban-col:nth-child(2) { animation-delay: 0.06s; }
+        .kanban-col:nth-child(3) { animation-delay: 0.12s; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .col-header {
+            padding: 14px 16px 12px;
+            border-bottom: 1px solid var(--border-soft);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .team-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 3px 9px;
+            border-radius: 5px;
+        }
+        .team-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+        .col-backend  .team-badge { background: var(--backend-bg);  color: var(--backend-color);  border: 1px solid var(--backend-border); }
+        .col-backend  .team-dot   { background: var(--backend-color); }
+        .col-frontend .team-badge { background: var(--frontend-bg); color: var(--frontend-color); border: 1px solid var(--frontend-border); }
+        .col-frontend .team-dot   { background: var(--frontend-color); }
+        .col-design   .team-badge { background: var(--design-bg);   color: var(--design-color);   border: 1px solid var(--design-border); }
+        .col-design   .team-dot   { background: var(--design-color); }
+
+        .col-count {
+            margin-left: auto;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: var(--bg);
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .col-body {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 180px;
+        }
+
+        /* ── Card ── */
+        .board-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            cursor: pointer;
+            transition: box-shadow 0.18s ease,
+                        transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        border-color 0.18s ease;
+        }
+        .board-card.is-hovered {
+            transform: scale(1.025) translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.09);
+            border-color: #d1d5db;
+        }
+
+        .card-team-line {
+            width: 100%;
+            height: 3px;
+            border-radius: 2px;
+            margin-bottom: 10px;
+        }
+        .col-backend  .card-team-line { background: var(--backend-color);  opacity: 0.2; }
+        .col-frontend .card-team-line { background: var(--frontend-color); opacity: 0.2; }
+        .col-design   .card-team-line { background: var(--design-color);   opacity: 0.2; }
+
+        /* 제목 + 마감일 한 줄 */
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-weight: 600;
+            font-size: 13.5px;
+            line-height: 1.45;
+            color: var(--text);
+            letter-spacing: -0.2px;
+            flex: 1;
+        }
+
+        /* 마감일 칩 */
+        .due-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 7px;
+            border-radius: 5px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            letter-spacing: -0.1px;
+        }
+        .due-chip svg { width: 10px; height: 10px; }
+
+        /* 상태별 색상 — JS가 클래스 붙여줌 */
+        .due-chip.safe { background: var(--due-safe-bg); color: var(--due-safe); }
+        .due-chip.warn { background: var(--due-warn-bg); color: var(--due-warn); }
+        .due-chip.over { background: var(--due-over-bg); color: var(--due-over); }
+        .due-chip.none { background: var(--bg);          color: var(--text-muted); border: 1px solid var(--border); }
+
+        .card-content {
+            font-size: 12.5px;
+            color: var(--text-sub);
+            line-height: 1.55;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 10px;
+            border-top: 1px solid var(--border-soft);
+        }
+
+        .card-writer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-sub);
+            font-weight: 500;
+        }
+
+        .avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .card-created {
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+
+        .empty-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 36px 20px;
+            color: var(--text-muted);
+            font-size: 12.5px;
+            gap: 6px;
+            text-align: center;
+        }
+        .empty-icon {
+            width: 36px;
+            height: 36px;
+            border: 1.5px dashed var(--border);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">
+        <div class="logo-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                <rect x="1" y="1" width="6" height="6" rx="1"/>
+                <rect x="9" y="1" width="6" height="6" rx="1"/>
+                <rect x="1" y="9" width="6" height="6" rx="1"/>
+                <rect x="9" y="9" width="6" height="6" rx="1"/>
+            </svg>
+        </div>
+        Team Board
+    </div>
+    <a href="/board/new" class="btn-new">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        새 작업
+    </a>
+</header>
+
+<div class="page-top">
+    <div>
+        <div class="page-title">팀별 작업 현황</div>
+        <div class="page-meta" th:text="'전체 ' + ${#lists.size(boardList)} + '개의 작업 · 모든 팀원이 조회 가능'">전체 0개의 작업</div>
+    </div>
+    <div class="view-tabs">
+        <div class="view-tab active">보드</div>
+        <div class="view-tab">목록</div>
+    </div>
+</div>
+
+<div class="kanban-wrap">
+    <div class="row g-3">
+
+        <!-- Backend팀 — 모든 게시글 -->
+        <div class="col-12 col-md-4">
+            <div class="kanban-col col-backend">
+                <div class="col-header">
+                    <span class="team-badge"><span class="team-dot"></span>Backend팀</span>
+                    <span class="col-count" th:text="${#lists.size(boardList)} + '개'">0개</span>
+                </div>
+                <div class="col-body">
+
+                    <div class="empty-col" th:if="${#lists.isEmpty(boardList)}">
+                        <div class="empty-icon">＋</div>
+                        <span>등록된 작업이 없습니다</span>
+                    </div>
+
+                    <!--
+                        th:data-due 에 ISO 포맷으로 넘겨주면
+                        JS가 오늘 날짜와 비교해서 due-chip 색상을 결정합니다.
+                    -->
+                    <div class="board-card"
+                         th:each="board : ${boardList}"
+                         th:data-id="${board.id}"
+                         th:data-due="${board.dueDate != null ? #temporals.format(board.dueDate, 'yyyy-MM-dd') : ''}">
+
+                        <div class="card-team-line"></div>
+
+                        <div class="card-top">
+                            <div class="card-title" th:text="${board.title}">작업 제목</div>
+                            <!-- 마감일 칩: JS가 상태 클래스(safe/warn/over/none) 주입 -->
+                            <span class="due-chip"
+                                  th:data-due="${board.dueDate != null ? #temporals.format(board.dueDate, 'yyyy-MM-dd') : ''}">
+                                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
+                                    <rect x="1" y="1.5" width="8" height="7.5" rx="1"/>
+                                    <path d="M3 1v1M7 1v1M1 4h8"/>
+                                </svg>
+                                <span class="due-label"
+                                      th:text="${board.dueDate != null ? #temporals.format(board.dueDate, 'MM.dd') : '기한 없음'}">
+                                    MM.dd
+                                </span>
+                            </span>
+                        </div>
+
+                        <div class="card-content" th:text="${board.content}">내용 미리보기</div>
+
+                        <div class="card-footer">
+                            <div class="card-writer">
+                                <div class="avatar" th:text="${#strings.substring(board.writer, 0, 1)}">U</div>
+                                <span th:text="${board.writer}">작성자</span>
+                            </div>
+                            <span class="card-created"
+                                  th:text="${#temporals.format(board.createdAt, 'MM.dd 등록')}">01.01 등록</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Frontend팀 -->
+        <div class="col-12 col-md-4">
+            <div class="kanban-col col-frontend">
+                <div class="col-header">
+                    <span class="team-badge"><span class="team-dot"></span>Frontend팀</span>
+                    <span class="col-count">0개</span>
+                </div>
+                <div class="col-body">
+                    <div class="empty-col">
+                        <div class="empty-icon">＋</div>
+                        <span>등록된 작업이 없습니다</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Design팀 -->
+        <div class="col-12 col-md-4">
+            <div class="kanban-col col-design">
+                <div class="col-header">
+                    <span class="team-badge"><span class="team-dot"></span>Design팀</span>
+                    <span class="col-count">0개</span>
+                </div>
+                <div class="col-body">
+                    <div class="empty-col">
+                        <div class="empty-icon">＋</div>
+                        <span>등록된 작업이 없습니다</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // 마감일 칩 상태 계산
+    document.querySelectorAll('.due-chip').forEach(chip => {
+        const due = chip.dataset.due;
+        if (!due) {
+            chip.classList.add('none');
+            return;
+        }
+        const dueDate = new Date(due);
+        const diffDays = Math.floor((dueDate - today) / (1000 * 60 * 60 * 24));
+
+        if (diffDays < 0) {
+            // 마감 초과
+            chip.classList.add('over');
+            chip.querySelector('.due-label').textContent =
+                chip.querySelector('.due-label').textContent + ' 초과';
+        } else if (diffDays <= 3) {
+            // 3일 이내 경고
+            chip.classList.add('warn');
+            if (diffDays === 0) chip.querySelector('.due-label').textContent = '오늘 마감';
+            else if (diffDays === 1) chip.querySelector('.due-label').textContent = '내일 마감';
+        } else {
+            chip.classList.add('safe');
+        }
+    });
+
+    // 카드 호버 & 클릭
+    document.querySelectorAll('.board-card').forEach(card => {
+        card.addEventListener('mouseenter', () => card.classList.add('is-hovered'));
+        card.addEventListener('mouseleave', () => card.classList.remove('is-hovered'));
+        card.addEventListener('click', () => {
+            const id = card.dataset.id;
+            if (id) location.href = `/board/${id}`;
+        });
+    });
+
+    // 보드/목록 탭
+    document.querySelectorAll('.view-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
