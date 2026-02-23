@@ -1,0 +1,68 @@
+/* ── 공통 변수 ── */
+:root {
+    --bg:           #f5f5f4;
+    --surface:      #ffffff;
+    --border:       #e5e7eb;
+    --border-soft:  #f0f0ef;
+    --text:         #111827;
+    --text-sub:     #6b7280;
+    --text-muted:   #9ca3af;
+    
+    --backend-color:   #2563eb; --backend-bg: #eff6ff; --backend-border: #bfdbfe;
+    --frontend-color:  #d97706; --frontend-bg: #fffbeb; --frontend-border: #fde68a;
+    --design-color:    #7c3aed; --design-bg: #f5f3ff;  --design-border: #ddd6fe;
+
+    --due-safe: #059669; --due-safe-bg: #ecfdf5;
+    --due-warn: #d97706; --due-warn-bg: #fffbeb;
+    --due-over: #dc2626; --due-over-bg: #fef2f2;
+
+    --status-progress-color: #2563eb;  --status-progress-bg: #eff6ff;
+    --status-requested-color: #d97706; --status-requested-bg: #fffbeb;
+    --status-completed-color: #059669; --status-completed-bg: #ecfdf5;
+}
+
+/* ── Reset & Base ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    font-size: 14px;
+}
+
+/* ── 공통 Header ── */
+header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    text-decoration: none;
+}
+
+.logo-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--text);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

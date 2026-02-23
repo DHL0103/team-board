@@ -1,0 +1,40 @@
+// pages/_main.scss
+@use "../abstract/variables" as *;
+
+.btn-new {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: $text;
+    color: #fff;
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.15s;
+
+    &:hover {
+        background: #374151;
+        transform: translateY(-1px);
+    }
+}
+
+.kanban-board {
+    display: flex;
+    gap: 20px;
+    padding: 0 32px 40px;
+
+    .kanban-col {
+        flex: 1;
+        min-width: 300px;
+        background: $surface;
+        border: 1px solid $border;
+        border-radius: 10px;
+
+        .col-header {
+            padding: 14px 16px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+}

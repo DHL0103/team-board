@@ -1,0 +1,28 @@
+// style.scss
+
+// 1. 변수 로드
+@use "abstract/variables";
+
+// 2. 리셋 & 기본 설정 (레이아웃 깨짐 방지 핵심!)
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: variables.$bg;
+    color: variables.$text;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;         // 헤더와 컨텐츠를 세로로 배치하기 위함
+    flex-direction: column;
+}
+
+// 3. 레이아웃 분리 파일 로드
+@import "layout/header";
+
+// 4. 페이지별 파일 로드
+@import "pages/main";
+@import "pages/detail";
+@import "pages/login";

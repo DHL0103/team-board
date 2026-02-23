@@ -13,6 +13,10 @@ public class MemberService {
         return memberMapper.selectMemberById(id);
     }
 
+    public Member getMemberByUsername(String username) {
+        return memberMapper.findByUsername(username);
+    }
+
     public void create (String username, String password, Long boardId) {
         Member member = new Member();
         member.setUsername(username);
