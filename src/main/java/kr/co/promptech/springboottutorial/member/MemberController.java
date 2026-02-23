@@ -1,0 +1,36 @@
+package kr.co.promptech.springboottutorial.member;
+
+import kr.co.promptech.springboottutorial.dto.MemberCreateDto;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+
+@Controller
+@RequestMapping("/member")
+@RequiredArgsConstructor
+public class MemberController {
+    private final MemberService memberService;
+
+    //id값으로 멤버 검색
+    @GetMapping("/{id}")
+    @ResponseBody
+    public Member getMemberDetailPage(@PathVariable Long id){
+        return memberService.getMemberById(id);
+    }
+
+    //로그인 페이지
+    @GetMapping("/login")
+    public String login_page() {
+        return "login_form";
+    }
+
+    //회원가입
+    @PostMapping("/signup")
+    @ResponseBody
+    public String createMember(@RequestBody MemberCreateDto memberCreateDto){
+        memberService.create(memberCreateDto.getUsername(), memberCreateDto.getPassword(), memberCreateDto.getBoardId());
+        return "회원가입 성공";
+    }
+
+
+}

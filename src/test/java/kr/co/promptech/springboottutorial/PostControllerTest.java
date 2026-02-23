@@ -1,0 +1,77 @@
+package kr.co.promptech.springboottutorial;
+
+import kr.co.promptech.springboottutorial.board.BoardController;
+import kr.co.promptech.springboottutorial.post.Post;
+import kr.co.promptech.springboottutorial.post.PostController;
+import kr.co.promptech.springboottutorial.post.PostService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import java.util.Collections;
+
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+// ... 임포트 생략
+
+@WebMvcTest({PostController.class, BoardController.class})
+@AutoConfigureMockMvc // 검문소 가동!
+class PostControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+    @MockBean
+    private PostService postService;
+
+    @Test
+    @WithMockUser // 조회도 로그인 유저여야 통과됨
+    @DisplayName("GET /board - 전체 게시글 조회 테스트")
+    void testGetAllBoardView() throws Exception {
+        given(postService.getAllPost()).willReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/board"))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("postList"))
+                .andExpect(view().name("main_page"));
+    }
+
+    @Test
+    @WithMockUser // 상세페이지도 로그인 유저여야 통과됨
+    @DisplayName("GET /post/{id} - 상세 페이지 조회 테스트")
+    void testGetPostDetailPage() throws Exception {
+        Long postId = 1L;
+        Post mockPost = new Post();
+        given(postService.getPostById(postId)).willReturn(mockPost);
+
+        mockMvc.perform(get("/post/" + postId))
+                .andExpect(status().isOk())
+                .andExpect(view().name("post_detail"));
+    }
+
+    @Test
+    @WithMockUser(username = "daehee_fe")
+    @DisplayName("POST /create - 게시글 생성 테스트")
+    void testCreatePost() throws Exception {
+        mockMvc.perform(post("/post/create")
+                        .param("boardId", "1")
+                        .param("title", "제목")
+                        .param("content", "내용")
+                        .param("dueDate", "2026-12-31T23:59:59")
+                        .with(csrf()))
+                // 200 대신 3xx 리다이렉트 확인
+                .andExpect(status().is3xxRedirection())
+                // 리다이렉트되는 목적지 주소 확인
+                .andExpect(redirectedUrl("/board"));
+
+        verify(postService).createPost(anyLong(), anyString(), anyString(), any(), eq("daehee_fe"));
+    }
+}
+

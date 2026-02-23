@@ -1,0 +1,12 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: daehee-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12341234
+      MYSQL_DATABASE: onboarding
+    ports:
+      - "3307:3306"  # 내 컴퓨터(3307) -> 도커(3306) 연결
+    volumes:
+      - ./mysql_data:/var/lib/mysql
