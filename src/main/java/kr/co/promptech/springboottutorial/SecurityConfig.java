@@ -3,9 +3,12 @@ package kr.co.promptech.springboottutorial;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -21,6 +24,8 @@ public class SecurityConfig {
                 .formLogin(
                         (formLogin) -> formLogin
                                 .loginPage("/member/login")
+                                .loginProcessingUrl("/member/login")  // POST 요청 처리
+                                .failureUrl("/member/login?error=true")    // 실패 시 이 URL로
                                 .defaultSuccessUrl("/board")
                 )
                 .logout(
@@ -33,6 +38,7 @@ public class SecurityConfig {
                         (authorizeHttpRequests) ->  authorizeHttpRequests
                                 .anyRequest().permitAll()
                 )
+                .csrf((csrf) -> csrf.disable()) // 테스트 시에는 CSRF를 꺼두어야 Postman POST 요청이 잘 들어갑니다.
         ;
         return http.build();
     }
@@ -43,8 +49,14 @@ public class SecurityConfig {
     }
 
     @Bean
-    protected AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(
+            UserDetailsService userDetailsService,
+            PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+
+        return new  ProviderManager(authenticationProvider);
     }
 
 }

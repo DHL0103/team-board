@@ -1,11 +1,9 @@
 package kr.co.promptech.springboottutorial.member;
 
+import kr.co.promptech.springboottutorial.dto.MemberCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/member")
@@ -20,9 +18,19 @@ public class MemberController {
         return memberService.getMemberById(id);
     }
 
-    //로그인 요청
+    //로그인 페이지
     @GetMapping("/login")
-    public String login(){
+    public String login_page() {
         return "login_form";
     }
+
+    //회원가입
+    @PostMapping("/signup")
+    @ResponseBody
+    public String createMember(@RequestBody MemberCreateDto memberCreateDto){
+        memberService.create(memberCreateDto.getUsername(), memberCreateDto.getPassword(), memberCreateDto.getBoardId());
+        return "회원가입 성공";
+    }
+
+
 }
