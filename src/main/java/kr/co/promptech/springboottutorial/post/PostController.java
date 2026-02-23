@@ -2,13 +2,11 @@ package kr.co.promptech.springboottutorial.post;
 
 import kr.co.promptech.springboottutorial.comment.Comment;
 import kr.co.promptech.springboottutorial.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -19,6 +17,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final MemberService memberService;
 
     @GetMapping("/{id}")
     public String getPostDetailPage(@PathVariable Long id, Model model) {
@@ -48,5 +47,19 @@ public class PostController {
 
     }
 
+    @PostMapping("/delete/{id}")
+    public String deletePost(@PathVariable Long id, Principal principal) {
+        Post post = postService.getPostById(id);
+        Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();
+
+        if (!post.getMemberId().equals(currentMemberId)) {
+            // 본인이 아니면 삭제 거부 (에러 페이지나 메시지 처리)
+            return "redirect:/post/" + id + "?error=unauthorized";
+        }
+
+        postService.deletePost(post);
+
+        return "redirect:/board";
+    }
 
 }

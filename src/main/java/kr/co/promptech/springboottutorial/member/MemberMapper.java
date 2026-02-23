@@ -14,4 +14,5 @@ public interface MemberMapper {
 
     @Select("SELECT * FROM member WHERE username = #{username}")
     Member findByUsername(String username);
+
 }

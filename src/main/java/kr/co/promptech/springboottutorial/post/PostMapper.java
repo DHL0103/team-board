@@ -1,9 +1,7 @@
 package kr.co.promptech.springboottutorial.post;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+
 import java.util.List; // 표준 List 임포트
 
 @Mapper
@@ -38,4 +36,7 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
     """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void createPost(Post post);
+
+    @Delete("DELETE FROM post WHERE id = #{id}")
+    void deletePost(Post post);
 }

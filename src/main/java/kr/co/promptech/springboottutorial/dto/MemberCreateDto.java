@@ -1,6 +1,8 @@
 package kr.co.promptech.springboottutorial.dto;
 
-@lombok.Data
+import lombok.Data;
+
+@Data
 public class MemberCreateDto {
     String username;
     String password;
