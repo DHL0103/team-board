@@ -1,28 +1,45 @@
 // style.scss
 
-// 1. 변수 로드
+// ── 1. @use는 반드시 파일 최상단에 ──
 @use "abstract/variables";
+@use "layout/header";
+@use "pages/main";
+@use "pages/detail";
+@use "pages/login";
 
-// 2. 리셋 & 기본 설정 (레이아웃 깨짐 방지 핵심!)
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+// ── 2. 리셋 & 기본 설정 ──
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
 
 body {
-    background: variables.$bg;
-    color: variables.$text;
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
-    display: flex;         // 헤더와 컨텐츠를 세로로 배치하기 위함
-    flex-direction: column;
+  background-color: variables.$bg;
+  color: variables.$text;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-// 3. 레이아웃 분리 파일 로드
-@import "layout/header";
+button, input, select, textarea {
+  font-family: inherit;
+}
 
-// 4. 페이지별 파일 로드
-@import "pages/main";
-@import "pages/detail";
-@import "pages/login";
+// ── 3. 공통 애니메이션 (딱 한 번만 선언) ──
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

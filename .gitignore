@@ -38,3 +38,6 @@ out/
 
 #db로그 문제 해결
 mysql_data/
+
+# CSS 폴더 제외
+src/main/resources/static/css/
