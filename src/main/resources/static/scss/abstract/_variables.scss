@@ -1,0 +1,22 @@
+// abstract/_variables.scss
+$bg: #f5f5f4;
+$surface: #ffffff;
+$border: #e5e7eb;
+$border-soft: #f0f0ef;
+$text: #111827;
+$text-sub: #6b7280;
+$text-muted: #9ca3af;
+
+// 팀 컬러 (Map 구조 활용 - 훨씬 전문적입니다)
+$teams: (
+  backend: (color: #2563eb, bg: #eff6ff, border: #bfdbfe),
+  frontend: (color: #d97706, bg: #fffbeb, border: #fde68a),
+  design: (color: #7c3aed, bg: #f5f3ff, border: #ddd6fe)
+);
+
+// 마감일 상태 컬러
+$due-colors: (
+  safe: (color: #059669, bg: #ecfdf5),
+  warn: (color: #d97706, bg: #fffbeb),
+  over: (color: #dc2626, bg: #fef2f2)
+);
