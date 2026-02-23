@@ -1,13 +1,16 @@
 package kr.co.promptech.springboottutorial.post;
 
 import kr.co.promptech.springboottutorial.comment.Comment;
+import kr.co.promptech.springboottutorial.dto.PostCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -16,6 +19,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+
     @GetMapping("/{id}")
     public String getPostDetailPage(@PathVariable Long id, Model model) {
         // 1. 게시글 상세 데이터 가져오기
@@ -30,5 +34,19 @@ public class PostController {
 
         return "post_detail";
     }
+
+    @PostMapping("/create")
+    public String createPost(PostCreateDto postCreateDto, Model model, Principal principal) {
+        postService.createPost(
+                postCreateDto.getBoardId(),
+                postCreateDto.getTitle(),
+                postCreateDto.getContent(),
+                postCreateDto.getDueDate(),
+                principal.getName()
+        );
+        return "redirect:/board";
+
+    }
+
 
 }
