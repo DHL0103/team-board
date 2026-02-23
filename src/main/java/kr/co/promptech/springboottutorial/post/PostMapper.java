@@ -7,14 +7,14 @@ import java.util.List; // 표준 List 임포트
 @Mapper
 public interface PostMapper { // 인터페이스(interface)여야 합니다!
 
-    @Select("SELECT * FROM post")
+    @Select("SELECT * FROM posts")
     List<Post> getAllPost();
 
-    @Select("SELECT * FROM post WHERE id = #{id}")
+    @Select("SELECT * FROM posts WHERE id = #{id}")
     Post getPostById(Long id);
 
     @Insert("""
-        INSERT INTO post (
+        INSERT INTO posts (
             board_id,
             member_id,
             title,
@@ -37,6 +37,6 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void createPost(Post post);
 
-    @Delete("DELETE FROM post WHERE id = #{id}")
+    @Delete("DELETE FROM posts WHERE id = #{id}")
     void deletePost(Post post);
 }
