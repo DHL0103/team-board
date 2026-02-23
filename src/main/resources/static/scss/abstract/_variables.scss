@@ -1,4 +1,5 @@
 // abstract/_variables.scss
+
 $bg: #f5f5f4;
 $surface: #ffffff;
 $border: #e5e7eb;
@@ -7,11 +8,11 @@ $text: #111827;
 $text-sub: #6b7280;
 $text-muted: #9ca3af;
 
-// 팀 컬러 (Map 구조 활용 - 훨씬 전문적입니다)
+// 팀 컬러 Map
 $teams: (
-  backend: (color: #2563eb, bg: #eff6ff, border: #bfdbfe),
+  backend:  (color: #2563eb, bg: #eff6ff, border: #bfdbfe),
   frontend: (color: #d97706, bg: #fffbeb, border: #fde68a),
-  design: (color: #7c3aed, bg: #f5f3ff, border: #ddd6fe)
+  design:   (color: #7c3aed, bg: #f5f3ff, border: #ddd6fe)
 );
 
 // 마감일 상태 컬러
@@ -20,3 +21,40 @@ $due-colors: (
   warn: (color: #d97706, bg: #fffbeb),
   over: (color: #dc2626, bg: #fef2f2)
 );
+
+:root {
+  --bg: #{$bg};
+  --surface: #{$surface};
+  --border: #{$border};
+  --border-soft: #{$border-soft};
+  --text: #{$text};
+  --text-sub: #{$text-sub};
+  --text-muted: #{$text-muted};
+
+  // 팀 컬러
+  --backend-color:   #{map-get(map-get($teams, backend),  color)};
+  --backend-bg:      #{map-get(map-get($teams, backend),  bg)};
+  --backend-border:  #{map-get(map-get($teams, backend),  border)};
+  --frontend-color:  #{map-get(map-get($teams, frontend), color)};
+  --frontend-bg:     #{map-get(map-get($teams, frontend), bg)};
+  --frontend-border: #{map-get(map-get($teams, frontend), border)};
+  --design-color:    #{map-get(map-get($teams, design),   color)};
+  --design-bg:       #{map-get(map-get($teams, design),   bg)};
+  --design-border:   #{map-get(map-get($teams, design),   border)};
+
+  // 마감일 컬러
+  --due-safe:    #{map-get(map-get($due-colors, safe), color)};
+  --due-safe-bg: #{map-get(map-get($due-colors, safe), bg)};
+  --due-warn:    #{map-get(map-get($due-colors, warn), color)};
+  --due-warn-bg: #{map-get(map-get($due-colors, warn), bg)};
+  --due-over:    #{map-get(map-get($due-colors, over), color)};
+  --due-over-bg: #{map-get(map-get($due-colors, over), bg)};
+
+  // 상태 칩 (원본 디자인 색상으로 수정)
+  --status-progress-bg:    #eff6ff;
+  --status-progress-color: #2563eb;
+  --status-requested-bg:   #fffbeb;
+  --status-requested-color: #d97706;
+  --status-completed-bg:   #ecfdf5;
+  --status-completed-color: #059669;
+}

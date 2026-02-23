@@ -1,65 +1,316 @@
 @use "../abstract/variables" as *;
 
+// ── 레이아웃 ──
 .detail-wrap {
-  max-width: 800px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 36px 24px 60px;
+  padding: 36px 32px 60px;
+}
 
-  .btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    color: $text-sub;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 6px 12px;
-    border: 1px solid $border;
-    border-radius: 6px;
-    background: $surface;
-    transition: all 0.15s;
+.breadcrumb-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: $text-muted;
+  margin-bottom: 20px;
 
-    &:hover {
-      border-color: #d1d5db;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-sub; } }
+  .breadcrumb-sep { opacity: 0.4; }
+}
+
+// ── 포스트 카드 ──
+.post-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  animation: fadeUp 0.35s ease both;
+
+  .post-team-bar {
+    height: 4px;
+    &.team-backend  { background: var(--backend-color); }
+    &.team-frontend { background: var(--frontend-color); }
+    &.team-design   { background: var(--design-color); }
+  }
+
+  .post-header {
+    padding: 24px 28px 20px;
+    border-bottom: 1px solid $border-soft;
+
+    .post-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .post-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.4px;
+      line-height: 1.4;
       color: $text;
+      margin-bottom: 16px;
+    }
+
+    .post-info-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: $text-muted;
+      .post-info-item { display: flex; align-items: center; gap: 5px; }
     }
   }
 
-  .post-card {
-    background: $surface;
-    border: 1px solid $border;
-    border-radius: 10px;
-    margin-top: 24px;
-    overflow: hidden;
-
-    .card-header {
-      padding: 32px 32px 24px;
-      border-bottom: 1px solid $border-soft;
-
-      .post-title {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 12px;
-      }
-    }
-
+  .post-body {
+    padding: 24px 28px;
     .post-content {
-      padding: 32px;
-      line-height: 1.7;
-      min-height: 200px;
+      font-size: 14px;
+      color: $text;
+      line-height: 1.75;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
   }
 
-  .comment-section {
-    margin-top: 40px;
+  .post-actions {
+    padding: 16px 28px;
+    border-top: 1px solid $border-soft;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .post-actions-left,
+    .post-actions-right { display: flex; align-items: center; gap: 8px; }
+  }
+}
+
+// ── 배지 & 칩 ──
+.team-badge, .status-chip, .due-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.team-badge {
+  .team-dot { width: 6px; height: 6px; border-radius: 50%; }
+  &.badge-backend  { background: var(--backend-bg);  color: var(--backend-color);  border: 1px solid var(--backend-border);  .team-dot { background: var(--backend-color); } }
+  &.badge-frontend { background: var(--frontend-bg); color: var(--frontend-color); border: 1px solid var(--frontend-border); .team-dot { background: var(--frontend-color); } }
+  &.badge-design   { background: var(--design-bg);   color: var(--design-color);   border: 1px solid var(--design-border);   .team-dot { background: var(--design-color); } }
+}
+
+.status-chip {
+  &.chip-progress  { background: var(--status-progress-bg);  color: var(--status-progress-color); }
+  &.chip-requested { background: var(--status-requested-bg); color: var(--status-requested-color); }
+  &.chip-completed { background: var(--status-completed-bg); color: var(--status-completed-color); }
+}
+
+.due-chip {
+  svg { width: 10px; height: 10px; }
+  &.due-safe { background: var(--due-safe-bg); color: var(--due-safe); }
+  &.due-warn { background: var(--due-warn-bg); color: var(--due-warn); }
+  &.due-over { background: var(--due-over-bg); color: var(--due-over); }
+  &.due-none { background: $bg; color: $text-muted; border: 1px solid $border; }
+}
+
+// ── 버튼 ──
+.btn-edit, .btn-delete, .btn-request {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-request {
+  background: #111827;
+  color: white;
+  border: none;
+  &:hover { background: #374151; color: white; transform: translateY(-1px); }
+}
+
+.btn-edit {
+  background: $surface;
+  color: $text-sub;
+  border: 1px solid $border;
+  &:hover { border-color: #d1d5db; color: $text; }
+}
+
+.btn-delete {
+  background: $surface;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  &:hover { background: #fef2f2; border-color: #fca5a5; }
+}
+
+// ── 삭제 확인 모달 ──
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  align-items: center;
+  justify-content: center;
+
+  &.open { display: flex; }
+}
+
+.modal-box {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 380px;
+  padding: 32px;
+  margin: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  animation: modalIn 0.2s ease both;
+}
+
+.modal-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.modal-title { font-size: 16px; font-weight: 700; color: $text; margin-bottom: 8px; }
+.modal-desc  { font-size: 14px; color: $text-sub; line-height: 1.5; margin-bottom: 24px; }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+.btn-modal-cancel {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid $border;
+  background: $surface;
+  color: $text-sub;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  &:hover { background: $bg; color: $text; }
+}
+
+.btn-modal-delete {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+  &:hover { background: #b91c1c; }
+}
+
+// ── 에러 토스트 ──
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1f2937;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  display: none;
+  z-index: 1000;
+  white-space: nowrap;
+
+  &.show {
+    display: block;
+    animation: toastIn 0.2s ease;
+  }
+}
+
+// ── 댓글 섹션 ──
+.comment-section {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 16px;
+  animation: fadeUp 0.35s ease 0.08s both;
+
+  .comment-header {
+    padding: 16px 28px;
+    border-bottom: 1px solid $border-soft;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .comment-header-title { font-size: 13px; font-weight: 600; color: $text; }
+    .comment-count-badge  { font-size: 11px; font-weight: 500; background: $bg; color: $text-muted; padding: 1px 7px; border-radius: 20px; border: 1px solid $border; }
+  }
+
+  .comment-list {
+    padding: 0 28px;
+
+    .comment-empty { padding: 32px 0; text-align: center; color: $text-muted; font-size: 13px; }
 
     .comment-item {
-      padding: 20px 0;
+      padding: 16px 0;
       border-bottom: 1px solid $border-soft;
+      &:last-child { border-bottom: none; }
 
-      .comment-writer {
-        font-weight: 600;
-        color: $text;
+      .comment-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+      .avatar-md {
+        width: 28px; height: 28px; border-radius: 50%;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        color: white; display: flex; align-items: center; justify-content: center;
+        font-size: 12px; font-weight: 700; flex-shrink: 0;
       }
+      .comment-writer { font-size: 13px; font-weight: 600; color: $text; }
+      .comment-date   { font-size: 11.5px; color: $text-muted; margin-left: auto; }
+      .comment-content { font-size: 13.5px; color: $text; line-height: 1.6; padding-left: 36px; white-space: pre-wrap; word-break: break-word; }
+    }
+  }
+
+  .comment-form {
+    padding: 16px 28px;
+    border-top: 1px solid $border-soft;
+    background: $bg;
+
+    .comment-input-row { display: flex; gap: 10px; align-items: flex-end; }
+    .comment-textarea {
+      flex: 1; resize: none; border: 1px solid $border; border-radius: 8px;
+      padding: 10px 14px; font-family: 'Inter', sans-serif; font-size: 13px;
+      color: $text; background: $surface; outline: none; transition: border-color 0.15s;
+      min-height: 42px; max-height: 120px;
+      &:focus { border-color: #9ca3af; }
+      &::placeholder { color: $text-muted; }
+    }
+    .btn-comment-submit {
+      background: $text; color: white; border: none; padding: 10px 18px;
+      border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;
+      font-family: 'Inter', sans-serif; white-space: nowrap; transition: background 0.15s;
+      &:hover { background: #374151; }
     }
   }
 }

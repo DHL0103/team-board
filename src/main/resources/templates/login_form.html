@@ -6,12 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인 · Team Board</title>
 
-  <link href="/css/lib/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="/css/common.css" rel="stylesheet">
+  <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet">
 
-  <link rel="stylesheet" href="/css/login.css">
-    
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -73,17 +72,8 @@
   </div>
 
   <script src="/js/lib/bootstrap.bundle.min.js"></script>
-  <script>
-    // 엔터 키로 폼 제출
-    document.querySelectorAll(".form-input").forEach(input => {
-      input.addEventListener("keydown", e => {
-        if (e.key === "Enter") {
-          e.preventDefault(); // 기본 엔터 동작 방지
-          document.querySelector("form").submit(); // 폼 바로 제출
-        }
-      });
-    });
-  </script>
+
+  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
 
 </body>
 
