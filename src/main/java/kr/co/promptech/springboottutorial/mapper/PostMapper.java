@@ -1,5 +1,6 @@
-package kr.co.promptech.springboottutorial.post;
+package kr.co.promptech.springboottutorial.mapper;
 
+import kr.co.promptech.springboottutorial.model.Post;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List; // 표준 List 임포트

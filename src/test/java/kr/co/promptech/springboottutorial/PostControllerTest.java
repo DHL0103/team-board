@@ -1,9 +1,9 @@
 package kr.co.promptech.springboottutorial;
 
-import kr.co.promptech.springboottutorial.board.BoardController;
-import kr.co.promptech.springboottutorial.post.Post;
-import kr.co.promptech.springboottutorial.post.PostController;
-import kr.co.promptech.springboottutorial.post.PostService;
+import kr.co.promptech.springboottutorial.controller.BoardController;
+import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.controller.PostController;
+import kr.co.promptech.springboottutorial.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

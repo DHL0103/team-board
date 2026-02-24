@@ -1,4 +1,4 @@
-package kr.co.promptech.springboottutorial.dto;
+package kr.co.promptech.springboottutorial.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;

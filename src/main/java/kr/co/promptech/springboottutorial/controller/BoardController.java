@@ -1,7 +1,7 @@
-package kr.co.promptech.springboottutorial.board;
+package kr.co.promptech.springboottutorial.controller;
 
-import kr.co.promptech.springboottutorial.post.Post;
-import kr.co.promptech.springboottutorial.post.PostService;
+import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,9 +1,10 @@
-package kr.co.promptech.springboottutorial.post;
+package kr.co.promptech.springboottutorial.service;
 
-import kr.co.promptech.springboottutorial.member.Member;
-import kr.co.promptech.springboottutorial.member.MemberMapper;
+import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.mapper.MemberMapper;
+import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

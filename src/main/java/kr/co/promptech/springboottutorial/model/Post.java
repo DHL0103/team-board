@@ -1,4 +1,4 @@
-package kr.co.promptech.springboottutorial.post;
+package kr.co.promptech.springboottutorial.model;
 
 
 import lombok.Data;

@@ -1,6 +1,8 @@
-package kr.co.promptech.springboottutorial.member;
+package kr.co.promptech.springboottutorial.controller;
 
-import kr.co.promptech.springboottutorial.dto.MemberCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
+import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

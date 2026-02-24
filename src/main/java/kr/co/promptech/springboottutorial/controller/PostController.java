@@ -1,15 +1,15 @@
-package kr.co.promptech.springboottutorial.post;
+package kr.co.promptech.springboottutorial.controller;
 
-import kr.co.promptech.springboottutorial.comment.Comment;
-import kr.co.promptech.springboottutorial.dto.PostCreateDto;
-import kr.co.promptech.springboottutorial.member.MemberService;
+import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.service.MemberService;
+import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
