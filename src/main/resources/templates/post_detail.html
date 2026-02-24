@@ -79,7 +79,7 @@
 
     <div class="post-actions">
       <div class="post-actions-left">
-        <button class="btn-delete" id="btn-delete">
+        <button th:if="${isOwner}" class="btn-delete" id="btn-delete">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5">
             <path
                     d="M2 3.5h9M5 3.5V2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1M10.5 3.5l-.7 7a1 1 0 0 1-1 .9H4.2a1 1 0 0 1-1-.9l-.7-7" />
