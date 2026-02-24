@@ -45,4 +45,16 @@ public class PostService {
         postMapper.deletePost(post);
     }
 
+    public void updatePost(Post post, PostCreateDto postCreateDto){
+
+        post.setTitle(postCreateDto.getTitle());
+        post.setContent(postCreateDto.getContent());
+        post.setDueDate(postCreateDto.getDueDate());
+        post.setUpdatedAt(LocalDateTime.now());
+
+        postMapper.updatePost(post);
+    }
+
+
+
 }

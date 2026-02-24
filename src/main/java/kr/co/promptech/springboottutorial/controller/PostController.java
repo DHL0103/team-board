@@ -20,16 +20,16 @@ public class PostController {
     private final MemberService memberService;
 
     @GetMapping("/{id}")
-    public String getPostDetailPage(@PathVariable Long id, Model model) {
-        // 1. 게시글 상세 데이터 가져오기
+    public String getPostDetailPage(@PathVariable Long id, Model model, Principal principal) {
         Post post = postService.getPostById(id);
-
-        // 2. 해당 게시글에 달린 댓글 리스트 가져오기
-        //List<Comment> comments = commentService.getCommentsByPostId(id);
-
-        // 3. Model에 두 데이터 모두 담기
         model.addAttribute("post", post);
-        //model.addAttribute("commentList", comments);
+
+        if (principal != null) {
+            Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();
+            model.addAttribute("isOwner", post.getMemberId().equals(currentMemberId));
+        } else {
+            model.addAttribute("isOwner", false);
+        }
 
         return "post_detail";
     }
@@ -53,6 +53,20 @@ public class PostController {
         postService.deletePost(post);
 
         return "redirect:/board";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updatePost(@PathVariable Long id,PostCreateDto postCreateDto, Principal principal) {
+        Post post = postService.getPostById(id);
+        Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();
+
+        if (!post.getMemberId().equals(currentMemberId)) {
+            // 본인이 아니면 수정 거부 (에러 페이지나 메시지 처리)
+            return "redirect:/post/" + id + "?error=unauthorized";
+        }
+
+        postService.updatePost(post, postCreateDto);
+        return "redirect:/post/" + id;
     }
 
 }
