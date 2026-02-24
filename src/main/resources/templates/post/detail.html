@@ -69,6 +69,8 @@
         <div class="post-info-item"><span id="writer-name" style="font-weight:500;">로딩 중...</span></div>
         <div class="post-info-item"><span
                 th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')} + ' 등록'">등록일</span></div>
+        <div class="post-info-item" th:if="${post.updatedAt != null}"><span
+                th:text="${#temporals.format(post.updatedAt, 'yyyy.MM.dd HH:mm')} + ' 수정'">수정일</span></div>
       </div>
     </div>
     <div class="post-body">
@@ -77,7 +79,7 @@
 
     <div class="post-actions">
       <div class="post-actions-left">
-        <button class="btn-delete" id="btn-delete">
+        <button th:if="${isOwner}" class="btn-delete" id="btn-delete">
           <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5">
             <path
                     d="M2 3.5h9M5 3.5V2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1M10.5 3.5l-.7 7a1 1 0 0 1-1 .9H4.2a1 1 0 0 1-1-.9l-.7-7" />
@@ -85,7 +87,7 @@
         </button>
       </div>
       <div class="post-actions-right">
-        <a th:if="${isOwner}" th:href="'/post/' + ${post.id} + '/edit'" class="btn-edit">수정</a>
+        <button th:if="${isOwner}" class="btn-edit" id="btn-edit">수정</button>
         <a th:if="${post.status == 'PROGRESS'}" th:href="'/post/' + ${post.id} + '/request'" class="btn-request">✓ 완료
           요청</a>
       </div>
@@ -121,6 +123,57 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="editModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">작업 수정</span>
+        <span class="modal-team-badge"
+              th:style="${post.boardId == 1 ? 'background:var(--backend-bg);color:var(--backend-color);border:1px solid var(--backend-border)' : post.boardId == 2 ? 'background:var(--frontend-bg);color:var(--frontend-color);border:1px solid var(--frontend-border)' : 'background:var(--design-bg);color:var(--design-color);border:1px solid var(--design-border)'}"
+              th:text="${post.boardId == 1 ? 'Backend팀' : post.boardId == 2 ? 'Frontend팀' : 'Design팀'}">팀</span>
+      </div>
+      <button type="button" class="modal-close" id="btn-edit-close">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
+    <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
+      <div class="form-group">
+        <label class="form-label">제목</label>
+        <input type="text" name="title" th:value="${post.title}" class="form-input" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label">내용</label>
+        <textarea name="content" class="form-input" th:text="${post.content}" required></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">마감일 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
+        <input type="hidden" name="dueDate" id="edit-due-value"
+               th:value="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') + 'T00:00:00' : ''}">
+        <div class="due-picker">
+          <div class="due-picker-header">
+            <span class="due-month-label" id="edit-month-label"></span>
+            <div class="due-nav">
+              <span class="due-selected-display" id="edit-selected-display">선택 안 함</span>
+              <button type="button" class="due-nav-btn" id="btn-edit-prev-month">‹</button>
+              <button type="button" class="due-nav-btn" id="btn-edit-next-month">›</button>
+            </div>
+          </div>
+          <div class="due-grid">
+            <div class="due-dow">
+              <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+            </div>
+            <div class="due-days" id="edit-due-days"></div>
+          </div>
+          <button type="button" class="due-clear-btn" id="btn-edit-clear-due">선택 초기화</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-submit">수정 완료</button>
+    </form>
+  </div>
+</div>
+
 <div class="modal-overlay" id="deleteModal">
   <div class="modal-box">
     <div class="modal-icon">
@@ -142,53 +195,10 @@
 
 <script src="/js/common.js"></script>
 <script th:inline="javascript">
-  const deleteModal = document.getElementById("deleteModal");
-  const btnDelete = document.getElementById("btn-delete");
-  const btnDeleteCancel = document.getElementById("btn-delete-cancel");
-
-  // 삭제 모달 열기
-  if (btnDelete) {
-      btnDelete.addEventListener("click", () => {
-          deleteModal.classList.add("open");
-          document.body.style.overflow = "hidden";
-      });
-  }
-
-  // 삭제 모달 닫기
-  if (btnDeleteCancel) {
-      btnDeleteCancel.addEventListener("click", () => {
-          deleteModal.classList.remove("open");
-          document.body.style.overflow = "";
-      });
-  }
-
-  // 모달 밖 클릭 시 닫기
-  if (deleteModal) {
-      deleteModal.addEventListener("click", (e) => {
-          if (e.target.id === "deleteModal") {
-              deleteModal.classList.remove("open");
-              document.body.style.overflow = "";
-          }
-      });
-  }
-
-  // 작성자 이름 Fetch
   const memberId = [[${post.memberId}]];
-  fetchUsername(memberId).then(name => {
-      document.getElementById("writer-name").textContent = name;
-  });
-
-  // 에러 토스트
-  window.addEventListener("load", () => {
-      const toast = document.getElementById("errorToast");
-      if (toast) {
-          toast.classList.add("show");
-          setTimeout(() => toast.classList.remove("show"), 3000);
-      }
-  });
-
-  // 마감일 계산 (생략된 기존 로직 그대로 사용 가능)
+  const existingDueDateStr = /*[[${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}]]*/ '';
 </script>
+<script src="/js/post_detail.js"></script>
 </body>
 
 </html>

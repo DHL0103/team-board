@@ -1,5 +1,6 @@
-package kr.co.promptech.springboottutorial.post;
+package kr.co.promptech.springboottutorial.mapper;
 
+import kr.co.promptech.springboottutorial.model.Post;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List; // 표준 List 임포트
@@ -39,4 +40,15 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
 
     @Delete("DELETE FROM posts WHERE id = #{id}")
     void deletePost(Post post);
+
+    @Update("""
+        UPDATE posts
+        SET
+            title = #{title},
+            content = #{content},
+            due_date = #{dueDate},
+            updated_at = #{updatedAt}
+        WHERE id = #{id}
+    """)
+    void updatePost(Post post);
 }

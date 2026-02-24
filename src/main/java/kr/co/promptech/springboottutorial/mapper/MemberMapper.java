@@ -1,5 +1,6 @@
-package kr.co.promptech.springboottutorial.member;
+package kr.co.promptech.springboottutorial.mapper;
 
+import kr.co.promptech.springboottutorial.model.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

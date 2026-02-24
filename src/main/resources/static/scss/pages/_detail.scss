@@ -2,9 +2,10 @@
 
 // ── 레이아웃 ──
 .detail-wrap {
-  max-width: 860px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 36px 32px 60px;
+  padding: 40px 48px 72px;
 }
 
 .breadcrumb-row {
@@ -36,7 +37,7 @@
   }
 
   .post-header {
-    padding: 24px 28px 20px;
+    padding: 28px 36px 22px;
     border-bottom: 1px solid $border-soft;
 
     .post-meta-row {
@@ -67,7 +68,7 @@
   }
 
   .post-body {
-    padding: 24px 28px;
+    padding: 28px 36px;
     .post-content {
       font-size: 14px;
       color: $text;
@@ -78,7 +79,7 @@
   }
 
   .post-actions {
-    padding: 16px 28px;
+    padding: 16px 36px;
     border-top: 1px solid $border-soft;
     display: flex;
     justify-content: space-between;
@@ -227,6 +228,68 @@
   &:hover { background: #b91c1c; }
 }
 
+.btn-modal-confirm {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+  &:hover { background: #1d4ed8; }
+}
+
+.modal-box--edit {
+  max-width: 480px;
+  .modal-title { margin-bottom: 20px; }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    color: $text-sub;
+  }
+}
+
+.input-field {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid $border;
+  border-radius: 7px;
+  font-size: 13px;
+  color: $text;
+  background: $bg;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.15s;
+  &:focus { outline: none; border-color: #2563eb; }
+}
+
+.textarea-field {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid $border;
+  border-radius: 7px;
+  font-size: 13px;
+  color: $text;
+  background: $bg;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.15s;
+  &:focus { outline: none; border-color: #2563eb; }
+}
+
 // ── 에러 토스트 ──
 .toast {
   position: fixed;
@@ -259,7 +322,7 @@
   animation: fadeUp 0.35s ease 0.08s both;
 
   .comment-header {
-    padding: 16px 28px;
+    padding: 16px 36px;
     border-bottom: 1px solid $border-soft;
     display: flex;
     align-items: center;
@@ -270,7 +333,7 @@
   }
 
   .comment-list {
-    padding: 0 28px;
+    padding: 0 36px;
 
     .comment-empty { padding: 32px 0; text-align: center; color: $text-muted; font-size: 13px; }
 
@@ -293,7 +356,7 @@
   }
 
   .comment-form {
-    padding: 16px 28px;
+    padding: 16px 36px;
     border-top: 1px solid $border-soft;
     background: $bg;
 

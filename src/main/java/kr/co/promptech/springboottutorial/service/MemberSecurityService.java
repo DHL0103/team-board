@@ -1,5 +1,7 @@
-package kr.co.promptech.springboottutorial.member;
+package kr.co.promptech.springboottutorial.service;
 
+import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

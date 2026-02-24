@@ -1,9 +1,9 @@
 package kr.co.promptech.springboottutorial;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.co.promptech.springboottutorial.dto.MemberCreateDto;
-import kr.co.promptech.springboottutorial.member.MemberController;
-import kr.co.promptech.springboottutorial.member.MemberService;
+import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
+import kr.co.promptech.springboottutorial.controller.MemberController;
+import kr.co.promptech.springboottutorial.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
