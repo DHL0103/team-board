@@ -124,27 +124,52 @@
 </div>
 
 <div class="modal-overlay" id="editModal">
-  <div class="modal-box modal-box--edit">
-    <div class="modal-title">게시글 수정</div>
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">작업 수정</span>
+        <span class="modal-team-badge"
+              th:style="${post.boardId == 1 ? 'background:var(--backend-bg);color:var(--backend-color);border:1px solid var(--backend-border)' : post.boardId == 2 ? 'background:var(--frontend-bg);color:var(--frontend-color);border:1px solid var(--frontend-border)' : 'background:var(--design-bg);color:var(--design-color);border:1px solid var(--design-border)'}"
+              th:text="${post.boardId == 1 ? 'Backend팀' : post.boardId == 2 ? 'Frontend팀' : 'Design팀'}">팀</span>
+      </div>
+      <button type="button" class="modal-close" id="btn-edit-close">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+        </svg>
+      </button>
+    </div>
     <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
       <div class="form-group">
-        <label>제목</label>
-        <input type="text" name="title" th:value="${post.title}" class="input-field" required />
+        <label class="form-label">제목</label>
+        <input type="text" name="title" th:value="${post.title}" class="form-input" required />
       </div>
       <div class="form-group">
-        <label>내용</label>
-        <textarea name="content" class="textarea-field" th:text="${post.content}" required></textarea>
+        <label class="form-label">내용</label>
+        <textarea name="content" class="form-input" th:text="${post.content}" required></textarea>
       </div>
       <div class="form-group">
-        <label>마감일</label>
-        <input type="datetime-local" name="dueDate"
-               th:value="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') + 'T' + #temporals.format(post.dueDate, 'HH:mm') : ''}"
-               class="input-field" />
+        <label class="form-label">마감일 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
+        <input type="hidden" name="dueDate" id="edit-due-value"
+               th:value="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') + 'T00:00:00' : ''}">
+        <div class="due-picker">
+          <div class="due-picker-header">
+            <span class="due-month-label" id="edit-month-label"></span>
+            <div class="due-nav">
+              <span class="due-selected-display" id="edit-selected-display">선택 안 함</span>
+              <button type="button" class="due-nav-btn" id="btn-edit-prev-month">‹</button>
+              <button type="button" class="due-nav-btn" id="btn-edit-next-month">›</button>
+            </div>
+          </div>
+          <div class="due-grid">
+            <div class="due-dow">
+              <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+            </div>
+            <div class="due-days" id="edit-due-days"></div>
+          </div>
+          <button type="button" class="due-clear-btn" id="btn-edit-clear-due">선택 초기화</button>
+        </div>
       </div>
-      <div class="modal-actions">
-        <button type="button" class="btn-modal-cancel" id="btn-edit-cancel">취소</button>
-        <button type="submit" class="btn-modal-confirm">수정 완료</button>
-      </div>
+      <button type="submit" class="btn-submit">수정 완료</button>
     </form>
   </div>
 </div>
@@ -172,7 +197,12 @@
 <script th:inline="javascript">
   const editModal = document.getElementById("editModal");
   const btnEdit = document.getElementById("btn-edit");
-  const btnEditCancel = document.getElementById("btn-edit-cancel");
+  const btnEditClose = document.getElementById("btn-edit-close");
+
+  function closeEditModal() {
+      editModal.classList.remove("open");
+      document.body.style.overflow = "";
+  }
 
   if (btnEdit) {
       btnEdit.addEventListener("click", () => {
@@ -180,18 +210,12 @@
           document.body.style.overflow = "hidden";
       });
   }
-  if (btnEditCancel) {
-      btnEditCancel.addEventListener("click", () => {
-          editModal.classList.remove("open");
-          document.body.style.overflow = "";
-      });
+  if (btnEditClose) {
+      btnEditClose.addEventListener("click", closeEditModal);
   }
   if (editModal) {
       editModal.addEventListener("click", (e) => {
-          if (e.target.id === "editModal") {
-              editModal.classList.remove("open");
-              document.body.style.overflow = "";
-          }
+          if (e.target.id === "editModal") closeEditModal();
       });
   }
 
@@ -240,7 +264,89 @@
       }
   });
 
-  // 마감일 계산 (생략된 기존 로직 그대로 사용 가능)
+  // ── 수정 모달 캘린더 피커 ──
+  const editToday = new Date();
+  editToday.setHours(0, 0, 0, 0);
+
+  const existingDueDateStr = /*[[${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}]]*/ '';
+
+  let editPickerYear = editToday.getFullYear();
+  let editPickerMonth = editToday.getMonth();
+  let editSelectedDate = null;
+
+  if (existingDueDateStr) {
+      editSelectedDate = new Date(existingDueDateStr + 'T00:00:00');
+      editPickerYear = editSelectedDate.getFullYear();
+      editPickerMonth = editSelectedDate.getMonth();
+      const m = String(editSelectedDate.getMonth() + 1).padStart(2, '0');
+      const d = String(editSelectedDate.getDate()).padStart(2, '0');
+      document.getElementById('edit-selected-display').textContent = `${m}.${d} 마감`;
+  }
+
+  function editChangeMonth(dir) {
+      editPickerMonth += dir;
+      if (editPickerMonth < 0) { editPickerMonth = 11; editPickerYear--; }
+      if (editPickerMonth > 11) { editPickerMonth = 0; editPickerYear++; }
+      renderEditCalendar();
+  }
+
+  document.getElementById('btn-edit-prev-month').addEventListener('click', () => editChangeMonth(-1));
+  document.getElementById('btn-edit-next-month').addEventListener('click', () => editChangeMonth(1));
+
+  function renderEditCalendar() {
+      document.getElementById('edit-month-label').textContent = `${editPickerYear}년 ${editPickerMonth + 1}월`;
+      const grid = document.getElementById('edit-due-days');
+      grid.innerHTML = '';
+
+      const firstDay = new Date(editPickerYear, editPickerMonth, 1).getDay();
+      const lastDate = new Date(editPickerYear, editPickerMonth + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+          const el = document.createElement('div');
+          el.className = 'due-day empty';
+          grid.appendChild(el);
+      }
+
+      for (let d = 1; d <= lastDate; d++) {
+          const el = document.createElement('div');
+          el.className = 'due-day';
+          el.textContent = d;
+
+          const thisDate = new Date(editPickerYear, editPickerMonth, d);
+          const isToday = thisDate.getTime() === editToday.getTime();
+          const isPast = thisDate < editToday;
+
+          if (isPast) el.classList.add('past');
+          if (isToday) el.classList.add('today');
+          if (editSelectedDate && thisDate.getTime() === editSelectedDate.getTime()) el.classList.add('selected');
+
+          if (!isPast) {
+              el.addEventListener('click', () => editSelectDate(thisDate));
+          }
+          grid.appendChild(el);
+      }
+  }
+
+  function editSelectDate(date) {
+      editSelectedDate = date;
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      document.getElementById('edit-due-value').value = `${y}-${m}-${d}T00:00:00`;
+      document.getElementById('edit-selected-display').textContent = `${m}.${d} 마감`;
+      renderEditCalendar();
+  }
+
+  function clearEditDue() {
+      editSelectedDate = null;
+      document.getElementById('edit-due-value').value = '';
+      document.getElementById('edit-selected-display').textContent = '선택 안 함';
+      renderEditCalendar();
+  }
+
+  document.getElementById('btn-edit-clear-due').addEventListener('click', clearEditDue);
+
+  renderEditCalendar();
 </script>
 </body>
 
