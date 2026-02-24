@@ -31,7 +31,7 @@ public class PostController {
             model.addAttribute("isOwner", false);
         }
 
-        return "post_detail";
+        return "post/detail";
     }
 
     @PostMapping("/create")

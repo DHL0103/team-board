@@ -89,7 +89,7 @@ class PostControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("post"))
                 .andExpect(model().attribute("isOwner", true))
-                .andExpect(view().name("post_detail"));
+                .andExpect(view().name("post/detail"));
     }
 
     @Test
@@ -106,7 +106,7 @@ class PostControllerTest {
         mockMvc.perform(get("/post/" + postId))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("isOwner", false))
-                .andExpect(view().name("post_detail"));
+                .andExpect(view().name("post/detail"));
     }
 
     // ── 3. POST /post/create - 게시글 생성 ──
