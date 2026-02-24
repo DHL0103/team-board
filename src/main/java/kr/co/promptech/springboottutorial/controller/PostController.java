@@ -36,15 +36,8 @@ public class PostController {
 
     @PostMapping("/create")
     public String createPost(PostCreateDto postCreateDto, Model model, Principal principal) {
-        postService.createPost(
-                postCreateDto.getBoardId(),
-                postCreateDto.getTitle(),
-                postCreateDto.getContent(),
-                postCreateDto.getDueDate(),
-                principal.getName()
-        );
+        postService.createPost(postCreateDto, principal.getName());
         return "redirect:/board";
-
     }
 
     @PostMapping("/delete/{id}")

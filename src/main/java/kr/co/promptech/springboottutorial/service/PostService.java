@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
+import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +25,15 @@ public class PostService {
         return postMapper.getPostById(id);
     }
 
-    public void createPost(Long boardId,String title, String content, LocalDateTime dueDate, String username){
+    public void createPost(PostCreateDto postCreateDto, String username){
         Member member = memberMapper.findByUsername(username);
 
         Post post = new Post();
-        post.setTitle(title);
-        post.setContent(content);
-        post.setDueDate(dueDate);
+        post.setTitle(postCreateDto.getTitle());
+        post.setContent(postCreateDto.getContent());
+        post.setDueDate(postCreateDto.getDueDate());
         post.setMemberId(member.getId()); // 작성자 ID 주입
-        post.setBoardId(boardId);         // 게시판 ID 주입
+        post.setBoardId(postCreateDto.getBoardId());         // 게시판 ID 주입
         post.setStatus("PROGRESS");       // 기본 상태는 진행중으로.
         post.setCreatedAt(LocalDateTime.now());
         post.setUpdatedAt(null);

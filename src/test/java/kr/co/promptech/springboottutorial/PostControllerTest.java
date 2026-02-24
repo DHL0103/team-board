@@ -3,6 +3,8 @@ package kr.co.promptech.springboottutorial;
 import kr.co.promptech.springboottutorial.controller.BoardController;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.controller.PostController;
+import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
@@ -30,6 +33,12 @@ class PostControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private PostService postService;
+    @MockBean
+    private MemberService memberService;  // ← 추가 필요
+
+    @MockBean
+    private UserDetailsService userDetailsService;  // ← SecurityConfig용으로 추가 필요
+
 
     @Test
     @WithMockUser // 조회도 로그인 유저여야 통과됨
@@ -58,20 +67,17 @@ class PostControllerTest {
 
     @Test
     @WithMockUser(username = "daehee_fe")
-    @DisplayName("POST /create - 게시글 생성 테스트")
+    @DisplayName("POST /post/create - 게시글 생성 테스트")
     void testCreatePost() throws Exception {
         mockMvc.perform(post("/post/create")
                         .param("boardId", "1")
                         .param("title", "제목")
                         .param("content", "내용")
-                        .param("dueDate", "2026-12-31T23:59:59")
                         .with(csrf()))
-                // 200 대신 3xx 리다이렉트 확인
                 .andExpect(status().is3xxRedirection())
-                // 리다이렉트되는 목적지 주소 확인
                 .andExpect(redirectedUrl("/board"));
 
-        verify(postService).createPost(anyLong(), anyString(), anyString(), any(), eq("daehee_fe"));
+        verify(postService).createPost(any(PostCreateDto.class), eq("daehee_fe"));
     }
 }
 
