@@ -29,6 +29,7 @@ public class PostController {
     public String getPostDetailPage(@PathVariable Long id, Model model, Principal principal) {
         Post post = postService.getPostById(id);
         model.addAttribute("post", post);
+        model.addAttribute("postFiles", postFileService.getFilesByPostId(id));
 
         if (principal != null) {
             Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();
@@ -76,16 +77,36 @@ public class PostController {
     }
 
     @PostMapping("/update/{id}")
-    public String updatePost(@PathVariable Long id,PostCreateDto postCreateDto, Principal principal) {
+    public String updatePost(@PathVariable Long id,
+                             PostCreateDto postCreateDto,
+                             @RequestParam(value = "files", required = false) List<MultipartFile> files,
+                             @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds,
+                             Principal principal) {
         Post post = postService.getPostById(id);
         Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();
 
         if (!post.getMemberId().equals(currentMemberId)) {
-            // 본인이 아니면 수정 거부 (에러 페이지나 메시지 처리)
             return "redirect:/post/" + id + "?error=unauthorized";
         }
 
         postService.updatePost(post, postCreateDto);
+
+        if (deleteFileIds != null) {
+            postFileService.deleteFiles(deleteFileIds);
+        }
+
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    try {
+                        postFileService.saveFile(file, id);
+                    } catch (Exception e) {
+                        log.error("파일 저장 실패: {}", file.getOriginalFilename(), e);
+                    }
+                }
+            }
+        }
+
         return "redirect:/post/" + id;
     }
 
