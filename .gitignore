@@ -41,3 +41,7 @@ mysql_data/
 
 # CSS 폴더 제외
 src/main/resources/static/css/
+
+# 업로드 파일 (macOS 메타데이터 포함)
+uploads/
+
