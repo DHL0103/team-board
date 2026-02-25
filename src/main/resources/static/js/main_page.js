@@ -202,7 +202,7 @@ fileInput.addEventListener("change", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
     const toast = document.getElementById("errorToast");
-    if (toast) {
+    if (toast && toast.textContent.trim()) {
         toast.classList.add("show");
         setTimeout(() => toast.classList.remove("show"), 3000);
     }

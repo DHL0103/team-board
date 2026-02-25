@@ -36,8 +36,8 @@
     <span th:text="${post.title}">제목</span>
   </div>
 
-  <div class="toast" id="errorToast" th:if="${param.error}"
-       th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : '본인이 작성한 글만 삭제할 수 있습니다.'}">
+  <div class="toast" id="errorToast"
+       th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error != null ? '본인이 작성한 글만 삭제할 수 있습니다.' : '')}">
   </div>
 
   <div class="post-card">
