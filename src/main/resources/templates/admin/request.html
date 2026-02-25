@@ -49,12 +49,12 @@
             </div>
 
             <!-- 빈 상태 -->
-            <div class="admin-empty" th:if="${#lists.isEmpty(requestedPosts)}">
+            <div class="admin-empty" th:if="${#lists.isEmpty(postList)}">
                 승인 대기 중인 작업이 없습니다.
             </div>
 
-            <div class="request-list" th:unless="${#lists.isEmpty(requestedPosts)}">
-                <div class="request-card" th:each="post : ${requestedPosts}">
+            <div class="request-list" th:unless="${#lists.isEmpty(postList)}">
+                <div class="request-card" th:each="post : ${postList}">
                     <div class="request-card-info">
                         <div class="request-card-title" th:text="${post.title}">작업 제목</div>
                         <div class="request-card-meta">

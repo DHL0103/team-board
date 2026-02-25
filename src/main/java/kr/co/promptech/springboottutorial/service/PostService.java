@@ -35,6 +35,10 @@ public class PostService {
         return postMapper.getPostById(id);
     }
 
+    public List<Post> getRequestedPost(){
+        return postMapper.getRequestedPost();
+    }
+
     public Long createPost(PostCreateDto postCreateDto, String username){
         Member member = memberMapper.findByUsername(username);
 
