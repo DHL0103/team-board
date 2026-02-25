@@ -15,6 +15,16 @@ $teams: (
   design:   (color: #7c3aed, bg: #f5f3ff, border: #ddd6fe)
 );
 
+// 팔레트 컬러 Map (p1~p6, 팀 이름 무관)
+$palettes: (
+  p1: (color: #2563eb, bg: #eff6ff, border: #bfdbfe),  // 파랑
+  p2: (color: #d97706, bg: #fffbeb, border: #fde68a),  // 앰버
+  p3: (color: #7c3aed, bg: #f5f3ff, border: #ddd6fe),  // 보라
+  p4: (color: #059669, bg: #ecfdf5, border: #a7f3d0),  // 초록
+  p5: (color: #dc2626, bg: #fef2f2, border: #fecaca),  // 빨강
+  p6: (color: #0891b2, bg: #ecfeff, border: #a5f3fc),  // 청록
+);
+
 // 마감일 상태 컬러
 $due-colors: (
   safe: (color: #059669, bg: #ecfdf5),
@@ -41,6 +51,13 @@ $due-colors: (
   --design-color:    #{map-get(map-get($teams, design),   color)};
   --design-bg:       #{map-get(map-get($teams, design),   bg)};
   --design-border:   #{map-get(map-get($teams, design),   border)};
+
+  // 팔레트 컬러 (p1~p6)
+  @each $key, $val in $palettes {
+    --#{$key}-color:  #{map-get($val, color)};
+    --#{$key}-bg:     #{map-get($val, bg)};
+    --#{$key}-border: #{map-get($val, border)};
+  }
 
   // 마감일 컬러
   --due-safe:    #{map-get(map-get($due-colors, safe), color)};
