@@ -54,14 +54,17 @@
             </div>
 
             <div class="request-list" th:unless="${#lists.isEmpty(postList)}">
-                <div class="request-card" th:each="post : ${postList}">
-                    <div class="request-card-info">
+                <div class="request-card"
+                     th:each="post : ${postList}"
+                     th:with="palette=${ {'p1','p2','p3','p4','p5','p6'}[(post.boardId - 1) % 6] }"
+                     th:classappend="${'palette-' + palette}">
+                    <a class="request-card-info" th:href="@{'/post/' + ${post.id}}">
                         <div class="request-card-title" th:text="${post.title}">작업 제목</div>
                         <div class="request-card-meta">
                             <span th:text="${post.boardId}">보드</span>
                             <span th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
                         </div>
-                    </div>
+                    </a>
                     <div class="request-card-actions">
                         <form th:action="@{'/admin/post/approve/' + ${post.id}}" method="post" style="display:inline;">
                             <button type="submit" class="btn-approve">승인</button>

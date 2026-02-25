@@ -100,6 +100,13 @@
   color: $text-muted;
 }
 
+// ── 승인 요청 카드 팔레트 border ──
+@each $key, $val in $palettes {
+  .request-card.palette-#{$key} {
+    border-left: 3px solid map-get($val, color);
+  }
+}
+
 // ── 승인 요청 카드 ──
 .request-list {
   padding: 16px 20px;
@@ -125,6 +132,9 @@
     gap: 4px;
     flex: 1;
     min-width: 0;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
   }
 
   .request-card-title {

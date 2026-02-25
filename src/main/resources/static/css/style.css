@@ -1555,6 +1555,30 @@ textarea.form-input {
   color: #9ca3af;
 }
 
+.request-card.palette-p1 {
+  border-left: 3px solid #2563eb;
+}
+
+.request-card.palette-p2 {
+  border-left: 3px solid #d97706;
+}
+
+.request-card.palette-p3 {
+  border-left: 3px solid #7c3aed;
+}
+
+.request-card.palette-p4 {
+  border-left: 3px solid #059669;
+}
+
+.request-card.palette-p5 {
+  border-left: 3px solid #dc2626;
+}
+
+.request-card.palette-p6 {
+  border-left: 3px solid #0891b2;
+}
+
 .request-list {
   padding: 16px 20px;
   display: flex;
@@ -1581,6 +1605,9 @@ textarea.form-input {
   gap: 4px;
   flex: 1;
   min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
 }
 .request-card .request-card-title {
   font-size: 14px;
