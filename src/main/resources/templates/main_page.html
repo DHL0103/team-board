@@ -14,6 +14,10 @@
 
 <body>
 
+    <div class="toast" id="errorToast" th:if="${param.error}"
+         th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : '오류가 발생했습니다.'}">
+    </div>
+
     <header>
         <div class="logo">
             <div class="logo-icon">

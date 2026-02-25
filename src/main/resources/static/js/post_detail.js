@@ -161,6 +161,10 @@ if (editFileInput) {
 
     editFileInput.addEventListener('change', () => {
         for (const file of editFileInput.files) {
+            if (file.size > 10 * 1024 * 1024) {
+                showToast(`${file.name}: 파일 크기는 10MB를 초과할 수 없습니다.`);
+                continue;
+            }
             editFileDataTransfer.items.add(file);
         }
         editFileInput.files = editFileDataTransfer.files;

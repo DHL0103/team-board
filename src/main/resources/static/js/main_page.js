@@ -190,10 +190,22 @@ document.getElementById("btn-file-attach").addEventListener("click", () => {
 
 fileInput.addEventListener("change", () => {
     for (const file of fileInput.files) {
+        if (file.size > 10 * 1024 * 1024) {
+            showToast(`${file.name}: 파일 크기는 10MB를 초과할 수 없습니다.`);
+            continue;
+        }
         fileDataTransfer.items.add(file);
     }
     fileInput.files = fileDataTransfer.files;
     renderFileChips();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const toast = document.getElementById("errorToast");
+    if (toast) {
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 3000);
+    }
 });
 
 function renderFileChips() {
