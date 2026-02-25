@@ -6,6 +6,10 @@ const btnEditClose = document.getElementById("btn-edit-close");
 function closeEditModal() {
     editModal.classList.remove("open");
     document.body.style.overflow = "";
+    // 새 파일 첨부 초기화
+    editFileDataTransfer = new DataTransfer();
+    if (editFileInput) editFileInput.files = editFileDataTransfer.files;
+    if (editFileChipList) editFileChipList.innerHTML = '';
 }
 
 if (btnEdit) {
@@ -57,7 +61,7 @@ fetchUsername(memberId).then(name => {
 // ── 에러 토스트 ──
 window.addEventListener("load", () => {
     const toast = document.getElementById("errorToast");
-    if (toast) {
+    if (toast && toast.textContent.trim()) {
         toast.classList.add("show");
         setTimeout(() => toast.classList.remove("show"), 3000);
     }
@@ -144,3 +148,51 @@ function clearEditDue() {
 document.getElementById('btn-edit-clear-due').addEventListener('click', clearEditDue);
 
 renderEditCalendar();
+
+// ── 수정 모달 파일 첨부 ──
+let editFileDataTransfer = new DataTransfer();
+const editFileInput = document.getElementById('edit-file-input');
+const editFileChipList = document.getElementById('edit-file-chip-list');
+
+if (editFileInput) {
+    document.getElementById('btn-edit-file-attach').addEventListener('click', () => {
+        editFileInput.click();
+    });
+
+    editFileInput.addEventListener('change', () => {
+        for (const file of editFileInput.files) {
+            if (file.size > 10 * 1024 * 1024) {
+                showToast(`${file.name}: 파일 크기는 10MB를 초과할 수 없습니다.`);
+                continue;
+            }
+            editFileDataTransfer.items.add(file);
+        }
+        editFileInput.files = editFileDataTransfer.files;
+        renderEditFileChips();
+    });
+}
+
+function renderEditFileChips() {
+    editFileChipList.innerHTML = '';
+    for (let i = 0; i < editFileDataTransfer.files.length; i++) {
+        const file = editFileDataTransfer.files[i];
+        const chip = document.createElement('span');
+        chip.className = 'file-chip';
+        chip.innerHTML = `${file.name}<button type="button" class="file-chip-remove" data-index="${i}">×</button>`;
+        editFileChipList.appendChild(chip);
+    }
+}
+
+if (editFileChipList) {
+    editFileChipList.addEventListener('click', (e) => {
+        if (!e.target.classList.contains('file-chip-remove')) return;
+        const idx = parseInt(e.target.dataset.index);
+        const newDt = new DataTransfer();
+        for (let i = 0; i < editFileDataTransfer.files.length; i++) {
+            if (i !== idx) newDt.items.add(editFileDataTransfer.files[i]);
+        }
+        editFileDataTransfer = newDt;
+        editFileInput.files = editFileDataTransfer.files;
+        renderEditFileChips();
+    });
+}

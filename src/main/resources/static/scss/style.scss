@@ -28,7 +28,59 @@ button, input, select, textarea {
   font-family: inherit;
 }
 
-// ── 3. 공통 애니메이션 (딱 한 번만 선언) ──
+// ── 3. 파일 첨부 공통 UI ──
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: variables.$text-sub;
+  background: variables.$surface;
+  border: 1px solid variables.$border;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  &:hover { border-color: #d1d5db; color: variables.$text; }
+}
+
+.file-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: variables.$text;
+  background: variables.$bg;
+  border: 1px solid variables.$border;
+  border-radius: 99px;
+  text-decoration: none;
+  transition: border-color 0.15s;
+  &:hover { border-color: #9ca3af; }
+}
+
+.file-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  background: none;
+  border: none;
+  color: variables.$text-muted;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  &:hover { color: #ef4444; }
+}
+
+// ── 4. 공통 애니메이션 (딱 한 번만 선언) ──
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }

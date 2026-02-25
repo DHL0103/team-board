@@ -1,0 +1,79 @@
+@use "../abstract/variables" as *;
+
+header {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  background: $surface;
+  border-bottom: 1px solid $border;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: $text;
+    font-weight: 700;
+    font-size: 16px;
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: $text;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+// 뒤로가기 버튼 (상세 페이지)
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: $text-sub;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid $border;
+  border-radius: 6px;
+  background: $surface;
+  transition: all 0.15s;
+
+  &:hover {
+    border-color: #d1d5db;
+    color: $text;
+  }
+}
+
+// 새 작업 버튼 (메인 페이지)
+.btn-new {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: $text;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s, transform 0.15s;
+
+  &:hover {
+    background: #374151;
+    color: #fff;
+    transform: translateY(-1px);
+  }
+}

@@ -1,3 +1,12 @@
+// ── 토스트 유틸 ──
+function showToast(message) {
+    const toast = document.getElementById("errorToast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
+}
+
 // ── 회원 이름 캐싱 및 조회 유틸 ──
 const memberCache = {};
 
