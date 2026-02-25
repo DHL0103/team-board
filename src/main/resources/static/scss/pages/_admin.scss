@@ -1,0 +1,269 @@
+@use "../abstract/variables" as *;
+
+// ── 레이아웃 ──
+.admin-wrap {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 32px 40px 72px;
+}
+
+// ── 어드민 내비게이션 ──
+.admin-nav {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid $border;
+  padding-bottom: 0;
+
+  .admin-nav-item {
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    color: $text-sub;
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+
+    &:hover { color: $text; }
+    &.active { color: $text; border-bottom-color: $text; }
+  }
+}
+
+// ── 섹션 카드 ──
+.admin-section {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+  margin-bottom: 24px;
+  animation: fadeUp 0.35s ease both;
+}
+
+.admin-section-header {
+  padding: 18px 24px;
+  border-bottom: 1px solid $border-soft;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .admin-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: $text;
+  }
+
+  .admin-section-meta {
+    font-size: 12px;
+    color: $text-muted;
+    margin-top: 2px;
+  }
+}
+
+// ── 테이블 ──
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    padding: 10px 24px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: $text-muted;
+    background: $bg;
+    border-bottom: 1px solid $border;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+  }
+
+  td {
+    padding: 13px 24px;
+    font-size: 13px;
+    color: $text;
+    border-bottom: 1px solid $border-soft;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .admin-table-row {
+    cursor: pointer;
+    transition: background 0.12s;
+    &:hover td { background: $bg; }
+  }
+}
+
+.admin-empty {
+  padding: 40px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+}
+
+// ── 승인 요청 카드 ──
+.request-list {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.request-card {
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 14px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  transition: background 0.12s;
+  &:hover { background: $bg; }
+
+  .request-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .request-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .request-card-meta {
+    font-size: 12px;
+    color: $text-muted;
+    display: flex;
+    gap: 10px;
+  }
+
+  .request-card-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+}
+
+// ── 버튼 ──
+.btn-admin-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  background: $text;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+  &:hover { background: #374151; }
+}
+
+.btn-approve {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  &:hover { background: #d1fae5; }
+}
+
+.btn-reject {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  background: $surface;
+  color: $text-sub;
+  border: 1px solid $border;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  &:hover { background: $bg; color: $text; }
+}
+
+.btn-admin-edit {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  background: $surface;
+  color: $text-sub;
+  border: 1px solid $border;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  &:hover { border-color: #d1d5db; color: $text; }
+}
+
+.btn-admin-danger {
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  background: $surface;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  &:hover { background: #fef2f2; }
+}
+
+// ── 모달 (공통 modal-overlay/modal-box 재사용, 추가 변형만) ──
+.modal-box--admin {
+  max-width: 460px;
+
+  .modal-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: $text;
+    margin-bottom: 20px;
+  }
+}
+
+// ── 폼 (input-field, form-group은 _detail.scss 공용) ──
+.select-field {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid $border;
+  border-radius: 7px;
+  font-size: 13px;
+  color: $text;
+  background: $bg;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236b7280' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color 0.15s;
+  &:focus { outline: none; border-color: #2563eb; }
+}
+
+// ── role 뱃지 ──
+.role-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+
+  &.role-admin   { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  &.role-manager { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+  &.role-user    { background: $bg;     color: $text-muted; border: 1px solid $border; }
+}

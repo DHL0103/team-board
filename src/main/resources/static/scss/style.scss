@@ -6,6 +6,7 @@
 @use "pages/main";
 @use "pages/detail";
 @use "pages/login";
+@use "pages/admin";
 
 // ── 2. 리셋 & 기본 설정 ──
 *, *::before, *::after { box-sizing: border-box; }
