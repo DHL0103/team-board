@@ -45,3 +45,6 @@ src/main/resources/static/css/
 # 업로드 파일 (macOS 메타데이터 포함)
 uploads/
 
+# 로컬 설정 파일 (DB 정보 등 민감 정보 포함)
+src/main/resources/application.properties
+
