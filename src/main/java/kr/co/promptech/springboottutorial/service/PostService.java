@@ -1,21 +1,31 @@
 package kr.co.promptech.springboottutorial.service;
 
+import kr.co.promptech.springboottutorial.mapper.PostFileMapper;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
+import kr.co.promptech.springboottutorial.model.PostFile;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostMapper postMapper;
     private final MemberMapper memberMapper;
+    private final PostFileMapper postFileMapper;
+
 
     public List<Post> getAllPost(){
         return postMapper.getAllPost();
@@ -25,7 +35,7 @@ public class PostService {
         return postMapper.getPostById(id);
     }
 
-    public void createPost(PostCreateDto postCreateDto, String username){
+    public Long createPost(PostCreateDto postCreateDto, String username){
         Member member = memberMapper.findByUsername(username);
 
         Post post = new Post();
@@ -39,6 +49,7 @@ public class PostService {
         post.setUpdatedAt(null);
 
         postMapper.createPost(post);
+        return post.getId();
     }
 
     public void deletePost(Post post){
@@ -54,7 +65,4 @@ public class PostService {
 
         postMapper.updatePost(post);
     }
-
-
-
 }

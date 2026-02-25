@@ -3,21 +3,27 @@ package kr.co.promptech.springboottutorial.controller;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/post")
+@Slf4j
 public class PostController {
 
     private final PostService postService;
     private final MemberService memberService;
+    private final PostFileService postFileService;
 
     @GetMapping("/{id}")
     public String getPostDetailPage(@PathVariable Long id, Model model, Principal principal) {
@@ -35,8 +41,22 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(PostCreateDto postCreateDto, Model model, Principal principal) {
-        postService.createPost(postCreateDto, principal.getName());
+    public String createPost(PostCreateDto postCreateDto,
+                             @RequestParam(value = "files", required = false) List<MultipartFile> files,
+                             Principal principal) {
+        Long postId = postService.createPost(postCreateDto, principal.getName());
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    try {
+                        postFileService.saveFile(file, postId);
+                    } catch (Exception e) {
+                        // 파일 저장 실패해도 게시글은 유지
+                        log.error("파일 저장 실패: {}", file.getOriginalFilename(), e);
+                    }
+                }
+            }
+        }
         return "redirect:/board";
     }
 
