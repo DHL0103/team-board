@@ -25,7 +25,11 @@ public class PostFileService {
             String ext = originalName.substring(originalName.lastIndexOf("."));
             String savedName = UUID.randomUUID().toString() + ext;
 
-            Path path = Paths.get(uploadDir).resolve(savedName);
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+            Path path = uploadPath.resolve(savedName);
             Files.copy(file.getInputStream(), path);
 
             PostFile postFile = new PostFile();

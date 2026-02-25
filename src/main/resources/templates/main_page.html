@@ -231,7 +231,7 @@
                 </button>
             </div>
 
-            <form action="/post/create" method="post">
+            <form action="/post/create" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="boardId" id="modal-board-id">
 
                 <div class="form-group">
@@ -268,6 +268,17 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <input type="file" name="files" id="file-input" multiple hidden>
+                    <button type="button" class="file-upload-btn" id="btn-file-attach">
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M6 1v7M3 5l3-4 3 4M2 10h8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        파일 첨부
+                    </button>
+                    <div class="file-chip-list" id="file-chip-list"></div>
+                </div>
+
                 <button type="submit" class="btn-submit">작업 추가</button>
             </form>
         </div>
@@ -275,190 +286,7 @@
 
     <script src="/js/lib/bootstrap.bundle.min.js"></script>
     <script src="/js/common.js"></script>
-    <script>
-        // ── 기존 로직 ──
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const colMap = {
-            backend: { bodyId: "body-backend", countId: "count-backend" },
-            frontend: { bodyId: "body-frontend", countId: "count-frontend", emptyId: "empty-frontend" },
-            design: { bodyId: "body-design", countId: "count-design", emptyId: "empty-design" },
-        };
-        
-        Object.values(colMap).forEach(({ bodyId, countId, emptyId }) => {
-            const body = document.getElementById(bodyId);
-            if (!body) return;
-            const cards = body.querySelectorAll(".board-card");
-            let visible = 0;
-            cards.forEach(card => { if (card.dataset.status === "COMPLETED") card.style.display = "none"; else visible++; });
-            document.getElementById(countId).textContent = visible + "개";
-            if (emptyId && visible === 0) document.getElementById(emptyId).style.display = "flex";
-        });
-
-        document.querySelectorAll(".due-chip").forEach(chip => {
-            const due = chip.dataset.due;
-            if (!due) { chip.classList.add("none"); return; }
-            const dueDate = new Date(due);
-            const diffDays = Math.floor((dueDate - today) / (1000 * 60 * 60 * 24));
-            const label = chip.querySelector(".due-label");
-            if (diffDays < 0) { chip.classList.add("over"); label.textContent += " 초과"; }
-            else if (diffDays === 0) { chip.classList.add("warn"); label.textContent = "오늘 마감"; }
-            else if (diffDays === 1) { chip.classList.add("warn"); label.textContent = "내일 마감"; }
-            else if (diffDays <= 3) { chip.classList.add("warn"); }
-            else { chip.classList.add("safe"); }
-        });
-
-        document.querySelectorAll(".status-chip").forEach(chip => {
-            const s = chip.dataset.status;
-            if (s === "PROGRESS") chip.classList.add("progress");
-            if (s === "REQUESTED") chip.classList.add("requested");
-        });
-
-        const boardUrlMap = { "1": "backend", "2": "frontend", "3": "design" };
-        document.querySelectorAll(".board-card").forEach(card => {
-            card.addEventListener("mouseenter", () => card.classList.add("is-hovered"));
-            card.addEventListener("mouseleave", () => card.classList.remove("is-hovered"));
-            card.addEventListener("click", () => {
-                const postId = card.dataset.id;
-                if (postId) location.href = `/post/${postId}`;
-            });
-        });
-
-        document.querySelectorAll(".board-card").forEach(async card => {
-            if (card.dataset.status === "COMPLETED") return;
-            const memberId = card.dataset.memberId;
-            if (!memberId) return;
-            const name = await fetchUsername(memberId);
-            card.querySelector(".writer-name").textContent = name;
-        });
-
-        document.querySelectorAll(".view-tab").forEach(tab => {
-            tab.addEventListener("click", () => {
-                document.querySelectorAll(".view-tab").forEach(t => t.classList.remove("active"));
-                tab.classList.add("active");
-            });
-        });
-
-        // ── 모달 ──
-        const teamStyles = {
-            backend: { bg: "var(--backend-bg)", color: "var(--backend-color)", border: "var(--backend-border)" },
-            frontend: { bg: "var(--frontend-bg)", color: "var(--frontend-color)", border: "var(--frontend-border)" },
-            design: { bg: "var(--design-bg)", color: "var(--design-color)", border: "var(--design-border)" },
-        };
-
-        const createModal = document.getElementById("createModal");
-
-        function openModal(boardId, teamName, teamKey) {
-            document.getElementById("modal-board-id").value = boardId;
-            const badge = document.getElementById("modal-team-badge");
-            const s = teamStyles[teamKey];
-            badge.textContent = teamName;
-            badge.style.background = s.bg;
-            badge.style.color = s.color;
-            badge.style.border = `1px solid ${s.border}`;
-            clearDue();
-            renderCalendar();
-            createModal.classList.add("open");
-            document.body.style.overflow = "hidden";
-        }
-
-        function closeModal() {
-            createModal.classList.remove("open");
-            document.body.style.overflow = "";
-        }
-
-        document.getElementById("btn-add-backend").addEventListener("click", () => openModal(1, "Backend팀", "backend"));
-        document.getElementById("btn-add-frontend").addEventListener("click", () => openModal(2, "Frontend팀", "frontend"));
-        document.getElementById("btn-add-design").addEventListener("click", () => openModal(3, "Design팀", "design"));
-
-        createModal.addEventListener("click", (e) => {
-            if (e.target === createModal) closeModal();
-        });
-
-        document.getElementById("btn-modal-close").addEventListener("click", closeModal);
-
-        // ESC 닫기
-        document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
-
-        // ── 날짜 피커 ──
-        let pickerYear = today.getFullYear();
-        let pickerMonth = today.getMonth(); // 0-indexed
-        let selectedDate = null;
-
-        function changeMonth(dir) {
-            pickerMonth += dir;
-            if (pickerMonth < 0) { pickerMonth = 11; pickerYear--; }
-            if (pickerMonth > 11) { pickerMonth = 0; pickerYear++; }
-            renderCalendar();
-        }
-
-        document.getElementById("btn-prev-month").addEventListener("click", () => changeMonth(-1));
-        document.getElementById("btn-next-month").addEventListener("click", () => changeMonth(1));
-
-        function renderCalendar() {
-            const label = document.getElementById("due-month-label");
-            label.textContent = `${pickerYear}년 ${pickerMonth + 1}월`;
-
-            const grid = document.getElementById("due-days");
-            grid.innerHTML = "";
-
-            const firstDay = new Date(pickerYear, pickerMonth, 1).getDay(); // 0=일
-            const lastDate = new Date(pickerYear, pickerMonth + 1, 0).getDate();
-
-            // 앞 빈칸
-            for (let i = 0; i < firstDay; i++) {
-                const el = document.createElement("div");
-                el.className = "due-day empty";
-                grid.appendChild(el);
-            }
-
-            for (let d = 1; d <= lastDate; d++) {
-                const el = document.createElement("div");
-                el.className = "due-day";
-                el.textContent = d;
-
-                const thisDate = new Date(pickerYear, pickerMonth, d);
-                const isToday = thisDate.getTime() === today.getTime();
-                const isPast = thisDate < today;
-
-                if (isPast) el.classList.add("past");
-                if (isToday) el.classList.add("today");
-                if (selectedDate && thisDate.getTime() === selectedDate.getTime()) el.classList.add("selected");
-
-                if (!isPast) {
-                    el.addEventListener("click", () => selectDate(thisDate));
-                }
-                grid.appendChild(el);
-            }
-        }
-
-        function selectDate(date) {
-            selectedDate = date;
-
-            // hidden input에 LocalDateTime 형식으로 세팅 (자정 기준)
-            const y = date.getFullYear();
-            const m = String(date.getMonth() + 1).padStart(2, "0");
-            const d = String(date.getDate()).padStart(2, "0");
-            document.getElementById("modal-due-value").value = `${y}-${m}-${d}T00:00:00`;
-
-            // 표시 업데이트
-            document.getElementById("due-selected-display").textContent = `${m}.${d} 마감`;
-
-            renderCalendar();
-        }
-
-        function clearDue() {
-            selectedDate = null;
-            document.getElementById("modal-due-value").value = "";
-            document.getElementById("due-selected-display").textContent = "선택 안 함";
-            renderCalendar();
-        }
-
-        document.getElementById("btn-clear-due").addEventListener("click", () => clearDue());
-
-        // 초기 렌더
-        renderCalendar();</script>
+    <script src="/js/main_page.js"></script>
 
 </body>
 
