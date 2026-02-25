@@ -15,6 +15,24 @@
   --design-color: #7c3aed;
   --design-bg: #f5f3ff;
   --design-border: #ddd6fe;
+  --p1-color: #2563eb;
+  --p1-bg: #eff6ff;
+  --p1-border: #bfdbfe;
+  --p2-color: #d97706;
+  --p2-bg: #fffbeb;
+  --p2-border: #fde68a;
+  --p3-color: #7c3aed;
+  --p3-bg: #f5f3ff;
+  --p3-border: #ddd6fe;
+  --p4-color: #059669;
+  --p4-bg: #ecfdf5;
+  --p4-border: #a7f3d0;
+  --p5-color: #dc2626;
+  --p5-bg: #fef2f2;
+  --p5-border: #fecaca;
+  --p6-color: #0891b2;
+  --p6-bg: #ecfeff;
+  --p6-border: #a5f3fc;
   --due-safe: #059669;
   --due-safe-bg: #ecfdf5;
   --due-warn: #d97706;
@@ -207,6 +225,84 @@ header .logo .logo-icon {
 }
 .col-design .card-team-line {
   background: #7c3aed;
+  opacity: 0.2;
+}
+
+.col-p1 {
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+.col-p1 .team-dot {
+  background: #2563eb;
+}
+.col-p1 .card-team-line {
+  background: #2563eb;
+  opacity: 0.2;
+}
+
+.col-p2 {
+  background: #fffbeb;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+.col-p2 .team-dot {
+  background: #d97706;
+}
+.col-p2 .card-team-line {
+  background: #d97706;
+  opacity: 0.2;
+}
+
+.col-p3 {
+  background: #f5f3ff;
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+}
+.col-p3 .team-dot {
+  background: #7c3aed;
+}
+.col-p3 .card-team-line {
+  background: #7c3aed;
+  opacity: 0.2;
+}
+
+.col-p4 {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+}
+.col-p4 .team-dot {
+  background: #059669;
+}
+.col-p4 .card-team-line {
+  background: #059669;
+  opacity: 0.2;
+}
+
+.col-p5 {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+.col-p5 .team-dot {
+  background: #dc2626;
+}
+.col-p5 .card-team-line {
+  background: #dc2626;
+  opacity: 0.2;
+}
+
+.col-p6 {
+  background: #ecfeff;
+  color: #0891b2;
+  border: 1px solid #a5f3fc;
+}
+.col-p6 .team-dot {
+  background: #0891b2;
+}
+.col-p6 .card-team-line {
+  background: #0891b2;
   opacity: 0.2;
 }
 

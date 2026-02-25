@@ -2,11 +2,11 @@
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
-const colMap = {
-    backend: { bodyId: "body-backend", countId: "count-backend" },
-    frontend: { bodyId: "body-frontend", countId: "count-frontend", emptyId: "empty-frontend" },
-    design: { bodyId: "body-design", countId: "count-design", emptyId: "empty-design" },
-};
+const colMap = {};
+document.querySelectorAll(".kanban-col[data-board-id]").forEach(col => {
+    const id = col.dataset.boardId;
+    colMap[id] = { bodyId: `body-${id}`, countId: `count-${id}`, emptyId: `empty-${id}` };
+});
 
 Object.values(colMap).forEach(({ bodyId, countId, emptyId }) => {
     const body = document.getElementById(bodyId);
@@ -37,7 +37,6 @@ document.querySelectorAll(".status-chip").forEach(chip => {
     if (s === "REQUESTED") chip.classList.add("requested");
 });
 
-const boardUrlMap = { "1": "backend", "2": "frontend", "3": "design" };
 document.querySelectorAll(".board-card").forEach(card => {
     card.addEventListener("mouseenter", () => card.classList.add("is-hovered"));
     card.addEventListener("mouseleave", () => card.classList.remove("is-hovered"));
@@ -64,9 +63,12 @@ document.querySelectorAll(".view-tab").forEach(tab => {
 
 // ── 모달 ──
 const teamStyles = {
-    backend: { bg: "var(--backend-bg)", color: "var(--backend-color)", border: "var(--backend-border)" },
-    frontend: { bg: "var(--frontend-bg)", color: "var(--frontend-color)", border: "var(--frontend-border)" },
-    design: { bg: "var(--design-bg)", color: "var(--design-color)", border: "var(--design-border)" },
+    p1: { bg: "var(--p1-bg)", color: "var(--p1-color)", border: "var(--p1-border)" },
+    p2: { bg: "var(--p2-bg)", color: "var(--p2-color)", border: "var(--p2-border)" },
+    p3: { bg: "var(--p3-bg)", color: "var(--p3-color)", border: "var(--p3-border)" },
+    p4: { bg: "var(--p4-bg)", color: "var(--p4-color)", border: "var(--p4-border)" },
+    p5: { bg: "var(--p5-bg)", color: "var(--p5-color)", border: "var(--p5-border)" },
+    p6: { bg: "var(--p6-bg)", color: "var(--p6-color)", border: "var(--p6-border)" },
 };
 
 const createModal = document.getElementById("createModal");
@@ -94,9 +96,11 @@ function closeModal() {
     fileChipList.innerHTML = "";
 }
 
-document.getElementById("btn-add-backend").addEventListener("click", () => openModal(1, "Backend팀", "backend"));
-document.getElementById("btn-add-frontend").addEventListener("click", () => openModal(2, "Frontend팀", "frontend"));
-document.getElementById("btn-add-design").addEventListener("click", () => openModal(3, "Design팀", "design"));
+document.querySelectorAll(".btn-col-add").forEach(btn => {
+    btn.addEventListener("click", () => {
+        openModal(btn.dataset.boardId, btn.dataset.boardName, btn.dataset.palette);
+    });
+});
 
 createModal.addEventListener("click", (e) => {
     if (e.target === createModal) closeModal();
