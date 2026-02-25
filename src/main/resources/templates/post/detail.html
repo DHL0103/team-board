@@ -77,6 +77,21 @@
       <div class="post-content" th:text="${post.content}">내용</div>
     </div>
 
+    <div class="post-files" th:if="${postFiles != null and !#lists.isEmpty(postFiles)}">
+      <div class="post-files-label">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 1v7M3 5l3-4 3 4M2 10h8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        첨부파일
+      </div>
+      <div class="file-chip-list">
+        <a class="file-chip" th:each="file : ${postFiles}"
+           th:href="@{/files/{storedPath}(storedPath=${file.storedPath}, name=${file.originalName})}"
+           th:text="${file.originalName}"
+           target="_blank"></a>
+      </div>
+    </div>
+
     <div class="post-actions">
       <div class="post-actions-left">
         <button th:if="${isOwner}" class="btn-delete" id="btn-delete">
@@ -138,7 +153,7 @@
         </svg>
       </button>
     </div>
-    <form th:action="@{/post/update/{id}(id=${post.id})}" method="post">
+    <form th:action="@{/post/update/{id}(id=${post.id})}" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label">제목</label>
         <input type="text" name="title" th:value="${post.title}" class="form-input" required />
@@ -169,6 +184,27 @@
           <button type="button" class="due-clear-btn" id="btn-edit-clear-due">선택 초기화</button>
         </div>
       </div>
+      <div class="form-group" th:if="${postFiles != null and !#lists.isEmpty(postFiles)}">
+        <label class="form-label">기존 첨부파일 <span style="color:var(--text-muted);font-weight:400;">(체크 시 삭제)</span></label>
+        <div class="existing-file-list">
+          <label class="existing-file-item" th:each="file : ${postFiles}">
+            <input type="checkbox" name="deleteFileIds" th:value="${file.id}">
+            <span class="file-name" th:text="${file.originalName}">파일명</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <input type="file" name="files" id="edit-file-input" multiple hidden>
+        <button type="button" class="file-upload-btn" id="btn-edit-file-attach">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M6 1v7M3 5l3-4 3 4M2 10h8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          파일 추가
+        </button>
+        <div class="file-chip-list" id="edit-file-chip-list"></div>
+      </div>
+
       <button type="submit" class="btn-submit">수정 완료</button>
     </form>
   </div>
