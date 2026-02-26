@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
+import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,16 +22,12 @@ public class MemberService {
         return memberMapper.findByUsername(username);
     }
 
-    public void create (String username, String password, Long boardId) {
-        Member member = new Member();
-        member.setUsername(username);
-        member.setBoardId(boardId);
-        member.setRole("ROLE_USER");
+    public void create (MemberCreateDto memberCreateDto) {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        member.setPassword(passwordEncoder.encode(password));
+        memberCreateDto.setPassword(passwordEncoder.encode(memberCreateDto.getPassword()));
 
-        this.memberMapper.save(member);
+        this.memberMapper.save(memberCreateDto);
     }
 
     public List<Member> getAllMemberExceptAdmin() {

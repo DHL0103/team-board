@@ -5,6 +5,7 @@ import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
@@ -95,7 +96,11 @@ public class AdminController {
         return "redirect:/admin/boards";
     }
 
-
+    @PostMapping("/member/create")
+    public String createMember(@ModelAttribute MemberCreateDto memberCreateDto){
+        memberService.create(memberCreateDto);
+        return "redirect:/admin/members";
+    }
 
 
 }
