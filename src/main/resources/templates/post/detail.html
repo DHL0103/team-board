@@ -81,8 +81,9 @@
       </div>
       <div class="post-actions-right">
         <button th:if="${isOwner}" class="btn-edit" id="btn-edit">수정</button>
-        <a th:if="${post.status == 'PROGRESS'}" th:href="'/post/' + ${post.id} + '/request'" class="btn-request">✓ 완료
-          요청</a>
+        <form th:if="${post.status == 'PROGRESS'}" th:action="@{/post/request/{id}(id=${post.id})}" method="post" style="margin:0;">
+          <button type="submit" class="btn-request">✓ 완료 요청</button>
+        </form>
       </div>
     </div>
   </div>

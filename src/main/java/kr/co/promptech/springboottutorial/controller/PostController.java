@@ -125,4 +125,14 @@ public class PostController {
         return "redirect:/post/" + id;
     }
 
+    @PostMapping("/request/{id}")
+    public String requestPost(@PathVariable Long id, Principal principal) {
+        Post post = postService.getPostById(id);
+        Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();
+        if (!post.getMemberId().equals(currentMemberId)) {
+            return "redirect:/post/" + id + "?error=unauthorized";
+        }
+        postService.updateStatus(id,"REQUESTED");
+        return "redirect:/post/" + id;
+    }
 }
