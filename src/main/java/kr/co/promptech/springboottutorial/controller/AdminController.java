@@ -2,10 +2,12 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.model.Board;
+import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
+import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ import java.util.Map;
 public class AdminController {
     private final PostService postService;
     private final BoardService boardService;
+    private final MemberService memberService;
 
     @GetMapping("/request")
     public String requestPage(Model model){
@@ -48,9 +51,16 @@ public class AdminController {
     }
 
     @GetMapping("/members")
-    public String memberPage(){
-
-
+    public String memberPage(Model model){
+        List<Member> memberList = memberService.getAllMemberExceptAdmin();
+        model.addAttribute("memberList", memberList);
+        List<Board> boardList = boardService.getAllBoards();
+        model.addAttribute("boardList", boardList);
+        Map<Long, String> boardMap = new LinkedHashMap<>();
+        for (Board board : boardList) {
+            boardMap.put(board.getId(), board.getName());
+        }
+        model.addAttribute("boardMap", boardMap);
         return "admin/members";
     }
     @GetMapping("/boards")

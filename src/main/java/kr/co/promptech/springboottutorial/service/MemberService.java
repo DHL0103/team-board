@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -29,5 +31,10 @@ public class MemberService {
         member.setPassword(passwordEncoder.encode(password));
 
         this.memberMapper.save(member);
+    }
+
+    public List<Member> getAllMemberExceptAdmin() {
+        List<Member> memberList = memberMapper.getAllMemberExceptAdmin();
+        return memberList;
     }
 }
