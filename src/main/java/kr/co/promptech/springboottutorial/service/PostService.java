@@ -74,4 +74,8 @@ public class PostService {
 
         postMapper.updatePost(post);
     }
+
+    public void updateStatus(Long id, String status){
+        postMapper.updateStatus(id,status);
+    }
 }

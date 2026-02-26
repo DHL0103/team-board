@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,12 @@ public class AdminController {
         }
         model.addAttribute("boardPaletteMap", boardPaletteMap);
         return "admin/request";
+    }
+
+    @PostMapping("/approve/{id}")
+    public String approve(@PathVariable Long id, Model model){
+        postService.updateStatus(id,"APPROVED");
+        return "redirect:/admin/request";
     }
 
     @GetMapping("/members")

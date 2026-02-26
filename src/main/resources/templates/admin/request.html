@@ -56,10 +56,10 @@
                         </div>
                     </a>
                     <div class="request-card-actions">
-                        <form th:action="@{'/admin/post/approve/' + ${post.id}}" method="post" style="display:inline;">
+                        <form th:action="@{'/admin/approve/' + ${post.id}}" method="post" style="display:inline;">
                             <button type="submit" class="btn-approve">승인</button>
                         </form>
-                        <form th:action="@{'/admin/post/reject/' + ${post.id}}" method="post" style="display:inline;">
+                        <form th:action="@{'/admin/reject/' + ${post.id}}" method="post" style="display:inline;">
                             <button type="submit" class="btn-reject">반려</button>
                         </form>
                     </div>
