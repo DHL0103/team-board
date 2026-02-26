@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.service;
 
+import kr.co.promptech.springboottutorial.exception.PostNotFoundException;
 import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
@@ -36,7 +37,9 @@ public class PostService {
     }
 
     public Post getPostById(Long id){
-        return postMapper.getPostById(id);
+        Post post = postMapper.getPostById(id);
+        if (post == null) throw new PostNotFoundException(id);
+        return post;
     }
 
     public List<Post> getRequestedPost(){
