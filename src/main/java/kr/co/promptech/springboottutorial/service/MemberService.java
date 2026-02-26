@@ -39,4 +39,8 @@ public class MemberService {
     public void update(Long id, MemberUpdateDto memberUpdateDto){
         memberMapper.update(id, memberUpdateDto);
     }
+
+    public void delete(Long id){
+        memberMapper.deleteById(id);
+    }
 }

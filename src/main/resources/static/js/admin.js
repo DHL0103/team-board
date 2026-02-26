@@ -51,6 +51,20 @@ if (btnCloseEdit) {
     });
 }
 
+// ── 멤버 삭제 버튼 ──
+document.querySelectorAll(".btn-open-delete-member").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("delete-member-name").textContent = btn.dataset.username;
+        document.getElementById("deleteMemberForm").action = `/admin/member/delete/${btn.dataset.memberId}`;
+        openModal("deleteMemberModal");
+    });
+});
+
+const btnDeleteMemberCancel = document.getElementById("btn-delete-member-cancel");
+if (btnDeleteMemberCancel) {
+    btnDeleteMemberCancel.addEventListener("click", () => closeModal("deleteMemberModal"));
+}
+
 // ── 수정 버튼 — 데이터 채우고 모달 열기 ──
 document.querySelectorAll(".btn-open-edit").forEach(btn => {
     btn.addEventListener("click", () => {

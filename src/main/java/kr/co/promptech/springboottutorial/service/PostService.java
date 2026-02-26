@@ -72,6 +72,10 @@ public class PostService {
         return postMapper.getPostsByBoardId(boardId);
     }
 
+    public List<Post> getPostsByMemberId(Long memberId) {
+        return postMapper.getPostsByMemberId(memberId);
+    }
+
     public void updatePost(Post post, PostCreateDto postCreateDto){
 
         post.setTitle(postCreateDto.getTitle());
