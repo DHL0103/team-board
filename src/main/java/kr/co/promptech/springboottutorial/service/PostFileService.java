@@ -41,6 +41,14 @@ public class PostFileService {
         }
     }
 
+    public void deleteFilesByPostId(Long postId) {
+        List<PostFile> files = postFileMapper.findByPostId(postId);
+        List<Long> ids = files.stream().map(PostFile::getId).toList();
+        if (!ids.isEmpty()) {
+            deleteFiles(ids);
+        }
+    }
+
     public void saveFile(MultipartFile file, Long postId){
         try {
             String originalName = file.getOriginalFilename();

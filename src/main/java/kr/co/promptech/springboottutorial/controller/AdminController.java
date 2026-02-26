@@ -62,6 +62,16 @@ public class AdminController {
         return "redirect:/admin/boards";
     }
 
+    @PostMapping("/board/delete/{id}")
+    public String deleteBoard(@PathVariable Long id){
+        List<Post> posts = postService.getPostsByBoardId(id);
+        for (Post post : posts) {
+            postService.deletePost(post);
+        }
+        boardService.deleteBoard(id);
+        return "redirect:/admin/boards";
+    }
+
 
 
 

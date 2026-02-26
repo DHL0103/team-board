@@ -1,6 +1,6 @@
 package kr.co.promptech.springboottutorial.service;
 
-import kr.co.promptech.springboottutorial.mapper.PostFileMapper;
+import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.model.Post;
@@ -24,7 +24,7 @@ import java.util.UUID;
 public class PostService {
     private final PostMapper postMapper;
     private final MemberMapper memberMapper;
-    private final PostFileMapper postFileMapper;
+    private final PostFileService postFileService;
 
 
     public List<Post> getAllPost(){
@@ -57,7 +57,12 @@ public class PostService {
     }
 
     public void deletePost(Post post){
+        postFileService.deleteFilesByPostId(post.getId());
         postMapper.deletePost(post);
+    }
+
+    public List<Post> getPostsByBoardId(Long boardId) {
+        return postMapper.getPostsByBoardId(boardId);
     }
 
     public void updatePost(Post post, PostCreateDto postCreateDto){
