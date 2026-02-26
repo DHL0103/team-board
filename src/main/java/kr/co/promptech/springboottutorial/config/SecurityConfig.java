@@ -24,7 +24,7 @@ public class SecurityConfig {
                                 .loginPage("/member/login")
                                 .loginProcessingUrl("/member/login")  // POST 요청 처리
                                 .failureUrl("/member/login?error=true")    // 실패 시 이 URL로
-                                .defaultSuccessUrl("/board")
+                                .defaultSuccessUrl("/board", true)
                 )
                 .logout(
                         (logout) -> logout
