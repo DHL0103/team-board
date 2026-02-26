@@ -41,6 +41,12 @@ public class AdminController {
         return "redirect:/admin/request";
     }
 
+    @PostMapping("/reject/{id}")
+    public String reject(@PathVariable Long id, Model model){
+        postService.updateStatus(id,"PROGRESS");
+        return "redirect:/admin/request";
+    }
+
     @GetMapping("/members")
     public String memberPage(){
 
