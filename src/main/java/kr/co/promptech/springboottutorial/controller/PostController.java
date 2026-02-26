@@ -1,6 +1,8 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.service.PostFileService;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,12 +28,23 @@ public class PostController {
     private final PostService postService;
     private final MemberService memberService;
     private final PostFileService postFileService;
+    private final BoardService boardService;
 
     @GetMapping("/{id}")
     public String getPostDetailPage(@PathVariable Long id, Model model, Principal principal) {
         Post post = postService.getPostById(id);
         model.addAttribute("post", post);
         model.addAttribute("postFiles", postFileService.getFilesByPostId(id));
+        List<Board> boardList = boardService.getAllBoards();
+        Map<Long, String> boardPaletteMap = new LinkedHashMap<>();
+        for (int i = 0; i < boardList.size(); i++) {
+            boardPaletteMap.put(boardList.get(i).getId(), "p" + (i % 6 + 1));
+        }
+        model.addAttribute("boardPaletteMap", boardPaletteMap);
+        boardList.stream()
+                .filter(b -> b.getId().equals(post.getBoardId()))
+                .findFirst()
+                .ifPresent(b -> model.addAttribute("boardName", b.getName()));
 
         if (principal != null) {
             Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();

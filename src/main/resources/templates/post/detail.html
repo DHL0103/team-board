@@ -28,10 +28,10 @@
   </a>
 </header>
 
-<div class="detail-wrap">
+<div class="detail-wrap" th:with="palette=${boardPaletteMap[post.boardId]}">
   <div class="breadcrumb-row">
     <a href="/">보드</a> <span class="breadcrumb-sep">›</span>
-    <span th:text="${post.boardId == 1 ? 'Backend팀' : post.boardId == 2 ? 'Frontend팀' : 'Design팀'}">팀</span> <span
+    <span th:text="${boardName}">팀</span> <span
           class="breadcrumb-sep">›</span>
     <span th:text="${post.title}">제목</span>
   </div>
@@ -41,15 +41,12 @@
   </div>
 
   <div class="post-card">
-    <div class="post-team-bar"
-         th:classappend="${post.boardId == 1 ? 'team-backend' : post.boardId == 2 ? 'team-frontend' : 'team-design'}">
-    </div>
+    <div class="post-team-bar" th:classappend="${'col-' + palette}"></div>
     <div class="post-header">
       <div class="post-meta-row">
-          <span class="team-badge"
-                th:classappend="${post.boardId == 1 ? 'badge-backend' : post.boardId == 2 ? 'badge-frontend' : 'badge-design'}">
+          <span class="team-badge" th:classappend="${'badge-' + palette}">
             <span class="team-dot"></span>
-            <span th:text="${post.boardId == 1 ? 'Backend팀' : post.boardId == 2 ? 'Frontend팀' : 'Design팀'}">팀</span>
+            <span th:text="${boardName}">팀</span>
           </span>
         <span class="status-chip"
               th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
@@ -143,9 +140,7 @@
     <div class="modal-header">
       <div class="modal-title-row">
         <span class="modal-title">작업 수정</span>
-        <span class="modal-team-badge"
-              th:style="${post.boardId == 1 ? 'background:var(--backend-bg);color:var(--backend-color);border:1px solid var(--backend-border)' : post.boardId == 2 ? 'background:var(--frontend-bg);color:var(--frontend-color);border:1px solid var(--frontend-border)' : 'background:var(--design-bg);color:var(--design-color);border:1px solid var(--design-border)'}"
-              th:text="${post.boardId == 1 ? 'Backend팀' : post.boardId == 2 ? 'Frontend팀' : 'Design팀'}">팀</span>
+        <span class="modal-team-badge" th:classappend="${'badge-' + palette}" th:text="${boardName}">팀</span>
       </div>
       <button type="button" class="modal-close" id="btn-edit-close">
         <svg width="10" height="10" viewBox="0 0 10 10" fill="none">

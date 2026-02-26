@@ -809,14 +809,23 @@ textarea.form-input {
 .post-card .post-team-bar {
   height: 4px;
 }
-.post-card .post-team-bar.team-backend {
-  background: var(--backend-color);
+.post-card .post-team-bar.col-p1 {
+  background: var(--p1-color);
 }
-.post-card .post-team-bar.team-frontend {
-  background: var(--frontend-color);
+.post-card .post-team-bar.col-p2 {
+  background: var(--p2-color);
 }
-.post-card .post-team-bar.team-design {
-  background: var(--design-color);
+.post-card .post-team-bar.col-p3 {
+  background: var(--p3-color);
+}
+.post-card .post-team-bar.col-p4 {
+  background: var(--p4-color);
+}
+.post-card .post-team-bar.col-p5 {
+  background: var(--p5-color);
+}
+.post-card .post-team-bar.col-p6 {
+  background: var(--p6-color);
 }
 .post-card .post-header {
   padding: 28px 36px 22px;
@@ -906,29 +915,53 @@ textarea.form-input {
   height: 6px;
   border-radius: 50%;
 }
-.team-badge.badge-backend {
-  background: var(--backend-bg);
-  color: var(--backend-color);
-  border: 1px solid var(--backend-border);
+.team-badge.badge-p1 {
+  background: var(--p1-bg);
+  color: var(--p1-color);
+  border: 1px solid var(--p1-border);
 }
-.team-badge.badge-backend .team-dot {
-  background: var(--backend-color);
+.team-badge.badge-p1 .team-dot {
+  background: var(--p1-color);
 }
-.team-badge.badge-frontend {
-  background: var(--frontend-bg);
-  color: var(--frontend-color);
-  border: 1px solid var(--frontend-border);
+.team-badge.badge-p2 {
+  background: var(--p2-bg);
+  color: var(--p2-color);
+  border: 1px solid var(--p2-border);
 }
-.team-badge.badge-frontend .team-dot {
-  background: var(--frontend-color);
+.team-badge.badge-p2 .team-dot {
+  background: var(--p2-color);
 }
-.team-badge.badge-design {
-  background: var(--design-bg);
-  color: var(--design-color);
-  border: 1px solid var(--design-border);
+.team-badge.badge-p3 {
+  background: var(--p3-bg);
+  color: var(--p3-color);
+  border: 1px solid var(--p3-border);
 }
-.team-badge.badge-design .team-dot {
-  background: var(--design-color);
+.team-badge.badge-p3 .team-dot {
+  background: var(--p3-color);
+}
+.team-badge.badge-p4 {
+  background: var(--p4-bg);
+  color: var(--p4-color);
+  border: 1px solid var(--p4-border);
+}
+.team-badge.badge-p4 .team-dot {
+  background: var(--p4-color);
+}
+.team-badge.badge-p5 {
+  background: var(--p5-bg);
+  color: var(--p5-color);
+  border: 1px solid var(--p5-border);
+}
+.team-badge.badge-p5 .team-dot {
+  background: var(--p5-color);
+}
+.team-badge.badge-p6 {
+  background: var(--p6-bg);
+  color: var(--p6-color);
+  border: 1px solid var(--p6-border);
+}
+.team-badge.badge-p6 .team-dot {
+  background: var(--p6-color);
 }
 
 .status-chip.chip-progress {

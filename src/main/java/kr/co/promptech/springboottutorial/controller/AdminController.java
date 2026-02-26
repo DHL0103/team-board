@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,8 +24,13 @@ public class AdminController {
 
     @GetMapping("/request")
     public String requestPage(Model model){
-        List<Post> postList = postService.getRequestedPost();
-        model.addAttribute("postList", postList);
+        model.addAttribute("postList", postService.getRequestedPost());
+        List<Board> boardList = boardService.getAllBoards();
+        Map<Long, String> boardPaletteMap = new LinkedHashMap<>();
+        for (int i = 0; i < boardList.size(); i++) {
+            boardPaletteMap.put(boardList.get(i).getId(), "p" + (i % 6 + 1));
+        }
+        model.addAttribute("boardPaletteMap", boardPaletteMap);
         return "admin/request";
     }
 
