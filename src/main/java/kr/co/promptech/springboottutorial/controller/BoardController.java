@@ -23,7 +23,8 @@ public class BoardController {
     //처음 메인페이지 로드 (모든 포스트,보드 가져옴)
     @GetMapping
     public String getAllPost(Model model) {
-        List<Post> postList = postService.getAllPost();
+        //APPROVED된것 제외하고 가져오기
+        List<Post> postList = postService.getCurrentPost();
         List<Board> boardList = boardService.getAllBoards();
         model.addAttribute("postList", postList);
         model.addAttribute("boardList", boardList);

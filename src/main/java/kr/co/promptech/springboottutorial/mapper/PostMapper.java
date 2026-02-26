@@ -12,6 +12,9 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
     @Select("SELECT * FROM posts")
     List<Post> getAllPost();
 
+    @Select("SELECT * FROM posts WHERE status != 'APPROVED'")
+    List<Post>getCurrentPost();
+
     @Select("SELECT * FROM posts WHERE id = #{id}")
     Post getPostById(Long id);
 
@@ -61,4 +64,6 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
 
     @Update("UPDATE posts SET status = #{status} WHERE id = #{id}")
     void updateStatus(Long id, String status);
+
+
 }

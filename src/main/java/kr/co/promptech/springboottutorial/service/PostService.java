@@ -31,6 +31,10 @@ public class PostService {
         return postMapper.getAllPost();
     }
 
+    public List<Post> getCurrentPost(){
+        return postMapper.getCurrentPost();
+    }
+
     public Post getPostById(Long id){
         return postMapper.getPostById(id);
     }
