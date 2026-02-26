@@ -18,25 +18,7 @@
          th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error != null ? '오류가 발생했습니다.' : '')}">
     </div>
 
-    <header>
-        <div class="logo">
-            <div class="logo-icon">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-                    <rect x="1" y="1" width="6" height="6" rx="1" />
-                    <rect x="9" y="1" width="6" height="6" rx="1" />
-                    <rect x="1" y="9" width="6" height="6" rx="1" />
-                    <rect x="9" y="9" width="6" height="6" rx="1" />
-                </svg>
-            </div>
-            Team Board
-        </div>
-        <a href="/post/new" class="btn-new">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-            </svg>
-            새 작업
-        </a>
-    </header>
+    <div th:replace="~{fragments/header :: main-header}"></div>
 
     <div class="page-top">
         <div>
@@ -53,24 +35,25 @@
     <div class="kanban-wrap">
         <div class="row g-3">
 
-            <!-- Backend팀 -->
-            <div class="col-12 col-md-4">
-                <div class="kanban-col col-backend">
+            <!-- Board 컬럼 (동적) -->
+            <div class="col-12 col-md-4" th:each="board : ${boardList}"
+                 th:with="palette=${ {'p1','p2','p3','p4','p5','p6'}[boardStat.index % 6] }">
+                <div th:class="${'kanban-col col-' + palette}" th:data-board-id="${board.id}">
                     <div class="col-header">
-                        <span class="team-badge"><span class="team-dot"></span>Backend팀</span>
-                        <span class="col-count" id="count-backend">0개</span>
-                        <button class="btn-col-add" id="btn-add-backend">
+                        <span class="team-badge"><span class="team-dot"></span><span th:text="${board.name}">팀명</span></span>
+                        <span class="col-count" th:id="'count-' + ${board.id}">0개</span>
+                        <button class="btn-col-add"
+                                th:data-board-id="${board.id}"
+                                th:data-board-name="${board.name}"
+                                th:data-palette="${palette}">
                             <svg viewBox="0 0 12 12" fill="none">
                                 <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8"
                                     stroke-linecap="round" />
                             </svg>
                         </button>
                     </div>
-                    <div class="col-body" id="body-backend">
-                        <div class="empty-col" th:if="${#lists.isEmpty(postList)}">
-                            <div class="empty-icon">＋</div><span>등록된 작업이 없습니다</span>
-                        </div>
-                        <div class="board-card" th:each="post : ${postList}" th:if="${post.boardId == 1}"
+                    <div class="col-body" th:id="'body-' + ${board.id}">
+                        <div class="board-card" th:each="post : ${postList}" th:if="${post.boardId == board.id}"
                             th:data-id="${post.id}" th:data-status="${post.status}" th:data-member-id="${post.memberId}"
                             th:data-board-id="${post.boardId}"
                             th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
@@ -104,114 +87,7 @@
                                     등록</span>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Frontend팀 -->
-            <div class="col-12 col-md-4">
-                <div class="kanban-col col-frontend">
-                    <div class="col-header">
-                        <span class="team-badge"><span class="team-dot"></span>Frontend팀</span>
-                        <span class="col-count" id="count-frontend">0개</span>
-                        <button class="btn-col-add" id="btn-add-frontend">
-                            <svg viewBox="0 0 12 12" fill="none">
-                                <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="col-body" id="body-frontend">
-                        <div class="board-card" th:each="post : ${postList}" th:if="${post.boardId == 2}"
-                            th:data-id="${post.id}" th:data-status="${post.status}" th:data-member-id="${post.memberId}"
-                            th:data-board-id="${post.boardId}"
-                            th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
-                            <div class="card-team-line"></div>
-                            <div class="card-top">
-                                <div class="card-title" th:text="${post.title}">작업 제목</div>
-                                <span class="due-chip"
-                                    th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
-                                    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
-                                        <rect x="1" y="1.5" width="8" height="7.5" rx="1" />
-                                        <path d="M3 1v1M7 1v1M1 4h8" />
-                                    </svg>
-                                    <span class="due-label"
-                                        th:text="${post.dueDate != null ? #temporals.format(post.dueDate,'MM.dd') : '기한 없음'}"></span>
-                                </span>
-                            </div>
-                            <div class="card-content" th:text="${post.content}">내용</div>
-                            <div class="card-footer">
-                                <div class="card-left">
-                                    <span class="status-chip" th:data-status="${post.status}"
-                                        th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status}"></span>
-                                    <div class="card-writer">
-                                        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3">
-                                            <circle cx="6" cy="4.5" r="2.5" />
-                                            <path d="M1.5 10.5c0-2 1.8-3.5 4.5-3.5s4.5 1.5 4.5 3.5" />
-                                        </svg>
-                                        <span class="writer-name">로딩 중...</span>
-                                    </div>
-                                </div>
-                                <span class="card-date" th:text="${#temporals.format(post.createdAt,'MM.dd 등록')}">01.01
-                                    등록</span>
-                            </div>
-                        </div>
-                        <div class="empty-col" id="empty-frontend" style="display:none;">
-                            <div class="empty-icon">＋</div><span>등록된 작업이 없습니다</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Design팀 -->
-            <div class="col-12 col-md-4">
-                <div class="kanban-col col-design">
-                    <div class="col-header">
-                        <span class="team-badge"><span class="team-dot"></span>Design팀</span>
-                        <span class="col-count" id="count-design">0개</span>
-                        <button class="btn-col-add" id="btn-add-design">
-                            <svg viewBox="0 0 12 12" fill="none">
-                                <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8"
-                                    stroke-linecap="round" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="col-body" id="body-design">
-                        <div class="board-card" th:each="post : ${postList}" th:if="${post.boardId == 3}"
-                            th:data-id="${post.id}" th:data-status="${post.status}" th:data-member-id="${post.memberId}"
-                            th:data-board-id="${post.boardId}"
-                            th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
-                            <div class="card-team-line"></div>
-                            <div class="card-top">
-                                <div class="card-title" th:text="${post.title}">작업 제목</div>
-                                <span class="due-chip"
-                                    th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
-                                    <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
-                                        <rect x="1" y="1.5" width="8" height="7.5" rx="1" />
-                                        <path d="M3 1v1M7 1v1M1 4h8" />
-                                    </svg>
-                                    <span class="due-label"
-                                        th:text="${post.dueDate != null ? #temporals.format(post.dueDate,'MM.dd') : '기한 없음'}"></span>
-                                </span>
-                            </div>
-                            <div class="card-content" th:text="${post.content}">내용</div>
-                            <div class="card-footer">
-                                <div class="card-left">
-                                    <span class="status-chip" th:data-status="${post.status}"
-                                        th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status}"></span>
-                                    <div class="card-writer">
-                                        <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3">
-                                            <circle cx="6" cy="4.5" r="2.5" />
-                                            <path d="M1.5 10.5c0-2 1.8-3.5 4.5-3.5s4.5 1.5 4.5 3.5" />
-                                        </svg>
-                                        <span class="writer-name">로딩 중...</span>
-                                    </div>
-                                </div>
-                                <span class="card-date" th:text="${#temporals.format(post.createdAt,'MM.dd 등록')}">01.01
-                                    등록</span>
-                            </div>
-                        </div>
-                        <div class="empty-col" id="empty-design" style="display:none;">
+                        <div class="empty-col" th:id="'empty-' + ${board.id}" style="display:none;">
                             <div class="empty-icon">＋</div><span>등록된 작업이 없습니다</span>
                         </div>
                     </div>

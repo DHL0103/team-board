@@ -58,6 +58,9 @@ fetchUsername(memberId).then(name => {
     document.getElementById("writer-name").textContent = name;
 });
 
+// ── 마감일 칩 ──
+initDueChips();
+
 // ── 에러 토스트 ──
 window.addEventListener("load", () => {
     const toast = document.getElementById("errorToast");

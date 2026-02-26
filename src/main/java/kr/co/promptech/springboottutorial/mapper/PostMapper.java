@@ -52,4 +52,10 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
         WHERE id = #{id}
     """)
     void updatePost(Post post);
+
+    @Select("SELECT * FROM posts WHERE status = 'REQUESTED'")
+    List<Post> getRequestedPost();
+
+    @Select("SELECT * FROM posts WHERE board_id = #{boardId}")
+    List<Post> getPostsByBoardId(Long boardId);
 }

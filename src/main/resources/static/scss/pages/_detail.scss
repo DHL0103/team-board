@@ -31,9 +31,9 @@
 
   .post-team-bar {
     height: 4px;
-    &.team-backend  { background: var(--backend-color); }
-    &.team-frontend { background: var(--frontend-color); }
-    &.team-design   { background: var(--design-color); }
+    @each $key, $val in $palettes {
+      &.col-#{$key} { background: var(--#{$key}-color); }
+    }
   }
 
   .post-header {
@@ -119,9 +119,9 @@
 
 .team-badge {
   .team-dot { width: 6px; height: 6px; border-radius: 50%; }
-  &.badge-backend  { background: var(--backend-bg);  color: var(--backend-color);  border: 1px solid var(--backend-border);  .team-dot { background: var(--backend-color); } }
-  &.badge-frontend { background: var(--frontend-bg); color: var(--frontend-color); border: 1px solid var(--frontend-border); .team-dot { background: var(--frontend-color); } }
-  &.badge-design   { background: var(--design-bg);   color: var(--design-color);   border: 1px solid var(--design-border);   .team-dot { background: var(--design-color); } }
+  @each $key, $val in $palettes {
+    &.badge-#{$key} { background: var(--#{$key}-bg); color: var(--#{$key}-color); border: 1px solid var(--#{$key}-border); .team-dot { background: var(--#{$key}-color); } }
+  }
 }
 
 .status-chip {

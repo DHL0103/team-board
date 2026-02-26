@@ -24,7 +24,7 @@ public class SecurityConfig {
                                 .loginPage("/member/login")
                                 .loginProcessingUrl("/member/login")  // POST 요청 처리
                                 .failureUrl("/member/login?error=true")    // 실패 시 이 URL로
-                                .defaultSuccessUrl("/board")
+                                .defaultSuccessUrl("/board", true)
                 )
                 .logout(
                         (logout) -> logout
@@ -34,7 +34,9 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) ->  authorizeHttpRequests
-                                .anyRequest().permitAll()
+                                .requestMatchers("/member/login").permitAll()
+                                .requestMatchers("/css/**", "/js/**").permitAll()
+                                .anyRequest().authenticated()
                 )
                 .csrf((csrf) -> csrf.disable()) // 테스트 시에는 CSRF를 꺼두어야 Postman POST 요청이 잘 들어갑니다.
         ;

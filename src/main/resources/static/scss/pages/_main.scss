@@ -79,6 +79,8 @@ $design:   map-get($teams, design);
     flex-direction: column;
     gap: 8px;
     min-height: 180px;
+    max-height: 376px;
+    overflow-y: auto;
   }
 }
 
@@ -86,6 +88,14 @@ $design:   map-get($teams, design);
 .col-backend  { @include badge-style($backend);  .card-team-line { background: map-get($backend,  color); opacity: 0.2; } }
 .col-frontend { @include badge-style($frontend); .card-team-line { background: map-get($frontend, color); opacity: 0.2; } }
 .col-design   { @include badge-style($design);   .card-team-line { background: map-get($design,   color); opacity: 0.2; } }
+
+// 팔레트 클래스 (p1~p6)
+@each $key, $val in $palettes {
+  .col-#{$key} {
+    @include badge-style($val);
+    .card-team-line { background: map-get($val, color); opacity: 0.2; }
+  }
+}
 
 .team-badge {
   display: inline-flex;
