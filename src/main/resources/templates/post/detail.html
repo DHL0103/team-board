@@ -60,8 +60,8 @@
               <rect x="1" y="1.5" width="8" height="7.5" rx="1" />
               <path d="M3 1v1M7 1v1M1 4h8" />
             </svg>
-            <span id="due-label"
-                  th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') + ' 마감' : '기한 없음'}"></span>
+            <span class="due-label"
+                  th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
           </span>
       </div>
       <div class="post-title" th:text="${post.title}">제목</div>

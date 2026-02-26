@@ -1621,6 +1621,7 @@ textarea.form-input {
   font-size: 12px;
   color: #9ca3af;
   display: flex;
+  align-items: center;
   gap: 10px;
 }
 .request-card .request-card-actions {

@@ -1,3 +1,6 @@
+// ── 마감일 칩 ──
+initDueChips();
+
 // ── 모달 유틸 ──
 function openModal(id) {
     document.getElementById(id).classList.add("open");

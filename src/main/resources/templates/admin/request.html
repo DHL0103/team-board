@@ -61,8 +61,16 @@
                     <a class="request-card-info" th:href="@{'/post/' + ${post.id}}">
                         <div class="request-card-title" th:text="${post.title}">작업 제목</div>
                         <div class="request-card-meta">
-                            <span th:text="${post.boardId}">보드</span>
                             <span th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
+                            <span class="due-chip"
+                                  th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
+                                <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
+                                    <rect x="1" y="1.5" width="8" height="7.5" rx="1" />
+                                    <path d="M3 1v1M7 1v1M1 4h8" />
+                                </svg>
+                                <span class="due-label"
+                                      th:text="${post.dueDate != null ? #temporals.format(post.dueDate,'MM.dd') : '기한 없음'}"></span>
+                            </span>
                         </div>
                     </a>
                     <div class="request-card-actions">
@@ -80,6 +88,7 @@
     </div>
 
     <script src="/js/common.js"></script>
+    <script src="/js/admin.js"></script>
 
 </body>
 
