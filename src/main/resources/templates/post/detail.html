@@ -7,26 +7,7 @@
 
 <body>
 
-<header>
-  <a href="/board" class="logo">
-    <div class="logo-icon">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-        <rect x="1" y="1" width="6" height="6" rx="1" />
-        <rect x="9" y="1" width="6" height="6" rx="1" />
-        <rect x="1" y="9" width="6" height="6" rx="1" />
-        <rect x="9" y="9" width="6" height="6" rx="1" />
-      </svg>
-    </div>
-    Team Board
-  </a>
-  <a href="/board" class="btn-back">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M8 1L3 6l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
-            stroke-linejoin="round" />
-    </svg>
-    보드로 돌아가기
-  </a>
-</header>
+<div th:replace="~{fragments/header :: back-header}"></div>
 
 <div class="detail-wrap" th:with="palette=${boardPaletteMap[post.boardId]}">
   <div class="breadcrumb-row">
