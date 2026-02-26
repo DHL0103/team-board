@@ -187,6 +187,8 @@ header .logo .logo-icon {
   flex-direction: column;
   gap: 8px;
   min-height: 180px;
+  max-height: 376px;
+  overflow-y: auto;
 }
 
 .col-backend {

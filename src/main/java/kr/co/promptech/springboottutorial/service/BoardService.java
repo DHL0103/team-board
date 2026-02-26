@@ -21,4 +21,8 @@ public class BoardService {
     public void createBoard(BoardCreateDto boardCreateDto){
         boardMapper.createBoard(boardCreateDto);
     }
+
+    public void updateBoard(Long id, BoardCreateDto boardCreateDto){
+        boardMapper.updateBoard(id, boardCreateDto);
+    }
 }

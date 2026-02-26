@@ -55,11 +55,12 @@ public class AdminController {
     }
 
 
-//    @PostMapping("/board/update/{id}")
-//    public String updateBoard(@PathVariable Long id,@RequestBody BoardCreateDto boardCreateDto){
-//
-//
-//    }
+    @PostMapping("/board/update/{id}")
+    public String updateBoard(@PathVariable Long id,@ModelAttribute BoardCreateDto boardCreateDto){
+        boardService.updateBoard(id, boardCreateDto);
+
+        return "redirect:/admin/boards";
+    }
 
 
 
