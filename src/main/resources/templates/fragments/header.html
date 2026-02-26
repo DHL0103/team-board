@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <header th:fragment="back-header">
   <a href="/board" class="logo">
@@ -13,12 +14,15 @@
     </div>
     Team Board
   </a>
-  <a href="/board" class="btn-back">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M8 1L3 6l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    보드로 돌아가기
-  </a>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <a href="/board" class="btn-back">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+        <path d="M8 1L3 6l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      보드로 돌아가기
+    </a>
+  </div>
 </header>
 
 <header th:fragment="main-header">
@@ -33,9 +37,12 @@
     </div>
     Team Board
   </a>
-  <form th:action="@{/member/logout}" method="post" style="margin:0;">
-    <button type="submit" class="btn-back">로그아웃</button>
-  </form>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <form th:action="@{/member/logout}" method="post" style="margin:0;">
+      <button type="submit" class="btn-back">로그아웃</button>
+    </form>
+  </div>
 </header>
 
 </html>
