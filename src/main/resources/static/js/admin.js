@@ -58,7 +58,9 @@ document.querySelectorAll(".btn-open-edit").forEach(btn => {
         // members.html
         const editMemberForm = document.getElementById("editMemberForm");
         if (editMemberForm) {
-            editMemberForm.action = `/admin/user/update/${btn.dataset.memberId}`;
+            editMemberForm.action = `/admin/member/update/${btn.dataset.memberId}`;
+            const roleSelect = document.getElementById("edit-role-select");
+            if (roleSelect) roleSelect.value = btn.dataset.role ?? "ROLE_USER";
             const select = document.getElementById("edit-board-select");
             if (select) select.value = btn.dataset.boardId ?? "";
             openModal("editMemberModal");

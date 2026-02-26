@@ -6,6 +6,7 @@ import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.MemberUpdateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
@@ -99,6 +100,12 @@ public class AdminController {
     @PostMapping("/member/create")
     public String createMember(@ModelAttribute MemberCreateDto memberCreateDto){
         memberService.create(memberCreateDto);
+        return "redirect:/admin/members";
+    }
+
+    @PostMapping("/member/update/{id}")
+    public String updateMember(@PathVariable Long id,@ModelAttribute MemberUpdateDto memberUpdateDto){
+        memberService.update(id,memberUpdateDto);
         return "redirect:/admin/members";
     }
 

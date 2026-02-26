@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,9 @@ public class MemberService {
     public List<Member> getAllMemberExceptAdmin() {
         List<Member> memberList = memberMapper.getAllMemberExceptAdmin();
         return memberList;
+    }
+
+    public void update(Long id, MemberUpdateDto memberUpdateDto){
+        memberMapper.update(id, memberUpdateDto);
     }
 }
