@@ -39,8 +39,9 @@ out/
 #db로그 문제 해결
 mysql_data/
 
-# CSS 폴더 제외
+# CSS 폴더 제외 (외부 라이브러리는 유지)
 src/main/resources/static/css/
+!src/main/resources/static/css/lib/
 
 # macOS 메타데이터
 .DS_Store
