@@ -5,6 +5,8 @@ import kr.co.promptech.springboottutorial.model.PostRejection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 import java.util.List;
 
 @Service
@@ -17,6 +19,7 @@ public class PostRejectionService {
         PostRejection rejection = new PostRejection();
         rejection.setPostId(postId);
         rejection.setReason(reason);
+        rejection.setCreatedAt(LocalDateTime.now());
         postRejectionMapper.save(rejection);
     }
 
