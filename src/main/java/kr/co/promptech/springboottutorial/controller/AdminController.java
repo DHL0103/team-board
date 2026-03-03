@@ -10,6 +10,7 @@ import kr.co.promptech.springboottutorial.model.dto.MemberUpdateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
+import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ public class AdminController {
     private final PostService postService;
     private final BoardService boardService;
     private final MemberService memberService;
+    private final PostRejectionService postRejectionService;
 
     @GetMapping("/request")
     public String requestPage(Model model){
@@ -47,8 +49,9 @@ public class AdminController {
     }
 
     @PostMapping("/reject/{id}")
-    public String reject(@PathVariable Long id, Model model){
+    public String reject(@PathVariable Long id, @RequestParam String reason){
         postService.updateStatus(id,"REJECTED");
+        postRejectionService.save(id, reason);
         return "redirect:/admin/request";
     }
 

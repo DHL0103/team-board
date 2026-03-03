@@ -6,6 +6,7 @@ import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.service.PostFileService;
+import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,14 @@ public class PostController {
     private final MemberService memberService;
     private final PostFileService postFileService;
     private final BoardService boardService;
+    private final PostRejectionService postRejectionService;
 
     @GetMapping("/{id}")
     public String getPostDetailPage(@PathVariable Long id, Model model, Principal principal) {
         Post post = postService.getPostById(id);
         model.addAttribute("post", post);
         model.addAttribute("postFiles", postFileService.getFilesByPostId(id));
+        model.addAttribute("rejections", postRejectionService.getByPostId(id));
         List<Board> boardList = boardService.getAllBoards();
         Map<Long, String> boardPaletteMap = new LinkedHashMap<>();
         for (int i = 0; i < boardList.size(); i++) {
