@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface PostRejectionMapper {
 
-    @Insert("INSERT INTO post_rejections (post_id, reason, created_at) VALUES (#{postId}, #{reason}, #{createdAt})")
+    @Insert("INSERT INTO post_rejections (post_id, reason, rejected_by, created_at) VALUES (#{postId}, #{reason}, #{rejectedBy}, #{createdAt})")
     void save(PostRejection postRejection);
 
     @Select("SELECT * FROM post_rejections WHERE post_id = #{postId} ORDER BY created_at DESC")

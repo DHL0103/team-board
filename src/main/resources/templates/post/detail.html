@@ -88,6 +88,24 @@
     </div>
   </div>
 
+  <!-- 반려 이력 사이드바 -->
+  <div class="rejection-panel" th:if="${rejections != null and not #lists.isEmpty(rejections)}">
+    <div class="rejection-panel-header">
+      <span class="rejection-panel-title">반려 이력</span>
+      <span class="rejection-panel-count" th:text="${#lists.size(rejections)} + '건'">0건</span>
+    </div>
+    <div class="rejection-list">
+      <div class="rejection-item" th:each="rejection : ${rejections}"
+           th:data-rejected-by="${rejection.rejectedBy}">
+        <div class="rejection-date">
+          <span class="rejection-rejector">로딩 중...</span>
+          <span th:text="${#temporals.format(rejection.createdAt, 'MM.dd HH:mm')}">01.01</span>
+        </div>
+        <div class="rejection-reason" th:text="${rejection.reason}">반려 사유</div>
+      </div>
+    </div>
+  </div>
+
   <div class="comment-section">
     <div class="comment-header">
       <span class="comment-header-title">피드백 & 댓글</span>
@@ -113,19 +131,6 @@
           <button type="submit" class="btn-comment-submit">등록</button>
         </div>
       </form>
-    </div>
-  </div>
-  <!-- 반려 이력 사이드바 -->
-  <div class="rejection-panel" th:if="${rejections != null and not #lists.isEmpty(rejections)}">
-    <div class="rejection-panel-header">
-      <span class="rejection-panel-title">반려 이력</span>
-      <span class="rejection-panel-count" th:text="${#lists.size(rejections)} + '건'">0건</span>
-    </div>
-    <div class="rejection-list">
-      <div class="rejection-item" th:each="rejection : ${rejections}">
-        <div class="rejection-date" th:text="${#temporals.format(rejection.createdAt, 'MM.dd HH:mm')}">01.01</div>
-        <div class="rejection-reason" th:text="${rejection.reason}">반려 사유</div>
-      </div>
     </div>
   </div>
 

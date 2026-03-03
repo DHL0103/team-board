@@ -27,6 +27,7 @@
   border: 1px solid $border;
   border-radius: 10px;
   overflow: hidden;
+  margin-bottom: 16px;
   animation: fadeUp 0.35s ease both;
 
   .post-team-bar {
@@ -427,6 +428,12 @@
   right: 40px;
   width: 260px;
   z-index: 10;
+
+  @media (max-width: 768px) {
+    position: static;
+    width: 100%;
+    margin-bottom: 16px;
+  }
   background: var(--status-rejected-bg);
   border: 1px solid #fecdd3;
   border-radius: 10px;

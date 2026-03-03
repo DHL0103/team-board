@@ -9,5 +9,6 @@ public class PostRejection {
     private Long id;
     private Long postId;
     private String reason;
+    private Long rejectedBy;
     private LocalDateTime createdAt;
 }

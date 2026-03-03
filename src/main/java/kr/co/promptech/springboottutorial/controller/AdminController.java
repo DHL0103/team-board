@@ -17,6 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,9 +51,10 @@ public class AdminController {
     }
 
     @PostMapping("/reject/{id}")
-    public String reject(@PathVariable Long id, @RequestParam String reason){
+    public String reject(@PathVariable Long id, @RequestParam String reason, Principal principal){
         postService.updateStatus(id,"REJECTED");
-        postRejectionService.save(id, reason);
+        Long rejectedBy = memberService.getMemberByUsername(principal.getName()).getId();
+        postRejectionService.save(id, reason, rejectedBy);
         return "redirect:/admin/request";
     }
 
