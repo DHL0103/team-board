@@ -98,7 +98,7 @@ class AdminControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/admin/request"));
 
-        verify(postService).updateStatus(1L, "PROGRESS");
+        verify(postService).updateStatus(1L, "REJECTED");
     }
 
     // ──────────────────────── GET /admin/members ────────────────────────

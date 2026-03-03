@@ -30,8 +30,8 @@
             <span th:text="${boardName}">팀</span>
           </span>
         <span class="status-chip"
-              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
-              th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : '완료'}"></span>
+              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : 'chip-completed'}"
+              th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : '완료'}"></span>
         <span class="due-chip" id="due-chip"
               th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
             <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
@@ -81,7 +81,7 @@
       </div>
       <div class="post-actions-right">
         <button th:if="${isOwner}" class="btn-edit" id="btn-edit">수정</button>
-        <form th:if="${isOwner and post.status == 'PROGRESS'}" th:action="@{/post/request/{id}(id=${post.id})}" method="post" style="margin:0;">
+        <form th:if="${isOwner and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/post/request/{id}(id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
       </div>

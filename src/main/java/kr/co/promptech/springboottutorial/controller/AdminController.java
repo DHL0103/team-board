@@ -48,7 +48,7 @@ public class AdminController {
 
     @PostMapping("/reject/{id}")
     public String reject(@PathVariable Long id, Model model){
-        postService.updateStatus(id,"PROGRESS");
+        postService.updateStatus(id,"REJECTED");
         return "redirect:/admin/request";
     }
 

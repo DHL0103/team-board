@@ -210,6 +210,7 @@ $design:   map-get($teams, design);
 
   &.progress  { background: var(--status-progress-bg);  color: var(--status-progress-color); }
   &.requested { background: var(--status-requested-bg); color: var(--status-requested-color); }
+  &.rejected  { background: var(--status-rejected-bg);  color: var(--status-rejected-color); }
 }
 
 .due-chip {
