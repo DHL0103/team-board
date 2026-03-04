@@ -2,6 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
+<th:block th:fragment="common-head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</th:block>
+
+<header th:fragment="logo-header">
+  <a href="/" class="logo">
+    <div class="logo-icon">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+        <rect x="1" y="1" width="6" height="6" rx="1" />
+        <rect x="9" y="1" width="6" height="6" rx="1" />
+        <rect x="1" y="9" width="6" height="6" rx="1" />
+        <rect x="9" y="9" width="6" height="6" rx="1" />
+      </svg>
+    </div>
+    Team Board
+  </a>
+</header>
+
 <header th:fragment="back-header">
   <a href="/board" class="logo">
     <div class="logo-icon">
