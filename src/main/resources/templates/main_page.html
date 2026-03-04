@@ -16,138 +16,44 @@
 
     <div class="page-top">
         <div>
-            <div class="page-title">팀별 작업 현황</div>
-            <div class="page-meta" th:text="'전체 ' + ${#lists.size(postList)} + '개의 작업 · 완료 승인된 항목은 숨김 처리됩니다'">전체 0개
-            </div>
-        </div>
-        <div class="view-tabs">
-            <div class="view-tab active">보드</div>
-            <div class="view-tab">목록</div>
+            <div class="page-title">내 보드</div>
+            <div class="page-meta" th:text="'총 ' + ${#lists.size(boardList)} + '개의 보드'">총 0개의 보드</div>
         </div>
     </div>
 
-    <div class="kanban-wrap">
-        <div class="row g-3">
-
-            <!-- Board 컬럼 (동적) -->
-            <div class="col-12 col-md-4" th:each="board : ${boardList}"
-                 th:with="palette=${ {'p1','p2','p3','p4','p5','p6'}[boardStat.index % 6] }">
-                <div th:class="${'kanban-col col-' + palette}" th:data-board-id="${board.id}">
-                    <div class="col-header">
-                        <span class="team-badge"><span class="team-dot"></span><span th:text="${board.name}">팀명</span></span>
-                        <span class="col-count" th:id="'count-' + ${board.id}">0개</span>
-                        <button class="btn-col-add"
-                                th:data-board-id="${board.id}"
-                                th:data-board-name="${board.name}"
-                                th:data-palette="${palette}">
-                            <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
-                        </button>
-                    </div>
-                    <div class="col-body" th:id="'body-' + ${board.id}">
-                        <div class="board-card" th:each="post : ${postList}" th:if="${post.boardId == board.id}"
-                            th:data-id="${post.id}" th:data-status="${post.status}" th:data-member-id="${post.memberId}"
-                            th:data-board-id="${post.boardId}"
-                            th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
-                            <div class="card-team-line"></div>
-                            <div class="card-top">
-                                <div class="card-title" th:text="${post.title}">작업 제목</div>
-                                <span class="due-chip"
-                                    th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
-                                    <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
-                                    <span class="due-label"
-                                        th:text="${post.dueDate != null ? #temporals.format(post.dueDate,'MM.dd') : '기한 없음'}"></span>
-                                </span>
-                            </div>
-                            <div class="card-content" th:text="${post.content}">내용</div>
-                            <div class="card-footer">
-                                <div class="card-left">
-                                    <span class="status-chip" th:data-status="${post.status}"
-                                        th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : post.status}"></span>
-                                    <div class="card-writer">
-                                        <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
-                                        <span class="writer-name">로딩 중...</span>
-                                    </div>
-                                </div>
-                                <span class="card-date" th:text="${#temporals.format(post.createdAt,'MM.dd 등록')}">01.01
-                                    등록</span>
-                            </div>
-                        </div>
-                        <div class="empty-col" th:id="'empty-' + ${board.id}" style="display:none;">
-                            <div class="empty-icon">＋</div><span>등록된 작업이 없습니다</span>
-                        </div>
-                    </div>
-                </div>
+    <div class="board-grid-wrap">
+        <!-- 빈 상태 -->
+        <div class="board-grid-empty" th:if="${#lists.isEmpty(boardList)}">
+            <div class="board-grid-empty-icon">
+                <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
             </div>
+            <div>소속된 보드가 없습니다.</div>
+        </div>
+
+        <div class="board-grid" th:unless="${#lists.isEmpty(boardList)}">
+            <a class="board-grid-card"
+               th:each="board : ${boardList}"
+               th:href="@{'/board/' + ${board.id}}"
+               th:classappend="${'palette-' + board.color}">
+                <div class="board-grid-card-bar"></div>
+                <div class="board-grid-card-body">
+                    <div class="board-grid-card-name" th:text="${board.name}">보드명</div>
+                    <div class="board-grid-card-desc" th:text="${board.description}">설명</div>
+                </div>
+                <div class="board-grid-card-footer">
+                    <span class="team-badge"
+                          th:classappend="${'badge-' + board.color}">
+                        <span class="team-dot"></span>
+                        <span th:text="${board.color}">p1</span>
+                    </span>
+                </div>
+            </a>
         </div>
     </div>
 
-    <!-- ── 작업 생성 모달 ── -->
-    <div class="modal-overlay" id="createModal" >
-        <div class="modal-box">
-            <div class="modal-header">
-                <div class="modal-title-row">
-                    <span class="modal-title">새 작업 추가</span>
-                    <span class="modal-team-badge" id="modal-team-badge"></span>
-                </div>
-                <button class="modal-close" id="btn-modal-close">
-                    <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
-                </button>
-            </div>
-
-            <form action="/post/create" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="boardId" id="modal-board-id">
-
-                <div class="form-group">
-                    <label class="form-label">제목</label>
-                    <input class="form-input" type="text" name="title" placeholder="작업 제목을 입력하세요" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">내용</label>
-                    <textarea class="form-input" name="content" placeholder="작업 내용을 입력하세요"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">마감일 <span
-                            style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
-                    <!-- hidden input — JS가 yyyy-MM-ddTHH:mm:ss 형식으로 채워줌 -->
-                    <input type="hidden" name="dueDate" id="modal-due-value">
-                    <div class="due-picker">
-                        <div class="due-picker-header">
-                            <span class="due-month-label" id="due-month-label">2025년 2월</span>
-                            <div class="due-nav">
-                                <span class="due-selected-display" id="due-selected-display">선택 안 함</span>
-                                <button type="button" class="due-nav-btn" id="btn-prev-month">‹</button>
-                                <button type="button" class="due-nav-btn" id="btn-next-month">›</button>
-                            </div>
-                        </div>
-                        <div class="due-grid">
-                            <div class="due-dow">
-                                <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
-                            </div>
-                            <div class="due-days" id="due-days"></div>
-                        </div>
-                        <button type="button" class="due-clear-btn" id="btn-clear-due">선택 초기화</button>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <input type="file" name="files" id="file-input" multiple hidden>
-                    <button type="button" class="file-upload-btn" id="btn-file-attach">
-                        <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
-                        파일 첨부
-                    </button>
-                    <div class="file-chip-list" id="file-chip-list"></div>
-                </div>
-
-                <button type="submit" class="btn-submit">작업 추가</button>
-            </form>
-        </div>
-    </div>
-
-    <script src="/js/lib/bootstrap.bundle.min.js"></script>
-    <script src="/js/common.js"></script>
-    <script src="/js/main_page.js"></script>
+    <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/main_page.js}"></script>
 
 </body>
 

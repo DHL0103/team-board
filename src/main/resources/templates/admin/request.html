@@ -35,7 +35,7 @@
             <div class="request-list" th:unless="${#lists.isEmpty(postList)}">
                 <div class="request-card"
                      th:each="post : ${postList}"
-                     th:with="palette=${boardPaletteMap[post.boardId]}"
+                     th:with="palette=${boardColorMap[post.boardId]}"
                      th:classappend="${'palette-' + palette}">
                     <a class="request-card-info" th:href="@{'/post/' + ${post.id}}">
                         <div class="request-card-title" th:text="${post.title}">작업 제목</div>
@@ -81,8 +81,8 @@
         </div>
     </div>
 
-    <script src="/js/common.js"></script>
-    <script src="/js/admin.js"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/admin.js}"></script>
 
 </body>
 

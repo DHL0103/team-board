@@ -11,7 +11,7 @@
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
-<div class="detail-wrap" th:with="palette=${boardPaletteMap[post.boardId]}">
+<div class="detail-wrap" th:with="palette=${boardColor}">
   <div class="breadcrumb-row">
     <a href="/">보드</a> <span class="breadcrumb-sep">›</span>
     <span th:text="${boardName}">팀</span> <span
@@ -211,8 +211,8 @@
   </div>
 </div>
 
-<script src="/js/common.js"></script>
-<script src="/js/post_detail.js"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/post_detail.js}"></script>
 </body>
 
 </html>
