@@ -53,6 +53,9 @@ if (deleteModal) {
     });
 }
 
+const memberId = parseInt(document.body.dataset.memberId);
+const existingDueDateStr = document.body.dataset.dueDate || '';
+
 // ── 작성자 이름 Fetch ──
 fetchUsername(memberId).then(name => {
     document.getElementById("writer-name").textContent = name;

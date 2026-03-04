@@ -6,7 +6,8 @@
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body>
+<body th:data-member-id="${post.memberId}"
+      th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
@@ -226,10 +227,6 @@
 </div>
 
 <script src="/js/common.js"></script>
-<script th:inline="javascript">
-  const memberId = [[${post.memberId}]];
-  const existingDueDateStr = /*[[${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}]]*/ '';
-</script>
 <script src="/js/post_detail.js"></script>
 </body>
 

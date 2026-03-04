@@ -57,8 +57,7 @@
                             <button type="submit" class="btn-approve">승인</button>
                         </form>
                         <button type="button" class="btn-reject"
-                                th:data-post-id="${post.id}"
-                                onclick="openRejectModal(this)">반려</button>
+                                th:data-post-id="${post.id}">반려</button>
                     </div>
                 </div>
             </div>
@@ -71,7 +70,7 @@
         <div class="modal-box">
             <div class="modal-header">
                 <span class="modal-title">반려 사유 입력</span>
-                <button class="modal-close" onclick="closeRejectModal()">
+                <button class="modal-close">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                         <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                     </svg>
@@ -89,21 +88,6 @@
 
     <script src="/js/common.js"></script>
     <script src="/js/admin.js"></script>
-    <script>
-        function openRejectModal(btn) {
-            const postId = btn.dataset.postId;
-            document.getElementById('rejectForm').action = '/admin/reject/' + postId;
-            document.getElementById('rejectModal').classList.add('open');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeRejectModal() {
-            document.getElementById('rejectModal').classList.remove('open');
-            document.body.style.overflow = '';
-        }
-        document.getElementById('rejectModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('rejectModal')) closeRejectModal();
-        });
-    </script>
 
 </body>
 
