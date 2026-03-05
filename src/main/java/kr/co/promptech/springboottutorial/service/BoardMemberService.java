@@ -36,11 +36,7 @@ public class BoardMemberService {
     }
 
     public void save(Long boardId, Long memberId, String boardRole) {
-        BoardMember bm = new BoardMember();
-        bm.setBoardId(boardId);
-        bm.setMemberId(memberId);
-        bm.setBoardRole(boardRole);
-        boardMemberMapper.save(bm);
+        boardMemberMapper.save(boardId, memberId, boardRole);
     }
 
     public void updateRole(Long boardId, Long memberId, String boardRole) {
