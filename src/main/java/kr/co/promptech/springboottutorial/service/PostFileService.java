@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.mapper.PostFileMapper;
 import kr.co.promptech.springboottutorial.model.PostFile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +21,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PostFileService {
     private final PostFileMapper postFileMapper;
-    private String uploadDir = "uploads";
+    @Value("${app.upload-dir}")
+    private String uploadDir;
 
     public List<PostFile> getFilesByPostId(Long postId) {
         return postFileMapper.findByPostId(postId);
