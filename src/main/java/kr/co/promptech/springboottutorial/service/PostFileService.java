@@ -62,7 +62,14 @@ public class PostFileService {
             Path path = uploadPath.resolve(savedName);
             Files.copy(file.getInputStream(), path);
 
-            postFileMapper.saveFile(postId, originalName, savedName, file.getSize(), LocalDateTime.now());
+            PostFile postFile = PostFile.builder()
+                    .postId(postId)
+                    .originalName(originalName)
+                    .storedPath(savedName)
+                    .fileSize(file.getSize())
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            postFileMapper.saveFile(postFile);
         } catch (IOException e) {
             throw new RuntimeException("파일 저장 실패", e);
         }
