@@ -1,4 +1,4 @@
-package kr.co.promptech.springboottutorial.controller;
+package kr.co.promptech.springboottutorial.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
