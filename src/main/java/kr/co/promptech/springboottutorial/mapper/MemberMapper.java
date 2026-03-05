@@ -1,7 +1,6 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Member;
-import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberUpdateDto;
 import org.apache.ibatis.annotations.*;
 
@@ -14,7 +13,7 @@ public interface MemberMapper {
     Member selectMemberById(Long id);
 
     @Insert("INSERT INTO members (username, password, role) VALUES (#{username}, #{password}, #{role})")
-    void save(MemberCreateDto memberCreateDto);
+    void save(@Param("username") String username, @Param("password") String password, @Param("role") String role);
 
     @Select("SELECT * FROM members WHERE username = #{username}")
     Member findByUsername(String username);

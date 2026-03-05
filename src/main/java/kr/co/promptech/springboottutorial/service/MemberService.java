@@ -23,12 +23,13 @@ public class MemberService {
         return memberMapper.findByUsername(username);
     }
 
-    public void create (MemberCreateDto memberCreateDto) {
-
+    public void create(MemberCreateDto memberCreateDto) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        memberCreateDto.setPassword(passwordEncoder.encode(memberCreateDto.getPassword()));
-
-        this.memberMapper.save(memberCreateDto);
+        memberMapper.save(
+                memberCreateDto.getUsername(),
+                passwordEncoder.encode(memberCreateDto.getPassword()),
+                memberCreateDto.getRole()
+        );
     }
 
     public List<Member> getAllMemberExceptAdmin() {
