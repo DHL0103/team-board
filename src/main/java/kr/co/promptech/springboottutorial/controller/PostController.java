@@ -129,7 +129,7 @@ public class PostController {
             return "redirect:/post/" + id + "?error=unauthorized";
         }
 
-        postService.updatePost(post, postCreateDto);
+        postService.updatePost(id, postCreateDto);
 
         if (deleteFileIds != null) {
             postFileService.deleteFiles(deleteFileIds);

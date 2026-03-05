@@ -1,7 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Post;
-import kr.co.promptech.springboottutorial.model.PostFile;
+import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List; // 표준 List 임포트
@@ -48,13 +48,13 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
     @Update("""
         UPDATE posts
         SET
-            title = #{title},
-            content = #{content},
-            due_date = #{dueDate},
-            updated_at = #{updatedAt}
+            title = #{dto.title},
+            content = #{dto.content},
+            due_date = #{dto.dueDate},
+            updated_at = NOW()
         WHERE id = #{id}
     """)
-    void updatePost(Post post);
+    void updatePost(@Param("id") Long id, @Param("dto") PostCreateDto dto);
 
     @Select("SELECT * FROM posts WHERE status = 'REQUESTED'")
     List<Post> getRequestedPost();
