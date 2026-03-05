@@ -21,7 +21,12 @@ public class BoardController {
     private final BoardService boardService;
     private final MemberService memberService;
 
-    //로그인 이후 들어오는 메인페이지 로드
+    /**
+     * @param model     뷰에 전달할 데이터 컨테이너
+     * @param principal 현재 로그인한 사용자 정보
+     * @return 메인 페이지 뷰 이름 (main_page)
+     * ADMIN이면 전체 보드 목록, 일반 USER면 소속 보드 목록만 반환
+     */
     @GetMapping
     public String getAllBoard(Model model, Principal principal) {
         Member currentMember = memberService.getMemberByUsername(principal.getName());

@@ -30,6 +30,13 @@ public class PostController {
     private final BoardService boardService;
     private final PostRejectionService postRejectionService;
 
+    /**
+     * @param id        조회할 게시글 PK
+     * @param model     뷰에 전달할 데이터 컨테이너
+     * @param principal 현재 로그인한 사용자 정보 (optional)
+     * @return 게시글 상세 뷰 이름 (post/detail)
+     * 게시글 상세 페이지 렌더링. 첨부파일, 반려사유, 보드 정보, 작성자 여부를 함께 전달
+     */
     @GetMapping("/{id}")
     public String getPostDetailPage(@PathVariable Long id, Model model, Principal principal) {
         Post post = postService.getPostById(id);
@@ -52,6 +59,13 @@ public class PostController {
         return "post/detail";
     }
 
+    /**
+     * @param postCreateDto 게시글 생성 데이터 (제목, 내용, 보드ID 등)
+     * @param files         첨부파일 목록 (optional)
+     * @param principal     현재 로그인한 사용자 정보
+     * @return 메인 보드 페이지로 리다이렉트
+     * 게시글 생성 후 첨부파일 저장. 파일 저장 실패 시 게시글은 유지
+     */
     @PostMapping("/create")
     public String createPost(PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
@@ -72,6 +86,12 @@ public class PostController {
         return "redirect:/board";
     }
 
+    /**
+     * @param id        삭제할 게시글 PK
+     * @param principal 현재 로그인한 사용자 정보
+     * @return 메인 보드 페이지로 리다이렉트, 본인 아닐 경우 에러 파라미터와 함께 상세 페이지로 리다이렉트
+     * 작성자 본인만 삭제 가능
+     */
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable Long id, Principal principal) {
         Post post = postService.getPostById(id);
@@ -87,6 +107,15 @@ public class PostController {
         return "redirect:/board";
     }
 
+    /**
+     * @param id            수정할 게시글 PK
+     * @param postCreateDto 수정할 게시글 데이터
+     * @param files         새로 추가할 첨부파일 목록 (optional)
+     * @param deleteFileIds 삭제할 첨부파일 ID 목록 (optional)
+     * @param principal     현재 로그인한 사용자 정보
+     * @return 게시글 상세 페이지로 리다이렉트, 본인 아닐 경우 에러 파라미터와 함께 리다이렉트
+     * 작성자 본인만 수정 가능. 파일 삭제 후 신규 파일 저장
+     */
     @PostMapping("/update/{id}")
     public String updatePost(@PathVariable Long id,
                              PostCreateDto postCreateDto,
@@ -121,6 +150,12 @@ public class PostController {
         return "redirect:/post/" + id;
     }
 
+    /**
+     * @param id        승인 요청할 게시글 PK
+     * @param principal 현재 로그인한 사용자 정보
+     * @return 게시글 상세 페이지로 리다이렉트, 본인 아닐 경우 에러 파라미터와 함께 리다이렉트
+     * 게시글 상태를 REQUESTED로 변경. 작성자 본인만 요청 가능
+     */
     @PostMapping("/request/{id}")
     public String requestPost(@PathVariable Long id, Principal principal) {
         Post post = postService.getPostById(id);

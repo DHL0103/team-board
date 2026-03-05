@@ -13,14 +13,21 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
     private final MemberService memberService;
 
-    //id값으로 멤버 검색
+    /**
+     * @param id 조회할 멤버의 PK
+     * @return 해당 멤버 객체 (JSON)
+     * id로 특정 멤버 정보를 조회하는 REST API
+     */
     @GetMapping("/{id}")
     @ResponseBody
     public Member getMemberDetailPage(@PathVariable Long id){
         return memberService.getMemberById(id);
     }
 
-    //로그인 페이지
+    /**
+     * @return 로그인 폼 뷰 이름 (login_form)
+     * 로그인 페이지 렌더링, 실제 인증 처리는 Spring Security가 담당
+     */
     @GetMapping("/login")
     public String login_page() {
         return "login_form";
