@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
+@NoArgsConstructor
 public class Comment {
     private Long id;
     private Long postId;      // 어떤 업무에 달린 댓글인지
