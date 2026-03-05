@@ -2,32 +2,13 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인 · Team Board</title>
-
-  <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
 <body>
 
-  <header>
-    <a href="/" class="logo">
-      <div class="logo-icon">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-          <rect x="1" y="1" width="6" height="6" rx="1" />
-          <rect x="9" y="1" width="6" height="6" rx="1" />
-          <rect x="1" y="9" width="6" height="6" rx="1" />
-          <rect x="9" y="9" width="6" height="6" rx="1" />
-        </svg>
-      </div>
-      Team Board
-    </a>
-  </header>
+  <div th:replace="~{fragments/header :: logo-header}"></div>
 
   <div class="login-wrap">
     <div class="login-card">
@@ -38,10 +19,7 @@
       </div>
 
       <div class="error-msg" th:if="${param.error != null}">
-        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
-          <circle cx="7" cy="7" r="6" />
-          <path d="M7 4v3M7 9.5v.5" stroke-linecap="round" />
-        </svg>
+        <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
         <span>아이디 또는 비밀번호가 올바르지 않습니다.</span>
       </div>
 
@@ -70,8 +48,6 @@
 
     </div>
   </div>
-
-  <script src="/js/lib/bootstrap.bundle.min.js"></script>
 
   <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
 

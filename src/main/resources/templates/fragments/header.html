@@ -1,41 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:fragment="common-head">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</th:block>
+
+<header th:fragment="logo-header">
+  <a href="/" class="logo">
+    <div class="logo-icon">
+      <svg width="16" height="16"><use href="/img/icons.svg#icon-logo"></use></svg>
+    </div>
+    Team Board
+  </a>
+</header>
 
 <header th:fragment="back-header">
   <a href="/board" class="logo">
     <div class="logo-icon">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-        <rect x="1" y="1" width="6" height="6" rx="1" />
-        <rect x="9" y="1" width="6" height="6" rx="1" />
-        <rect x="1" y="9" width="6" height="6" rx="1" />
-        <rect x="9" y="9" width="6" height="6" rx="1" />
-      </svg>
+      <svg width="16" height="16"><use href="/img/icons.svg#icon-logo"></use></svg>
     </div>
     Team Board
   </a>
-  <a href="/board" class="btn-back">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-      <path d="M8 1L3 6l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    보드로 돌아가기
-  </a>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <a href="/board" class="btn-back">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
+      보드로 돌아가기
+    </a>
+  </div>
 </header>
 
 <header th:fragment="main-header">
   <a href="/board" class="logo">
     <div class="logo-icon">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
-        <rect x="1" y="1" width="6" height="6" rx="1" />
-        <rect x="9" y="1" width="6" height="6" rx="1" />
-        <rect x="1" y="9" width="6" height="6" rx="1" />
-        <rect x="9" y="9" width="6" height="6" rx="1" />
-      </svg>
+      <svg width="16" height="16"><use href="/img/icons.svg#icon-logo"></use></svg>
     </div>
     Team Board
   </a>
-  <form th:action="@{/member/logout}" method="post" style="margin:0;">
-    <button type="submit" class="btn-back">로그아웃</button>
-  </form>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <form th:action="@{/member/logout}" method="post" style="margin:0;">
+      <button type="submit" class="btn-back">로그아웃</button>
+    </form>
+  </div>
 </header>
 
 </html>

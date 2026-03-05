@@ -18,6 +18,21 @@ document.querySelectorAll(".modal-overlay").forEach(overlay => {
     });
 });
 
+document.querySelectorAll(".modal-close").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const overlay = btn.closest(".modal-overlay");
+        if (overlay) closeModal(overlay.id);
+    });
+});
+
+// ── 반려 모달 ──
+document.querySelectorAll(".btn-reject").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("rejectForm").action = "/admin/reject/" + btn.dataset.postId;
+        openModal("rejectModal");
+    });
+});
+
 document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
         document.querySelectorAll(".modal-overlay.open").forEach(m => closeModal(m.id));
@@ -51,6 +66,20 @@ if (btnCloseEdit) {
     });
 }
 
+// ── 멤버 삭제 버튼 ──
+document.querySelectorAll(".btn-open-delete-member").forEach(btn => {
+    btn.addEventListener("click", () => {
+        document.getElementById("delete-member-name").textContent = btn.dataset.username;
+        document.getElementById("deleteMemberForm").action = `/admin/member/delete/${btn.dataset.memberId}`;
+        openModal("deleteMemberModal");
+    });
+});
+
+const btnDeleteMemberCancel = document.getElementById("btn-delete-member-cancel");
+if (btnDeleteMemberCancel) {
+    btnDeleteMemberCancel.addEventListener("click", () => closeModal("deleteMemberModal"));
+}
+
 // ── 수정 버튼 — 데이터 채우고 모달 열기 ──
 document.querySelectorAll(".btn-open-edit").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -58,7 +87,9 @@ document.querySelectorAll(".btn-open-edit").forEach(btn => {
         // members.html
         const editMemberForm = document.getElementById("editMemberForm");
         if (editMemberForm) {
-            editMemberForm.action = `/admin/user/update/${btn.dataset.memberId}`;
+            editMemberForm.action = `/admin/member/update/${btn.dataset.memberId}`;
+            const roleSelect = document.getElementById("edit-role-select");
+            if (roleSelect) roleSelect.value = btn.dataset.role ?? "ROLE_USER";
             const select = document.getElementById("edit-board-select");
             if (select) select.value = btn.dataset.boardId ?? "";
             openModal("editMemberModal");

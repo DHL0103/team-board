@@ -26,13 +26,5 @@ public class MemberController {
         return "login_form";
     }
 
-    //회원가입
-    @PostMapping("/signup")
-    @ResponseBody
-    public String createMember(@RequestBody MemberCreateDto memberCreateDto){
-        memberService.create(memberCreateDto.getUsername(), memberCreateDto.getPassword(), memberCreateDto.getBoardId());
-        return "회원가입 성공";
-    }
-
 
 }

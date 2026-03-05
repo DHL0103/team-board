@@ -20,6 +20,7 @@
   .breadcrumb-sep { opacity: 0.4; }
 }
 
+
 // ── 포스트 카드 ──
 .post-card {
   background: $surface;
@@ -418,4 +419,72 @@
     color: #ef4444;
     text-decoration: line-through;
   }
+}
+
+// ── 반려 이력 사이드바 ──
+.rejection-panel {
+  position: fixed;
+  top: 140px;
+  right: 40px;
+  width: 260px;
+  z-index: 10;
+
+  @media (max-width: 768px) {
+    position: static;
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  background: var(--status-rejected-bg);
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  padding: 16px;
+  animation: fadeUp 0.35s ease both;
+}
+
+.rejection-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.rejection-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--status-rejected-color);
+}
+
+.rejection-panel-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--status-rejected-color);
+  background: white;
+  border: 1px solid #fecdd3;
+  padding: 1px 7px;
+  border-radius: 20px;
+}
+
+.rejection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rejection-item {
+  background: white;
+  border: 1px solid #fecdd3;
+  border-radius: 7px;
+  padding: 10px 12px;
+}
+
+.rejection-date {
+  font-size: 11px;
+  color: $text-muted;
+  margin-bottom: 4px;
+}
+
+.rejection-reason {
+  font-size: 13px;
+  color: $text;
+  line-height: 1.5;
 }

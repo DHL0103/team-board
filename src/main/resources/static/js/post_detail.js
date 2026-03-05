@@ -53,9 +53,24 @@ if (deleteModal) {
     });
 }
 
+const memberId = parseInt(document.body.dataset.memberId);
+const existingDueDateStr = document.body.dataset.dueDate || '';
+
 // ── 작성자 이름 Fetch ──
 fetchUsername(memberId).then(name => {
     document.getElementById("writer-name").textContent = name;
+});
+
+// ── 반려자 이름 Fetch ──
+document.querySelectorAll('.rejection-item').forEach(async item => {
+    const rejectedBy = item.dataset.rejectedBy;
+    const span = item.querySelector('.rejection-rejector');
+    if (!rejectedBy) {
+        span.textContent = '';
+        return;
+    }
+    const name = await fetchUsername(rejectedBy);
+    span.textContent = name;
 });
 
 // ── 마감일 칩 ──
@@ -198,4 +213,33 @@ if (editFileChipList) {
         editFileInput.files = editFileDataTransfer.files;
         renderEditFileChips();
     });
+}
+
+// ── 반려 패널 위치 동적 조정 ──
+const rejectionPanel = document.querySelector('.rejection-panel');
+if (rejectionPanel) {
+    const detailWrap = document.querySelector('.detail-wrap');
+
+    function adjustRejectionPanel() {
+        if (window.innerWidth <= 768) return; // 모바일은 CSS media query가 처리
+
+        const spaceRight = window.innerWidth - detailWrap.getBoundingClientRect().right;
+
+        if (spaceRight >= 276) { // 260px 패널 + 16px 여백
+            rejectionPanel.style.position     = 'fixed';
+            rejectionPanel.style.top          = '140px';
+            rejectionPanel.style.right        = '40px';
+            rejectionPanel.style.width        = '260px';
+            rejectionPanel.style.marginBottom = '';
+        } else {
+            rejectionPanel.style.position     = 'static';
+            rejectionPanel.style.top          = '';
+            rejectionPanel.style.right        = '';
+            rejectionPanel.style.width        = '100%';
+            rejectionPanel.style.marginBottom = '16px';
+        }
+    }
+
+    window.addEventListener('resize', adjustRejectionPanel);
+    adjustRejectionPanel();
 }

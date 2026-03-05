@@ -2,11 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin · 멤버 관리</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>Admin · 멤버 관리</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
 <body>
@@ -29,9 +26,7 @@
                     <div class="admin-section-meta">멤버를 클릭하면 소속 보드를 변경할 수 있습니다.</div>
                 </div>
                 <button class="btn-admin-primary" id="btn-open-create">
-                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                        <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
-                    </svg>
+                    <svg width="10" height="10"><use href="/img/icons.svg#icon-plus"></use></svg>
                     멤버 추가
                 </button>
             </div>
@@ -49,29 +44,55 @@
                         <th></th>
                     </tr>
                 </thead>
+                <!-- 매니저 그룹 -->
                 <tbody>
-                    <tr class="admin-table-row" th:each="member : ${memberList}">
+                    <tr class="table-group-label">
+                        <td colspan="4">매니저</td>
+                    </tr>
+                    <tr class="admin-table-row" th:each="member : ${memberList}" th:if="${member.role == 'ROLE_MANAGER'}">
                         <td th:text="${member.username}">username</td>
                         <td>
-                            <span class="role-badge"
-                                  th:classappend="${member.role == 'ROLE_ADMIN' ? 'role-admin' : (member.role == 'ROLE_MANAGER' ? 'role-manager' : 'role-user')}"
-                                  th:text="${member.role == 'ROLE_ADMIN' ? 'Admin' : (member.role == 'ROLE_MANAGER' ? 'Manager' : 'User')}">
-                                User
-                            </span>
+                            <span class="role-badge role-manager">Manager</span>
                         </td>
                         <td>
                             <span th:if="${member.boardId != null}"
-                                  th:text="${boardMap != null and boardMap[member.boardId] != null ? boardMap[member.boardId] : member.boardId}">
-                                보드명
-                            </span>
+                                  th:text="${boardMap != null and boardMap[member.boardId] != null ? boardMap[member.boardId] : member.boardId}">보드명</span>
                             <span th:unless="${member.boardId != null}" style="color: var(--text-muted);">미배정</span>
                         </td>
-                        <td>
+                        <td style="display:flex; gap:8px; align-items:center;">
                             <button class="btn-admin-edit btn-open-edit"
                                     th:data-member-id="${member.id}"
-                                    th:data-board-id="${member.boardId}">
-                                수정
-                            </button>
+                                    th:data-board-id="${member.boardId}"
+                                    th:data-role="${member.role}">수정</button>
+                            <button type="button" class="btn-admin-danger btn-open-delete-member"
+                                    th:data-member-id="${member.id}"
+                                    th:data-username="${member.username}">삭제</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <!-- 멤버 그룹 -->
+                <tbody>
+                    <tr class="table-group-label">
+                        <td colspan="4">멤버</td>
+                    </tr>
+                    <tr class="admin-table-row" th:each="member : ${memberList}" th:if="${member.role == 'ROLE_USER'}">
+                        <td th:text="${member.username}">username</td>
+                        <td>
+                            <span class="role-badge role-user">User</span>
+                        </td>
+                        <td>
+                            <span th:if="${member.boardId != null}"
+                                  th:text="${boardMap != null and boardMap[member.boardId] != null ? boardMap[member.boardId] : member.boardId}">보드명</span>
+                            <span th:unless="${member.boardId != null}" style="color: var(--text-muted);">미배정</span>
+                        </td>
+                        <td style="display:flex; gap:8px; align-items:center;">
+                            <button class="btn-admin-edit btn-open-edit"
+                                    th:data-member-id="${member.id}"
+                                    th:data-board-id="${member.boardId}"
+                                    th:data-role="${member.role}">수정</button>
+                            <button type="button" class="btn-admin-danger btn-open-delete-member"
+                                    th:data-member-id="${member.id}"
+                                    th:data-username="${member.username}">삭제</button>
                         </td>
                     </tr>
                 </tbody>
@@ -85,7 +106,7 @@
         <div class="modal-box modal-box--admin">
             <div class="modal-title">멤버 추가</div>
 
-            <form action="/admin/user/create" method="post">
+            <form action="/admin/member/create" method="post">
                 <div class="form-group">
                     <label>아이디</label>
                     <input class="input-field" type="text" name="username" placeholder="아이디를 입력하세요" required>
@@ -123,9 +144,16 @@
     <!-- 멤버 수정 모달 -->
     <div class="modal-overlay" id="editMemberModal">
         <div class="modal-box modal-box--admin">
-            <div class="modal-title">소속 보드 변경</div>
+            <div class="modal-title">멤버 수정</div>
 
-            <form id="editMemberForm" action="/admin/user/update/0" method="post">
+            <form id="editMemberForm" action="/admin/member/update/0" method="post">
+                <div class="form-group">
+                    <label>권한</label>
+                    <select class="select-field" name="role" id="edit-role-select">
+                        <option value="ROLE_USER">User</option>
+                        <option value="ROLE_MANAGER">Manager</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label>소속 보드</label>
                     <select class="select-field" name="boardId" id="edit-board-select">
@@ -144,8 +172,25 @@
         </div>
     </div>
 
-    <script src="/js/common.js"></script>
-    <script src="/js/admin.js"></script>
+    <!-- 멤버 삭제 확인 모달 -->
+    <div class="modal-overlay" id="deleteMemberModal">
+        <div class="modal-box modal-box--admin">
+            <div class="modal-icon">
+                <svg width="20" height="20"><use href="/img/icons.svg#icon-trash-lg"></use></svg>
+            </div>
+            <div class="modal-title">멤버를 삭제하시겠습니까?</div>
+            <div class="modal-desc"><span id="delete-member-name"></span> 멤버를 삭제하면 작성한 모든 게시물과 첨부파일이 함께 삭제됩니다.</div>
+            <div class="modal-actions">
+                <button type="button" class="btn-modal-cancel" id="btn-delete-member-cancel">취소</button>
+                <form id="deleteMemberForm" method="post" style="display:inline;">
+                    <button type="submit" class="btn-modal-delete">삭제</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/admin.js}"></script>
 
 </body>
 

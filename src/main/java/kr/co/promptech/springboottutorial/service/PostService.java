@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.service;
 
+import kr.co.promptech.springboottutorial.exception.PostNotFoundException;
 import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
@@ -31,8 +32,14 @@ public class PostService {
         return postMapper.getAllPost();
     }
 
+    public List<Post> getCurrentPost(){
+        return postMapper.getCurrentPost();
+    }
+
     public Post getPostById(Long id){
-        return postMapper.getPostById(id);
+        Post post = postMapper.getPostById(id);
+        if (post == null) throw new PostNotFoundException(id);
+        return post;
     }
 
     public List<Post> getRequestedPost(){
@@ -65,6 +72,10 @@ public class PostService {
         return postMapper.getPostsByBoardId(boardId);
     }
 
+    public List<Post> getPostsByMemberId(Long memberId) {
+        return postMapper.getPostsByMemberId(memberId);
+    }
+
     public void updatePost(Post post, PostCreateDto postCreateDto){
 
         post.setTitle(postCreateDto.getTitle());
@@ -73,5 +84,9 @@ public class PostService {
         post.setUpdatedAt(LocalDateTime.now());
 
         postMapper.updatePost(post);
+    }
+
+    public void updateStatus(Long id, String status){
+        postMapper.updateStatus(id,status);
     }
 }

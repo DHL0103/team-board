@@ -2,14 +2,16 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <title>작업 상세</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body>
+<body th:data-member-id="${post.memberId}"
+      th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
-<div class="detail-wrap" th:with="palette=${boardPaletteMap[post.boardId]}">
+<div class="detail-wrap" th:with="palette=${boardColor}">
   <div class="breadcrumb-row">
     <a href="/">보드</a> <span class="breadcrumb-sep">›</span>
     <span th:text="${boardName}">팀</span> <span
@@ -30,14 +32,11 @@
             <span th:text="${boardName}">팀</span>
           </span>
         <span class="status-chip"
-              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
-              th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : '완료'}"></span>
+              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : 'chip-completed'}"
+              th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : '완료'}"></span>
         <span class="due-chip" id="due-chip"
               th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
-            <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.3">
-              <rect x="1" y="1.5" width="8" height="7.5" rx="1" />
-              <path d="M3 1v1M7 1v1M1 4h8" />
-            </svg>
+            <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
             <span class="due-label"
                   th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
           </span>
@@ -57,9 +56,7 @@
 
     <div class="post-files" th:if="${postFiles != null and !#lists.isEmpty(postFiles)}">
       <div class="post-files-label">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
-          <path d="M6 1v7M3 5l3-4 3 4M2 10h8" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
         첨부파일
       </div>
       <div class="file-chip-list">
@@ -73,16 +70,32 @@
     <div class="post-actions">
       <div class="post-actions-left">
         <button th:if="${isOwner}" class="btn-delete" id="btn-delete">
-          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path
-                    d="M2 3.5h9M5 3.5V2.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1M10.5 3.5l-.7 7a1 1 0 0 1-1 .9H4.2a1 1 0 0 1-1-.9l-.7-7" />
-          </svg> 삭제
+          <svg width="13" height="13"><use href="/img/icons.svg#icon-trash"></use></svg> 삭제
         </button>
       </div>
       <div class="post-actions-right">
         <button th:if="${isOwner}" class="btn-edit" id="btn-edit">수정</button>
-        <a th:if="${post.status == 'PROGRESS'}" th:href="'/post/' + ${post.id} + '/request'" class="btn-request">✓ 완료
-          요청</a>
+        <form th:if="${isOwner and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/post/request/{id}(id=${post.id})}" method="post" style="margin:0;">
+          <button type="submit" class="btn-request">✓ 완료 요청</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 반려 이력 사이드바 -->
+  <div class="rejection-panel" th:if="${rejections != null and not #lists.isEmpty(rejections)}">
+    <div class="rejection-panel-header">
+      <span class="rejection-panel-title">반려 이력</span>
+      <span class="rejection-panel-count" th:text="${#lists.size(rejections)} + '건'">0건</span>
+    </div>
+    <div class="rejection-list">
+      <div class="rejection-item" th:each="rejection : ${rejections}"
+           th:data-rejected-by="${rejection.rejectedBy}">
+        <div class="rejection-date">
+          <span class="rejection-rejector">로딩 중...</span>
+          <span th:text="${#temporals.format(rejection.createdAt, 'MM.dd HH:mm')}">01.01</span>
+        </div>
+        <div class="rejection-reason" th:text="${rejection.reason}">반려 사유</div>
       </div>
     </div>
   </div>
@@ -114,7 +127,7 @@
       </form>
     </div>
   </div>
-</div>
+
 
 <div class="modal-overlay" id="editModal">
   <div class="modal-box">
@@ -124,9 +137,7 @@
         <span class="modal-team-badge" th:classappend="${'badge-' + palette}" th:text="${boardName}">팀</span>
       </div>
       <button type="button" class="modal-close" id="btn-edit-close">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-          <path d="M1 1l8 8M9 1L1 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-        </svg>
+        <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
       </button>
     </div>
     <form th:action="@{/post/update/{id}(id=${post.id})}" method="post" enctype="multipart/form-data">
@@ -173,9 +184,7 @@
       <div class="form-group">
         <input type="file" name="files" id="edit-file-input" multiple hidden>
         <button type="button" class="file-upload-btn" id="btn-edit-file-attach">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M6 1v7M3 5l3-4 3 4M2 10h8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
+          <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
           파일 추가
         </button>
         <div class="file-chip-list" id="edit-file-chip-list"></div>
@@ -189,10 +198,7 @@
 <div class="modal-overlay" id="deleteModal">
   <div class="modal-box">
     <div class="modal-icon">
-      <svg width="20" height="20" viewBox="0 0 18 18" fill="none" stroke="#dc2626" stroke-width="1.6">
-        <path
-                d="M3 4.5h12M7 4.5V3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1.5M14.5 4.5l-.9 9.5a1.5 1.5 0 0 1-1.5 1.35H5.9A1.5 1.5 0 0 1 4.4 14L3.5 4.5" />
-      </svg>
+      <svg width="20" height="20"><use href="/img/icons.svg#icon-trash-lg"></use></svg>
     </div>
     <div class="modal-title">정말 삭제하시겠습니까?</div>
     <div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div>
@@ -205,12 +211,8 @@
   </div>
 </div>
 
-<script src="/js/common.js"></script>
-<script th:inline="javascript">
-  const memberId = [[${post.memberId}]];
-  const existingDueDateStr = /*[[${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}]]*/ '';
-</script>
-<script src="/js/post_detail.js"></script>
+<script th:src="@{/js/common.js}"></script>
+<script th:src="@{/js/post_detail.js}"></script>
 </body>
 
 </html>

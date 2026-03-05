@@ -22,8 +22,9 @@ initDueChips();
 
 document.querySelectorAll(".status-chip").forEach(chip => {
     const s = chip.dataset.status;
-    if (s === "PROGRESS") chip.classList.add("progress");
+    if (s === "PROGRESS")  chip.classList.add("progress");
     if (s === "REQUESTED") chip.classList.add("requested");
+    if (s === "REJECTED")  chip.classList.add("rejected");
 });
 
 document.querySelectorAll(".board-card").forEach(card => {
