@@ -38,7 +38,9 @@ public class PostService {
 
     public Post getPostById(Long id){
         Post post = postMapper.getPostById(id);
-        if (post == null) throw new PostNotFoundException(id);
+        if (post == null) {
+            throw new PostNotFoundException(id);
+        }
         return post;
     }
 
