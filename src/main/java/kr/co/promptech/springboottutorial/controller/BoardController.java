@@ -1,6 +1,5 @@
 package kr.co.promptech.springboottutorial.controller;
 
-import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
@@ -33,10 +32,10 @@ public class BoardController {
         //유저의 시스템 레벨에 따라서 보여주는 보드 목록 구분
         if (currentMember.getRole().equals("ROLE_ADMIN")) {
             //시스템 레벨 admin이라면 모든 보드 반환
-            model.addAttribute("boardList", boardService.getAllBoards());
+            model.addAttribute("boardList", boardService.getAllBoardDtos());
         } else {
             //시스템 레벨 user라면 board_members 테이블을 이용하여 속해있는 보드만 조회
-            model.addAttribute("boardList", boardService.getBoardsByMemberId(currentMember.getId()));
+            model.addAttribute("boardList", boardService.getBoardsByMemberIdDtos(currentMember.getId()));
         }
         return "main_page";
     }

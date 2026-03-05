@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,12 @@ public class BoardService {
 
     public List<Board> getAllBoards() {
         return boardMapper.getAllBoards();
+    }
+
+    public List<BoardResponseDto> getAllBoardDtos() {
+        return boardMapper.getAllBoards().stream()
+                .map(b -> new BoardResponseDto(b.getId(), b.getName(), b.getDescription(), b.getColor(), b.getStatus()))
+                .toList();
     }
 
     public Board getBoardById(Long id) {
@@ -36,5 +43,11 @@ public class BoardService {
 
     public List<Board> getBoardsByMemberId(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId);
+    }
+
+    public List<BoardResponseDto> getBoardsByMemberIdDtos(Long memberId) {
+        return boardMapper.getBoardsByMemberId(memberId).stream()
+                .map(b -> new BoardResponseDto(b.getId(), b.getName(), b.getDescription(), b.getColor(), b.getStatus()))
+                .toList();
     }
 }
