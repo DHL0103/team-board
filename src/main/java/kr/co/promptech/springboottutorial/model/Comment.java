@@ -1,10 +1,12 @@
 package kr.co.promptech.springboottutorial.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
 public class Comment {
     private Long id;
     private Long postId;      // 어떤 업무에 달린 댓글인지
