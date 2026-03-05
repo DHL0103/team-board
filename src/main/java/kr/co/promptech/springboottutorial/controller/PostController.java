@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,16 +36,11 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("postFiles", postFileService.getFilesByPostId(id));
         model.addAttribute("rejections", postRejectionService.getByPostId(id));
-        List<Board> boardList = boardService.getAllBoards();
-        Map<Long, String> boardPaletteMap = new LinkedHashMap<>();
-        for (int i = 0; i < boardList.size(); i++) {
-            boardPaletteMap.put(boardList.get(i).getId(), "p" + (i % 6 + 1));
+        Board board = boardService.getBoardById(post.getBoardId());
+        if (board != null) {
+            model.addAttribute("boardName", board.getName());
+            model.addAttribute("boardColor", board.getColor());
         }
-        model.addAttribute("boardPaletteMap", boardPaletteMap);
-        boardList.stream()
-                .filter(b -> b.getId().equals(post.getBoardId()))
-                .findFirst()
-                .ifPresent(b -> model.addAttribute("boardName", b.getName()));
 
         if (principal != null) {
             Long currentMemberId = memberService.getMemberByUsername(principal.getName()).getId();

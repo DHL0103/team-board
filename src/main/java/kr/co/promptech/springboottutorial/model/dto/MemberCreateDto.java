@@ -6,6 +6,5 @@ import lombok.Data;
 public class MemberCreateDto {
     String username;
     String password;
-    Long boardId;
     String role;
 }

@@ -7,6 +7,5 @@ public class Member {
     private Long id;
     private String username;
     private String password;
-    private String role;        // ROLE_USER,ROLE_MANAGER, ROLE_ADMIN
-    private Long boardId;
+    private String role;
 }

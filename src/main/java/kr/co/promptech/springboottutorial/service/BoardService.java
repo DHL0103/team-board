@@ -18,6 +18,10 @@ public class BoardService {
         return boardMapper.getAllBoards();
     }
 
+    public Board getBoardById(Long id) {
+        return boardMapper.getBoardById(id);
+    }
+
     public void createBoard(BoardCreateDto boardCreateDto){
         boardMapper.createBoard(boardCreateDto);
     }
@@ -28,5 +32,9 @@ public class BoardService {
 
     public void deleteBoard(Long id) {
         boardMapper.deleteBoard(id);
+    }
+
+    public List<Board> getBoardsByMemberId(Long memberId) {
+        return boardMapper.getBoardsByMemberId(memberId);
     }
 }
