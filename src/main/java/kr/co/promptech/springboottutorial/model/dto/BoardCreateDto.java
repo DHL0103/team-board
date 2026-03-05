@@ -1,8 +1,10 @@
 package kr.co.promptech.springboottutorial.model.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class BoardCreateDto {
     private String name;
     private String color;
