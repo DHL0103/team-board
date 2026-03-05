@@ -15,7 +15,7 @@ public interface PostMemberMapper {
     int countByPostIdAndMemberId(@Param("postId") Long postId, @Param("memberId") Long memberId);
 
     @Insert("INSERT INTO post_members (post_id, member_id) VALUES (#{postId}, #{memberId})")
-    void save(PostMember postMember);
+    void save(@Param("postId") Long postId, @Param("memberId") Long memberId);
 
     @Delete("DELETE FROM post_members WHERE post_id = #{postId} AND member_id = #{memberId}")
     void delete(@Param("postId") Long postId, @Param("memberId") Long memberId);

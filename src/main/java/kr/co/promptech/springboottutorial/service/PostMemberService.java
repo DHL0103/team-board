@@ -22,10 +22,7 @@ public class PostMemberService {
     }
 
     public void save(Long postId, Long memberId) {
-        PostMember pm = new PostMember();
-        pm.setPostId(postId);
-        pm.setMemberId(memberId);
-        postMemberMapper.save(pm);
+        postMemberMapper.save(postId, memberId);
     }
 
     public void delete(Long postId, Long memberId) {
