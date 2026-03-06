@@ -92,107 +92,132 @@ document.querySelectorAll(".btn-col-add").forEach(btn => {
     });
 });
 
-createModal.addEventListener("click", (e) => {
-    if (e.target === createModal) closeModal();
-});
+if (createModal) {
+    createModal.addEventListener("click", (e) => {
+        if (e.target === createModal) closeModal();
+    });
 
-document.getElementById("btn-modal-close").addEventListener("click", closeModal);
+    document.getElementById("btn-modal-close").addEventListener("click", closeModal);
 
-document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
 
-// ── 날짜 피커 ──
-let pickerYear = today.getFullYear();
-let pickerMonth = today.getMonth();
-let selectedDate = null;
+    // ── 날짜 피커 ──
+    let pickerYear = today.getFullYear();
+    let pickerMonth = today.getMonth();
+    let selectedDate = null;
 
-function changeMonth(dir) {
-    pickerMonth += dir;
-    if (pickerMonth < 0) { pickerMonth = 11; pickerYear--; }
-    if (pickerMonth > 11) { pickerMonth = 0; pickerYear++; }
-    renderCalendar();
-}
-
-document.getElementById("btn-prev-month").addEventListener("click", () => changeMonth(-1));
-document.getElementById("btn-next-month").addEventListener("click", () => changeMonth(1));
-
-function renderCalendar() {
-    const label = document.getElementById("due-month-label");
-    label.textContent = `${pickerYear}년 ${pickerMonth + 1}월`;
-
-    const grid = document.getElementById("due-days");
-    grid.innerHTML = "";
-
-    const firstDay = new Date(pickerYear, pickerMonth, 1).getDay();
-    const lastDate = new Date(pickerYear, pickerMonth + 1, 0).getDate();
-
-    for (let i = 0; i < firstDay; i++) {
-        const el = document.createElement("div");
-        el.className = "due-day empty";
-        grid.appendChild(el);
+    function changeMonth(dir) {
+        pickerMonth += dir;
+        if (pickerMonth < 0) { pickerMonth = 11; pickerYear--; }
+        if (pickerMonth > 11) { pickerMonth = 0; pickerYear++; }
+        renderCalendar();
     }
 
-    for (let d = 1; d <= lastDate; d++) {
-        const el = document.createElement("div");
-        el.className = "due-day";
-        el.textContent = d;
+    document.getElementById("btn-prev-month").addEventListener("click", () => changeMonth(-1));
+    document.getElementById("btn-next-month").addEventListener("click", () => changeMonth(1));
 
-        const thisDate = new Date(pickerYear, pickerMonth, d);
-        const isToday = thisDate.getTime() === today.getTime();
-        const isPast = thisDate < today;
+    function renderCalendar() {
+        const label = document.getElementById("due-month-label");
+        label.textContent = `${pickerYear}년 ${pickerMonth + 1}월`;
 
-        if (isPast) el.classList.add("past");
-        if (isToday) el.classList.add("today");
-        if (selectedDate && thisDate.getTime() === selectedDate.getTime()) el.classList.add("selected");
+        const grid = document.getElementById("due-days");
+        grid.innerHTML = "";
 
-        if (!isPast) {
-            el.addEventListener("click", () => selectDate(thisDate));
+        const firstDay = new Date(pickerYear, pickerMonth, 1).getDay();
+        const lastDate = new Date(pickerYear, pickerMonth + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) {
+            const el = document.createElement("div");
+            el.className = "due-day empty";
+            grid.appendChild(el);
         }
-        grid.appendChild(el);
-    }
-}
 
-function selectDate(date) {
-    selectedDate = date;
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const d = String(date.getDate()).padStart(2, "0");
-    document.getElementById("modal-due-value").value = `${y}-${m}-${d}T00:00:00`;
-    document.getElementById("due-selected-display").textContent = `${m}.${d} 마감`;
-    renderCalendar();
-}
+        for (let d = 1; d <= lastDate; d++) {
+            const el = document.createElement("div");
+            el.className = "due-day";
+            el.textContent = d;
 
-function clearDue() {
-    selectedDate = null;
-    document.getElementById("modal-due-value").value = "";
-    document.getElementById("due-selected-display").textContent = "선택 안 함";
-    renderCalendar();
-}
+            const thisDate = new Date(pickerYear, pickerMonth, d);
+            const isToday = thisDate.getTime() === today.getTime();
+            const isPast = thisDate < today;
 
-document.getElementById("btn-clear-due").addEventListener("click", () => clearDue());
+            if (isPast) el.classList.add("past");
+            if (isToday) el.classList.add("today");
+            if (selectedDate && thisDate.getTime() === selectedDate.getTime()) el.classList.add("selected");
 
-renderCalendar();
-
-// ── 파일 첨부 ──
-// FileList는 read-only이므로 DataTransfer로 관리
-let fileDataTransfer = new DataTransfer();
-const fileInput = document.getElementById("file-input");
-const fileChipList = document.getElementById("file-chip-list");
-
-document.getElementById("btn-file-attach").addEventListener("click", () => {
-    fileInput.click();
-});
-
-fileInput.addEventListener("change", () => {
-    for (const file of fileInput.files) {
-        if (file.size > 10 * 1024 * 1024) {
-            showToast(`${file.name}: 파일 크기는 10MB를 초과할 수 없습니다.`);
-            continue;
+            if (!isPast) {
+                el.addEventListener("click", () => selectDate(thisDate));
+            }
+            grid.appendChild(el);
         }
-        fileDataTransfer.items.add(file);
     }
-    fileInput.files = fileDataTransfer.files;
-    renderFileChips();
-});
+
+    function selectDate(date) {
+        selectedDate = date;
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, "0");
+        const d = String(date.getDate()).padStart(2, "0");
+        document.getElementById("modal-due-value").value = `${y}-${m}-${d}T00:00:00`;
+        document.getElementById("due-selected-display").textContent = `${m}.${d} 마감`;
+        renderCalendar();
+    }
+
+    function clearDue() {
+        selectedDate = null;
+        document.getElementById("modal-due-value").value = "";
+        document.getElementById("due-selected-display").textContent = "선택 안 함";
+        renderCalendar();
+    }
+
+    document.getElementById("btn-clear-due").addEventListener("click", () => clearDue());
+
+    renderCalendar();
+
+    // ── 파일 첨부 ──
+    // FileList는 read-only이므로 DataTransfer로 관리
+    let fileDataTransfer = new DataTransfer();
+    const fileInput = document.getElementById("file-input");
+    const fileChipList = document.getElementById("file-chip-list");
+
+    document.getElementById("btn-file-attach").addEventListener("click", () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener("change", () => {
+        for (const file of fileInput.files) {
+            if (file.size > 10 * 1024 * 1024) {
+                showToast(`${file.name}: 파일 크기는 10MB를 초과할 수 없습니다.`);
+                continue;
+            }
+            fileDataTransfer.items.add(file);
+        }
+        fileInput.files = fileDataTransfer.files;
+        renderFileChips();
+    });
+
+    function renderFileChips() {
+        fileChipList.innerHTML = "";
+        for (let i = 0; i < fileDataTransfer.files.length; i++) {
+            const file = fileDataTransfer.files[i];
+            const chip = document.createElement("span");
+            chip.className = "file-chip";
+            chip.innerHTML = `${file.name}<button type="button" class="file-chip-remove" data-index="${i}">×</button>`;
+            fileChipList.appendChild(chip);
+        }
+    }
+
+    fileChipList.addEventListener("click", (e) => {
+        if (!e.target.classList.contains("file-chip-remove")) return;
+        const idx = parseInt(e.target.dataset.index);
+        const newDt = new DataTransfer();
+        for (let i = 0; i < fileDataTransfer.files.length; i++) {
+            if (i !== idx) newDt.items.add(fileDataTransfer.files[i]);
+        }
+        fileDataTransfer = newDt;
+        fileInput.files = fileDataTransfer.files;
+        renderFileChips();
+    });
+}
 
 document.addEventListener("DOMContentLoaded", () => {
     const toast = document.getElementById("errorToast");
@@ -202,25 +227,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-function renderFileChips() {
-    fileChipList.innerHTML = "";
-    for (let i = 0; i < fileDataTransfer.files.length; i++) {
-        const file = fileDataTransfer.files[i];
-        const chip = document.createElement("span");
-        chip.className = "file-chip";
-        chip.innerHTML = `${file.name}<button type="button" class="file-chip-remove" data-index="${i}">×</button>`;
-        fileChipList.appendChild(chip);
-    }
-}
-
-fileChipList.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("file-chip-remove")) return;
-    const idx = parseInt(e.target.dataset.index);
-    const newDt = new DataTransfer();
-    for (let i = 0; i < fileDataTransfer.files.length; i++) {
-        if (i !== idx) newDt.items.add(fileDataTransfer.files[i]);
-    }
-    fileDataTransfer = newDt;
-    fileInput.files = fileDataTransfer.files;
-    renderFileChips();
+// ── 보드 멤버 수 로드 ──
+document.querySelectorAll(".board-grid-card[data-board-id]").forEach(async card => {
+    const boardId = card.dataset.boardId;
+    try {
+        const res = await fetch(`/member/count/${boardId}`);
+        const count = await res.text();
+        card.querySelector(".member-count-label").textContent = count;
+    } catch (e) {}
 });
+

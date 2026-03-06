@@ -25,4 +25,7 @@ public interface BoardMemberMapper {
 
     @Delete("DELETE FROM board_members WHERE board_id = #{boardId} AND member_id = #{memberId}")
     void delete(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
+
+    @Select("SELECT COUNT(*) FROM board_members WHERE board_id = #{boardId}")
+    long countByBoardId(Long boardId);
 }

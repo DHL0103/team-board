@@ -46,4 +46,8 @@ public class BoardMemberService {
     public void delete(Long boardId, Long memberId) {
         boardMemberMapper.delete(boardId, memberId);
     }
+
+    public long countByBoardId(Long boardId) {
+        return boardMemberMapper.countByBoardId(boardId);
+    }
 }

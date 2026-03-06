@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
 import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
+    private final BoardMemberService boardMemberService;
 
     /**
      * @param id 조회할 멤버의 PK
@@ -33,5 +35,9 @@ public class MemberController {
         return "login_form";
     }
 
-
+    @GetMapping("/count/{boardId}")
+    @ResponseBody
+    public long getMemberCount(@PathVariable Long boardId) {
+        return boardMemberService.countByBoardId(boardId);
+    }
 }
