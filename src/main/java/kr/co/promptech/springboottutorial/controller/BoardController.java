@@ -46,27 +46,35 @@ public class BoardController {
         return "main_page";
     }
 
+    /**
+     * @param boardId   조회할 보드 ID
+     * @param model     뷰에 전달할 데이터 컨테이너
+     * @param principal 현재 로그인한 사용자 정보
+     * @return 보드 멤버면 board/detail, 아니면 board/request
+     * board는 항상 model에 담기며 BoardResponseDto 타입
+     * 멤버인 경우 postList(PostResponseDto)도 함께 전달
+     */
     @GetMapping("/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model, Principal principal) {
         MemberResponseDto currentMember = memberService.getMemberByUsername(principal.getName());
         boolean isBoardMember = boardMemberService.isMember(boardId, currentMember.getId());
         BoardResponseDto board = boardService.getBoardDtoById(boardId);
         model.addAttribute("board", board);
+        //보드 소속 멤버 (user,manager 모두 포함) 이면 보드 상세페이지로 이동
         if (isBoardMember) {
             model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
             return "board/detail";
-        } else {
-            return "board/request";
         }
+        //소속이 아니라면 요청을 보내는 페이지로 이동
+        return "board/request";
+
     }
 
     @GetMapping("/{boardId}/post_list")
     public String postList(@PathVariable Long boardId, @RequestParam String status, Model model) {
         BoardResponseDto board = boardService.getBoardDtoById(boardId);
-        String statusLabel = status.equals("PROGRESS") ? "진행 중" : status.equals("REQUESTED") ? "승인 요청" : "완료";
         model.addAttribute("board", board);
         model.addAttribute("status", status);
-        model.addAttribute("statusLabel", statusLabel);
         model.addAttribute("postList", java.util.List.of());
         return "board/post_list";
     }

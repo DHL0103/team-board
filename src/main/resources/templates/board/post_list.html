@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title th:text="${board.name} + ' · ' + ${statusLabel}">포스트 목록</title>
+  <title th:text="${board.name} + ' · ' + ${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : '완료'}">포스트 목록</title>
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
@@ -33,7 +33,7 @@
     <div class="post-list-header">
       <span class="status-chip"
             th:classappend="${status == 'PROGRESS' ? 'chip-progress' : status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
-            th:text="${statusLabel}">진행 중</span>
+            th:text="${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : '완료'}">진행 중</span>
       <span class="col-count" th:text="${#lists.size(postList)} + '건'">0건</span>
     </div>
 
@@ -41,7 +41,7 @@
       <div class="board-grid-empty-icon">
         <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
       </div>
-      <div th:text="'해당하는 ' + ${statusLabel} + ' 작업이 없습니다.'">작업이 없습니다.</div>
+      <div th:text="'해당하는 ' + ${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : '완료'} + ' 작업이 없습니다.'">작업이 없습니다.</div>
     </div>
 
     <div class="post-list-body" th:unless="${#lists.isEmpty(postList)}">
