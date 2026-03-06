@@ -32,8 +32,12 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
             response.sendRedirect("member/login");
             return false;
         }
-
         MemberResponseDto member = memberService.getMemberByUsername(principal.getName());
+
+        //시스템 레벨 관리자는 통과
+        if ("ROLE_ADMIN".equals(member.getRole())) {
+            return true;
+        }
 
         // 3. 멤버 여부 확인
         boolean isMember = boardMemberService.isMember(boardId, member.getId());
