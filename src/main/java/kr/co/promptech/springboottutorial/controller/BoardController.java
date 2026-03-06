@@ -1,17 +1,19 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
+import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
+import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,7 +21,8 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final MemberService memberService;
-
+    private final BoardMemberService boardMemberService;
+    private final PostService postService;
     /**
      * @param model     뷰에 전달할 데이터 컨테이너
      * @param principal 현재 로그인한 사용자 정보
@@ -39,6 +42,20 @@ public class BoardController {
             model.addAttribute("boardList", boardService.getBoardsByMemberIdDtos(currentMember.getId()));
         }
         return "main_page";
+    }
+
+    @GetMapping("/{boardId}")
+    public String boardDetail(@PathVariable Long boardId, Model model, Principal principal) {
+        MemberResponseDto currentMember = memberService.getMemberByUsername(principal.getName());
+        boolean isBoardMember = boardMemberService.isMember(boardId, currentMember.getId());
+        BoardResponseDto board = boardService.getBoardDtoById(boardId);
+        model.addAttribute("board", board);
+        if (isBoardMember) {
+            model.addAttribute("postList", postService.getPostsByBoardId(boardId));
+            return "board/detail";
+        } else {
+            return "board/request";
+        }
     }
 
 }

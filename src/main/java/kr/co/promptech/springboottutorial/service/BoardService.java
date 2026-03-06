@@ -29,6 +29,10 @@ public class BoardService {
         return boardMapper.getBoardById(id);
     }
 
+    public BoardResponseDto getBoardDtoById(Long id) {
+        return new BoardResponseDto(boardMapper.getBoardById(id));
+    }
+
     public void createBoard(BoardCreateDto boardCreateDto){
         boardMapper.createBoard(boardCreateDto);
     }
