@@ -72,6 +72,14 @@ public class BoardController {
         return "board/request";
     }
 
+    /**
+     * @param boardId 조회할 보드 ID
+     * @param status  필터링할 상태값 (PROGRESS / REQUESTED / COMPLETED)
+     * @param model   뷰에 전달할 데이터 컨테이너
+     * @return board/post_list 뷰
+     * PROGRESS는 REJECTED 포스트도 함께 포함하여 반환
+     * board(BoardResponseDto), postList(PostResponseDto) 전달
+     */
     @GetMapping("/{boardId}/post_list")
     public String postList(@PathVariable Long boardId, @RequestParam String status, Model model) {
         BoardResponseDto board = boardService.getBoardDtoById(boardId);
