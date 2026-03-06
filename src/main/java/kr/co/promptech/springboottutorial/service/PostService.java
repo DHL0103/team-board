@@ -52,7 +52,10 @@ public class PostService {
         Member member = memberMapper.findByUsername(username);
 
         String dueDateStr = postCreateDto.getDueDate();
-        LocalDateTime dueDate = (dueDateStr != null && !dueDateStr.isEmpty()) ? LocalDateTime.parse(dueDateStr) : null;
+        LocalDateTime dueDate = null;
+        if (dueDateStr != null && !dueDateStr.isEmpty()) {
+            dueDate = LocalDateTime.parse(dueDateStr);
+        }
 
         Post post = Post.builder()
                 .title(postCreateDto.getTitle())
@@ -83,7 +86,10 @@ public class PostService {
 
     public void updatePost(Long id, PostCreateDto postCreateDto){
         String dueDateStr = postCreateDto.getDueDate();
-        LocalDateTime dueDate = (dueDateStr != null && !dueDateStr.isEmpty()) ? LocalDateTime.parse(dueDateStr) : null;
+        LocalDateTime dueDate = null;
+        if (dueDateStr != null && !dueDateStr.isEmpty()) {
+            dueDate = LocalDateTime.parse(dueDateStr);
+        }
         postMapper.updatePost(id, postCreateDto.getTitle(), postCreateDto.getContent(), dueDate);
     }
 

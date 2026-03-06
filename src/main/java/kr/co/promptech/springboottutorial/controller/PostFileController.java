@@ -43,7 +43,9 @@ public class PostFileController {
         }
 
         String contentType = Files.probeContentType(filePath);
-        if (contentType == null) contentType = "application/octet-stream";
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
 
         String displayName = (name != null && !name.isBlank()) ? name : filename;
         ContentDisposition contentDisposition = ContentDisposition.attachment()

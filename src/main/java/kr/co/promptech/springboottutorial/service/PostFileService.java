@@ -31,8 +31,9 @@ public class PostFileService {
     public void deleteFiles(List<Long> ids) {
         for (Long id : ids) {
             PostFile postFile = postFileMapper.findById(id);
-            if (postFile == null) continue;
-
+            if (postFile == null) {
+                continue;
+            }
             try {
                 Files.deleteIfExists(Paths.get(uploadDir).resolve(postFile.getStoredPath()));
             } catch (IOException e) {
