@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title th:text="${board.name} + ' · ' + ${statusLabel}">포스트 목록</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+</head>
+
+<body>
+
+  <div th:replace="~{fragments/header :: back-header}"></div>
+
+  <div class="board-detail-header">
+    <div>
+      <div class="board-title-row">
+        <div class="neon-badge" th:classappend="${'neon-badge-' + board.color}">
+          <div class="neon-dot"></div>
+        </div>
+        <div class="page-title" th:text="${board.name}">보드명</div>
+      </div>
+      <div class="page-meta" th:text="${board.description}">설명</div>
+    </div>
+    <a class="btn-edit" th:href="@{'/board/' + ${board.id}}">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
+      칸반으로
+    </a>
+  </div>
+
+  <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
+
+  <div class="post-list-wrap">
+
+    <div class="post-list-header">
+      <span class="status-chip"
+            th:classappend="${status == 'PROGRESS' ? 'chip-progress' : status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
+            th:text="${statusLabel}">진행 중</span>
+      <span class="col-count" th:text="${#lists.size(postList)} + '건'">0건</span>
+    </div>
+
+    <div class="post-list-empty" th:if="${#lists.isEmpty(postList)}">
+      <div class="board-grid-empty-icon">
+        <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
+      </div>
+      <div th:text="'해당하는 ' + ${statusLabel} + ' 작업이 없습니다.'">작업이 없습니다.</div>
+    </div>
+
+    <div class="post-list-body" th:unless="${#lists.isEmpty(postList)}">
+      <a class="post-list-card"
+         th:each="post : ${postList}"
+         th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
+        <div class="post-list-card-bar" th:classappend="${'col-' + board.color}"></div>
+        <div class="post-list-card-body">
+          <div class="post-list-card-top">
+            <div class="card-title" th:text="${post.title}">제목</div>
+            <span class="status-chip"
+                  th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : 'chip-completed'}"
+                  th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : '완료'}"></span>
+          </div>
+          <div class="card-content" th:text="${post.content}">내용</div>
+          <div class="card-footer">
+            <div class="card-left">
+              <span class="due-chip"
+                    th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+                <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+                <span class="due-label"
+                      th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
+              </span>
+            </div>
+            <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </div>
+
+  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/common.js}"></script>
+
+</body>
+
+</html>

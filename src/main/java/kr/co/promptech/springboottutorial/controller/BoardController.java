@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.security.Principal;
 
 @Controller
@@ -56,6 +58,17 @@ public class BoardController {
         } else {
             return "board/request";
         }
+    }
+
+    @GetMapping("/{boardId}/post_list")
+    public String postList(@PathVariable Long boardId, @RequestParam String status, Model model) {
+        BoardResponseDto board = boardService.getBoardDtoById(boardId);
+        String statusLabel = status.equals("PROGRESS") ? "진행 중" : status.equals("REQUESTED") ? "승인 요청" : "완료";
+        model.addAttribute("board", board);
+        model.addAttribute("status", status);
+        model.addAttribute("statusLabel", statusLabel);
+        model.addAttribute("postList", java.util.List.of());
+        return "board/post_list";
     }
 
 }
