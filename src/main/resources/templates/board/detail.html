@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title th:text="${board.name}">보드 상세</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+</head>
+
+<body th:data-board-id="${board.id}">
+
+  <div th:replace="~{fragments/header :: back-header}"></div>
+
+  <div class="board-detail-header">
+    <div>
+      <div class="board-title-row">
+        <div class="neon-badge" th:classappend="${'neon-badge-' + board.color}">
+          <div class="neon-dot"></div>
+        </div>
+        <div class="page-title" th:text="${board.name}">보드명</div>
+      </div>
+      <div class="page-meta" th:text="${board.description}">설명</div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn-edit" id="btn-toggle-completed">완료 보기</button>
+      <button class="btn-request" id="btn-create-post">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
+        작업 추가
+      </button>
+    </div>
+  </div>
+
+  <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
+
+  <div class="kanban-wrap">
+    <div class="row justify-content-center">
+
+      <!-- 진행 중 -->
+      <div class="col-md-4" th:with="progressPosts=${postList.?[status == 'PROGRESS']}">
+        <div class="kanban-col">
+          <div class="col-header col-p1">
+            <span class="team-badge badge-p1">
+              <span class="team-dot"></span>
+              진행 중
+            </span>
+            <span class="col-count" th:text="${#lists.size(progressPosts)}">0</span>
+          </div>
+          <div class="col-body">
+            <div class="empty-col" th:if="${#lists.isEmpty(progressPosts)}">
+              <div class="empty-icon">
+                <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
+              </div>
+              <span>작업이 없습니다</span>
+            </div>
+            <div class="board-card"
+                 th:each="post : ${progressPosts}"
+                 th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
+              <div class="card-team-line col-p1"></div>
+              <div class="card-top">
+                <div class="card-title" th:text="${post.title}">제목</div>
+              </div>
+              <div class="card-content" th:text="${post.content}">내용</div>
+              <div class="card-footer">
+                <div class="card-left">
+                  <span class="due-chip"
+                        th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+                    <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+                    <span class="due-label"
+                          th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
+                  </span>
+                </div>
+                <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 검토 중 (승인 요청 + 반려) -->
+      <div class="col-md-4" th:with="reviewPosts=${postList.?[status == 'REQUESTED' or status == 'REJECTED']}">
+        <div class="kanban-col">
+          <div class="col-header col-p2">
+            <span class="team-badge badge-p2">
+              <span class="team-dot"></span>
+              검토 중
+            </span>
+            <span class="col-count" th:text="${#lists.size(reviewPosts)}">0</span>
+          </div>
+          <div class="col-body">
+            <div class="empty-col" th:if="${#lists.isEmpty(reviewPosts)}">
+              <div class="empty-icon">
+                <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
+              </div>
+              <span>작업이 없습니다</span>
+            </div>
+            <div class="board-card"
+                 th:each="post : ${reviewPosts}"
+                 th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
+              <div class="card-team-line col-p2"></div>
+              <div class="card-top">
+                <div class="card-title" th:text="${post.title}">제목</div>
+                <span class="status-chip"
+                      th:classappend="${post.status == 'REQUESTED' ? 'requested' : 'rejected'}"
+                      th:text="${post.status == 'REQUESTED' ? '요청' : '반려'}"></span>
+              </div>
+              <div class="card-content" th:text="${post.content}">내용</div>
+              <div class="card-footer">
+                <div class="card-left">
+                  <span class="due-chip"
+                        th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+                    <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+                    <span class="due-label"
+                          th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
+                  </span>
+                </div>
+                <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 완료 -->
+      <div class="col-md-4" id="col-completed" style="display:none;" th:with="completedPosts=${postList.?[status == 'COMPLETED']}">
+        <div class="kanban-col">
+          <div class="col-header col-p4">
+            <span class="team-badge badge-p4">
+              <span class="team-dot"></span>
+              완료
+            </span>
+            <span class="col-count" th:text="${#lists.size(completedPosts)}">0</span>
+          </div>
+          <div class="col-body">
+            <div class="empty-col" th:if="${#lists.isEmpty(completedPosts)}">
+              <div class="empty-icon">
+                <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
+              </div>
+              <span>작업이 없습니다</span>
+            </div>
+            <div class="board-card"
+                 th:each="post : ${completedPosts}"
+                 th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
+              <div class="card-team-line col-p4"></div>
+              <div class="card-top">
+                <div class="card-title" th:text="${post.title}">제목</div>
+                <span class="status-chip chip-completed">완료</span>
+              </div>
+              <div class="card-content" th:text="${post.content}">내용</div>
+              <div class="card-footer">
+                <div class="card-left">
+                  <span class="due-chip"
+                        th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+                    <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+                    <span class="due-label"
+                          th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
+                  </span>
+                </div>
+                <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 작업 추가 모달 -->
+  <div class="modal-overlay" id="createModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title-row">
+          <span class="modal-title">작업 추가</span>
+          <span class="modal-team-badge" th:classappend="${'badge-' + board.color}" th:text="${board.name}">팀</span>
+        </div>
+        <button type="button" class="modal-close" id="btn-create-close">
+          <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
+        </button>
+      </div>
+      <form th:action="@{/post/create}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="boardId" th:value="${board.id}">
+        <div class="form-group">
+          <label class="form-label">제목</label>
+          <input type="text" name="title" class="form-input" placeholder="작업 제목을 입력하세요" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label">내용</label>
+          <textarea name="content" class="form-input" placeholder="작업 내용을 입력하세요" required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">마감일 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
+          <input type="hidden" name="dueDate" id="create-due-value">
+          <div class="due-picker">
+            <div class="due-picker-header">
+              <span class="due-month-label" id="create-month-label"></span>
+              <div class="due-nav">
+                <span class="due-selected-display" id="create-selected-display">선택 안 함</span>
+                <button type="button" class="due-nav-btn" id="btn-create-prev-month">‹</button>
+                <button type="button" class="due-nav-btn" id="btn-create-next-month">›</button>
+              </div>
+            </div>
+            <div class="due-grid">
+              <div class="due-dow">
+                <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+              </div>
+              <div class="due-days" id="create-due-days"></div>
+            </div>
+            <button type="button" class="due-clear-btn" id="btn-create-clear-due">선택 초기화</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="file" name="files" id="create-file-input" multiple hidden>
+          <button type="button" class="file-upload-btn" id="btn-create-file-attach">
+            <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
+            파일 첨부
+          </button>
+          <div class="file-chip-list" id="create-file-chip-list"></div>
+        </div>
+        <button type="submit" class="btn-submit">작업 추가</button>
+      </form>
+    </div>
+  </div>
+
+  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/common.js}"></script>
+  <script th:src="@{/js/board_detail.js}"></script>
+
+</body>
+
+</html>
