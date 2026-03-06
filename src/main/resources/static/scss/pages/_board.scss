@@ -3,9 +3,6 @@
 // ── 보드 상세 헤더 ──
 .board-detail-header {
   padding: 32px 32px 20px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
 }
 
 .board-title-row {
@@ -52,10 +49,16 @@
 }
 
 // ── 포스트 목록 페이지 ──
-.post-list-wrap {
-  padding: 0 32px 40px;
-  max-width: 800px;
+.post-list-page {
+  width: 100%;
+  max-width: 1100px;
   margin: 0 auto;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+
+.post-list-wrap {
+  padding: 0 0 40px;
 }
 
 .post-list-header {
@@ -63,6 +66,8 @@
   align-items: center;
   gap: 8px;
   margin-bottom: 16px;
+
+  .post-list-back { margin-left: auto; }
 }
 
 .post-list-empty {
@@ -81,10 +86,12 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 }
 
 .post-list-card {
   display: flex;
+  width: 100%;
   background: $surface;
   border: 1px solid $border;
   border-radius: 8px;
