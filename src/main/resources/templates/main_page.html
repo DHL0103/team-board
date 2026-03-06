@@ -22,15 +22,13 @@
     </div>
 
     <div class="board-grid-wrap">
-        <!-- 빈 상태 -->
-        <div class="board-grid-empty" th:if="${#lists.isEmpty(boardList)}">
-            <div class="board-grid-empty-icon">
-                <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
-            </div>
-            <div>소속된 보드가 없습니다.</div>
-        </div>
-
-        <div class="board-grid" th:unless="${#lists.isEmpty(boardList)}">
+        <div class="board-grid">
+            <a class="board-grid-card-create" href="/admin/boards">
+                <div class="create-icon">
+                    <svg width="20" height="20"><use href="/img/icons.svg#icon-plus"></use></svg>
+                </div>
+                <span>만들기</span>
+            </a>
             <a class="board-grid-card"
                th:each="board : ${boardList}"
                th:href="@{'/board/' + ${board.id}}"
@@ -38,13 +36,6 @@
                 <div class="board-grid-card-bar"></div>
                 <div class="board-grid-card-body">
                     <div class="board-grid-card-name" th:text="${board.name}">보드명</div>
-                    <div class="board-grid-card-desc" th:text="${board.description}">설명</div>
-                </div>
-                <div class="board-grid-card-footer">
-                    <span class="team-badge"
-                          th:classappend="${'badge-' + board.color}">
-                        <span class="team-dot"></span>
-                    </span>
                 </div>
             </a>
         </div>
