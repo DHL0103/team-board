@@ -36,11 +36,9 @@ public class AdminController {
     public String requestPage(Model model){
         model.addAttribute("postList", postService.getRequestedPost());
         List<Board> boardList = boardService.getAllBoards();
-        Map<Long, String> boardPaletteMap = new LinkedHashMap<>();
-        for (int i = 0; i < boardList.size(); i++) {
-            boardPaletteMap.put(boardList.get(i).getId(), "p" + (i % 6 + 1));
-        }
-        model.addAttribute("boardPaletteMap", boardPaletteMap);
+        Map<Long, String> boardColorMap = boardList.stream()
+                .collect(java.util.stream.Collectors.toMap(Board::getId, Board::getColor));
+        model.addAttribute("boardColorMap", boardColorMap);
         return "admin/request";
     }
 

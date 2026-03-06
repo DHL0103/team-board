@@ -1,10 +1,12 @@
 package kr.co.promptech.springboottutorial.model.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class BoardCreateDto {
-    private String name;        // 팀명
-    private String slug;        // URL용 이름
-    private String description; // 팀 설명
+    private String name;
+    private String color;
+    private String description;
 }

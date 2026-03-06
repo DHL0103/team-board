@@ -38,7 +38,9 @@ public class PostService {
 
     public Post getPostById(Long id){
         Post post = postMapper.getPostById(id);
-        if (post == null) throw new PostNotFoundException(id);
+        if (post == null) {
+            throw new PostNotFoundException(id);
+        }
         return post;
     }
 
@@ -49,15 +51,21 @@ public class PostService {
     public Long createPost(PostCreateDto postCreateDto, String username){
         Member member = memberMapper.findByUsername(username);
 
-        Post post = new Post();
-        post.setTitle(postCreateDto.getTitle());
-        post.setContent(postCreateDto.getContent());
-        post.setDueDate(postCreateDto.getDueDate());
-        post.setMemberId(member.getId()); // 작성자 ID 주입
-        post.setBoardId(postCreateDto.getBoardId());         // 게시판 ID 주입
-        post.setStatus("PROGRESS");       // 기본 상태는 진행중으로.
-        post.setCreatedAt(LocalDateTime.now());
-        post.setUpdatedAt(null);
+        String dueDateStr = postCreateDto.getDueDate();
+        LocalDateTime dueDate = null;
+        if (dueDateStr != null && !dueDateStr.isEmpty()) {
+            dueDate = LocalDateTime.parse(dueDateStr);
+        }
+
+        Post post = Post.builder()
+                .title(postCreateDto.getTitle())
+                .content(postCreateDto.getContent())
+                .dueDate(dueDate)
+                .memberId(member.getId())
+                .boardId(postCreateDto.getBoardId())
+                .status("PROGRESS")
+                .createdAt(LocalDateTime.now())
+                .build();
 
         postMapper.createPost(post);
         return post.getId();
@@ -76,14 +84,13 @@ public class PostService {
         return postMapper.getPostsByMemberId(memberId);
     }
 
-    public void updatePost(Post post, PostCreateDto postCreateDto){
-
-        post.setTitle(postCreateDto.getTitle());
-        post.setContent(postCreateDto.getContent());
-        post.setDueDate(postCreateDto.getDueDate());
-        post.setUpdatedAt(LocalDateTime.now());
-
-        postMapper.updatePost(post);
+    public void updatePost(Long id, PostCreateDto postCreateDto){
+        String dueDateStr = postCreateDto.getDueDate();
+        LocalDateTime dueDate = null;
+        if (dueDateStr != null && !dueDateStr.isEmpty()) {
+            dueDate = LocalDateTime.parse(dueDateStr);
+        }
+        postMapper.updatePost(id, postCreateDto.getTitle(), postCreateDto.getContent(), dueDate);
     }
 
     public void updateStatus(Long id, String status){

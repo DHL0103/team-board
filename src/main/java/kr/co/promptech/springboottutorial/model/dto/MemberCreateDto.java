@@ -1,11 +1,12 @@
 package kr.co.promptech.springboottutorial.model.dto;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
+@AllArgsConstructor
 public class MemberCreateDto {
     String username;
     String password;
-    Long boardId;
     String role;
 }

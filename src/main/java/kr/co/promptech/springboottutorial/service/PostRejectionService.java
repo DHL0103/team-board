@@ -16,12 +16,7 @@ public class PostRejectionService {
     private final PostRejectionMapper postRejectionMapper;
 
     public void save(Long postId, String reason, Long rejectedBy) {
-        PostRejection rejection = new PostRejection();
-        rejection.setPostId(postId);
-        rejection.setReason(reason);
-        rejection.setRejectedBy(rejectedBy);
-        rejection.setCreatedAt(LocalDateTime.now());
-        postRejectionMapper.save(rejection);
+        postRejectionMapper.save(postId, reason, rejectedBy, LocalDateTime.now());
     }
 
     public List<PostRejection> getByPostId(Long postId) {

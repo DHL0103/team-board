@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class Member {
+public class PostMember {
     private Long id;
-    private String username; // 로그인 아이디
-    private String password; // BCrypt 암호화된 비밀번호
-    private String role;     // 시스템 권한 (ROLE_USER / ROLE_ADMIN)
+    private Long postId;   // 담당 업무 ID (FK → posts.id)
+    private Long memberId; // 담당자 ID (FK → members.id)
 }

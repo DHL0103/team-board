@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.mapper.PostFileMapper;
 import kr.co.promptech.springboottutorial.model.PostFile;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +21,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PostFileService {
     private final PostFileMapper postFileMapper;
-    private String uploadDir = "uploads";
+    @Value("${app.upload-dir}")
+    private String uploadDir;
 
     public List<PostFile> getFilesByPostId(Long postId) {
         return postFileMapper.findByPostId(postId);
@@ -29,8 +31,9 @@ public class PostFileService {
     public void deleteFiles(List<Long> ids) {
         for (Long id : ids) {
             PostFile postFile = postFileMapper.findById(id);
-            if (postFile == null) continue;
-
+            if (postFile == null) {
+                continue;
+            }
             try {
                 Files.deleteIfExists(Paths.get(uploadDir).resolve(postFile.getStoredPath()));
             } catch (IOException e) {
@@ -62,13 +65,13 @@ public class PostFileService {
             Path path = uploadPath.resolve(savedName);
             Files.copy(file.getInputStream(), path);
 
-            PostFile postFile = new PostFile();
-            postFile.setPostId(postId);
-            postFile.setOriginalName(originalName);
-            postFile.setStoredPath(savedName);
-            postFile.setFileSize(file.getSize());
-            postFile.setCreatedAt(LocalDateTime.now());
-
+            PostFile postFile = PostFile.builder()
+                    .postId(postId)
+                    .originalName(originalName)
+                    .storedPath(savedName)
+                    .fileSize(file.getSize())
+                    .createdAt(LocalDateTime.now())
+                    .build();
             postFileMapper.saveFile(postFile);
         } catch (IOException e) {
             throw new RuntimeException("파일 저장 실패", e);
