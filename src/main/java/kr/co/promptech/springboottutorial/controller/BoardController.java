@@ -1,6 +1,6 @@
 package kr.co.promptech.springboottutorial.controller;
 
-import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class BoardController {
      */
     @GetMapping
     public String getAllBoard(Model model, Principal principal) {
-        Member currentMember = memberService.getMemberByUsername(principal.getName());
+        MemberResponseDto currentMember = memberService.getMemberByUsername(principal.getName());
         //유저의 시스템 레벨에 따라서 보여주는 보드 목록 구분
         if (currentMember.getRole().equals("ROLE_ADMIN")) {
             //시스템 레벨 admin이라면 모든 보드 반환

@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,8 +20,8 @@ public class MemberService {
         return memberMapper.selectMemberById(id);
     }
 
-    public Member getMemberByUsername(String username) {
-        return memberMapper.findByUsername(username);
+    public MemberResponseDto getMemberByUsername(String username) {
+        return new MemberResponseDto(memberMapper.findByUsername(username));
     }
 
     public void create(MemberCreateDto memberCreateDto) {
