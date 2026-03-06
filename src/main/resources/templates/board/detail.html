@@ -34,7 +34,7 @@
   <div class="kanban-wrap">
     <div class="row justify-content-center">
 
-      <!-- 진행 중 -->
+      <!-- 진행 중 + 반려-->
       <div class="col-md-4" th:with="progressPosts=${postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
         <div class="kanban-col">
           <a class="col-header col-p1" th:href="@{'/board/' + ${board.id} + '/post_list?status=PROGRESS'}">
@@ -75,13 +75,13 @@
         </div>
       </div>
 
-      <!-- 검토 중 (승인 요청 + 반려) -->
+      <!-- 검토 중 (승인 요청 ) -->
       <div class="col-md-4" th:with="reviewPosts=${postList.?[status == 'REQUESTED']}">
         <div class="kanban-col">
           <a class="col-header col-p2" th:href="@{'/board/' + ${board.id} + '/post_list?status=REQUESTED'}">
             <span class="team-badge badge-p2">
               <span class="team-dot"></span>
-              검토 중
+              승인 요청
             </span>
             <span class="col-count" th:text="${#lists.size(reviewPosts)}">0</span>
           </a>
