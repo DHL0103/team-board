@@ -8,6 +8,7 @@ import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.model.PostFile;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -78,6 +79,12 @@ public class PostService {
 
     public List<Post> getPostsByBoardId(Long boardId) {
         return postMapper.getPostsByBoardId(boardId);
+    }
+
+    public List<PostResponseDto> getPostDtosByBoardId(Long boardId) {
+        return postMapper.getPostsByBoardId(boardId).stream()
+                .map(PostResponseDto::new)
+                .toList();
     }
 
     public List<Post> getPostsByMemberId(Long memberId) {

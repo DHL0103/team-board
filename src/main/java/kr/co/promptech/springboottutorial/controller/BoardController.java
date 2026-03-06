@@ -53,7 +53,7 @@ public class BoardController {
         BoardResponseDto board = boardService.getBoardDtoById(boardId);
         model.addAttribute("board", board);
         if (isBoardMember) {
-            model.addAttribute("postList", postService.getPostsByBoardId(boardId));
+            model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
             return "board/detail";
         } else {
             return "board/request";
