@@ -2,11 +2,12 @@
 
 // ── 보드 상세 헤더 ──
 .board-detail-header {
-  padding: 32px 32px 20px;
+  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
+  padding: 32px 32px 20px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
 }
@@ -93,6 +94,14 @@
   flex-direction: column;
   gap: 8px;
   width: 100%;
+}
+
+// card-team-line status 색상 (col-p* 와 동일한 opacity)
+.card-team-line {
+  &.bar-progress  { background: #2563eb; opacity: 0.2; }
+  &.bar-requested { background: #d97706; opacity: 0.2; }
+  &.bar-completed { background: #059669; opacity: 0.2; }
+  &.bar-rejected  { background: #dc2626; opacity: 0.2; }
 }
 
 .post-list-card {

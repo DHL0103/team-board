@@ -54,9 +54,13 @@
             <div class="board-card"
                  th:each="post : ${progressPosts}"
                  th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-              <div class="card-team-line col-p1"></div>
+              <div class="card-team-line"
+                   th:classappend="${post.status == 'REJECTED' ? 'col-p5' : 'col-p1'}"></div>
               <div class="card-top">
                 <div class="card-title" th:text="${post.title}">제목</div>
+                <span class="status-chip"
+                      th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : 'chip-rejected'}"
+                      th:text="${post.status == 'PROGRESS' ? '진행 중' : '반려'}"></span>
               </div>
               <div class="card-content" th:text="${post.content}">내용</div>
               <div class="card-footer">
@@ -98,9 +102,7 @@
               <div class="card-team-line col-p2"></div>
               <div class="card-top">
                 <div class="card-title" th:text="${post.title}">제목</div>
-                <span class="status-chip"
-                      th:classappend="${post.status == 'REQUESTED' ? 'requested' : 'rejected'}"
-                      th:text="${post.status == 'REQUESTED' ? '요청' : '반려'}"></span>
+                <span class="status-chip chip-requested">승인 요청</span>
               </div>
               <div class="card-content" th:text="${post.content}">내용</div>
               <div class="card-footer">
