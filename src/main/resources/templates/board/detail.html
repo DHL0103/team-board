@@ -11,7 +11,7 @@
   <div th:replace="~{fragments/header :: back-header}"></div>
 
   <div class="board-detail-header">
-    <div>
+    <div style="min-width: 0; overflow: hidden;">
       <div class="board-title-row">
         <div class="neon-badge" th:classappend="${'neon-badge-' + board.color}">
           <div class="neon-dot"></div>
@@ -20,7 +20,7 @@
       </div>
       <div class="page-meta" th:text="${board.description}">설명</div>
     </div>
-    <div style="display:flex; gap:8px;">
+    <div style="display:flex; gap:8px; flex-shrink: 0;">
       <button class="btn-edit" id="btn-toggle-completed">완료 보기</button>
       <button class="btn-request" id="btn-create-post">
         <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>

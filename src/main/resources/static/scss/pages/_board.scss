@@ -3,6 +3,12 @@
 // ── 보드 상세 헤더 ──
 .board-detail-header {
   padding: 32px 32px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .board-title-row {
@@ -90,44 +96,24 @@
 }
 
 .post-list-card {
-  display: flex;
+  display: block;
   width: 100%;
   background: $surface;
   border: 1px solid $border;
   border-radius: 8px;
-  overflow: hidden;
+  padding: 14px;
   text-decoration: none;
   color: $text;
-  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+  transition: box-shadow 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.18s ease;
 
   &:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
     border-color: #d1d5db;
     color: $text;
   }
 }
 
-.post-list-card-bar {
-  width: 4px;
-  flex-shrink: 0;
-
-  @each $key, $val in $palettes {
-    &.col-#{$key} { background: map-get($val, color); }
-  }
-}
-
-.post-list-card-body {
-  flex: 1;
-  padding: 14px 16px;
-}
-
-.post-list-card-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 6px;
-}
 
 // ── 칸반 헤더 링크 ──
 a.col-header {
@@ -141,7 +127,9 @@ a.col-header {
 
 .glow-line {
   height: 2px;
-  margin: 0 32px 20px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto 20px;
 
   @each $key, $val in $palettes {
     &.glow-#{$key} {
