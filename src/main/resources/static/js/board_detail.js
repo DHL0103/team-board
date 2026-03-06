@@ -1,3 +1,5 @@
+initDueChips();
+
 // 카드 클릭 → 상세 페이지 이동
 document.querySelectorAll('.board-card[data-href]').forEach(card => {
     card.addEventListener('click', () => {
