@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostMember {
     private Long id;
-    private Long postId;
-    private Long memberId;
+    private Long postId;   // 담당 업무 ID (FK → posts.id)
+    private Long memberId; // 담당자 ID (FK → members.id)
 }

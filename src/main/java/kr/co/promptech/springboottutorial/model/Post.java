@@ -14,12 +14,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Post {
     private Long id;
-    private Long boardId;       // 어느 팀 게시판인지
-    private Long memberId;        // 작성자
-    private String title;
-    private String content;
-    private String status;      // PROGRESS, REQUESTED, COMPLETED
+    private Long boardId;            // 소속 게시판 ID (FK → boards.id)
+    private Long memberId;           // 작성자 ID (FK → members.id)
+    private String title;            // 업무 제목
+    private String content;          // 업무 내용
+    private String status;           // 업무 상태 (PROGRESS / REQUESTED / COMPLETED / REJECTED)
     private LocalDateTime dueDate;   // 마감 기한
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt; // 작성일시
+    private LocalDateTime updatedAt; // 수정일시
 }
