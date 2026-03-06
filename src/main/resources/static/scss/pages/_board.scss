@@ -1,0 +1,64 @@
+@use "../abstract/variables" as *;
+
+// ── 보드 상세 헤더 ──
+.board-detail-header {
+  padding: 32px 32px 20px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.board-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.neon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+
+  @each $key, $val in $palettes {
+    &.neon-badge-#{$key} {
+      background: map-get($val, color);
+      box-shadow: 0 0 20px rgba(map-get($val, color), 0.4),
+                  0 0 40px rgba(map-get($val, color), 0.2),
+                  inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.neon-dot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px white;
+  flex-shrink: 0;
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(0.9); }
+}
+
+.glow-line {
+  height: 2px;
+  margin: 0 32px 20px;
+
+  @each $key, $val in $palettes {
+    &.glow-#{$key} {
+      background: map-get($val, color);
+      box-shadow: 0 0 10px rgba(map-get($val, color), 0.5);
+    }
+  }
+}

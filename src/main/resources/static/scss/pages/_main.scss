@@ -21,9 +21,10 @@ $design:   map-get($teams, design);
   align-items: flex-end;
   justify-content: space-between;
 
-  .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
-  .page-meta  { font-size: 13px; color: $text-muted; }
 }
+
+.page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.page-meta  { font-size: 13px; color: $text-muted; }
 
 .view-tabs {
   display: flex;
