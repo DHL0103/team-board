@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ContentDisposition;
@@ -24,7 +25,8 @@ import java.nio.file.Paths;
 @RequiredArgsConstructor
 public class PostFileController {
 
-    private final String uploadDir = "uploads";
+    @Value("${app.upload-dir}")
+    private String uploadDir;
 
     /**
      * @param filename 서버에 저장된 파일명 (UUID 기반)
