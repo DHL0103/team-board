@@ -35,15 +35,15 @@
     <div class="row justify-content-center">
 
       <!-- 진행 중 -->
-      <div class="col-md-4" th:with="progressPosts=${postList.?[status == 'PROGRESS']}">
+      <div class="col-md-4" th:with="progressPosts=${postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
         <div class="kanban-col">
-          <div class="col-header col-p1">
+          <a class="col-header col-p1" th:href="@{'/board/' + ${board.id} + '/post_list?status=PROGRESS'}">
             <span class="team-badge badge-p1">
               <span class="team-dot"></span>
               진행 중
             </span>
             <span class="col-count" th:text="${#lists.size(progressPosts)}">0</span>
-          </div>
+          </a>
           <div class="col-body">
             <div class="empty-col" th:if="${#lists.isEmpty(progressPosts)}">
               <div class="empty-icon">
@@ -76,15 +76,15 @@
       </div>
 
       <!-- 검토 중 (승인 요청 + 반려) -->
-      <div class="col-md-4" th:with="reviewPosts=${postList.?[status == 'REQUESTED' or status == 'REJECTED']}">
+      <div class="col-md-4" th:with="reviewPosts=${postList.?[status == 'REQUESTED']}">
         <div class="kanban-col">
-          <div class="col-header col-p2">
+          <a class="col-header col-p2" th:href="@{'/board/' + ${board.id} + '/post_list?status=REQUESTED'}">
             <span class="team-badge badge-p2">
               <span class="team-dot"></span>
               검토 중
             </span>
             <span class="col-count" th:text="${#lists.size(reviewPosts)}">0</span>
-          </div>
+          </a>
           <div class="col-body">
             <div class="empty-col" th:if="${#lists.isEmpty(reviewPosts)}">
               <div class="empty-icon">
@@ -122,13 +122,13 @@
       <!-- 완료 -->
       <div class="col-md-4" id="col-completed" style="display:none;" th:with="completedPosts=${postList.?[status == 'COMPLETED']}">
         <div class="kanban-col">
-          <div class="col-header col-p4">
+          <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=COMPLETED'}">
             <span class="team-badge badge-p4">
               <span class="team-dot"></span>
               완료
             </span>
             <span class="col-count" th:text="${#lists.size(completedPosts)}">0</span>
-          </div>
+          </a>
           <div class="col-body">
             <div class="empty-col" th:if="${#lists.isEmpty(completedPosts)}">
               <div class="empty-icon">

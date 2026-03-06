@@ -51,6 +51,87 @@
   50%       { opacity: 0.7; transform: scale(0.9); }
 }
 
+// ── 포스트 목록 페이지 ──
+.post-list-wrap {
+  padding: 0 32px 40px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.post-list-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.post-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: $text-muted;
+  font-size: 13px;
+  gap: 8px;
+  text-align: center;
+}
+
+.post-list-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.post-list-card {
+  display: flex;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: $text;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    border-color: #d1d5db;
+    color: $text;
+  }
+}
+
+.post-list-card-bar {
+  width: 4px;
+  flex-shrink: 0;
+
+  @each $key, $val in $palettes {
+    &.col-#{$key} { background: map-get($val, color); }
+  }
+}
+
+.post-list-card-body {
+  flex: 1;
+  padding: 14px 16px;
+}
+
+.post-list-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+// ── 칸반 헤더 링크 ──
+a.col-header {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover { opacity: 0.8; }
+}
+
 .glow-line {
   height: 2px;
   margin: 0 32px 20px;
