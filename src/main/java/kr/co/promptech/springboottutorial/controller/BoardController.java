@@ -57,6 +57,7 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model, Principal principal) {
         MemberResponseDto currentMember = memberService.getMemberByUsername(principal.getName());
+        //해당 보드(user/manager)인지 확인
         boolean isBoardMember = boardMemberService.isMember(boardId, currentMember.getId());
         BoardResponseDto board = boardService.getBoardDtoById(boardId);
         model.addAttribute("board", board);
