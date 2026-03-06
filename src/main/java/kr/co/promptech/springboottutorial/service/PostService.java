@@ -87,6 +87,13 @@ public class PostService {
                 .toList();
     }
 
+    public List<PostResponseDto> getPostDtosByBoardIdAndStatus(Long boardId, String status) {
+        List<Post> posts = status.equals("PROGRESS")
+                ? postMapper.getPostsByBoardIdInProgress(boardId)
+                : postMapper.getPostsByBoardIdAndStatus(boardId, status);
+        return posts.stream().map(PostResponseDto::new).toList();
+    }
+
     public List<Post> getPostsByMemberId(Long memberId) {
         return postMapper.getPostsByMemberId(memberId);
     }

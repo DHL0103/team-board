@@ -64,6 +64,12 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
     @Select("SELECT * FROM posts WHERE board_id = #{boardId}")
     List<Post> getPostsByBoardId(Long boardId);
 
+    @Select("SELECT * FROM posts WHERE board_id = #{boardId} AND status IN ('PROGRESS', 'REJECTED')")
+    List<Post> getPostsByBoardIdInProgress(@Param("boardId") Long boardId);
+
+    @Select("SELECT * FROM posts WHERE board_id = #{boardId} AND status = #{status}")
+    List<Post> getPostsByBoardIdAndStatus(@Param("boardId") Long boardId, @Param("status") String status);
+
     @Select("SELECT * FROM posts WHERE member_id = #{memberId}")
     List<Post> getPostsByMemberId(Long memberId);
 

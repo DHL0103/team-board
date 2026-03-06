@@ -76,7 +76,7 @@ public class BoardController {
         BoardResponseDto board = boardService.getBoardDtoById(boardId);
         model.addAttribute("board", board);
         model.addAttribute("status", status);
-        model.addAttribute("postList", java.util.List.of());
+        model.addAttribute("postList", postService.getPostDtosByBoardIdAndStatus(boardId, status));
         return "board/post_list";
     }
 
