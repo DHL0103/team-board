@@ -21,7 +21,7 @@ public class BoardService {
 
     public List<BoardResponseDto> getAllBoardDtos() {
         return boardMapper.getAllBoards().stream()
-                .map(b -> new BoardResponseDto(b.getId(), b.getName(), b.getDescription(), b.getColor(), b.getStatus()))
+                .map(BoardResponseDto::new)
                 .toList();
     }
 
@@ -47,7 +47,7 @@ public class BoardService {
 
     public List<BoardResponseDto> getBoardsByMemberIdDtos(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId).stream()
-                .map(b -> new BoardResponseDto(b.getId(), b.getName(), b.getDescription(), b.getColor(), b.getStatus()))
+                .map(BoardResponseDto::new)
                 .toList();
     }
 }
