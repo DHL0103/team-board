@@ -20,7 +20,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/post")
+@RequestMapping("board/{boardId}/post")
 @Slf4j
 public class PostController {
 
