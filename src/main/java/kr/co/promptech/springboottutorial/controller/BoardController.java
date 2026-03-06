@@ -2,7 +2,6 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
-import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
@@ -23,7 +22,6 @@ import java.security.Principal;
 public class BoardController {
     private final BoardService boardService;
     private final MemberService memberService;
-    private final BoardMemberService boardMemberService;
     private final PostService postService;
     /**
      * @param model     뷰에 전달할 데이터 컨테이너
@@ -47,28 +45,31 @@ public class BoardController {
     }
 
     /**
-     * @param boardId   조회할 보드 ID
-     * @param model     뷰에 전달할 데이터 컨테이너
-     * @param principal 현재 로그인한 사용자 정보
-     * @return 보드 멤버면 board/detail, 아니면 board/request
-     * board는 항상 model에 담기며 BoardResponseDto 타입
-     * 멤버인 경우 postList(PostResponseDto)도 함께 전달
+     * @param boardId 조회할 보드 ID
+     * @param model   뷰에 전달할 데이터 컨테이너
+     * @return board/detail 뷰
+     * 인터셉터(BoardAuthInterceptor)에서 비멤버를 /board/{boardId}/request로 리다이렉트하므로
+     * 이 메서드에 도달한 사용자는 항상 보드 멤버임이 보장됨
+     * board(BoardResponseDto), postList(PostResponseDto) 전달
      */
     @GetMapping("/{boardId}")
-    public String boardDetail(@PathVariable Long boardId, Model model, Principal principal) {
-        MemberResponseDto currentMember = memberService.getMemberByUsername(principal.getName());
-        //해당 보드(user/manager)인지 확인
-        boolean isBoardMember = boardMemberService.isMember(boardId, currentMember.getId());
-        BoardResponseDto board = boardService.getBoardDtoById(boardId);
-        model.addAttribute("board", board);
-        //보드 소속 멤버 (user,manager 모두 포함) 이면 보드 상세페이지로 이동
-        if (isBoardMember) {
-            model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
-            return "board/detail";
-        }
-        //소속이 아니라면 요청을 보내는 페이지로 이동
-        return "board/request";
+    public String boardDetail(@PathVariable Long boardId, Model model) {
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
+        model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
+        return "board/detail";
+    }
 
+    /**
+     * @param boardId 조회할 보드 ID
+     * @param model   뷰에 전달할 데이터 컨테이너
+     * @return board/request 뷰
+     * 인터셉터가 비멤버를 이 URL로 리다이렉트함
+     * board(BoardResponseDto) 전달
+     */
+    @GetMapping("/{boardId}/request")
+    public String boardRequest(@PathVariable Long boardId, Model model) {
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
+        return "board/request";
     }
 
     @GetMapping("/{boardId}/post_list")
