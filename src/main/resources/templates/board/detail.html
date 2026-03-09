@@ -11,19 +11,14 @@
   <div th:replace="~{fragments/header :: back-header}"></div>
 
   <div class="board-detail-header">
-    <div style="min-width: 0; overflow: hidden;">
-      <div class="board-title-row">
-        <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
-      </div>
-      <div class="page-meta" th:text="${board.description}">설명</div>
+    <div class="board-title-row">
+      <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
     </div>
-    <div style="display:flex; gap:8px; flex-shrink: 0;">
-      <button class="btn-edit" id="btn-toggle-completed">완료 보기</button>
-      <button class="btn-request" id="btn-create-post">
-        <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
-        작업 추가
-      </button>
-    </div>
+    <div class="page-meta" th:text="${board.description}">설명</div>
+    <button class="btn-request board-detail-header__action" id="btn-create-post">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
+      작업 추가
+    </button>
   </div>
 
   <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
@@ -119,7 +114,7 @@
       </div>
 
       <!-- 완료 -->
-      <div class="col-md-4" id="col-completed" style="display:none;" th:with="completedPosts=${postList.?[status == 'APPROVED']}">
+      <div class="col-md-4" th:with="completedPosts=${postList.?[status == 'APPROVED']}">
         <div class="kanban-col">
           <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=APPROVED'}">
             <span class="team-badge badge-p4">

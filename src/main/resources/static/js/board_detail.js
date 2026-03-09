@@ -7,16 +7,6 @@ document.querySelectorAll('.board-card[data-href]').forEach(card => {
     });
 });
 
-// 완료 컬럼 토글
-const colCompleted = document.getElementById('col-completed');
-const btnToggleCompleted = document.getElementById('btn-toggle-completed');
-
-btnToggleCompleted.addEventListener('click', () => {
-    const isHidden = colCompleted.style.display === 'none';
-    colCompleted.style.display = isHidden ? '' : 'none';
-    btnToggleCompleted.textContent = isHidden ? '완료 숨기기' : '완료 보기';
-});
-
 // 작업 추가 모달
 const createModal = document.getElementById('createModal');
 const btnCreatePost = document.getElementById('btn-create-post');
