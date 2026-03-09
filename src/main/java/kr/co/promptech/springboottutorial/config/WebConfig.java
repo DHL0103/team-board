@@ -1,5 +1,7 @@
 package kr.co.promptech.springboottutorial.config;
 
+import kr.co.promptech.springboottutorial.interceptor.BoardAuthInterceptor;
+import kr.co.promptech.springboottutorial.interceptor.PostAuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
