@@ -12,6 +12,10 @@ header {
   top: 0;
   z-index: 100;
 
+  @media (max-width: 639px) {
+    padding: 0 16px;
+  }
+
   .logo {
     display: flex;
     align-items: center;
