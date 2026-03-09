@@ -2,11 +2,11 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title>가입 요청</title>
+  <title>승인 요청</title>
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body>
+<body th:data-board-id="${boardId}">
 
     <div th:replace="~{fragments/header :: back-header}"></div>
 
@@ -46,7 +46,7 @@
                         </div>
                     </a>
                     <div class="request-card-actions">
-                        <form th:action="@{'/board/' + ${boardId} + '/manager/posts/' + ${post.id} + '/approve'}" method="post" style="display:inline;">
+                        <form th:action="@{'/board/' + ${boardId} + '/manager/requests/approve/' + ${post.id}}" method="post" style="display:inline;">
                             <button type="submit" class="btn-approve">승인</button>
                         </form>
                         <button type="button" class="btn-reject"
@@ -78,7 +78,7 @@
     </div>
 
     <script th:src="@{/js/common.js}"></script>
-    <script th:src="@{/js/admin.js}"></script>
+    <script th:src="@{/js/manager_requests.js}"></script>
 
 </body>
 

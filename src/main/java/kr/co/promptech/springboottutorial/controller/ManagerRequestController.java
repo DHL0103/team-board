@@ -1,12 +1,14 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import kr.co.promptech.springboottutorial.service.MemberService;
+import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ManagerRequestController {
 
     private final PostService postService;
+    private final MemberService memberService;
+    private final PostRejectionService postRejectionService;
 
     /**
      * @param boardId 조회할 보드 ID
@@ -27,5 +31,19 @@ public class ManagerRequestController {
         model.addAttribute("boardId", boardId);
         model.addAttribute("requestList", postService.getRequestedPostDtosByBoardId(boardId));
         return "manager/requests";
+    }
+
+    @PostMapping("/approve/{postId}")
+    public String approve(@PathVariable Long boardId, @PathVariable Long postId) {
+        postService.updateStatus(postId, "APPROVED");
+        return "redirect:/board/" + boardId + "/manager/requests";
+    }
+
+    @PostMapping("/reject/{postId}")
+    public String reject(@PathVariable Long boardId, @PathVariable Long postId, @RequestParam String reason, Principal principal) {
+        postService.updateStatus(postId, "REJECTED");
+        Long rejectedBy = memberService.getMemberByUsername(principal.getName()).getId();
+        postRejectionService.save(postId, reason, rejectedBy);
+        return "redirect:/board/" + boardId + "/manager/requests";
     }
 }
