@@ -35,6 +35,12 @@ public class MemberController {
         return "login_form";
     }
 
+    /**
+     * @param boardId 멤버 수를 조회할 보드 ID
+     * @return 해당 보드의 활성 멤버 수 (MANAGER + USER)
+     * board_members 테이블에서 boardId에 해당하는 멤버 수 반환
+     * 메인 페이지 보드 카드의 멤버 수 표시에 사용
+     */
     @GetMapping("/count/{boardId}")
     @ResponseBody
     public long getMemberCount(@PathVariable Long boardId) {
