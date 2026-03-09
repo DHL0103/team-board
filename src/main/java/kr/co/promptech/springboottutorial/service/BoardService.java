@@ -33,8 +33,9 @@ public class BoardService {
         return new BoardResponseDto(boardMapper.getBoardById(id));
     }
 
-    public void createBoard(BoardCreateDto boardCreateDto){
+    public Long createBoard(BoardCreateDto boardCreateDto){
         boardMapper.createBoard(boardCreateDto);
+        return boardCreateDto.getId();
     }
 
     public void updateBoard(Long id, BoardCreateDto boardCreateDto){

@@ -1,7 +1,9 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
+import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
@@ -9,9 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
@@ -23,6 +26,7 @@ public class BoardController {
     private final BoardService boardService;
     private final MemberService memberService;
     private final PostService postService;
+    private final BoardMemberService boardMemberService;
     /**
      * @param model     뷰에 전달할 데이터 컨테이너
      * @param principal 현재 로그인한 사용자 정보
@@ -87,6 +91,20 @@ public class BoardController {
         model.addAttribute("status", status);
         model.addAttribute("postList", postService.getPostDtosByBoardIdAndStatus(boardId, status));
         return "board/post_list";
+    }
+
+    /**
+     * @param boardCreateDto 생성할 보드 정보 (name, color, description)
+     * @param principal      현재 로그인한 사용자 정보
+     * @return 메인 페이지로 리다이렉트
+     * 보드 생성 후 생성자를 해당 보드의 MANAGER로 board_members에 등록
+     */
+    @PostMapping("/create")
+    public String createBoard(@ModelAttribute BoardCreateDto boardCreateDto, Principal principal) {
+        Long boardId = boardService.createBoard(boardCreateDto);
+        MemberResponseDto member = memberService.getMemberByUsername(principal.getName());
+        boardMemberService.save(boardId, member.getId(), "MANAGER");
+        return "redirect:/board";
     }
 
 }

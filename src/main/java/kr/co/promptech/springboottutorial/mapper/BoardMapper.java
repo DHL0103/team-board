@@ -16,6 +16,7 @@ public interface BoardMapper {
     Board getBoardById(Long id);
 
     @Insert("INSERT INTO boards (name, color, description) VALUES (#{name}, #{color}, #{description})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void createBoard(BoardCreateDto boardCreateDto);
 
     @Update("UPDATE boards SET name = #{dto.name}, color = #{dto.color}, description = #{dto.description} WHERE id = #{id}")
