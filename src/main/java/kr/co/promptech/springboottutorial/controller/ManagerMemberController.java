@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -27,5 +28,29 @@ public class ManagerMemberController {
         model.addAttribute("boardId", boardId);
         model.addAttribute("memberList", boardMemberService.getMembersByBoardId(boardId));
         return "manager/members";
+    }
+
+    @PostMapping("/approve/{memberId}")
+    public String approveMember(@PathVariable Long boardId, @PathVariable Long memberId) {
+        boardMemberService.updateRole(boardId, memberId, "USER");
+        return "redirect:/board/" + boardId + "/manager/members";
+    }
+
+    @PostMapping("/promote/{memberId}")
+    public String promoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
+        boardMemberService.updateRole(boardId, memberId, "MANAGER");
+        return "redirect:/board/" + boardId + "/manager/members";
+    }
+
+    @PostMapping("/demote/{memberId}")
+    public String demoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
+        boardMemberService.updateRole(boardId, memberId, "USER");
+        return "redirect:/board/" + boardId + "/manager/members";
+    }
+
+    @PostMapping("/remove/{memberId}")
+    public String removeMember(@PathVariable Long boardId, @PathVariable Long memberId) {
+        boardMemberService.delete(boardId, memberId);
+        return "redirect:/board/" + boardId + "/manager/members";
     }
 }
