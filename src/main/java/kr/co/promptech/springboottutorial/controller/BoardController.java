@@ -71,9 +71,23 @@ public class BoardController {
      * board(BoardResponseDto) 전달
      */
     @GetMapping("/{boardId}/request")
-    public String boardRequest(@PathVariable Long boardId, Model model) {
+    public String boardRequest(@PathVariable Long boardId, Model model, Principal principal) {
+        MemberResponseDto member = memberService.getMemberByUsername(principal.getName());
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
+        model.addAttribute("isRequested", boardMemberService.isRequested(boardId, member.getId()));
         return "board/request";
+    }
+
+    /**
+     * @param boardId 조회할 보드 ID
+     * @param principal   뷰에 전달할 데이터 컨테이너
+     * @return board/request 페이지로 리다이렉트
+     * board_members 테이블에 role을 requested로 저장
+     */
+    @PostMapping("/{boardId}/request")
+    public String boardRequestPost(@PathVariable Long boardId, Principal principal) {
+        boardMemberService.save(boardId, memberService.getMemberByUsername(principal.getName()).getId(), "REQUESTED");
+        return "redirect:/board/" + boardId + "/request";
     }
 
     /**

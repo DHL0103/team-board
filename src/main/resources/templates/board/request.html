@@ -19,7 +19,13 @@
         <div style="font-size:16px; font-weight:700; margin-bottom:8px;" th:text="${board.name}">보드명</div>
         <div style="font-size:13px; color:var(--text-muted);">이 보드에 접근 권한이 없습니다.</div>
       </div>
-      <a href="/board" class="btn-edit" style="margin-top:8px;">
+      <form th:unless="${isRequested}" th:action="@{'/board/' + ${board.id} + '/request'}" method="post" style="margin:0;">
+        <button type="submit" class="btn-request">가입 요청</button>
+      </form>
+      <div th:if="${isRequested}" style="font-size:13px; color:var(--text-muted); padding:8px 16px; border:1px solid var(--border); border-radius:8px;">
+        이미 가입 요청을 보냈습니다
+      </div>
+      <a href="/board" class="btn-edit" style="margin-top:4px;">
         <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
         보드 목록으로
       </a>

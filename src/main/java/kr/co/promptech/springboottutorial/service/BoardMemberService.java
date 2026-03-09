@@ -35,6 +35,14 @@ public class BoardMemberService {
         return bm != null && ("USER".equals(bm.getBoardRole()) || "MANAGER".equals(bm.getBoardRole()));
     }
 
+    public boolean isRequested(Long boardId, Long memberId) {
+        BoardMember bm = boardMemberMapper.findByBoardIdAndMemberId(boardId, memberId);
+        if (bm == null) {
+            return false;
+        }
+        return "REQUESTED".equals(bm.getBoardRole());
+    }
+
     public void save(Long boardId, Long memberId, String boardRole) {
         boardMemberMapper.save(boardId, memberId, boardRole);
     }
