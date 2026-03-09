@@ -49,6 +49,12 @@ public class PostService {
         return postMapper.getRequestedPost();
     }
 
+    public List<PostResponseDto> getRequestedPostDtosByBoardId(Long boardId) {
+        return postMapper.getRequestedPostsByBoardId(boardId).stream()
+                .map(PostResponseDto::new)
+                .toList();
+    }
+
     public Long createPost(PostCreateDto postCreateDto, String username){
         Member member = memberMapper.findByUsername(username);
 
