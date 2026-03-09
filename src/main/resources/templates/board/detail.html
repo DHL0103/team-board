@@ -178,7 +178,7 @@
           <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
         </button>
       </div>
-      <form th:action="@{/post/create}" method="post" enctype="multipart/form-data">
+      <form th:action="@{'/board/' + ${board.id} + '/post/create'}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="boardId" th:value="${board.id}">
         <div class="form-group">
           <label class="form-label">제목</label>

@@ -63,7 +63,7 @@ public class PostController {
      * @param postCreateDto 게시글 생성 데이터 (제목, 내용, 보드ID 등)
      * @param files         첨부파일 목록 (optional)
      * @param principal     현재 로그인한 사용자 정보
-     * @return 메인 보드 페이지로 리다이렉트
+     * @return 보드 상세 페이지로 리다이렉트
      * 게시글 생성 후 첨부파일 저장. 파일 저장 실패 시 게시글은 유지
      */
     @PostMapping("/create")
@@ -83,7 +83,7 @@ public class PostController {
                 }
             }
         }
-        return "redirect:/board";
+        return "redirect:/board/{boardId}";
     }
 
     /**
