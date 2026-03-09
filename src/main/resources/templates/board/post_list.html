@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <title th:text="${board.name} + ' · ' + ${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : '완료'}">포스트 목록</title>
+  <title th:text="${board.name} + ' · ' + ${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : status == 'APPROVED' ? '완료' : status}">포스트 목록</title>
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
@@ -31,7 +31,7 @@
       <div class="post-list-header">
         <span class="status-chip"
               th:classappend="${status == 'PROGRESS' ? 'chip-progress' : status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
-              th:text="${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : '완료'}">진행 중</span>
+              th:text="${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : status == 'APPROVED' ? '완료' : status}">진행 중</span>
         <span class="col-count" th:text="${#lists.size(postList)} + '건'">0건</span>
         <a class="btn-edit post-list-back" th:href="@{'/board/' + ${board.id}}">
           <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
@@ -43,19 +43,19 @@
         <div class="board-grid-empty-icon">
           <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
         </div>
-        <div th:text="'해당하는 ' + ${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : '완료'} + ' 작업이 없습니다.'">작업이 없습니다.</div>
+        <div th:text="'해당하는 ' + ${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : status == 'APPROVED' ? '완료' : status} + ' 작업이 없습니다.'">작업이 없습니다.</div>
       </div>
 
       <div class="post-list-body" th:unless="${#lists.isEmpty(postList)}">
         <a class="post-list-card"
            th:each="post : ${postList}"
            th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-          <div class="card-team-line" th:classappend="${post.status == 'PROGRESS' ? 'bar-progress' : post.status == 'REQUESTED' ? 'bar-requested' : post.status == 'REJECTED' ? 'bar-rejected' : 'bar-completed'}"></div>
+          <div class="card-team-line" th:classappend="${post.status == 'PROGRESS' ? 'bar-progress' : post.status == 'REQUESTED' ? 'bar-requested' : post.status == 'REJECTED' ? 'bar-rejected' : post.status == 'APPROVED' ? 'bar-completed' : ''}"></div>
           <div class="card-top">
             <div class="card-title" th:text="${post.title}">제목</div>
             <span class="status-chip"
-                  th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : 'chip-completed'}"
-                  th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : '완료'}"></span>
+                  th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : post.status == 'APPROVED' ? 'chip-completed' : ''}"
+                  th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : post.status == 'APPROVED' ? '완료' : post.status}"></span>
           </div>
           <div class="card-content" th:text="${post.content}">내용</div>
           <div class="card-footer">

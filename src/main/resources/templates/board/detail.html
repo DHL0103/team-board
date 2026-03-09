@@ -122,9 +122,9 @@
       </div>
 
       <!-- 완료 -->
-      <div class="col-md-4" id="col-completed" style="display:none;" th:with="completedPosts=${postList.?[status == 'COMPLETED']}">
+      <div class="col-md-4" id="col-completed" style="display:none;" th:with="completedPosts=${postList.?[status == 'APPROVED']}">
         <div class="kanban-col">
-          <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=COMPLETED'}">
+          <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=APPROVED'}">
             <span class="team-badge badge-p4">
               <span class="team-dot"></span>
               완료
