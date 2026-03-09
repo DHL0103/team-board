@@ -17,9 +17,17 @@ import java.security.Principal;
 public class ManagerController {
     private final BoardMemberService boardMemberService;
 
+    /**
+     * @param boardId 조회할 보드 ID
+     * @param model   뷰에 전달할 데이터 컨테이너
+     * @return manager/members 뷰
+     * 해당 보드의 전체 멤버 목록(MANAGER / USER / REQUESTED) 반환
+     * memberList(BoardMemberResponseDto) 전달
+     */
     @GetMapping("/members")
-    public String membersPage(@PathVariable Long boardId, Model model){
+    public String membersPage(@PathVariable Long boardId, Model model) {
+        model.addAttribute("boardId", boardId);
         model.addAttribute("memberList", boardMemberService.getMembersByBoardId(boardId));
-        return "board" + boardId + "manager/members";
+        return "manager/members";
     }
 }
