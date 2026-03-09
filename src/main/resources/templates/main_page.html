@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
   <title>Team Board</title>
@@ -23,12 +23,12 @@
 
     <div class="board-grid-wrap">
         <div class="board-grid">
-            <a class="board-grid-card-create" href="/admin/boards">
+            <div class="board-grid-card-create" id="btn-open-board-create">
                 <div class="create-icon">
                     <svg width="20" height="20"><use href="/img/icons.svg#icon-plus"></use></svg>
                 </div>
                 <span>만들기</span>
-            </a>
+            </div>
             <a class="board-grid-card"
                th:each="board : ${boardList}"
                th:href="@{'/board/' + ${board.id}}"
@@ -45,6 +45,43 @@
                     </div>
                 </div>
             </a>
+        </div>
+    </div>
+
+    <!-- 보드 생성 모달 -->
+    <div class="modal-overlay" id="createBoardModal">
+        <div class="modal-box modal-box--admin">
+            <div class="modal-header">
+                <span class="modal-title">보드 추가</span>
+                <button type="button" class="modal-close" id="btn-close-board-create">
+                    <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
+                </button>
+            </div>
+            <form action="/board/create" method="post">
+                <div class="form-group">
+                    <label class="form-label">이름</label>
+                    <input class="form-input" type="text" name="name" placeholder="보드 이름" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">컬러</label>
+                    <div class="color-swatch-row">
+                        <label class="color-swatch"><input type="radio" name="color" value="p1" checked><span class="swatch-dot" style="background: var(--p1-color);"></span></label>
+                        <label class="color-swatch"><input type="radio" name="color" value="p2"><span class="swatch-dot" style="background: var(--p2-color);"></span></label>
+                        <label class="color-swatch"><input type="radio" name="color" value="p3"><span class="swatch-dot" style="background: var(--p3-color);"></span></label>
+                        <label class="color-swatch"><input type="radio" name="color" value="p4"><span class="swatch-dot" style="background: var(--p4-color);"></span></label>
+                        <label class="color-swatch"><input type="radio" name="color" value="p5"><span class="swatch-dot" style="background: var(--p5-color);"></span></label>
+                        <label class="color-swatch"><input type="radio" name="color" value="p6"><span class="swatch-dot" style="background: var(--p6-color);"></span></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">설명 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
+                    <input class="form-input" type="text" name="description" placeholder="보드 설명">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-modal-cancel" id="btn-cancel-board-create">취소</button>
+                    <button type="submit" class="btn-modal-confirm">추가</button>
+                </div>
+            </form>
         </div>
     </div>
 

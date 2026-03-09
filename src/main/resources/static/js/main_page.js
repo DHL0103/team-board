@@ -227,6 +227,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// ── 보드 생성 모달 ──
+const createBoardModal = document.getElementById("createBoardModal");
+const btnOpenBoardCreate = document.getElementById("btn-open-board-create");
+
+if (createBoardModal && btnOpenBoardCreate) {
+    btnOpenBoardCreate.addEventListener("click", () => {
+        createBoardModal.classList.add("open");
+        document.body.style.overflow = "hidden";
+    });
+
+    const closeBoard = () => {
+        createBoardModal.classList.remove("open");
+        document.body.style.overflow = "";
+    };
+
+    document.getElementById("btn-close-board-create").addEventListener("click", closeBoard);
+    document.getElementById("btn-cancel-board-create").addEventListener("click", closeBoard);
+    createBoardModal.addEventListener("click", e => { if (e.target === createBoardModal) closeBoard(); });
+}
+
 // ── 보드 멤버 수 로드 ──
 document.querySelectorAll(".board-grid-card[data-board-id]").forEach(async card => {
     const boardId = card.dataset.boardId;

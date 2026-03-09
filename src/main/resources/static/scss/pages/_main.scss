@@ -517,6 +517,33 @@ textarea.form-input { resize: none; height: 78px; }
   letter-spacing: -0.3px;
 }
 
+// ── 컬러 스와치 (보드 생성 모달) ──
+.color-swatch-row {
+  display: flex;
+  gap: 8px;
+}
+
+.color-swatch {
+  cursor: pointer;
+
+  input[type="radio"] { display: none; }
+
+  .swatch-dot {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    outline: 2px solid transparent;
+    outline-offset: 3px;
+    transition: outline-color 0.15s, transform 0.15s;
+  }
+
+  &:has(input:checked) .swatch-dot {
+    outline-color: #9ca3af;
+    transform: scale(1.15);
+  }
+}
+
 .board-grid-card-footer {
   display: flex;
   align-items: center;
