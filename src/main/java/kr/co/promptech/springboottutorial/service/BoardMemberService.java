@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.model.BoardMember;
+import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,9 @@ public class BoardMemberService {
 
     public long countByBoardId(Long boardId) {
         return boardMemberMapper.countByBoardId(boardId);
+    }
+
+    public List<BoardMemberResponseDto> getMembersByBoardId(Long boardId) {
+        return boardMemberMapper.findMembersByBoardId(boardId);
     }
 }

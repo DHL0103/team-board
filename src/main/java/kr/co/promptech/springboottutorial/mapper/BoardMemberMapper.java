@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.BoardMember;
+import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -28,4 +29,16 @@ public interface BoardMemberMapper {
 
     @Select("SELECT COUNT(*) FROM board_members WHERE board_id = #{boardId}")
     long countByBoardId(Long boardId);
+
+    @ConstructorArgs({
+            @Arg(column = "member_id", javaType = Long.class),
+            @Arg(column = "username",  javaType = String.class),
+            @Arg(column = "board_role", javaType = String.class)
+    })
+    @Select("SELECT bm.member_id, m.username, bm.board_role " +
+            "FROM board_members bm " +
+            "JOIN members m ON bm.member_id = m.id " +
+            "WHERE bm.board_id = #{boardId} " +
+            "ORDER BY bm.board_role, m.username")
+    List<BoardMemberResponseDto> findMembersByBoardId(Long boardId);
 }
