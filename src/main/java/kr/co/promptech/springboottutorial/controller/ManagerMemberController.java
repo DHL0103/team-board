@@ -30,24 +30,48 @@ public class ManagerMemberController {
         return "manager/members";
     }
 
+    /**
+     * @param boardId  보드 ID
+     * @param memberId 승인할 멤버 ID
+     * @return manager/members 리다이렉트
+     * 가입 요청(REQUESTED) 멤버를 USER로 승인
+     */
     @PostMapping("/approve/{memberId}")
     public String approveMember(@PathVariable Long boardId, @PathVariable Long memberId) {
         boardMemberService.updateRole(boardId, memberId, "USER");
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
+    /**
+     * @param boardId  보드 ID
+     * @param memberId 승격할 멤버 ID
+     * @return manager/members 리다이렉트
+     * 멤버(USER)를 매니저(MANAGER)로 승격
+     */
     @PostMapping("/promote/{memberId}")
     public String promoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
         boardMemberService.updateRole(boardId, memberId, "MANAGER");
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
+    /**
+     * @param boardId  보드 ID
+     * @param memberId 강등할 멤버 ID
+     * @return manager/members 리다이렉트
+     * 매니저(MANAGER)를 일반 멤버(USER)로 강등
+     */
     @PostMapping("/demote/{memberId}")
     public String demoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
         boardMemberService.updateRole(boardId, memberId, "USER");
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
+    /**
+     * @param boardId  보드 ID
+     * @param memberId 내보낼 멤버 ID
+     * @return manager/members 리다이렉트
+     * 해당 멤버를 보드에서 제거 (가입 거절 포함)
+     */
     @PostMapping("/remove/{memberId}")
     public String removeMember(@PathVariable Long boardId, @PathVariable Long memberId) {
         boardMemberService.delete(boardId, memberId);
