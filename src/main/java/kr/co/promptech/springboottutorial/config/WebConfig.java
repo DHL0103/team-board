@@ -10,11 +10,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final BoardAuthInterceptor boardAuthInterceptor;
+    private final PostAuthInterceptor postAuthInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(boardAuthInterceptor)
                 .addPathPatterns("/board/{boardId}", "/board/{boardId}/**")
                 .excludePathPatterns("/board/{boardId}/request", "/board/create");
+
+        registry.addInterceptor(postAuthInterceptor)
+                .addPathPatterns("/board/{boardId}/post/{postId}", "/board/{boardId}/post/{postId}/**");
     }
 }

@@ -31,18 +31,18 @@ public class PostController {
     private final PostRejectionService postRejectionService;
 
     /**
-     * @param id        조회할 게시글 PK
+     * @param postId        조회할 게시글 PK
      * @param model     뷰에 전달할 데이터 컨테이너
      * @param principal 현재 로그인한 사용자 정보 (optional)
      * @return 게시글 상세 뷰 이름 (post/detail)
      * 게시글 상세 페이지 렌더링. 첨부파일, 반려사유, 보드 정보, 작성자 여부를 함께 전달
      */
-    @GetMapping("/{id}")
-    public String getPostDetailPage(@PathVariable Long id, Model model, Principal principal) {
-        Post post = postService.getPostById(id);
+    @GetMapping("/{postId}")
+    public String getPostDetailPage(@PathVariable Long postId, Model model, Principal principal) {
+        Post post = postService.getPostById(postId);
         model.addAttribute("post", post);
-        model.addAttribute("postFiles", postFileService.getFilesByPostId(id));
-        model.addAttribute("rejections", postRejectionService.getByPostId(id));
+        model.addAttribute("postFiles", postFileService.getFilesByPostId(postId));
+        model.addAttribute("rejections", postRejectionService.getByPostId(postId));
         Board board = boardService.getBoardById(post.getBoardId());
         if (board != null) {
             model.addAttribute("boardName", board.getName());
