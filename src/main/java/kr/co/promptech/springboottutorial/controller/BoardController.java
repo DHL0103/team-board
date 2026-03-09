@@ -73,6 +73,9 @@ public class BoardController {
     @GetMapping("/{boardId}/request")
     public String boardRequest(@PathVariable Long boardId, Model model, Principal principal) {
         MemberResponseDto member = memberService.getMemberByUsername(principal.getName());
+        if (boardMemberService.isMember(boardId, member.getId()) || member.getRole().equals("ROLE_ADMIN")) {
+            return "redirect:/board/" + boardId;
+        }
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("isRequested", boardMemberService.isRequested(boardId, member.getId()));
         return "board/request";
