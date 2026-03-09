@@ -10,22 +10,18 @@
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
-  <div class="post-list-page">
-
-    <div class="board-detail-header">
-      <div>
-        <div class="board-title-row">
-          <div class="neon-badge" th:classappend="${'neon-badge-' + board.color}">
-            <div class="neon-dot"></div>
-          </div>
-          <div class="page-title" th:text="${board.name}">보드명</div>
-        </div>
-<!--        <div class="page-meta" th:text="${board.description}">설명</div>-->
+  <div class="board-detail-header">
+    <div style="min-width: 0; overflow: hidden;">
+      <div class="board-title-row">
+        <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
       </div>
+      <div class="page-meta" th:text="${board.description}">설명</div>
     </div>
+  </div>
 
-    <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
+  <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
 
+  <div class="post-list-page">
     <div class="post-list-wrap">
 
       <div class="post-list-header">
