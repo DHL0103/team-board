@@ -68,6 +68,7 @@ public class BoardController {
      * @param model   뷰에 전달할 데이터 컨테이너
      * @return board/request 뷰
      * 인터셉터가 비멤버를 이 URL로 리다이렉트함
+     * 해당 board 소속 멤버 혹은 시스템 레벨 관리자인 경우 보드 상세 페이지로 리다이렉트
      * board(BoardResponseDto) 전달
      */
     @GetMapping("/{boardId}/request")
