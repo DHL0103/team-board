@@ -57,9 +57,12 @@ public class BoardController {
      * board(BoardResponseDto), postList(PostResponseDto) 전달
      */
     @GetMapping("/{boardId}")
-    public String boardDetail(@PathVariable Long boardId, Model model) {
+    public String boardDetail(@PathVariable Long boardId, Model model, Principal principal) {
+        MemberResponseDto currentMember = memberService.getMemberByUsername(principal.getName());
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
+        boolean isManager = "ROLE_ADMIN".equals(currentMember.getRole()) || boardMemberService.isManager(boardId, currentMember.getId());
+        model.addAttribute("isManager", isManager);
         return "board/detail";
     }
 

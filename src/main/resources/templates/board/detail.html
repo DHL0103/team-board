@@ -15,10 +15,16 @@
       <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
     </div>
     <div class="page-meta" th:text="${board.description}">설명</div>
-    <button class="btn-request board-detail-header__action" id="btn-create-post">
-      <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
-      작업 추가
-    </button>
+    <div class="board-detail-header__action" style="display:flex; gap:8px;">
+      <a th:if="${isManager}" th:href="@{'/board/' + ${board.id} + '/manager/members'}" class="btn-edit">
+        <svg width="14" height="14"><use href="/img/icons.svg#icon-settings"></use></svg>
+        매니저 페이지
+      </a>
+      <button class="btn-request" id="btn-create-post">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
+        작업 추가
+      </button>
+    </div>
   </div>
 
   <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>

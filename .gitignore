@@ -56,6 +56,9 @@ src/main/resources/application.properties
 #css 맵은 scss디버깅용 파일이라 불필요
 src/main/resources/static/style.css.map
 
+# SVG 아이콘 스프라이트 (로컬 관리)
+src/main/resources/static/img/icons.svg
+
 # Claude Code 지침 파일
 CLAUDE.md
 
