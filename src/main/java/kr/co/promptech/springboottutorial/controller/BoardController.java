@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
@@ -87,7 +88,7 @@ public class BoardController {
      */
     @PostMapping("/{boardId}/request")
     public String boardRequestPost(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
-        boardMemberService.save(boardId, user.getId(), "REQUESTED");
+        boardMemberService.save(boardId, user.getId(), BoardRole.REQUESTED);
         return "redirect:/board/" + boardId + "/request";
     }
 
@@ -117,7 +118,7 @@ public class BoardController {
     @PostMapping("/create")
     public String createBoard(@ModelAttribute BoardCreateDto boardCreateDto, @AuthenticationPrincipal CustomUser user) {
         Long boardId = boardService.createBoard(boardCreateDto);
-        boardMemberService.save(boardId, user.getId(), "MANAGER");
+        boardMemberService.save(boardId, user.getId(), BoardRole.MANAGER);
         return "redirect:/board";
     }
 }

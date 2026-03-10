@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
+import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ public class ManagerRequestController {
      */
     @PostMapping("/approve/{postId}")
     public String approve(@PathVariable Long boardId, @PathVariable Long postId) {
-        postService.updateStatus(postId, "APPROVED");
+        postService.updateStatus(postId, PostStatus.APPROVED);
         return "redirect:/board/" + boardId + "/manager/requests";
     }
 
@@ -53,7 +54,7 @@ public class ManagerRequestController {
      */
     @PostMapping("/reject/{postId}")
     public String reject(@PathVariable Long boardId, @PathVariable Long postId, @RequestParam String reason, @AuthenticationPrincipal CustomUser user) {
-        postService.updateStatus(postId, "REJECTED");
+        postService.updateStatus(postId, PostStatus.REJECTED);
         postRejectionService.save(postId, reason, user.getId());
         return "redirect:/board/" + boardId + "/manager/requests";
     }

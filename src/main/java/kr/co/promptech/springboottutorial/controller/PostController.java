@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Board;
+import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.model.Post;
@@ -156,7 +157,7 @@ public class PostController {
         if (!post.getMemberId().equals(user.getId())) {
             return "redirect:/post/" + id + "?error=unauthorized";
         }
-        postService.updateStatus(id, "REQUESTED");
+        postService.updateStatus(id, PostStatus.REQUESTED);
         return "redirect:/post/" + id;
     }
 }

@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.BoardMember;
+import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import org.apache.ibatis.annotations.*;
 
@@ -13,10 +14,10 @@ public interface BoardMemberMapper {
     BoardMember findByBoardIdAndMemberId(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
 
     @Insert("INSERT INTO board_members (board_id, member_id, board_role) VALUES (#{boardId}, #{memberId}, #{boardRole})")
-    void save(@Param("boardId") Long boardId, @Param("memberId") Long memberId, @Param("boardRole") String boardRole);
+    void save(@Param("boardId") Long boardId, @Param("memberId") Long memberId, @Param("boardRole") BoardRole boardRole);
 
     @Update("UPDATE board_members SET board_role = #{boardRole} WHERE board_id = #{boardId} AND member_id = #{memberId}")
-    void updateRole(@Param("boardId") Long boardId, @Param("memberId") Long memberId, @Param("boardRole") String boardRole);
+    void updateRole(@Param("boardId") Long boardId, @Param("memberId") Long memberId, @Param("boardRole") BoardRole boardRole);
 
     @Delete("DELETE FROM board_members WHERE board_id = #{boardId} AND member_id = #{memberId}")
     void delete(@Param("boardId") Long boardId, @Param("memberId") Long memberId);

@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
@@ -48,5 +49,5 @@ public interface PostMapper {
     List<Post> getPostsByBoardIdAndStatus(@Param("boardId") Long boardId, @Param("status") String status);
 
     @Update("UPDATE posts SET status = #{status} WHERE id = #{id}")
-    void updateStatus(Long id, String status);
+    void updateStatus(Long id, PostStatus status);
 }

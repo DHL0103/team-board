@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.exception.PostNotFoundException;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
+import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,7 @@ public class PostService {
                 .dueDate(dueDate)
                 .memberId(memberId)
                 .boardId(postCreateDto.getBoardId())
-                .status("PROGRESS")
+                .status(PostStatus.PROGRESS.name())
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -64,7 +65,7 @@ public class PostService {
     }
 
     public List<PostResponseDto> getPostDtosByBoardIdAndStatus(Long boardId, String status) {
-        List<Post> posts = status.equals("PROGRESS")
+        List<Post> posts = PostStatus.PROGRESS.name().equals(status)
                 ? postMapper.getPostsByBoardIdInProgress(boardId)
                 : postMapper.getPostsByBoardIdAndStatus(boardId, status);
         return posts.stream().map(PostResponseDto::new).toList();
@@ -79,7 +80,7 @@ public class PostService {
         postMapper.updatePost(id, postCreateDto.getTitle(), postCreateDto.getContent(), dueDate);
     }
 
-    public void updateStatus(Long id, String status) {
+    public void updateStatus(Long id, PostStatus status) {
         postMapper.updateStatus(id, status);
     }
 }

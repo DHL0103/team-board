@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -38,7 +39,7 @@ public class ManagerMemberController {
      */
     @PostMapping("/approve/{memberId}")
     public String approveMember(@PathVariable Long boardId, @PathVariable Long memberId) {
-        boardMemberService.updateRole(boardId, memberId, "USER");
+        boardMemberService.updateRole(boardId, memberId, BoardRole.USER);
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
@@ -50,7 +51,7 @@ public class ManagerMemberController {
      */
     @PostMapping("/promote/{memberId}")
     public String promoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
-        boardMemberService.updateRole(boardId, memberId, "MANAGER");
+        boardMemberService.updateRole(boardId, memberId, BoardRole.MANAGER);
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
@@ -62,7 +63,7 @@ public class ManagerMemberController {
      */
     @PostMapping("/demote/{memberId}")
     public String demoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
-        boardMemberService.updateRole(boardId, memberId, "USER");
+        boardMemberService.updateRole(boardId, memberId, BoardRole.USER);
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
