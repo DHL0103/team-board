@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class PostAuthInterceptor implements HandlerInterceptor {
         MemberResponseDto member = memberService.getMemberByUsername(principal.getName());
 
         // 시스템 레벨 관리자는 통과
-        if ("ROLE_ADMIN".equals(member.getRole())) {
+        if (MemberRole.ROLE_ADMIN == member.getRole()) {
             return true;
         }
 

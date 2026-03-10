@@ -33,7 +33,7 @@ public class MemberSecurityService implements UserDetailsService {
                 member.getUsername(),
                 member.getPassword(),
                 member.getRole(),
-                List.of(new SimpleGrantedAuthority(member.getRole()))
+                List.of(new SimpleGrantedAuthority(member.getRole().name()))
         );
     }
 }

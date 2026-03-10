@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
@@ -35,7 +36,7 @@ public class BoardController {
      */
     @GetMapping
     public String getAllBoard(Model model, @AuthenticationPrincipal CustomUser user) {
-        if ("ROLE_ADMIN".equals(user.getRole())) {
+        if (MemberRole.ROLE_ADMIN == user.getRole()) {
             model.addAttribute("boardList", boardService.getAllBoardDtos());
         } else {
             model.addAttribute("boardList", boardService.getBoardDtosByMemberId(user.getId()));
@@ -56,7 +57,7 @@ public class BoardController {
     public String boardDetail(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
-        boolean isManager = "ROLE_ADMIN".equals(user.getRole()) || boardMemberService.isManager(boardId, user.getId());
+        boolean isManager = MemberRole.ROLE_ADMIN == user.getRole() || boardMemberService.isManager(boardId, user.getId());
         model.addAttribute("isManager", isManager);
         return "board/detail";
     }
@@ -72,7 +73,7 @@ public class BoardController {
      */
     @GetMapping("/{boardId}/request")
     public String boardRequest(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
-        if (boardMemberService.isMember(boardId, user.getId()) || "ROLE_ADMIN".equals(user.getRole())) {
+        if (boardMemberService.isMember(boardId, user.getId()) || MemberRole.ROLE_ADMIN == user.getRole()) {
             return "redirect:/board/" + boardId;
         }
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
