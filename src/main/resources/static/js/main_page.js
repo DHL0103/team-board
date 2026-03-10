@@ -18,8 +18,6 @@ Object.values(colMap).forEach(({ bodyId, countId, emptyId }) => {
     if (emptyId && visible === 0) document.getElementById(emptyId).style.display = "flex";
 });
 
-initDueChips();
-
 document.querySelectorAll(".status-chip").forEach(chip => {
     const s = chip.dataset.status;
     if (s === "PROGRESS")  chip.classList.add("progress");

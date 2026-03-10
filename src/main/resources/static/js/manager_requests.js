@@ -1,6 +1,3 @@
-// ── 마감일 칩 ──
-initDueChips();
-
 const boardId = document.body.dataset.boardId;
 
 // ── 모달 유틸 ──

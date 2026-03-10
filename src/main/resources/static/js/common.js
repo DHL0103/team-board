@@ -26,6 +26,8 @@ function initDueChips() {
     });
 }
 
+initDueChips();
+
 // ── 회원 이름 캐싱 및 조회 유틸 ──
 const memberCache = {};
 

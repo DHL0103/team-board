@@ -73,9 +73,6 @@ document.querySelectorAll('.rejection-item').forEach(async item => {
     span.textContent = name;
 });
 
-// ── 마감일 칩 ──
-initDueChips();
-
 // ── 에러 토스트 ──
 window.addEventListener("load", () => {
     const toast = document.getElementById("errorToast");
