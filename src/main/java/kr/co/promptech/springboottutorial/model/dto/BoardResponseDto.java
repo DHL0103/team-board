@@ -5,11 +5,12 @@ import lombok.Getter;
 
 @Getter
 public class BoardResponseDto {
-    private Long id;
-    private String name;
-    private String description;
-    private String color;
-    private String status;
+    private final Long id;
+    private final String name;
+    private final String description;
+    private final String color;
+    private final String status;
+    private final long memberCount;
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();
@@ -17,5 +18,15 @@ public class BoardResponseDto {
         this.description = board.getDescription();
         this.color = board.getColor();
         this.status = board.getStatus();
+        this.memberCount = 0;
+    }
+
+    public BoardResponseDto(Long id, String name, String description, String color, String status, long memberCount) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.color = color;
+        this.status = status;
+        this.memberCount = memberCount;
     }
 }

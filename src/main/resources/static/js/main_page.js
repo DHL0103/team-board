@@ -247,13 +247,3 @@ if (createBoardModal && btnOpenBoardCreate) {
     createBoardModal.addEventListener("click", e => { if (e.target === createBoardModal) closeBoard(); });
 }
 
-// ── 보드 멤버 수 로드 ──
-document.querySelectorAll(".board-grid-card[data-board-id]").forEach(async card => {
-    const boardId = card.dataset.boardId;
-    try {
-        const res = await fetch(`/member/count/${boardId}`);
-        const count = await res.text();
-        card.querySelector(".member-count-label").textContent = count;
-    } catch (e) {}
-});
-

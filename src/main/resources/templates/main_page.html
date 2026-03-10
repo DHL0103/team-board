@@ -33,14 +33,14 @@
                th:each="board : ${boardList}"
                th:href="@{'/board/' + ${board.id}}"
                th:classappend="${'palette-' + board.color}"
-               th:data-board-id="${board.id}">
+               >
                 <div class="board-grid-card-bar"></div>
                 <div class="board-grid-card-body">
                     <div class="board-grid-card-name" th:text="${board.name}">보드명</div>
                     <div class="board-grid-card-footer">
                         <span class="board-grid-member-count">
                             <svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>
-                            <span class="member-count-label">-</span>
+                            <span class="member-count-label" th:text="${board.memberCount}">-</span>
                         </span>
                     </div>
                 </div>

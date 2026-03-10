@@ -15,14 +15,8 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
 
-    public List<Board> getAllBoards() {
-        return boardMapper.getAllBoards();
-    }
-
     public List<BoardResponseDto> getAllBoardDtos() {
-        return boardMapper.getAllBoards().stream()
-                .map(BoardResponseDto::new)
-                .toList();
+        return boardMapper.getAllBoards();
     }
 
     public Board getBoardById(Long id) {
@@ -33,12 +27,12 @@ public class BoardService {
         return new BoardResponseDto(boardMapper.getBoardById(id));
     }
 
-    public Long createBoard(BoardCreateDto boardCreateDto){
+    public Long createBoard(BoardCreateDto boardCreateDto) {
         boardMapper.createBoard(boardCreateDto);
         return boardCreateDto.getId();
     }
 
-    public void updateBoard(Long id, BoardCreateDto boardCreateDto){
+    public void updateBoard(Long id, BoardCreateDto boardCreateDto) {
         boardMapper.updateBoard(id, boardCreateDto);
     }
 
@@ -46,13 +40,7 @@ public class BoardService {
         boardMapper.deleteBoard(id);
     }
 
-    public List<Board> getBoardsByMemberId(Long memberId) {
-        return boardMapper.getBoardsByMemberId(memberId);
-    }
-
     public List<BoardResponseDto> getBoardsByMemberIdDtos(Long memberId) {
-        return boardMapper.getBoardsByMemberId(memberId).stream()
-                .map(BoardResponseDto::new)
-                .toList();
+        return boardMapper.getBoardsByMemberId(memberId);
     }
 }
