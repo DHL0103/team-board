@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial;
 
 import kr.co.promptech.springboottutorial.controller.ManagerMemberController;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
@@ -52,13 +53,13 @@ class ManagerMemberControllerTest {
     private static final Long TARGET_MEMBER_ID = 2L;
 
     private CustomUser mockUser() {
-        return new CustomUser(USER_ID, "test_fe", "pw", "ROLE_USER",
-                List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        return new CustomUser(USER_ID, "test_fe", "pw", MemberRole.ROLE_USER,
+                List.of(new SimpleGrantedAuthority(MemberRole.ROLE_USER.name())));
     }
 
     @BeforeEach
     void setUpInterceptors() {
-        Member member = Member.builder().id(USER_ID).username("test_fe").role("ROLE_USER").build();
+        Member member = Member.builder().id(USER_ID).username("test_fe").role(MemberRole.ROLE_USER).build();
         given(memberService.getMemberByUsername("test_fe")).willReturn(new MemberResponseDto(member));
         given(boardMemberService.isMember(BOARD_ID, USER_ID)).willReturn(true);
         given(boardMemberService.isManager(BOARD_ID, USER_ID)).willReturn(true);

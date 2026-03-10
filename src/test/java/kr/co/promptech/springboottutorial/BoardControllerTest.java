@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.controller.BoardController;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
@@ -58,11 +59,11 @@ class BoardControllerTest {
     private static final Long BOARD_ID = 1L;
     private static final Long USER_ID = 1L;
 
-    private CustomUser mockUser(String role) {
-        return new CustomUser(USER_ID, "test_fe", "pw", role, List.of(new SimpleGrantedAuthority(role)));
+    private CustomUser mockUser(MemberRole role) {
+        return new CustomUser(USER_ID, "test_fe", "pw", role, List.of(new SimpleGrantedAuthority(role.name())));
     }
 
-    private MemberResponseDto mockMemberDto(String role) {
+    private MemberResponseDto mockMemberDto(MemberRole role) {
         Member member = Member.builder().id(USER_ID).username("test_fe").role(role).build();
         return new MemberResponseDto(member);
     }
@@ -73,7 +74,7 @@ class BoardControllerTest {
 
     @BeforeEach
     void setUpInterceptors() {
-        given(memberService.getMemberByUsername("test_fe")).willReturn(mockMemberDto("ROLE_USER"));
+        given(memberService.getMemberByUsername("test_fe")).willReturn(mockMemberDto(MemberRole.ROLE_USER));
         given(boardMemberService.isMember(BOARD_ID, USER_ID)).willReturn(true);
     }
 
@@ -84,7 +85,7 @@ class BoardControllerTest {
     void getAllBoard_user() throws Exception {
         given(boardService.getBoardDtosByMemberId(USER_ID)).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/board").with(user(mockUser("ROLE_USER"))))
+        mockMvc.perform(get("/board").with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("boardList"))
                 .andExpect(view().name("main_page"));
@@ -98,7 +99,7 @@ class BoardControllerTest {
     void getAllBoard_admin() throws Exception {
         given(boardService.getAllBoardDtos()).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/board").with(user(mockUser("ROLE_ADMIN"))))
+        mockMvc.perform(get("/board").with(user(mockUser(MemberRole.ROLE_ADMIN))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("boardList"))
                 .andExpect(view().name("main_page"));
@@ -116,7 +117,7 @@ class BoardControllerTest {
         given(postService.getPostDtosByBoardId(BOARD_ID)).willReturn(Collections.emptyList());
         given(boardMemberService.isManager(BOARD_ID, USER_ID)).willReturn(false);
 
-        mockMvc.perform(get("/board/{boardId}", BOARD_ID).with(user(mockUser("ROLE_USER"))))
+        mockMvc.perform(get("/board/{boardId}", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("isManager", false))
                 .andExpect(view().name("board/detail"));
@@ -125,11 +126,11 @@ class BoardControllerTest {
     @Test
     @DisplayName("GET /board/{boardId} - ADMIN → isManager=true")
     void boardDetail_admin() throws Exception {
-        given(memberService.getMemberByUsername("test_fe")).willReturn(mockMemberDto("ROLE_ADMIN"));
+        given(memberService.getMemberByUsername("test_fe")).willReturn(mockMemberDto(MemberRole.ROLE_ADMIN));
         given(boardService.getBoardDtoById(BOARD_ID)).willReturn(mockBoardDto());
         given(postService.getPostDtosByBoardId(BOARD_ID)).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/board/{boardId}", BOARD_ID).with(user(mockUser("ROLE_ADMIN"))))
+        mockMvc.perform(get("/board/{boardId}", BOARD_ID).with(user(mockUser(MemberRole.ROLE_ADMIN))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("isManager", true))
                 .andExpect(view().name("board/detail"));
@@ -144,7 +145,7 @@ class BoardControllerTest {
         given(boardMemberService.isRequested(BOARD_ID, USER_ID)).willReturn(false);
         given(boardService.getBoardDtoById(BOARD_ID)).willReturn(mockBoardDto());
 
-        mockMvc.perform(get("/board/{boardId}/request", BOARD_ID).with(user(mockUser("ROLE_USER"))))
+        mockMvc.perform(get("/board/{boardId}/request", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("isRequested", false))
                 .andExpect(view().name("board/request"));
@@ -155,7 +156,7 @@ class BoardControllerTest {
     void boardRequest_alreadyMember() throws Exception {
         given(boardMemberService.isMember(BOARD_ID, USER_ID)).willReturn(true);
 
-        mockMvc.perform(get("/board/{boardId}/request", BOARD_ID).with(user(mockUser("ROLE_USER"))))
+        mockMvc.perform(get("/board/{boardId}/request", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID));
     }
@@ -166,7 +167,7 @@ class BoardControllerTest {
     @DisplayName("POST /board/{boardId}/request - REQUESTED 저장 후 리다이렉트")
     void boardRequestPost() throws Exception {
         mockMvc.perform(post("/board/{boardId}/request", BOARD_ID)
-                        .with(user(mockUser("ROLE_USER")))
+                        .with(user(mockUser(MemberRole.ROLE_USER)))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/request"));
@@ -184,7 +185,7 @@ class BoardControllerTest {
 
         mockMvc.perform(get("/board/{boardId}/post_list", BOARD_ID)
                         .param("status", "PROGRESS")
-                        .with(user(mockUser("ROLE_USER"))))
+                        .with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("status", "PROGRESS"))
                 .andExpect(view().name("board/post_list"));
@@ -201,7 +202,7 @@ class BoardControllerTest {
                         .param("name", "새 보드")
                         .param("color", "p1")
                         .param("description", "설명")
-                        .with(user(mockUser("ROLE_USER")))
+                        .with(user(mockUser(MemberRole.ROLE_USER)))
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board"));

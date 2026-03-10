@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial;
 
 import kr.co.promptech.springboottutorial.controller.MemberController;
 import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
@@ -47,7 +48,7 @@ class MemberControllerTest {
         Member member = Member.builder()
                 .id(1L)
                 .username("testUser")
-                .role("ROLE_USER")
+                .role(MemberRole.ROLE_USER)
                 .build();
 
         given(memberService.getMemberById(1L)).willReturn(member);
