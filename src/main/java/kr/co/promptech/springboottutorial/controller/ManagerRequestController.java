@@ -1,14 +1,13 @@
 package kr.co.promptech.springboottutorial.controller;
 
-import kr.co.promptech.springboottutorial.service.MemberService;
+import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -16,7 +15,6 @@ import java.security.Principal;
 public class ManagerRequestController {
 
     private final PostService postService;
-    private final MemberService memberService;
     private final PostRejectionService postRejectionService;
 
     /**
@@ -49,15 +47,14 @@ public class ManagerRequestController {
      * @param boardId   보드 ID
      * @param postId    반려할 포스트 ID
      * @param reason    반려 사유
-     * @param principal 현재 로그인한 사용자 (반려자 기록용)
+     * @param user      현재 로그인한 사용자 (반려자 기록용)
      * @return manager/requests 리다이렉트
      * 포스트 상태를 REJECTED로 변경하고 반려 사유 저장
      */
     @PostMapping("/reject/{postId}")
-    public String reject(@PathVariable Long boardId, @PathVariable Long postId, @RequestParam String reason, Principal principal) {
+    public String reject(@PathVariable Long boardId, @PathVariable Long postId, @RequestParam String reason, @AuthenticationPrincipal CustomUser user) {
         postService.updateStatus(postId, "REJECTED");
-        Long rejectedBy = memberService.getMemberByUsername(principal.getName()).getId();
-        postRejectionService.save(postId, reason, rejectedBy);
+        postRejectionService.save(postId, reason, user.getId());
         return "redirect:/board/" + boardId + "/manager/requests";
     }
 }
