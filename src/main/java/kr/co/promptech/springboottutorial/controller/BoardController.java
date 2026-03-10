@@ -37,7 +37,7 @@ public class BoardController {
         if ("ROLE_ADMIN".equals(user.getRole())) {
             model.addAttribute("boardList", boardService.getAllBoardDtos());
         } else {
-            model.addAttribute("boardList", boardService.getBoardsByMemberIdDtos(user.getId()));
+            model.addAttribute("boardList", boardService.getBoardDtosByMemberId(user.getId()));
         }
         return "main_page";
     }

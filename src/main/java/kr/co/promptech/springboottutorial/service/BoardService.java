@@ -45,7 +45,7 @@ public class BoardService {
         boardMapper.deleteBoard(id);
     }
 
-    public List<BoardResponseDto> getBoardsByMemberIdDtos(Long memberId) {
+    public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId);
     }
 }
