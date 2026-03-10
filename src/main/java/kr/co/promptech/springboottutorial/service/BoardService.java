@@ -28,8 +28,13 @@ public class BoardService {
     }
 
     public Long createBoard(BoardCreateDto boardCreateDto) {
-        boardMapper.createBoard(boardCreateDto);
-        return boardCreateDto.getId();
+        Board board = Board.builder()
+                .name(boardCreateDto.getName())
+                .color(boardCreateDto.getColor())
+                .description(boardCreateDto.getDescription())
+                .build();
+        boardMapper.createBoard(board);
+        return board.getId();
     }
 
     public void updateBoard(Long id, BoardCreateDto boardCreateDto) {
