@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial;
 
 import kr.co.promptech.springboottutorial.controller.ManagerMemberController;
+import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
@@ -88,7 +89,7 @@ class ManagerMemberControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
 
-        verify(boardMemberService).updateRole(BOARD_ID, TARGET_MEMBER_ID, "USER");
+        verify(boardMemberService).updateRole(BOARD_ID, TARGET_MEMBER_ID, BoardRole.USER);
     }
 
     // ── 3. POST /promote/{memberId} ──
@@ -102,7 +103,7 @@ class ManagerMemberControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
 
-        verify(boardMemberService).updateRole(BOARD_ID, TARGET_MEMBER_ID, "MANAGER");
+        verify(boardMemberService).updateRole(BOARD_ID, TARGET_MEMBER_ID, BoardRole.MANAGER);
     }
 
     // ── 4. POST /demote/{memberId} ──
@@ -116,7 +117,7 @@ class ManagerMemberControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
 
-        verify(boardMemberService).updateRole(BOARD_ID, TARGET_MEMBER_ID, "USER");
+        verify(boardMemberService).updateRole(BOARD_ID, TARGET_MEMBER_ID, BoardRole.USER);
     }
 
     // ── 5. POST /remove/{memberId} ──

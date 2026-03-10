@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial;
 import kr.co.promptech.springboottutorial.controller.ManagerRequestController;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.MemberService;
@@ -92,7 +93,7 @@ class ManagerRequestControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/requests"));
 
-        verify(postService).updateStatus(POST_ID, "APPROVED");
+        verify(postService).updateStatus(POST_ID, PostStatus.APPROVED);
     }
 
     // ── 3. POST /reject/{postId} ──
@@ -107,7 +108,7 @@ class ManagerRequestControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/requests"));
 
-        verify(postService).updateStatus(POST_ID, "REJECTED");
+        verify(postService).updateStatus(POST_ID, PostStatus.REJECTED);
         verify(postRejectionService).save(POST_ID, "내용 보완 필요", USER_ID);
     }
 }

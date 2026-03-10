@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial;
 import kr.co.promptech.springboottutorial.controller.BoardController;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
@@ -170,7 +171,7 @@ class BoardControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/request"));
 
-        verify(boardMemberService).save(BOARD_ID, USER_ID, "REQUESTED");
+        verify(boardMemberService).save(BOARD_ID, USER_ID, BoardRole.REQUESTED);
     }
 
     // ── 5. GET /board/{boardId}/post_list ──
@@ -205,6 +206,6 @@ class BoardControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board"));
 
-        verify(boardMemberService).save(BOARD_ID, USER_ID, "MANAGER");
+        verify(boardMemberService).save(BOARD_ID, USER_ID, BoardRole.MANAGER);
     }
 }
