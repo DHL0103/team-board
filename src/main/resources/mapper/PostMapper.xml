@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.promptech.springboottutorial.mapper.PostMapper">
+
+    <select id="getPostById" resultType="kr.co.promptech.springboottutorial.model.Post">
+        SELECT * FROM posts WHERE id = #{id}
+    </select>
+
+    <insert id="createPost" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO posts (
+            board_id, member_id, title, content,
+            status, due_date, created_at, updated_at
+        ) VALUES (
+            #{boardId}, #{memberId}, #{title}, #{content},
+            #{status}, #{dueDate}, #{createdAt}, #{updatedAt}
+        )
+    </insert>
+
+    <delete id="deletePost">
+        DELETE FROM posts WHERE id = #{id}
+    </delete>
+
+    <update id="updatePost">
+        UPDATE posts
+        SET title = #{title}, content = #{content}, due_date = #{dueDate}, updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="getRequestedPostsByBoardId" resultType="kr.co.promptech.springboottutorial.model.Post">
+        SELECT * FROM posts WHERE board_id = #{boardId} AND status = 'REQUESTED'
+    </select>
+
+    <select id="getPostsByBoardId" resultType="kr.co.promptech.springboottutorial.model.Post">
+        SELECT * FROM posts WHERE board_id = #{boardId}
+    </select>
+
+    <select id="getPostsByBoardIdInProgress" resultType="kr.co.promptech.springboottutorial.model.Post">
+        SELECT * FROM posts WHERE board_id = #{boardId} AND status IN ('PROGRESS', 'REJECTED')
+    </select>
+
+    <select id="getPostsByBoardIdAndStatus" resultType="kr.co.promptech.springboottutorial.model.Post">
+        SELECT * FROM posts WHERE board_id = #{boardId} AND status = #{status}
+    </select>
+
+    <update id="updateStatus">
+        UPDATE posts SET status = #{status} WHERE id = #{id}
+    </update>
+
+</mapper>
