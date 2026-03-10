@@ -37,15 +37,7 @@ public class BoardService {
         return board.getId();
     }
 
-    public void updateBoard(Long id, BoardCreateDto boardCreateDto) {
-        boardMapper.updateBoard(id, boardCreateDto);
-    }
-
-    public void deleteBoard(Long id) {
-        boardMapper.deleteBoard(id);
-    }
-
-    public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
+public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId);
     }
 }

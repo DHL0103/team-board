@@ -14,18 +14,6 @@ public class BoardMemberService {
 
     private final BoardMemberMapper boardMemberMapper;
 
-    public List<BoardMember> getByBoardId(Long boardId) {
-        return boardMemberMapper.findByBoardId(boardId);
-    }
-
-    public List<BoardMember> getByMemberId(Long memberId) {
-        return boardMemberMapper.findByMemberId(memberId);
-    }
-
-    public BoardMember getByBoardIdAndMemberId(Long boardId, Long memberId) {
-        return boardMemberMapper.findByBoardIdAndMemberId(boardId, memberId);
-    }
-
     public boolean isManager(Long boardId, Long memberId) {
         BoardMember bm = boardMemberMapper.findByBoardIdAndMemberId(boardId, memberId);
         return bm != null && "MANAGER".equals(bm.getBoardRole());
@@ -54,10 +42,6 @@ public class BoardMemberService {
 
     public void delete(Long boardId, Long memberId) {
         boardMemberMapper.delete(boardId, memberId);
-    }
-
-    public long countByBoardId(Long boardId) {
-        return boardMemberMapper.countByBoardId(boardId);
     }
 
     public List<BoardMemberResponseDto> getMembersByBoardId(Long boardId) {

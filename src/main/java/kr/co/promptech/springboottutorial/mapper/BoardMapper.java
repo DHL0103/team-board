@@ -1,7 +1,6 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Board;
-import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import org.apache.ibatis.annotations.*;
 
@@ -32,13 +31,7 @@ public interface BoardMapper {
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void createBoard(Board board);
 
-    @Update("UPDATE boards SET name = #{dto.name}, color = #{dto.color}, description = #{dto.description} WHERE id = #{id}")
-    void updateBoard(@Param("id") Long id, @Param("dto") BoardCreateDto boardCreateDto);
-
-    @Delete("DELETE FROM boards WHERE id = #{id}")
-    void deleteBoard(Long id);
-
-    @ConstructorArgs({
+@ConstructorArgs({
             @Arg(column = "id",           javaType = Long.class),
             @Arg(column = "name",         javaType = String.class),
             @Arg(column = "description",  javaType = String.class),

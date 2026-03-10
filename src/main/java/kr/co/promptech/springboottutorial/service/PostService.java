@@ -1,23 +1,15 @@
 package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.exception.PostNotFoundException;
-import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
-import kr.co.promptech.springboottutorial.model.PostFile;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,25 +17,12 @@ public class PostService {
     private final PostMapper postMapper;
     private final PostFileService postFileService;
 
-
-    public List<Post> getAllPost(){
-        return postMapper.getAllPost();
-    }
-
-    public List<Post> getCurrentPost(){
-        return postMapper.getCurrentPost();
-    }
-
-    public Post getPostById(Long id){
+    public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
         if (post == null) {
             throw new PostNotFoundException(id);
         }
         return post;
-    }
-
-    public List<Post> getRequestedPost(){
-        return postMapper.getRequestedPost();
     }
 
     public List<PostResponseDto> getRequestedPostDtosByBoardId(Long boardId) {
@@ -52,7 +31,7 @@ public class PostService {
                 .toList();
     }
 
-    public Long createPost(PostCreateDto postCreateDto, Long memberId){
+    public Long createPost(PostCreateDto postCreateDto, Long memberId) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
@@ -73,13 +52,9 @@ public class PostService {
         return post.getId();
     }
 
-    public void deletePost(Post post){
+    public void deletePost(Post post) {
         postFileService.deleteFilesByPostId(post.getId());
         postMapper.deletePost(post);
-    }
-
-    public List<Post> getPostsByBoardId(Long boardId) {
-        return postMapper.getPostsByBoardId(boardId);
     }
 
     public List<PostResponseDto> getPostDtosByBoardId(Long boardId) {
@@ -95,11 +70,7 @@ public class PostService {
         return posts.stream().map(PostResponseDto::new).toList();
     }
 
-    public List<Post> getPostsByMemberId(Long memberId) {
-        return postMapper.getPostsByMemberId(memberId);
-    }
-
-    public void updatePost(Long id, PostCreateDto postCreateDto){
+    public void updatePost(Long id, PostCreateDto postCreateDto) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
@@ -108,7 +79,7 @@ public class PostService {
         postMapper.updatePost(id, postCreateDto.getTitle(), postCreateDto.getContent(), dueDate);
     }
 
-    public void updateStatus(Long id, String status){
-        postMapper.updateStatus(id,status);
+    public void updateStatus(Long id, String status) {
+        postMapper.updateStatus(id, status);
     }
 }

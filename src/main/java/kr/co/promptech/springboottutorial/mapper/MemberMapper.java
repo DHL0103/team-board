@@ -1,10 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Member;
-import kr.co.promptech.springboottutorial.model.dto.MemberUpdateDto;
 import org.apache.ibatis.annotations.*;
-
-import java.util.List;
 
 @Mapper
 public interface MemberMapper {
@@ -12,18 +9,6 @@ public interface MemberMapper {
     @Select("SELECT * FROM members WHERE id = #{id}")
     Member selectMemberById(Long id);
 
-    @Insert("INSERT INTO members (username, password, role) VALUES (#{username}, #{password}, #{role})")
-    void save(@Param("username") String username, @Param("password") String password, @Param("role") String role);
-
     @Select("SELECT * FROM members WHERE username = #{username}")
     Member findByUsername(String username);
-
-    @Select("SELECT * FROM members WHERE role != 'ROLE_ADMIN'")
-    List<Member> getAllMemberExceptAdmin();
-
-    @Update("UPDATE members SET role = #{dto.role} WHERE id = #{id}")
-    void update(@Param("id") Long id, @Param("dto") MemberUpdateDto memberUpdateDto);
-
-    @Delete("DELETE FROM members WHERE id = #{id}")
-    void deleteById(Long id);
 }

@@ -9,12 +9,6 @@ import java.util.List;
 @Mapper
 public interface BoardMemberMapper {
 
-    @Select("SELECT * FROM board_members WHERE board_id = #{boardId}")
-    List<BoardMember> findByBoardId(Long boardId);
-
-    @Select("SELECT * FROM board_members WHERE member_id = #{memberId}")
-    List<BoardMember> findByMemberId(Long memberId);
-
     @Select("SELECT * FROM board_members WHERE board_id = #{boardId} AND member_id = #{memberId}")
     BoardMember findByBoardIdAndMemberId(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
 
@@ -27,12 +21,9 @@ public interface BoardMemberMapper {
     @Delete("DELETE FROM board_members WHERE board_id = #{boardId} AND member_id = #{memberId}")
     void delete(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
 
-    @Select("SELECT COUNT(*) FROM board_members WHERE board_id = #{boardId}")
-    long countByBoardId(Long boardId);
-
     @ConstructorArgs({
-            @Arg(column = "member_id", javaType = Long.class),
-            @Arg(column = "username",  javaType = String.class),
+            @Arg(column = "member_id",  javaType = Long.class),
+            @Arg(column = "username",   javaType = String.class),
             @Arg(column = "board_role", javaType = String.class)
     })
     @Select("SELECT bm.member_id, m.username, bm.board_role " +

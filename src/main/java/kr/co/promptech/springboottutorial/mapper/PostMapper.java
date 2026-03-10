@@ -4,40 +4,21 @@ import kr.co.promptech.springboottutorial.model.Post;
 import org.apache.ibatis.annotations.*;
 
 import java.time.LocalDateTime;
-
-import java.util.List; // 표준 List 임포트
+import java.util.List;
 
 @Mapper
-public interface PostMapper { // 인터페이스(interface)여야 합니다!
-
-    @Select("SELECT * FROM posts")
-    List<Post> getAllPost();
-
-    @Select("SELECT * FROM posts WHERE status != 'APPROVED'")
-    List<Post>getCurrentPost();
+public interface PostMapper {
 
     @Select("SELECT * FROM posts WHERE id = #{id}")
     Post getPostById(Long id);
 
     @Insert("""
         INSERT INTO posts (
-            board_id,
-            member_id,
-            title,
-            content,
-            status,
-            due_date,
-            created_at,
-            updated_at
+            board_id, member_id, title, content,
+            status, due_date, created_at, updated_at
         ) VALUES (
-            #{boardId},
-            #{memberId},
-            #{title},
-            #{content},
-            #{status},
-            #{dueDate},
-            #{createdAt},
-            #{updatedAt}
+            #{boardId}, #{memberId}, #{title}, #{content},
+            #{status}, #{dueDate}, #{createdAt}, #{updatedAt}
         )
     """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
@@ -48,18 +29,11 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
 
     @Update("""
         UPDATE posts
-        SET
-            title = #{title},
-            content = #{content},
-            due_date = #{dueDate},
-            updated_at = NOW()
+        SET title = #{title}, content = #{content}, due_date = #{dueDate}, updated_at = NOW()
         WHERE id = #{id}
     """)
     void updatePost(@Param("id") Long id, @Param("title") String title,
                     @Param("content") String content, @Param("dueDate") LocalDateTime dueDate);
-
-    @Select("SELECT * FROM posts WHERE status = 'REQUESTED'")
-    List<Post> getRequestedPost();
 
     @Select("SELECT * FROM posts WHERE board_id = #{boardId} AND status = 'REQUESTED'")
     List<Post> getRequestedPostsByBoardId(Long boardId);
@@ -73,11 +47,6 @@ public interface PostMapper { // 인터페이스(interface)여야 합니다!
     @Select("SELECT * FROM posts WHERE board_id = #{boardId} AND status = #{status}")
     List<Post> getPostsByBoardIdAndStatus(@Param("boardId") Long boardId, @Param("status") String status);
 
-    @Select("SELECT * FROM posts WHERE member_id = #{memberId}")
-    List<Post> getPostsByMemberId(Long memberId);
-
     @Update("UPDATE posts SET status = #{status} WHERE id = #{id}")
     void updateStatus(Long id, String status);
-
-
 }
