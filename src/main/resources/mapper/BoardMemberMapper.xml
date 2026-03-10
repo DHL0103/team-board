@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.promptech.springboottutorial.mapper.BoardMemberMapper">
+
+    <select id="findByBoardIdAndMemberId" resultType="kr.co.promptech.springboottutorial.model.BoardMember">
+        SELECT * FROM board_members WHERE board_id = #{boardId} AND member_id = #{memberId}
+    </select>
+
+    <insert id="save">
+        INSERT INTO board_members (board_id, member_id, board_role) VALUES (#{boardId}, #{memberId}, #{boardRole})
+    </insert>
+
+    <update id="updateRole">
+        UPDATE board_members SET board_role = #{boardRole} WHERE board_id = #{boardId} AND member_id = #{memberId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM board_members WHERE board_id = #{boardId} AND member_id = #{memberId}
+    </delete>
+
+    <select id="findMembersByBoardId" resultType="kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto">
+        SELECT bm.member_id, m.username, bm.board_role
+        FROM board_members bm
+        JOIN members m ON bm.member_id = m.id
+        WHERE bm.board_id = #{boardId}
+        ORDER BY bm.board_role, m.username
+    </select>
+
+</mapper>

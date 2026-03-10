@@ -1,13 +1,16 @@
 package kr.co.promptech.springboottutorial.service;
 
+import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,10 +28,12 @@ public class MemberSecurityService implements UserDetailsService {
         }
 
         // 2. 시큐리티가 이해할 수 있는 UserDetails 객체로 변환해서 반환
-        return User.builder()
-                .username(member.getUsername())
-                .password(member.getPassword()) // DB에 저장된 암호화된 비밀번호
-                .roles(member.getRole().replace("ROLE_", "")) // "ROLE_USER" -> "USER"
-                .build();
+        return new CustomUser(
+                member.getId(),
+                member.getUsername(),
+                member.getPassword(),
+                member.getRole(),
+                List.of(new SimpleGrantedAuthority(member.getRole().name()))
+        );
     }
 }

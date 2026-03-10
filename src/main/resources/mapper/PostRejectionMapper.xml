@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.promptech.springboottutorial.mapper.PostRejectionMapper">
+
+    <insert id="save">
+        INSERT INTO post_rejections (post_id, reason, rejected_by, created_at)
+        VALUES (#{postId}, #{reason}, #{rejectedBy}, #{createdAt})
+    </insert>
+
+    <select id="findAllByPostId" resultType="kr.co.promptech.springboottutorial.model.PostRejection">
+        SELECT * FROM post_rejections WHERE post_id = #{postId} ORDER BY created_at DESC
+    </select>
+
+</mapper>

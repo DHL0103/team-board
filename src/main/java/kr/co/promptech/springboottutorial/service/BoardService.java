@@ -15,39 +15,29 @@ public class BoardService {
 
     private final BoardMapper boardMapper;
 
-    public List<Board> getAllBoards() {
-        return boardMapper.getAllBoards();
-    }
-
     public List<BoardResponseDto> getAllBoardDtos() {
-        return boardMapper.getAllBoards().stream()
-                .map(BoardResponseDto::new)
-                .toList();
+        return boardMapper.getAllBoards();
     }
 
     public Board getBoardById(Long id) {
         return boardMapper.getBoardById(id);
     }
 
-    public void createBoard(BoardCreateDto boardCreateDto){
-        boardMapper.createBoard(boardCreateDto);
+    public BoardResponseDto getBoardDtoById(Long id) {
+        return new BoardResponseDto(boardMapper.getBoardById(id));
     }
 
-    public void updateBoard(Long id, BoardCreateDto boardCreateDto){
-        boardMapper.updateBoard(id, boardCreateDto);
+    public Long createBoard(BoardCreateDto boardCreateDto) {
+        Board board = Board.builder()
+                .name(boardCreateDto.getName())
+                .color(boardCreateDto.getColor())
+                .description(boardCreateDto.getDescription())
+                .build();
+        boardMapper.createBoard(board);
+        return board.getId();
     }
 
-    public void deleteBoard(Long id) {
-        boardMapper.deleteBoard(id);
-    }
-
-    public List<Board> getBoardsByMemberId(Long memberId) {
+public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId);
-    }
-
-    public List<BoardResponseDto> getBoardsByMemberIdDtos(Long memberId) {
-        return boardMapper.getBoardsByMemberId(memberId).stream()
-                .map(BoardResponseDto::new)
-                .toList();
     }
 }

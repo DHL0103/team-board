@@ -1,0 +1,148 @@
+@use "../abstract/variables" as *;
+
+// ── 보드 상세 헤더 ──
+.board-detail-header {
+  position: relative;
+  width: 100%;
+  padding: 32px 32px 20px;
+}
+
+.board-detail-header__action {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+}
+
+.board-title-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.neon-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+
+  @each $key, $val in $palettes {
+    &.neon-badge-#{$key} {
+      background: map-get($val, color);
+      box-shadow: 0 0 20px rgba(map-get($val, color), 0.4),
+                  0 0 40px rgba(map-get($val, color), 0.2),
+                  inset 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+  }
+}
+
+.neon-dot {
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px white;
+  flex-shrink: 0;
+  animation: neon-pulse 2s ease-in-out infinite;
+}
+
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(0.9); }
+}
+
+// ── 포스트 목록 페이지 ──
+.post-list-page {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+
+.post-list-wrap {
+  padding: 0 0 40px;
+}
+
+.post-list-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .post-list-back { margin-left: auto; }
+}
+
+.post-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: $text-muted;
+  font-size: 13px;
+  gap: 8px;
+  text-align: center;
+}
+
+.post-list-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+// card-team-line status 색상 (col-p* 와 동일한 opacity)
+.card-team-line {
+  &.bar-progress  { background: #2563eb; opacity: 0.2; }
+  &.bar-requested { background: #d97706; opacity: 0.2; }
+  &.bar-completed { background: #059669; opacity: 0.2; }
+  &.bar-rejected  { background: #dc2626; opacity: 0.2; }
+}
+
+.post-list-card {
+  display: block;
+  width: 100%;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 14px;
+  text-decoration: none;
+  color: $text;
+  transition: box-shadow 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.18s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.09);
+    border-color: #d1d5db;
+    color: $text;
+  }
+}
+
+
+// ── 칸반 헤더 링크 ──
+a.col-header {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover { opacity: 0.8; }
+}
+
+.glow-line {
+  height: 2px;
+  margin: 0 32px 20px;
+
+  @each $key, $val in $palettes {
+    &.glow-#{$key} {
+      background: map-get($val, color);
+      box-shadow: 0 0 10px rgba(map-get($val, color), 0.5);
+    }
+  }
+}

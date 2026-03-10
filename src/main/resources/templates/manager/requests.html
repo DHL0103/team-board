@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>승인 요청</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+</head>
+
+<body th:data-board-id="${boardId}">
+
+    <div th:replace="~{fragments/header :: back-header}"></div>
+
+    <div class="admin-wrap">
+
+        <nav class="admin-nav">
+            <a th:href="@{'/board/' + ${boardId} + '/manager/members'}" class="admin-nav-item">멤버 관리</a>
+            <a th:href="@{'/board/' + ${boardId} + '/manager/requests'}" class="admin-nav-item active">승인 요청</a>
+        </nav>
+
+        <!-- 승인 요청 섹션 -->
+        <div class="admin-section">
+            <div class="admin-section-header">
+                <div>
+                    <div class="admin-section-title">승인 요청 목록</div>
+                    <div class="admin-section-meta">REQUESTED 상태의 작업을 승인하거나 반려할 수 있습니다.</div>
+                </div>
+            </div>
+
+            <!-- 빈 상태 -->
+            <div class="admin-empty" th:if="${#lists.isEmpty(requestList)}">
+                승인 대기 중인 작업이 없습니다.
+            </div>
+
+            <div class="request-list" th:unless="${#lists.isEmpty(requestList)}">
+                <div class="request-card" th:each="post : ${requestList}">
+                    <a class="request-card-info" th:href="@{'/board/' + ${boardId} + '/post/' + ${post.id}}">
+                        <div class="request-card-title" th:text="${post.title}">작업 제목</div>
+                        <div class="request-card-meta">
+                            <span th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
+                            <span class="due-chip"
+                                  th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate,'yyyy-MM-dd') : ''}">
+                                <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+                                <span class="due-label"
+                                      th:text="${post.dueDate != null ? #temporals.format(post.dueDate,'MM.dd') : '기한 없음'}"></span>
+                            </span>
+                        </div>
+                    </a>
+                    <div class="request-card-actions">
+                        <form th:action="@{'/board/' + ${boardId} + '/manager/requests/approve/' + ${post.id}}" method="post" style="display:inline;">
+                            <button type="submit" class="btn-approve">승인</button>
+                        </form>
+                        <button type="button" class="btn-reject"
+                                th:data-post-id="${post.id}">반려</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 반려 사유 모달 -->
+    <div class="modal-overlay" id="rejectModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <span class="modal-title">반려 사유 입력</span>
+                <button class="modal-close">
+                    <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
+                </button>
+            </div>
+            <form id="rejectForm" method="post">
+                <div class="form-group">
+                    <label class="form-label">사유</label>
+                    <textarea class="form-input" name="reason" placeholder="반려 사유를 입력하세요" required></textarea>
+                </div>
+                <button type="submit" class="btn-submit" style="background:#e11d48;">반려 확정</button>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/js/manager_requests.js}"></script>
+
+</body>
+
+</html>

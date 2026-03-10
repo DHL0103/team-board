@@ -2,7 +2,10 @@ package kr.co.promptech.springboottutorial;
 
 import kr.co.promptech.springboottutorial.controller.MemberController;
 import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
+import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.MemberService;
+import kr.co.promptech.springboottutorial.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +28,14 @@ class MemberControllerTest {
     @MockBean
     private MemberService memberService;
 
+    @MockBean
+    private BoardMemberService boardMemberService;
+
+    @MockBean
+    private PostService postService;
+
     @Test
-    @DisplayName("로그인 페이지 요청 시 login_form 뷰를 반환한다")
+    @DisplayName("GET /member/login - 로그인 폼 뷰 반환")
     void loginPage_returnsLoginForm() throws Exception {
         mockMvc.perform(get("/member/login"))
                 .andExpect(status().isOk())
@@ -34,13 +43,13 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("존재하는 멤버 ID로 조회 시 Member JSON을 반환한다")
+    @DisplayName("GET /member/{id} - 존재하는 멤버 조회 시 JSON 반환")
     void getMember_returnsMemberJson() throws Exception {
-        Member member = new Member();
-        member.setId(1L);
-        member.setUsername("testUser");
-        member.setRole("ROLE_USER");
-        member.setBoardId(1L);
+        Member member = Member.builder()
+                .id(1L)
+                .username("testUser")
+                .role(MemberRole.ROLE_USER)
+                .build();
 
         given(memberService.getMemberById(1L)).willReturn(member);
 
@@ -52,8 +61,8 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("존재하지 않는 멤버 ID 조회 시 null을 반환한다")
-    void getMember_notFound_returnsNull() throws Exception {
+    @DisplayName("GET /member/{id} - 존재하지 않는 멤버 조회 시 빈 응답 반환")
+    void getMember_notFound_returnsEmpty() throws Exception {
         given(memberService.getMemberById(999L)).willReturn(null);
 
         mockMvc.perform(get("/member/999"))

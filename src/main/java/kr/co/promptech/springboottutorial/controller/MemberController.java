@@ -1,6 +1,5 @@
 package kr.co.promptech.springboottutorial.controller;
 
-import kr.co.promptech.springboottutorial.model.dto.MemberCreateDto;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ public class MemberController {
      */
     @GetMapping("/{id}")
     @ResponseBody
-    public Member getMemberDetailPage(@PathVariable Long id){
+    public Member getMemberDetailPage(@PathVariable Long id) {
         return memberService.getMemberById(id);
     }
 
@@ -32,6 +31,4 @@ public class MemberController {
     public String login_page() {
         return "login_form";
     }
-
-
 }
