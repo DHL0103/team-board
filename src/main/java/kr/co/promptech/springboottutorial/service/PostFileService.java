@@ -29,6 +29,9 @@ public class PostFileService {
     }
 
     public void deleteFiles(List<Long> ids) {
+        if (ids == null) {
+            return;
+        }
         for (Long id : ids) {
             PostFile postFile = postFileMapper.findById(id);
             if (postFile == null) {

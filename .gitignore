@@ -62,3 +62,4 @@ src/main/resources/static/img/icons.svg
 # Claude Code 지침 파일
 CLAUDE.md
 
+.claude/

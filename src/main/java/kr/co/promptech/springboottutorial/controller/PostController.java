@@ -10,7 +10,6 @@ import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,6 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("board/{boardId}/post")
-@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -81,16 +79,16 @@ public class PostController {
      * 작성자 본인만 삭제 가능
      */
     @PostMapping("/delete/{id}")
-    public String deletePost(@PathVariable Long id, @AuthenticationPrincipal CustomUser user) {
+    public String deletePost(@PathVariable Long boardId, @PathVariable Long id, @AuthenticationPrincipal CustomUser user) {
         Post post = postService.getPostById(id);
 
         if (!post.getMemberId().equals(user.getId())) {
-            return "redirect:/post/" + id + "?error=unauthorized";
+            return "redirect:/board/" + boardId + "/post/" + id + "?error=unauthorized";
         }
 
         postService.deletePost(post);
 
-        return "redirect:/board";
+        return "redirect:/board/" + boardId;
     }
 
     /**
@@ -103,7 +101,8 @@ public class PostController {
      * 작성자 본인만 수정 가능. 파일 삭제 후 신규 파일 저장
      */
     @PostMapping("/update/{id}")
-    public String updatePost(@PathVariable Long id,
+    public String updatePost(@PathVariable Long boardId,
+                             @PathVariable Long id,
                              PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds,
@@ -111,28 +110,14 @@ public class PostController {
         Post post = postService.getPostById(id);
 
         if (!post.getMemberId().equals(user.getId())) {
-            return "redirect:/post/" + id + "?error=unauthorized";
+            return "redirect:/board/" + boardId + "/post/" + id + "?error=unauthorized";
         }
 
         postService.updatePost(id, postCreateDto);
+        postFileService.deleteFiles(deleteFileIds);
+        postFileService.saveFiles(files, id);
 
-        if (deleteFileIds != null) {
-            postFileService.deleteFiles(deleteFileIds);
-        }
-
-        if (files != null) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    try {
-                        postFileService.saveFile(file, id);
-                    } catch (Exception e) {
-                        log.error("파일 저장 실패: {}", file.getOriginalFilename(), e);
-                    }
-                }
-            }
-        }
-
-        return "redirect:/post/" + id;
+        return "redirect:/board/" + boardId + "/post/" + id;
     }
 
     /**
@@ -142,12 +127,12 @@ public class PostController {
      * 게시글 상태를 REQUESTED로 변경. 작성자 본인만 요청 가능
      */
     @PostMapping("/request/{id}")
-    public String requestPost(@PathVariable Long id, @AuthenticationPrincipal CustomUser user) {
+    public String requestPost(@PathVariable Long boardId, @PathVariable Long id, @AuthenticationPrincipal CustomUser user) {
         Post post = postService.getPostById(id);
         if (!post.getMemberId().equals(user.getId())) {
-            return "redirect:/post/" + id + "?error=unauthorized";
+            return "redirect:/board/" + boardId + "/post/" + id + "?error=unauthorized";
         }
         postService.updateStatus(id, PostStatus.REQUESTED);
-        return "redirect:/post/" + id;
+        return "redirect:/board/" + boardId + "/post/" + id;
     }
 }

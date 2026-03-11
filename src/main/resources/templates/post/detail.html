@@ -75,7 +75,7 @@
       </div>
       <div class="post-actions-right">
         <button th:if="${isOwner}" class="btn-edit" id="btn-edit">수정</button>
-        <form th:if="${isOwner and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/post/request/{id}(id=${post.id})}" method="post" style="margin:0;">
+        <form th:if="${isOwner and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
       </div>
@@ -140,7 +140,7 @@
         <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
       </button>
     </div>
-    <form th:action="@{/post/update/{id}(id=${post.id})}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/board/{boardId}/post/update/{id}(boardId=${post.boardId},id=${post.id})}" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label">제목</label>
         <input type="text" name="title" th:value="${post.title}" class="form-input" required />
@@ -204,7 +204,7 @@
     <div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" id="btn-delete-cancel">취소</button>
-      <form th:action="@{/post/delete/{id}(id=${post.id})}" method="post" style="display:inline;">
+      <form th:action="@{/board/{boardId}/post/delete/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="display:inline;">
         <button type="submit" class="btn-modal-delete">삭제 승인</button>
       </form>
     </div>
