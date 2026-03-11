@@ -36,4 +36,14 @@
         ORDER BY m.username
     </select>
 
+
+    <select id="findInvitedBoardsByMemberId" resultType="kr.co.promptech.springboottutorial.model.dto.InvitedBoardDto">
+        SELECT b.id AS boardId, b.name AS boardName, b.color AS boardColor
+        FROM board_members bm
+        JOIN boards b ON bm.board_id = b.id
+        WHERE bm.member_id = #{memberId}
+          AND bm.board_role = 'INVITED'
+        ORDER BY b.name
+    </select>
+
 </mapper>
