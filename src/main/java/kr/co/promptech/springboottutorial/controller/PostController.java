@@ -84,15 +84,9 @@ public class PostController {
      * 작성자 본인만 삭제 가능
      */
     @PostMapping("/delete/{id}")
-    public String deletePost(@PathVariable Long boardId, @PathVariable Long id, @AuthenticationPrincipal CustomUser user) {
+    public String deletePost(@PathVariable Long boardId, @PathVariable Long id) {
         Post post = postService.getPostById(id);
-
-        if (!post.getMemberId().equals(user.getId())) {
-            return "redirect:/board/" + boardId + "/post/" + id + "?error=unauthorized";
-        }
-
         postService.deletePost(post);
-
         return "redirect:/board/" + boardId;
     }
 
@@ -110,18 +104,10 @@ public class PostController {
                              @PathVariable Long id,
                              PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
-                             @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds,
-                             @AuthenticationPrincipal CustomUser user) {
-        Post post = postService.getPostById(id);
-
-        if (!post.getMemberId().equals(user.getId())) {
-            return "redirect:/board/" + boardId + "/post/" + id + "?error=unauthorized";
-        }
-
+                             @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds) {
         postService.updatePost(id, postCreateDto);
         postFileService.deleteFiles(deleteFileIds);
         postFileService.saveFiles(files, id);
-
         return "redirect:/board/" + boardId + "/post/" + id;
     }
 
@@ -132,11 +118,7 @@ public class PostController {
      * 게시글 상태를 REQUESTED로 변경. 작성자 본인만 요청 가능
      */
     @PostMapping("/request/{id}")
-    public String requestPost(@PathVariable Long boardId, @PathVariable Long id, @AuthenticationPrincipal CustomUser user) {
-        Post post = postService.getPostById(id);
-        if (!post.getMemberId().equals(user.getId())) {
-            return "redirect:/board/" + boardId + "/post/" + id + "?error=unauthorized";
-        }
+    public String requestPost(@PathVariable Long boardId, @PathVariable Long id) {
         postService.updateStatus(id, PostStatus.REQUESTED);
         return "redirect:/board/" + boardId + "/post/" + id;
     }
