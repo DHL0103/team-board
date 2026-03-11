@@ -1,8 +1,12 @@
 package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.exception.PostNotFoundException;
+import kr.co.promptech.springboottutorial.model.BoardMember;
 import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
+import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
+import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
@@ -17,6 +21,8 @@ import java.util.List;
 public class PostService {
     private final PostMapper postMapper;
     private final PostFileService postFileService;
+    private final PostMemberMapper postMemberMapper;
+    private final BoardMemberMapper boardMemberMapper;
 
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
@@ -50,6 +56,21 @@ public class PostService {
                 .build();
 
         postMapper.createPost(post);
+
+        // board USER가 생성한 경우 본인을 자동으로 담당자에 추가
+        BoardMember bm = boardMemberMapper.findByBoardIdAndMemberId(post.getBoardId(), memberId);
+        if (bm != null && BoardRole.USER.name().equals(bm.getBoardRole())) {
+            postMemberMapper.save(post.getId(), memberId);
+        }
+
+        // 명시적으로 지정된 담당자 저장 (중복은 UNIQUE KEY가 처리)
+        List<Long> assigneeIds = postCreateDto.getAssigneeIds();
+        if (assigneeIds != null) {
+            for (Long assigneeId : assigneeIds) {
+                postMemberMapper.save(post.getId(), assigneeId);
+            }
+        }
+
         return post.getId();
     }
 
