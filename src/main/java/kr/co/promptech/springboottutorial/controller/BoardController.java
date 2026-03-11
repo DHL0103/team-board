@@ -59,6 +59,7 @@ public class BoardController {
         model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
         boolean isManager = MemberRole.ROLE_ADMIN == user.getRole() || boardMemberService.isManager(boardId, user.getId());
         model.addAttribute("isManager", isManager);
+        model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(boardId));
         return "board/detail";
     }
 
