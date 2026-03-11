@@ -10,37 +10,45 @@
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
-  <div class="board-grid-wrap">
-    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; padding:80px 20px; gap:16px; text-align:center;">
-      <div class="board-grid-empty-icon">
-        <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
-      </div>
-      <div>
-        <div style="font-size:16px; font-weight:700; margin-bottom:8px;" th:text="${board.name}">보드명</div>
-        <div style="font-size:13px; color:var(--text-muted);">이 보드에 접근 권한이 없습니다.</div>
-      </div>
-      <th:block th:if="${isInvited}">
-        <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">이 보드에서 초대장을 보냈습니다.</div>
-        <div style="display:flex; gap:8px;">
-          <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/accept?from=board'}" method="post" style="margin:0;">
-            <button type="submit" class="btn-invite-accept">수락</button>
-          </form>
-          <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/reject?from=board'}" method="post" style="margin:0;">
-            <button type="submit" class="btn-invite-reject">거절</button>
-          </form>
-        </div>
-      </th:block>
-      <form th:unless="${isRequested or isInvited}" th:action="@{'/board/' + ${board.id} + '/request'}" method="post" style="margin:0;">
-        <button type="submit" class="btn-request">가입 요청</button>
-      </form>
-      <div th:if="${isRequested}" style="font-size:13px; color:var(--text-muted); padding:8px 16px; border:1px solid var(--border); border-radius:8px;">
-        이미 가입 요청을 보냈습니다
-      </div>
-      <a href="/board" class="btn-edit" style="margin-top:4px;">
-        <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
-        보드 목록으로
-      </a>
+  <div class="board-detail-header">
+    <div class="board-title-row">
+      <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
     </div>
+    <div class="page-meta" th:text="${board.description}">설명</div>
+  </div>
+
+  <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
+
+  <div class="board-request-wrap">
+    <div class="board-grid-empty-icon">
+      <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
+    </div>
+    <div class="board-request-msg" th:if="${isInvited}">이 보드에서 초대장을 보냈습니다.</div>
+    <div class="board-request-msg" th:unless="${isInvited}">이 보드에 접근 권한이 없습니다.</div>
+
+    <th:block th:if="${isInvited}">
+      <div class="board-request-actions">
+        <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/accept?from=board'}" method="post" style="margin:0;">
+          <button type="submit" class="btn-invite-accept">수락</button>
+        </form>
+        <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/reject?from=board'}" method="post" style="margin:0;">
+          <button type="submit" class="btn-invite-reject">거절</button>
+        </form>
+      </div>
+    </th:block>
+
+    <form th:unless="${isRequested or isInvited}" th:action="@{'/board/' + ${board.id} + '/request'}" method="post" style="margin:0;">
+      <button type="submit" class="btn-request">가입 요청</button>
+    </form>
+
+    <div th:if="${isRequested}" class="board-request-pending">
+      이미 가입 요청을 보냈습니다
+    </div>
+
+    <a href="/board" class="btn-edit" style="margin-top:4px;">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
+      보드 목록으로
+    </a>
   </div>
 
   <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>

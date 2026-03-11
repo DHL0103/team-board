@@ -56,6 +56,41 @@
   50%       { opacity: 0.7; transform: scale(0.9); }
 }
 
+// ── 보드 접근 요청 페이지 ──
+.board-request-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 12px;
+  text-align: center;
+}
+
+.board-request-msg {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text;
+}
+
+.board-request-sub {
+  font-size: 13px;
+  color: $text-muted;
+}
+
+.board-request-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.board-request-pending {
+  font-size: 13px;
+  color: $text-muted;
+  padding: 8px 16px;
+  border: 1px solid $border;
+  border-radius: 8px;
+}
+
 // ── 포스트 목록 페이지 ──
 .post-list-page {
   width: 100%;
