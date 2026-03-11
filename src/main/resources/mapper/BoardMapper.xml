@@ -26,6 +26,15 @@
         SELECT * FROM boards WHERE id = #{id}
     </select>
 
+    <select id="getBoardDtoById" resultMap="boardResponseDtoMap">
+        SELECT b.id, b.name, b.description, b.color, b.status,
+               COUNT(bm.member_id) AS member_count
+        FROM boards b
+        LEFT JOIN board_members bm ON b.id = bm.board_id AND bm.board_role IN ('USER', 'MANAGER')
+        WHERE b.id = #{id}
+        GROUP BY b.id
+    </select>
+
     <insert id="createBoard" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO boards (name, color, description) VALUES (#{name}, #{color}, #{description})
     </insert>
