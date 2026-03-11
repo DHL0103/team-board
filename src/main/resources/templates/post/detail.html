@@ -13,8 +13,8 @@
 
 <div class="detail-wrap" th:with="palette=${boardColor}">
   <div class="breadcrumb-row">
-    <a href="/">보드</a> <span class="breadcrumb-sep">›</span>
-    <span th:text="${boardName}">팀</span> <span
+    <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
+    <a th:href="@{'/board/' + ${post.boardId}}" th:text="${boardName}">팀</a> <span
           class="breadcrumb-sep">›</span>
     <span th:text="${post.title}">제목</span>
   </div>
