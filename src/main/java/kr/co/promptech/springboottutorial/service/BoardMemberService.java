@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.model.BoardMember;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.InvitedBoardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -51,5 +52,9 @@ public class BoardMemberService {
 
     public List<BoardMemberResponseDto> getUsersByBoardId(Long boardId) {
         return boardMemberMapper.findUsersByBoardId(boardId);
+    }
+
+    public List<InvitedBoardDto> getInvitedBoards(Long memberId) {
+        return boardMemberMapper.findInvitedBoardsByMemberId(memberId);
     }
 }
