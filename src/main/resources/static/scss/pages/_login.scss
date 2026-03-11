@@ -110,6 +110,35 @@
       text-align: center;
       font-size: 12px;
       color: $text-muted;
+
+      a { color: $text-sub; text-decoration: none; font-weight: 500; &:hover { color: $text; } }
+    }
+
+    .success-msg {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #16a34a;
+      margin-bottom: 16px;
+    }
+
+    .input-error-msg {
+      font-size: 12px;
+      color: #dc2626;
+      display: none;
+      margin-top: 4px;
+
+      &.visible { display: block; }
+    }
+
+    .form-input.input-error {
+      border-color: #fca5a5;
+      &:focus { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1); }
     }
   }
 }
