@@ -23,19 +23,28 @@
     <div class="post-team-bar" th:classappend="${'col-' + palette}"></div>
     <div class="post-header">
       <div class="post-meta-row">
-          <span class="team-badge" th:classappend="${'badge-' + palette}">
-            <span class="team-dot"></span>
-            <span th:text="${boardName}">팀</span>
-          </span>
+        <span class="team-badge" th:classappend="${'badge-' + palette}">
+          <span class="team-dot"></span>
+          <span th:text="${boardName}">팀</span>
+        </span>
         <span class="status-chip"
               th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : 'chip-completed'}"
               th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : '완료'}"></span>
         <span class="due-chip" id="due-chip"
               th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
-            <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
-            <span class="due-label"
-                  th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
-          </span>
+          <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+          <span class="due-label"
+                th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
+        </span>
+        <div class="assignee-chip-wrap" th:if="${postAssignees != null and !#lists.isEmpty(postAssignees)}">
+          <button type="button" class="assignee-chip" id="btn-assignee-chip">
+            <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
+            <span th:text="${#lists.size(postAssignees)}">0</span>
+          </button>
+          <div class="assignee-chip-dropdown" id="assignee-chip-dropdown">
+            <div class="assignee-chip-item" th:each="assignee : ${postAssignees}" th:text="${assignee.username}">이름</div>
+          </div>
+        </div>
       </div>
       <div class="post-title" th:text="${post.title}">제목</div>
       <div class="post-info-row">

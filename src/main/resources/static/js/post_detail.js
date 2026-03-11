@@ -352,6 +352,23 @@ if (editPostForm) {
     });
 }
 
+// ── 담당자 칩 드롭다운 ──
+const btnAssigneeChip = document.getElementById('btn-assignee-chip');
+const assigneeChipDropdown = document.getElementById('assignee-chip-dropdown');
+
+if (btnAssigneeChip) {
+    btnAssigneeChip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        assigneeChipDropdown.classList.toggle('open');
+    });
+}
+
+document.addEventListener('click', (e) => {
+    if (assigneeChipDropdown && !e.target.closest('.assignee-chip-wrap')) {
+        assigneeChipDropdown.classList.remove('open');
+    }
+});
+
 // ── 반려 패널 위치 동적 조정 ──
 const rejectionPanel = document.querySelector('.rejection-panel');
 if (rejectionPanel) {
