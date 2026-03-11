@@ -15,6 +15,10 @@
       <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
     </div>
     <div class="page-meta" th:text="${board.description}">설명</div>
+    <div class="board-member-count">
+      <svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>
+      <span th:text="${board.memberCount} + '명'">0명</span>
+    </div>
     <div class="board-detail-header__action" style="display:flex; gap:8px;">
       <a th:if="${isManager}" th:href="@{'/board/' + ${board.id} + '/manager/members'}" class="btn-edit">
         <svg width="14" height="14"><use href="/img/icons.svg#icon-settings"></use></svg>
