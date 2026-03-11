@@ -38,6 +38,35 @@ if (editModal) {
     });
 }
 
+// ── 반려 모달 ──
+const rejectModal = document.getElementById("rejectModal");
+const btnReject = document.querySelector(".btn-reject");
+const btnRejectClose = document.getElementById("btn-reject-close");
+const boardId = document.body.dataset.boardId;
+
+if (btnReject) {
+    btnReject.addEventListener("click", () => {
+        document.getElementById("rejectForm").action =
+            "/board/" + boardId + "/manager/requests/reject/" + btnReject.dataset.postId;
+        rejectModal.classList.add("open");
+        document.body.style.overflow = "hidden";
+    });
+}
+if (btnRejectClose) {
+    btnRejectClose.addEventListener("click", () => {
+        rejectModal.classList.remove("open");
+        document.body.style.overflow = "";
+    });
+}
+if (rejectModal) {
+    rejectModal.addEventListener("click", (e) => {
+        if (e.target.id === "rejectModal") {
+            rejectModal.classList.remove("open");
+            document.body.style.overflow = "";
+        }
+    });
+}
+
 // ── 삭제 모달 ──
 const deleteModal = document.getElementById("deleteModal");
 const btnDelete = document.getElementById("btn-delete");

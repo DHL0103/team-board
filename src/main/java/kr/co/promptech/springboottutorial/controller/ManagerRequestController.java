@@ -42,8 +42,12 @@ public class ManagerRequestController {
      * 포스트 상태를 APPROVED로 변경
      */
     @PostMapping("/approve/{postId}")
-    public String approve(@PathVariable Long boardId, @PathVariable Long postId) {
+    public String approve(@PathVariable Long boardId, @PathVariable Long postId,
+                          @RequestParam(required = false) String source) {
         postService.updateStatus(postId, PostStatus.APPROVED);
+        if ("detail".equals(source)) {
+            return "redirect:/board/" + boardId + "/post/" + postId;
+        }
         return "redirect:/board/" + boardId + "/manager/requests";
     }
 
@@ -56,9 +60,15 @@ public class ManagerRequestController {
      * 포스트 상태를 REJECTED로 변경하고 반려 사유 저장
      */
     @PostMapping("/reject/{postId}")
-    public String reject(@PathVariable Long boardId, @PathVariable Long postId, @RequestParam String reason, @AuthenticationPrincipal CustomUser user) {
+    public String reject(@PathVariable Long boardId, @PathVariable Long postId,
+                         @RequestParam String reason,
+                         @RequestParam(required = false) String source,
+                         @AuthenticationPrincipal CustomUser user) {
         postService.updateStatus(postId, PostStatus.REJECTED);
         postRejectionService.save(postId, reason, user.getId());
+        if ("detail".equals(source)) {
+            return "redirect:/board/" + boardId + "/post/" + postId;
+        }
         return "redirect:/board/" + boardId + "/manager/requests";
     }
 }

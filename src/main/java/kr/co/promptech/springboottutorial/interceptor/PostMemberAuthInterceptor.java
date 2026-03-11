@@ -47,7 +47,8 @@ public class PostMemberAuthInterceptor implements HandlerInterceptor {
         }
 
         Post post = postService.getPostById(postId);
-        if (PostStatus.APPROVED.name().equals(post.getStatus())) {
+        if (PostStatus.APPROVED.name().equals(post.getStatus())
+                || PostStatus.REQUESTED.name().equals(post.getStatus())) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }

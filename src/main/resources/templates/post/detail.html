@@ -7,6 +7,7 @@
 </head>
 
 <body th:data-member-id="${post.memberId}"
+      th:data-board-id="${post.boardId}"
       th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
 
 <div th:replace="~{fragments/header :: back-header}"></div>
@@ -73,6 +74,15 @@
         <form th:if="${canModify and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
+        <form th:if="${canModify and post.status == 'REQUESTED'}"
+              th:action="@{/board/{b}/manager/requests/approve/{id}(b=${post.boardId},id=${post.id})}"
+              method="post" style="margin:0;">
+          <input type="hidden" name="source" value="detail">
+          <button type="submit" class="btn-approve">승인</button>
+        </form>
+        <button th:if="${canModify and post.status == 'REQUESTED'}"
+                type="button" class="btn-reject"
+                th:data-post-id="${post.id}">반려</button>
       </div>
     </div>
   </div>
@@ -233,6 +243,26 @@
         <button type="submit" class="btn-modal-delete">삭제 승인</button>
       </form>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="rejectModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <span class="modal-title">반려 사유</span>
+      </div>
+      <button type="button" class="modal-close" id="btn-reject-close">
+        <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
+      </button>
+    </div>
+    <form id="rejectForm" method="post">
+      <input type="hidden" name="source" value="detail">
+      <div class="form-group">
+        <textarea name="reason" class="form-input" placeholder="반려 사유를 입력하세요" required></textarea>
+      </div>
+      <button type="submit" class="btn-submit" style="background:#e11d48;">반려 확정</button>
+    </form>
   </div>
 </div>
 

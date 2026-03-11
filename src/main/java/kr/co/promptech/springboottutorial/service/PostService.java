@@ -127,7 +127,8 @@ public class PostService {
             return true;
         }
         Post post = getPostById(postId);
-        if (PostStatus.APPROVED.name().equals(post.getStatus())) {
+        if (PostStatus.APPROVED.name().equals(post.getStatus())
+                || PostStatus.REQUESTED.name().equals(post.getStatus())) {
             return false;
         }
         return isAssignee(postId, memberId);
