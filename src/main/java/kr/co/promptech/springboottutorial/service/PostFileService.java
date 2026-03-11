@@ -52,6 +52,22 @@ public class PostFileService {
         }
     }
 
+    public void saveFiles(List<MultipartFile> files, Long postId) {
+        if (files == null) {
+            return;
+        }
+        for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                continue;
+            }
+            try {
+                saveFile(file, postId);
+            } catch (Exception e) {
+                log.error("파일 저장 실패: {}", file.getOriginalFilename(), e);
+            }
+        }
+    }
+
     public void saveFile(MultipartFile file, Long postId){
         try {
             String originalName = file.getOriginalFilename();

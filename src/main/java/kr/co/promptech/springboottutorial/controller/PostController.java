@@ -70,17 +70,7 @@ public class PostController {
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @AuthenticationPrincipal CustomUser user) {
         Long postId = postService.createPost(postCreateDto, user.getId());
-        if (files != null) {
-            for (MultipartFile file : files) {
-                if (!file.isEmpty()) {
-                    try {
-                        postFileService.saveFile(file, postId);
-                    } catch (Exception e) {
-                        log.error("파일 저장 실패: {}", file.getOriginalFilename(), e);
-                    }
-                }
-            }
-        }
+        postFileService.saveFiles(files, postId);
         return "redirect:/board/{boardId}";
     }
 
