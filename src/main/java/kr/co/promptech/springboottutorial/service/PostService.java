@@ -114,6 +114,10 @@ public class PostService {
         return postMemberMapper.findAssigneesByPostId(postId);
     }
 
+    public boolean isAssignee(Long postId, Long memberId) {
+        return postMemberMapper.countByPostIdAndMemberId(postId, memberId) > 0;
+    }
+
     public void updateStatus(Long id, PostStatus status) {
         postMapper.updateStatus(id, status);
     }
