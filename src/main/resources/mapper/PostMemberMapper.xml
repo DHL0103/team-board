@@ -7,6 +7,18 @@
         SELECT * FROM post_members WHERE post_id = #{postId}
     </select>
 
+    <select id="findAssigneesByPostId" resultType="kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto">
+        SELECT pm.member_id, m.username
+        FROM post_members pm
+        JOIN members m ON pm.member_id = m.id
+        WHERE pm.post_id = #{postId}
+        ORDER BY m.username
+    </select>
+
+    <delete id="deleteByPostId">
+        DELETE FROM post_members WHERE post_id = #{postId}
+    </delete>
+
     <select id="countByPostIdAndMemberId" resultType="int">
         SELECT COUNT(*) FROM post_members WHERE post_id = #{postId} AND member_id = #{memberId}
     </select>

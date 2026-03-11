@@ -8,6 +8,7 @@ import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
+import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -99,6 +100,18 @@ public class PostService {
             dueDate = LocalDateTime.parse(dueDateStr);
         }
         postMapper.updatePost(id, postCreateDto.getTitle(), postCreateDto.getContent(), dueDate);
+
+        postMemberMapper.deleteByPostId(id);
+        List<Long> assigneeIds = postCreateDto.getAssigneeIds();
+        if (assigneeIds != null) {
+            for (Long assigneeId : assigneeIds) {
+                postMemberMapper.save(id, assigneeId);
+            }
+        }
+    }
+
+    public List<BoardMemberResponseDto> getAssigneesByPostId(Long postId) {
+        return postMemberMapper.findAssigneesByPostId(postId);
     }
 
     public void updateStatus(Long id, PostStatus status) {
