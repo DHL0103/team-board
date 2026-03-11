@@ -10,18 +10,7 @@
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
-  <div class="board-detail-header">
-    <div class="board-title-row">
-      <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
-    </div>
-    <div class="page-meta" th:text="${board.description}">설명</div>
-    <div class="board-member-count">
-      <svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>
-      <span th:text="${board.memberCount} + '명'">0명</span>
-    </div>
-  </div>
-
-  <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
+  <th:block th:replace="~{fragments/board-header :: board-header(${board}, null)}"></th:block>
 
   <div class="board-request-wrap">
     <div class="board-grid-empty-icon">
