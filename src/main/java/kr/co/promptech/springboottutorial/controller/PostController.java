@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Board;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
@@ -49,11 +50,13 @@ public class PostController {
             model.addAttribute("boardColor", board.getColor());
         }
 
+        boolean isAuthorized = false;
         if (user != null) {
-            model.addAttribute("isOwner", post.getMemberId().equals(user.getId()));
-        } else {
-            model.addAttribute("isOwner", false);
+            isAuthorized = user.getRole() == MemberRole.ROLE_ADMIN
+                    || boardMemberService.isManager(post.getBoardId(), user.getId())
+                    || postService.isAssignee(postId, user.getId());
         }
+        model.addAttribute("isAuthorized", isAuthorized);
 
         model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(post.getBoardId()));
         model.addAttribute("postAssignees", postService.getAssigneesByPostId(postId));
@@ -78,10 +81,9 @@ public class PostController {
     }
 
     /**
-     * @param id   삭제할 게시글 PK
-     * @param user 현재 로그인한 사용자 정보
-     * @return 메인 보드 페이지로 리다이렉트, 본인 아닐 경우 에러 파라미터와 함께 상세 페이지로 리다이렉트
-     * 작성자 본인만 삭제 가능
+     * @param id 삭제할 게시글 PK
+     * @return 보드 상세 페이지로 리다이렉트
+     * 권한 검증은 PostMemberAuthInterceptor에서 처리
      */
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable Long boardId, @PathVariable Long id) {
@@ -95,9 +97,8 @@ public class PostController {
      * @param postCreateDto 수정할 게시글 데이터
      * @param files         새로 추가할 첨부파일 목록 (optional)
      * @param deleteFileIds 삭제할 첨부파일 ID 목록 (optional)
-     * @param user          현재 로그인한 사용자 정보
-     * @return 게시글 상세 페이지로 리다이렉트, 본인 아닐 경우 에러 파라미터와 함께 리다이렉트
-     * 작성자 본인만 수정 가능. 파일 삭제 후 신규 파일 저장
+     * @return 게시글 상세 페이지로 리다이렉트
+     * 권한 검증은 PostMemberAuthInterceptor에서 처리
      */
     @PostMapping("/update/{id}")
     public String updatePost(@PathVariable Long boardId,
@@ -112,10 +113,9 @@ public class PostController {
     }
 
     /**
-     * @param id   승인 요청할 게시글 PK
-     * @param user 현재 로그인한 사용자 정보
-     * @return 게시글 상세 페이지로 리다이렉트, 본인 아닐 경우 에러 파라미터와 함께 리다이렉트
-     * 게시글 상태를 REQUESTED로 변경. 작성자 본인만 요청 가능
+     * @param id 승인 요청할 게시글 PK
+     * @return 게시글 상세 페이지로 리다이렉트
+     * 권한 검증은 PostMemberAuthInterceptor에서 처리
      */
     @PostMapping("/request/{id}")
     public String requestPost(@PathVariable Long boardId, @PathVariable Long id) {

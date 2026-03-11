@@ -69,13 +69,13 @@
 
     <div class="post-actions">
       <div class="post-actions-left">
-        <button th:if="${isOwner}" class="btn-delete" id="btn-delete">
+        <button th:if="${isAuthorized}" class="btn-delete" id="btn-delete">
           <svg width="13" height="13"><use href="/img/icons.svg#icon-trash"></use></svg> 삭제
         </button>
       </div>
       <div class="post-actions-right">
-        <button th:if="${isOwner}" class="btn-edit" id="btn-edit">수정</button>
-        <form th:if="${isOwner and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
+        <button th:if="${isAuthorized}" class="btn-edit" id="btn-edit">수정</button>
+        <form th:if="${isAuthorized and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
       </div>
