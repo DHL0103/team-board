@@ -23,6 +23,18 @@ public class MemberService {
     }
 
     /**
+     * @return true: 변경 성공, false: 현재 비밀번호 불일치
+     */
+    public boolean changePassword(Long memberId, String currentPassword, String newRawPassword) {
+        Member member = memberMapper.selectMemberById(memberId);
+        if (!passwordEncoder.matches(currentPassword, member.getPassword())) {
+            return false;
+        }
+        memberMapper.updatePassword(memberId, passwordEncoder.encode(newRawPassword));
+        return true;
+    }
+
+    /**
      * @return true: 가입 성공, false: 아이디 중복
      */
     public boolean signup(String username, String rawPassword) {
