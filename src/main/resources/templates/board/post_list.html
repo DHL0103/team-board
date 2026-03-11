@@ -46,7 +46,6 @@
         <a class="post-list-card"
            th:each="post : ${postList}"
            th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-          <div class="card-team-line" th:classappend="${post.status == 'PROGRESS' ? 'bar-progress' : post.status == 'REQUESTED' ? 'bar-requested' : post.status == 'REJECTED' ? 'bar-rejected' : post.status == 'APPROVED' ? 'bar-completed' : ''}"></div>
           <div class="card-top">
             <div class="card-title" th:text="${post.title}">제목</div>
             <span class="status-chip"

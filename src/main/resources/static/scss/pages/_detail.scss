@@ -34,13 +34,6 @@
   margin-bottom: 16px;
   animation: fadeUp 0.35s ease both;
 
-  .post-team-bar {
-    height: 4px;
-    @each $key, $val in $palettes {
-      &.col-#{$key} { background: var(--#{$key}-color); }
-    }
-  }
-
   .post-header {
     padding: 28px 36px 22px;
     border-bottom: 1px solid $border-soft;
