@@ -29,17 +29,18 @@
 
 ### 게시판 레벨 (`board_members.board_role`)
 
-| 역할 | 설명 |
-|---|---|
-| `MANAGER` | 멤버 관리, 게시글 승인/반려/수정, 담당자 변경 |
-| `USER` | 게시판 내 게시글·댓글 작성 및 조회 |
-| `REQUESTED` | 가입 요청 상태, 승인 전까지 접근 불가 |
+| 역할          | 설명                          |
+|-------------|-----------------------------|
+| `MANAGER`   | 멤버 관리, 게시글 승인/반려/수정, 담당자 변경 |
+| `USER`      | 게시판 내 게시글·댓글 작성 및 조회        |
+| `REQUESTED` | 가입 요청 상태, 승인 전까지 접근 불가      |
+| `INVITED`   | 보드 초대 상태, 수락 전까지 접근 불가      |
 
 ## 업무 워크플로우
 
 ### 게시판 참가
-1. 유저가 참가 요청 전송 → `board_role = REQUESTED`
-2. 해당 게시판 MANAGER가 승인 → `board_role = USER`
+1. 유저가 참가 요청 전송 → `board_role = REQUESTED`  매니저가 초대 → `board_role = INVITED`
+2. 해당 게시판 MANAGER가 승인 or 해당 유저가 수락 → `board_role = USER`
 
 ### 게시글 처리
 
