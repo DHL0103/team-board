@@ -7,6 +7,7 @@ import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
+import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
@@ -24,6 +25,7 @@ public class PostService {
     private final PostFileService postFileService;
     private final PostMemberMapper postMemberMapper;
     private final BoardMemberMapper boardMemberMapper;
+    private final BoardMemberService boardMemberService;
 
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
@@ -116,6 +118,19 @@ public class PostService {
 
     public boolean isAssignee(Long postId, Long memberId) {
         return postMemberMapper.countByPostIdAndMemberId(postId, memberId) > 0;
+    }
+
+    public boolean canModify(Long postId, Long boardId, Long memberId, MemberRole role) {
+        boolean isAdminOrManager = role == MemberRole.ROLE_ADMIN
+                || boardMemberService.isManager(boardId, memberId);
+        if (isAdminOrManager) {
+            return true;
+        }
+        Post post = getPostById(postId);
+        if (PostStatus.APPROVED.name().equals(post.getStatus())) {
+            return false;
+        }
+        return isAssignee(postId, memberId);
     }
 
     public void updateStatus(Long id, PostStatus status) {

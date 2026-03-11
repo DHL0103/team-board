@@ -2,7 +2,6 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Board;
-import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
@@ -50,13 +49,9 @@ public class PostController {
             model.addAttribute("boardColor", board.getColor());
         }
 
-        boolean isAuthorized = false;
-        if (user != null) {
-            isAuthorized = user.getRole() == MemberRole.ROLE_ADMIN
-                    || boardMemberService.isManager(post.getBoardId(), user.getId())
-                    || postService.isAssignee(postId, user.getId());
-        }
-        model.addAttribute("isAuthorized", isAuthorized);
+        boolean canModify = user != null && postService.canModify(
+                postId, post.getBoardId(), user.getId(), user.getRole());
+        model.addAttribute("canModify", canModify);
 
         model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(post.getBoardId()));
         model.addAttribute("postAssignees", postService.getAssigneesByPostId(postId));

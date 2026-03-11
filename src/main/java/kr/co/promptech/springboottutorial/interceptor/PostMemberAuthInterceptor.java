@@ -2,8 +2,10 @@ package kr.co.promptech.springboottutorial.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
+import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
@@ -42,6 +44,12 @@ public class PostMemberAuthInterceptor implements HandlerInterceptor {
 
         if (boardMemberService.isManager(boardId, member.getId())) {
             return true;
+        }
+
+        Post post = postService.getPostById(postId);
+        if (PostStatus.APPROVED.name().equals(post.getStatus())) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN);
+            return false;
         }
 
         if (postService.isAssignee(postId, member.getId())) {
