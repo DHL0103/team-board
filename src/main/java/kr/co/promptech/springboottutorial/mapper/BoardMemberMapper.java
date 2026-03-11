@@ -25,4 +25,6 @@ public interface BoardMemberMapper {
     List<BoardMemberResponseDto> findUsersByBoardId(@Param("boardId") Long boardId);
 
     List<InvitedBoardDto> findInvitedBoardsByMemberId(@Param("memberId") Long memberId);
+
+    List<BoardMemberResponseDto> searchMembersWithBoardRole(@Param("boardId") Long boardId, @Param("username") String username);
 }

@@ -65,4 +65,8 @@ public class BoardMemberService {
     public List<InvitedBoardDto> getInvitedBoards(Long memberId) {
         return boardMemberMapper.findInvitedBoardsByMemberId(memberId);
     }
+
+    public List<BoardMemberResponseDto> searchMembersForInvite(Long boardId, String username) {
+        return boardMemberMapper.searchMembersWithBoardRole(boardId, username);
+    }
 }
