@@ -12,12 +12,7 @@
 <div th:replace="~{fragments/header :: back-header}"></div>
 
 <div class="detail-wrap" th:with="palette=${boardColor}">
-  <div class="breadcrumb-row">
-    <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
-    <a th:href="@{'/board/' + ${post.boardId}}" th:text="${boardName}">팀</a> <span
-          class="breadcrumb-sep">›</span>
-    <span th:text="${post.title}">제목</span>
-  </div>
+  <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${post.boardId}, boardName=${boardName}, currentPage=${post.title})}"></div>
 
   <div class="toast" id="errorToast"
        th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error != null ? '본인이 작성한 글만 삭제할 수 있습니다.' : '')}">

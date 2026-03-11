@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ public class ManagerRequestController {
 
     private final PostService postService;
     private final PostRejectionService postRejectionService;
+    private final BoardService boardService;
 
     /**
      * @param boardId 조회할 보드 ID
@@ -28,6 +30,7 @@ public class ManagerRequestController {
     @GetMapping
     public String requestsPage(@PathVariable Long boardId, Model model) {
         model.addAttribute("boardId", boardId);
+        model.addAttribute("boardName", boardService.getBoardDtoById(boardId).getName());
         model.addAttribute("requestList", postService.getRequestedPostDtosByBoardId(boardId));
         return "manager/requests";
     }
