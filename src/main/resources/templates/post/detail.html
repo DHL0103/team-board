@@ -140,7 +140,7 @@
         <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
       </button>
     </div>
-    <form th:action="@{/board/{boardId}/post/update/{id}(boardId=${post.boardId},id=${post.id})}" method="post" enctype="multipart/form-data">
+    <form id="edit-post-form" th:action="@{/board/{boardId}/post/update/{id}(boardId=${post.boardId},id=${post.id})}" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label">제목</label>
         <input type="text" name="title" th:value="${post.title}" class="form-input" required />
@@ -181,6 +181,36 @@
         </div>
       </div>
 
+      <div class="form-group" th:if="${boardUserList != null and !boardUserList.isEmpty()}">
+        <label class="form-label">담당자 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
+        <div class="selected-assignee-list" id="edit-selected-assignee-list">
+          <span class="selected-assignee-chip"
+                th:each="assignee : ${postAssignees}"
+                th:data-member-id="${assignee.memberId}"
+                th:data-username="${assignee.username}">
+            <span class="assignee-chip-name" th:text="${assignee.username}"></span>
+            <button type="button" class="selected-assignee-remove" th:data-member-id="${assignee.memberId}">×</button>
+          </span>
+        </div>
+        <div class="assignee-picker" id="edit-assignee-picker">
+          <button type="button" class="assignee-add-btn" id="btn-edit-add-assignee">
+            <svg width="10" height="10"><use href="/img/icons.svg#icon-plus"></use></svg>
+            담당자 추가
+          </button>
+          <div class="assignee-dropdown" id="edit-assignee-dropdown">
+            <input type="text" class="assignee-search-input" id="edit-assignee-search"
+                   placeholder="이름으로 검색" autocomplete="off">
+            <div class="assignee-option-list" id="edit-assignee-option-list">
+              <button type="button" class="assignee-option"
+                      th:each="member : ${boardUserList}"
+                      th:data-member-id="${member.memberId}"
+                      th:data-username="${member.username}"
+                      th:text="${member.username}">
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="form-group">
         <input type="file" name="files" id="edit-file-input" multiple hidden>
         <button type="button" class="file-upload-btn" id="btn-edit-file-attach">

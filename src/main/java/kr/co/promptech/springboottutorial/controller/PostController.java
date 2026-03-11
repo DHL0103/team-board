@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.service.PostFileService;
@@ -27,6 +28,7 @@ public class PostController {
     private final PostFileService postFileService;
     private final BoardService boardService;
     private final PostRejectionService postRejectionService;
+    private final BoardMemberService boardMemberService;
 
     /**
      * @param postId 조회할 게시글 PK
@@ -52,6 +54,9 @@ public class PostController {
         } else {
             model.addAttribute("isOwner", false);
         }
+
+        model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(post.getBoardId()));
+        model.addAttribute("postAssignees", postService.getAssigneesByPostId(postId));
 
         return "post/detail";
     }
