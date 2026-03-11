@@ -65,10 +65,10 @@
 
     <div th:each="board : ${invitedBoards}">
       <div class="invite-card">
-        <div class="invite-board-info">
+        <a class="invite-board-info" th:href="@{'/board/' + ${board.boardId}}">
           <span class="invite-board-dot" th:classappend="${'dot-' + board.boardColor}"></span>
           <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
-        </div>
+        </a>
         <div class="invite-actions">
           <form th:action="@{/member/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
             <button type="submit" class="btn-invite-accept">수락</button>

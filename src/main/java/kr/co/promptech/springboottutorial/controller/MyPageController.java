@@ -71,8 +71,12 @@ public class MyPageController {
      */
     @PostMapping("/boards/{boardId}/accept")
     public String acceptInvite(@AuthenticationPrincipal CustomUser user,
-                               @PathVariable Long boardId) {
+                               @PathVariable Long boardId,
+                               @RequestParam(required = false) String from) {
         boardMemberService.updateRole(boardId, user.getId(), BoardRole.USER);
+        if ("board".equals(from)) {
+            return "redirect:/board/" + boardId;
+        }
         return "redirect:/member/mypage";
     }
 
@@ -81,8 +85,12 @@ public class MyPageController {
      */
     @PostMapping("/boards/{boardId}/reject")
     public String rejectInvite(@AuthenticationPrincipal CustomUser user,
-                               @PathVariable Long boardId) {
+                               @PathVariable Long boardId,
+                               @RequestParam(required = false) String from) {
         boardMemberService.delete(boardId, user.getId());
+        if ("board".equals(from)) {
+            return "redirect:/board";
+        }
         return "redirect:/member/mypage";
     }
 }

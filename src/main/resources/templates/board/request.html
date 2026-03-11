@@ -19,7 +19,18 @@
         <div style="font-size:16px; font-weight:700; margin-bottom:8px;" th:text="${board.name}">보드명</div>
         <div style="font-size:13px; color:var(--text-muted);">이 보드에 접근 권한이 없습니다.</div>
       </div>
-      <form th:unless="${isRequested}" th:action="@{'/board/' + ${board.id} + '/request'}" method="post" style="margin:0;">
+      <th:block th:if="${isInvited}">
+        <div style="font-size:13px; color:var(--text-muted); margin-bottom:4px;">이 보드에서 초대장을 보냈습니다.</div>
+        <div style="display:flex; gap:8px;">
+          <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/accept?from=board'}" method="post" style="margin:0;">
+            <button type="submit" class="btn-invite-accept">수락</button>
+          </form>
+          <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/reject?from=board'}" method="post" style="margin:0;">
+            <button type="submit" class="btn-invite-reject">거절</button>
+          </form>
+        </div>
+      </th:block>
+      <form th:unless="${isRequested or isInvited}" th:action="@{'/board/' + ${board.id} + '/request'}" method="post" style="margin:0;">
         <button type="submit" class="btn-request">가입 요청</button>
       </form>
       <div th:if="${isRequested}" style="font-size:13px; color:var(--text-muted); padding:8px 16px; border:1px solid var(--border); border-radius:8px;">

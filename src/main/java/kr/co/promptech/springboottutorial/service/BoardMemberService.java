@@ -34,6 +34,14 @@ public class BoardMemberService {
         return BoardRole.REQUESTED.name().equals(bm.getBoardRole());
     }
 
+    public boolean isInvited(Long boardId, Long memberId) {
+        BoardMember bm = boardMemberMapper.findByBoardIdAndMemberId(boardId, memberId);
+        if (bm == null) {
+            return false;
+        }
+        return BoardRole.INVITED.name().equals(bm.getBoardRole());
+    }
+
     public void save(Long boardId, Long memberId, BoardRole boardRole) {
         boardMemberMapper.save(boardId, memberId, boardRole);
     }
