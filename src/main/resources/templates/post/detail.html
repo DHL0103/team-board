@@ -80,7 +80,7 @@
           <input type="hidden" name="source" value="detail">
           <button type="submit" class="btn-approve">승인</button>
         </form>
-        <button th:if="${canModify and post.status == 'REQUESTED'}"
+        <button th:if="${canModify and (post.status == 'REQUESTED' or post.status == 'APPROVED')}"
                 type="button" class="btn-reject"
                 th:data-post-id="${post.id}">반려</button>
       </div>
