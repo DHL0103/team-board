@@ -39,8 +39,8 @@
 ## 업무 워크플로우
 
 ### 게시판 참가
-1. 유저가 참가 요청 전송 → `board_role = REQUESTED`  매니저가 초대 → `board_role = INVITED`
-2. 해당 게시판 MANAGER가 승인 or 해당 유저가 수락 → `board_role = USER`
+1. 유저가 참가 요청 전송 → `board_role = REQUESTED`  or  매니저가 초대 → `board_role = INVITED`
+2. 해당 게시판 MANAGER가 승인  or  해당 유저가 수락 → `board_role = USER`
 
 ### 게시글 처리
 
