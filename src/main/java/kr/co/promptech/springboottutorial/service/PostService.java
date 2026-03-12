@@ -19,6 +19,8 @@ import kr.co.promptech.springboottutorial.model.dto.PostDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,7 +55,8 @@ public class PostService {
                 .toList();
     }
 
-    public Long createPost(PostCreateDto postCreateDto, Long memberId) {
+    @Transactional
+    public void createPost(PostCreateDto postCreateDto, Long memberId, List<MultipartFile> files) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
@@ -86,7 +89,7 @@ public class PostService {
             }
         }
 
-        return post.getId();
+        postFileService.saveFiles(files, post.getId());
     }
 
     public void deletePost(Long id) {

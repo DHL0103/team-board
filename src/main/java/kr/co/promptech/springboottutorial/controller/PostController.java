@@ -39,8 +39,7 @@ public class PostController {
     public String createPost(PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @AuthenticationPrincipal CustomUser user) {
-        Long postId = postService.createPost(postCreateDto, user.getId());
-        postFileService.saveFiles(files, postId);
+        postService.createPost(postCreateDto, user.getId(), files);
         return "redirect:/board/{boardId}";
     }
 
