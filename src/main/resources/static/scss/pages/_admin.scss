@@ -372,6 +372,7 @@
   font-size: 11px;
   font-weight: 600;
 
+  white-space: nowrap;
   &.status-active   { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
   &.status-inactive { background: $bg;     color: $text-muted; border: 1px solid $border; }
 }
