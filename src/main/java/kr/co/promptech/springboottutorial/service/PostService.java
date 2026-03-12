@@ -162,14 +162,7 @@ public class PostService {
                 .memberId(post.getMemberId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .status(post.getStatus())
-                .statusLabel(switch (post.getStatus()) {
-                    case "PROGRESS"  -> "진행 중";
-                    case "REQUESTED" -> "승인 요청";
-                    case "APPROVED"  -> "완료";
-                    case "REJECTED"  -> "반려";
-                    default          -> post.getStatus();
-                })
+                .status(PostStatus.valueOf(post.getStatus()))
                 .dueDate(post.getDueDate())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())

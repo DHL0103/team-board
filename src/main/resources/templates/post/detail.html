@@ -27,8 +27,8 @@
           <span th:text="${post.boardName}">팀</span>
         </span>
         <span class="status-chip"
-              th:classappend="'chip-' + ${#strings.toLowerCase(post.status)}"
-              th:text="${post.statusLabel}"></span>
+              th:classappend="'chip-' + ${#strings.toLowerCase(post.status.name())}"
+              th:text="${post.status.label}"></span>
         <span class="due-chip" id="due-chip"
               th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
           <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
@@ -79,17 +79,17 @@
       </div>
       <div class="post-actions-right">
         <button th:if="${post.canModify}" class="btn-edit" id="btn-edit">수정</button>
-        <form th:if="${post.canModify and (post.status == 'PROGRESS' or post.status == 'REJECTED')}"
+        <form th:if="${post.canModify and (post.status.name() == 'PROGRESS' or post.status.name() == 'REJECTED')}"
               th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
-        <form th:if="${post.canModify and post.status == 'REQUESTED'}"
+        <form th:if="${post.canModify and post.status.name() == 'REQUESTED'}"
               th:action="@{/board/{b}/manager/requests/approve/{id}(b=${post.boardId},id=${post.id})}"
               method="post" style="margin:0;">
           <input type="hidden" name="source" value="detail">
           <button type="submit" class="btn-approve">승인</button>
         </form>
-        <button th:if="${post.canModify and (post.status == 'REQUESTED' or post.status == 'APPROVED')}"
+        <button th:if="${post.canModify and (post.status.name() == 'REQUESTED' or post.status.name() == 'APPROVED')}"
                 type="button" class="btn-reject"
                 th:data-post-id="${post.id}">반려</button>
       </div>
