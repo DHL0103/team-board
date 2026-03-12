@@ -2,11 +2,11 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Board;
-import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
+import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
