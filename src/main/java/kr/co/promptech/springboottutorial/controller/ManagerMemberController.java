@@ -28,8 +28,7 @@ public class ManagerMemberController {
      */
     @GetMapping
     public String membersPage(@PathVariable Long boardId, Model model) {
-        model.addAttribute("boardId", boardId);
-        model.addAttribute("boardName", boardService.getBoardDtoById(boardId).getName());
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("memberList", boardMemberService.getMembersByBoardId(boardId));
         return "manager/members";
     }

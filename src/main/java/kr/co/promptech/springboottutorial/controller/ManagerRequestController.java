@@ -27,8 +27,7 @@ public class ManagerRequestController {
      */
     @GetMapping
     public String requestsPage(@PathVariable Long boardId, Model model) {
-        model.addAttribute("boardId", boardId);
-        model.addAttribute("boardName", boardService.getBoardDtoById(boardId).getName());
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("requestList", postService.getRequestedPostDtosByBoardId(boardId));
         return "manager/requests";
     }
