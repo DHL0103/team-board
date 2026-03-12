@@ -28,4 +28,8 @@
         SELECT * FROM members ORDER BY id
     </select>
 
+    <update id="updateRole">
+        UPDATE members SET role = #{role} WHERE id = #{id}
+    </update>
+
 </mapper>

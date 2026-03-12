@@ -58,4 +58,8 @@ public class MemberService {
                 .map(MemberResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    public void updateRole(Long memberId, MemberRole role) {
+        memberMapper.updateRole(memberId, role);
+    }
 }

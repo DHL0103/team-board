@@ -37,7 +37,7 @@ public class SecurityConfig {
                                 .requestMatchers("/member/login", "/member/signup").permitAll()
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                                .anyRequest().hasAnyRole("USER", "ADMIN")
                 )
                 .csrf((csrf) -> csrf.disable()) // 테스트 시에는 CSRF를 꺼두어야 Postman POST 요청이 잘 들어갑니다.
         ;
