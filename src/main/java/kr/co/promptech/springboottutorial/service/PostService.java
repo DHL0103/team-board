@@ -160,6 +160,12 @@ public class PostService {
         postMapper.updateStatus(id, status);
     }
 
+    @Transactional
+    public void rejectPost(Long postId, String reason, Long rejectedBy) {
+        postMapper.updateStatus(postId, PostStatus.REJECTED);
+        postRejectionMapper.save(postId, reason, rejectedBy, LocalDateTime.now());
+    }
+
     @Transactional(readOnly = true)
     public PostDetailDto getPostDetail(Long postId, CustomUser user) {
         Post post = getPostById(postId);
