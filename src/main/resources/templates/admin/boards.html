@@ -8,125 +8,65 @@
 
 <body>
 
-    <div th:replace="~{fragments/header :: back-header}"></div>
+  <div th:replace="~{fragments/header :: back-header}"></div>
 
-    <div class="admin-wrap">
+  <div class="admin-wrap">
 
-        <nav class="admin-nav">
-            <a href="/admin/request" class="admin-nav-item">승인 요청</a>
-            <a href="/admin/members" class="admin-nav-item">멤버 관리</a>
-            <a href="/admin/boards" class="admin-nav-item active">보드 관리</a>
-        </nav>
+    <nav class="admin-nav">
+      <a href="/admin/members" class="admin-nav-item">멤버 관리</a>
+      <a href="/admin/boards" class="admin-nav-item active">보드 관리</a>
+    </nav>
 
-        <!-- 보드 목록 섹션 -->
-        <div class="admin-section">
-            <div class="admin-section-header">
-                <div>
-                    <div class="admin-section-title">보드 목록</div>
-                    <div class="admin-section-meta">보드를 추가하거나 수정/삭제할 수 있습니다.</div>
-                </div>
-                <button class="btn-admin-primary" id="btn-open-create">
-                    <svg width="10" height="10"><use href="/img/icons.svg#icon-plus"></use></svg>
-                    보드 추가
-                </button>
-            </div>
-
-            <div class="admin-empty" th:if="${#lists.isEmpty(boardList)}">
-                등록된 보드가 없습니다.
-            </div>
-
-            <table class="admin-table" th:unless="${#lists.isEmpty(boardList)}">
-                <thead>
-                    <tr>
-                        <th>이름</th>
-                        <th>슬러그</th>
-                        <th>설명</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="board : ${boardList}">
-                        <td th:text="${board.name}">보드명</td>
-                        <td th:text="${board.slug}" style="color: var(--text-muted); font-size: 12px;">slug</td>
-                        <td th:text="${board.description != null ? board.description : '-'}" style="color: var(--text-sub);">설명</td>
-                        <td>
-                            <div style="display: flex; gap: 6px;">
-                                <button class="btn-admin-edit btn-open-edit"
-                                        th:data-board-id="${board.id}"
-                                        th:data-board-name="${board.name}"
-                                        th:data-board-slug="${board.slug}"
-                                        th:data-board-desc="${board.description}">
-                                    수정
-                                </button>
-                                <form th:action="@{'/admin/board/delete/' + ${board.id}}" method="post"
-                                      onsubmit="return confirm('보드를 삭제하면 소속 작업도 모두 삭제됩니다. 계속할까요?')">
-                                    <button type="submit" class="btn-admin-danger">삭제</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="admin-section">
+      <div class="admin-section-header">
+        <div>
+          <div class="admin-section-title">보드 목록</div>
+          <div class="admin-section-meta" th:text="${#lists.size(boardResponseDtoList)} + '개'"></div>
         </div>
+        <input type="text" id="board-search" class="form-input" placeholder="보드 이름 검색" style="max-width:200px;">
+      </div>
 
+      <div class="admin-empty" th:if="${#lists.isEmpty(boardResponseDtoList)}">
+        등록된 보드가 없습니다.
+      </div>
+
+      <table class="admin-table" th:unless="${#lists.isEmpty(boardResponseDtoList)}">
+        <thead>
+          <tr>
+            <th style="width:40px;"></th>
+            <th>이름</th>
+            <th>설명</th>
+            <th style="width:80px;">멤버</th>
+            <th style="width:90px;">상태</th>
+          </tr>
+        </thead>
+        <tbody id="board-tbody">
+          <tr class="admin-table-row"
+              th:each="board : ${boardResponseDtoList}"
+              th:data-name="${board.name}">
+            <td>
+              <span class="board-color-dot" th:classappend="'dot-' + ${board.color}"></span>
+            </td>
+            <td>
+              <a th:href="@{'/board/' + ${board.id}}" class="admin-board-link" th:text="${board.name}"></a>
+            </td>
+            <td style="color:var(--text-sub); max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" th:text="${board.description != null ? board.description : '-'}"></td>
+            <td th:text="${board.memberCount}"></td>
+            <td>
+              <span th:if="${board.status == 'ACTIVE'}" class="status-badge status-active">활성</span>
+              <span th:unless="${board.status == 'ACTIVE'}" class="status-badge status-inactive">비활성</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-wrap" id="pagination-wrap"></div>
     </div>
 
-    <!-- 보드 생성 모달 -->
-    <div class="modal-overlay" id="createBoardModal">
-        <div class="modal-box modal-box--admin">
-            <div class="modal-title">보드 추가</div>
+  </div>
 
-            <form action="/admin/board/create" method="post">
-                <div class="form-group">
-                    <label>이름</label>
-                    <input class="input-field" type="text" name="name" placeholder="보드 이름 (예: Backend팀)" required>
-                </div>
-                <div class="form-group">
-                    <label>슬러그</label>
-                    <input class="input-field" type="text" name="slug" placeholder="URL용 이름 (예: backend)">
-                </div>
-                <div class="form-group">
-                    <label>설명 <span style="color: var(--text-muted); font-weight: 400;">(선택)</span></label>
-                    <input class="input-field" type="text" name="description" placeholder="보드 설명">
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-modal-cancel" id="btn-close-create">취소</button>
-                    <button type="submit" class="btn-modal-confirm">추가</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 보드 수정 모달 -->
-    <div class="modal-overlay" id="editBoardModal">
-        <div class="modal-box modal-box--admin">
-            <div class="modal-title">보드 수정</div>
-
-            <form id="editBoardForm" action="/admin/board/update/0" method="post">
-                <div class="form-group">
-                    <label>이름</label>
-                    <input class="input-field" type="text" name="name" id="edit-board-name" required>
-                </div>
-                <div class="form-group">
-                    <label>슬러그</label>
-                    <input class="input-field" type="text" name="slug" id="edit-board-slug">
-                </div>
-                <div class="form-group">
-                    <label>설명 <span style="color: var(--text-muted); font-weight: 400;">(선택)</span></label>
-                    <input class="input-field" type="text" name="description" id="edit-board-desc">
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-modal-cancel" id="btn-close-edit">취소</button>
-                    <button type="submit" class="btn-modal-confirm">저장</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script th:src="@{/js/common.js}"></script>
-    <script th:src="@{/js/admin.js}"></script>
+  <script th:src="@{/js/common.js}"></script>
+  <script th:src="@{/js/admin_boards.js}"></script>
 
 </body>
 
