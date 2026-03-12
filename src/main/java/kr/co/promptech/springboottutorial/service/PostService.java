@@ -35,6 +35,10 @@ public class PostService {
         return post;
     }
 
+    public PostResponseDto getPostDtoById(Long id) {
+        return new PostResponseDto(getPostById(id));
+    }
+
     public List<PostResponseDto> getRequestedPostDtosByBoardId(Long boardId) {
         return postMapper.getRequestedPostsByBoardId(boardId).stream()
                 .map(PostResponseDto::new)
@@ -77,9 +81,9 @@ public class PostService {
         return post.getId();
     }
 
-    public void deletePost(Post post) {
-        postFileService.deleteFilesByPostId(post.getId());
-        postMapper.deletePost(post);
+    public void deletePost(Long id) {
+        postFileService.deleteFilesByPostId(id);
+        postMapper.deletePost(id);
     }
 
     public List<PostResponseDto> getPostDtosByBoardId(Long boardId) {

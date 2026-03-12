@@ -2,11 +2,11 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Board;
+import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
-import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
@@ -82,8 +82,7 @@ public class PostController {
      */
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable Long boardId, @PathVariable Long id) {
-        Post post = postService.getPostById(id);
-        postService.deletePost(post);
+        postService.deletePost(id);
         return "redirect:/board/" + boardId;
     }
 
