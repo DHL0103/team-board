@@ -111,6 +111,7 @@ public class PostService {
         return posts.stream().map(PostResponseDto::new).toList();
     }
 
+    @Transactional
     public void updatePost(Long id, PostCreateDto postCreateDto, List<MultipartFile> files, List<Long> deleteFileIds) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
