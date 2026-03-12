@@ -2,17 +2,17 @@ package kr.co.promptech.springboottutorial.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Post;
-import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
-import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
-import java.security.Principal;
 import java.util.Map;
 
 @Component
@@ -20,7 +20,6 @@ import java.util.Map;
 public class PostAuthInterceptor implements HandlerInterceptor {
 
     private final PostService postService;
-    private final MemberService memberService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -39,15 +38,14 @@ public class PostAuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Principal principal = request.getUserPrincipal();
-        if (principal == null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUser user)) {
             response.sendRedirect("/member/login");
             return false;
         }
-        MemberResponseDto member = memberService.getMemberByUsername(principal.getName());
 
         // 시스템 레벨 관리자는 통과
-        if (MemberRole.ROLE_ADMIN == member.getRole()) {
+        if (MemberRole.ROLE_ADMIN == user.getRole()) {
             return true;
         }
 
