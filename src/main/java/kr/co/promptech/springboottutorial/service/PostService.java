@@ -92,6 +92,7 @@ public class PostService {
         postFileService.saveFiles(files, post.getId());
     }
 
+    @Transactional
     public void deletePost(Long id) {
         postFileService.deleteFilesByPostId(id);
         postMapper.deletePost(id);
@@ -154,10 +155,12 @@ public class PostService {
         return isAssignee(postId, memberId);
     }
 
+    @Transactional
     public void updateStatus(Long id, PostStatus status) {
         postMapper.updateStatus(id, status);
     }
 
+    @Transactional(readOnly = true)
     public PostDetailDto getPostDetail(Long postId, CustomUser user) {
         Post post = getPostById(postId);
         Board board = boardMapper.getBoardById(post.getBoardId());
