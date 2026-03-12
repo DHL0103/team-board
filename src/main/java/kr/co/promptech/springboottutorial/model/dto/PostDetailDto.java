@@ -17,6 +17,7 @@ public class PostDetailDto {
     private String title;
     private String content;
     private String status;
+    private String statusLabel;
     private LocalDateTime dueDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
