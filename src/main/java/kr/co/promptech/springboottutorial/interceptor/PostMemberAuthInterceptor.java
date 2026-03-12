@@ -2,19 +2,19 @@ package kr.co.promptech.springboottutorial.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Post;
-import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
-import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
-import java.security.Principal;
 import java.util.Map;
 
 @Component
@@ -23,7 +23,6 @@ public class PostMemberAuthInterceptor implements HandlerInterceptor {
 
     private final BoardMemberService boardMemberService;
     private final PostService postService;
-    private final MemberService memberService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -31,18 +30,17 @@ public class PostMemberAuthInterceptor implements HandlerInterceptor {
         Long boardId = Long.parseLong(pathVariables.get("boardId"));
         Long postId = Long.parseLong(pathVariables.get("id"));
 
-        Principal principal = request.getUserPrincipal();
-        if (principal == null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof CustomUser user)) {
             response.sendRedirect("/member/login");
             return false;
         }
-        MemberResponseDto member = memberService.getMemberByUsername(principal.getName());
 
-        if (MemberRole.ROLE_ADMIN == member.getRole()) {
+        if (MemberRole.ROLE_ADMIN == user.getRole()) {
             return true;
         }
 
-        if (boardMemberService.isManager(boardId, member.getId())) {
+        if (boardMemberService.isManager(boardId, user.getId())) {
             return true;
         }
 
@@ -53,7 +51,7 @@ public class PostMemberAuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        if (postService.isAssignee(postId, member.getId())) {
+        if (postService.isAssignee(postId, user.getId())) {
             return true;
         }
 
