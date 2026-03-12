@@ -56,4 +56,11 @@ if (tbody) {
     });
 
     render();
+
+    tbody.addEventListener("click", e => {
+        const row = e.target.closest("tr[data-board-id]");
+        if (row) {
+            window.location.href = "/board/" + row.dataset.boardId;
+        }
+    });
 }

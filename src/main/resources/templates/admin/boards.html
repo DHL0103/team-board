@@ -43,7 +43,8 @@
         <tbody id="board-tbody">
           <tr class="admin-table-row"
               th:each="board : ${boardResponseDtoList}"
-              th:data-name="${board.name}">
+              th:data-name="${board.name}"
+              th:data-board-id="${board.id}">
             <td>
               <span class="board-color-dot" th:classappend="'dot-' + ${board.color}"></span>
             </td>
