@@ -35,6 +35,11 @@ public class PostService {
         return post;
     }
 
+    public PostResponseDto getPostDtoById(Long id) {
+        return new PostResponseDto(getPostById(id));
+    }
+
+
     public List<PostResponseDto> getRequestedPostDtosByBoardId(Long boardId) {
         return postMapper.getRequestedPostsByBoardId(boardId).stream()
                 .map(PostResponseDto::new)

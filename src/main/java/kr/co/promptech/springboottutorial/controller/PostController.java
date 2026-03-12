@@ -40,7 +40,7 @@ public class PostController {
     @GetMapping("/{postId}")
     public String getPostDetailPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal CustomUser user) {
         Post post = postService.getPostById(postId);
-        model.addAttribute("post", post);
+        model.addAttribute("post", postService.getPostDtoById(postId));
         model.addAttribute("postFiles", postFileService.getFilesByPostId(postId));
         model.addAttribute("rejections", postRejectionService.getByPostId(postId));
         Board board = boardService.getBoardById(post.getBoardId());
