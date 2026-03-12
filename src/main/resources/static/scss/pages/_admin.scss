@@ -429,3 +429,9 @@
   &:disabled { opacity: 0.4; cursor: not-allowed; }
   &.active { background: $text; color: white; border-color: $text; }
 }
+.status-badge--toggle {
+  cursor: pointer;
+  transition: opacity 0.15s;
+
+  &:hover { opacity: 0.75; }
+}

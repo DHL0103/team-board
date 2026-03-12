@@ -54,8 +54,14 @@
             <td style="color:var(--text-sub); max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" th:text="${board.description != null ? board.description : '-'}"></td>
             <td th:text="${board.memberCount}"></td>
             <td style="text-align:center;">
-              <span th:if="${board.status == 'ACTIVE'}" class="status-badge status-active">활성</span>
-              <span th:unless="${board.status == 'ACTIVE'}" class="status-badge status-inactive">비활성</span>
+              <span th:if="${board.status == 'ACTIVE'}"
+                    class="status-badge status-active status-badge--toggle"
+                    th:data-board-id="${board.id}"
+                    data-current-status="ACTIVE">활성</span>
+              <span th:unless="${board.status == 'ACTIVE'}"
+                    class="status-badge status-inactive status-badge--toggle"
+                    th:data-board-id="${board.id}"
+                    data-current-status="INACTIVE">비활성</span>
             </td>
           </tr>
         </tbody>
@@ -64,6 +70,18 @@
       <div class="pagination-wrap" id="pagination-wrap"></div>
     </div>
 
+  </div>
+
+  <!-- 상태 변경 확인 모달 -->
+  <div class="modal-overlay" id="statusChangeModal">
+    <div class="modal-box">
+      <div class="modal-box-title" id="statusChangeTitle">상태 변경</div>
+      <p class="modal-box-desc" id="statusChangeDesc"></p>
+      <div class="modal-box-actions">
+        <button class="btn btn-secondary" id="statusChangeCancel">취소</button>
+        <button class="btn btn-primary" id="statusChangeConfirm">확인</button>
+      </div>
+    </div>
   </div>
 
   <script th:src="@{/js/common.js}"></script>
