@@ -23,7 +23,6 @@
         SELECT bm.member_id, m.username, bm.board_role
         FROM board_members bm
         JOIN members m ON bm.member_id = m.id
-        JOIN members m ON bm.member_id = m.id
         WHERE bm.board_id = #{boardId}
         ORDER BY bm.board_role, m.username
     </select>
