@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.controller;
 import kr.co.promptech.springboottutorial.model.dto.MemberBoardDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class AdminApiController {
 
     private final BoardMemberService boardMemberService;
     private final MemberService memberService;
+    private final BoardService boardService;
 
     /**
      * @param memberId 조회할 멤버 ID
@@ -31,6 +33,25 @@ public class AdminApiController {
     @GetMapping("/members/{memberId}/boards")
     public List<MemberBoardDto> getMemberBoards(@PathVariable Long memberId) {
         return boardMemberService.getBoardsByMemberId(memberId);
+    }
+
+    /**
+     * @param memberId 대상 멤버 ID
+     * @param role     변경할 역할 (ROLE_USER / ROLE_SUSPENDED)
+     * ROLE_ADMIN은 변경 불가 — 요청 시 400 반환
+     */
+    /**
+     * @param boardId 대상 보드 ID
+     * @param status  변경할 상태 (ACTIVE / INACTIVE)
+     */
+    @PostMapping("/boards/{boardId}/status")
+    public ResponseEntity<Void> updateBoardStatus(@PathVariable Long boardId,
+                                                   @RequestParam String status) {
+        if (!"ACTIVE".equals(status) && !"INACTIVE".equals(status)) {
+            return ResponseEntity.badRequest().build();
+        }
+        boardService.updateStatus(boardId, status);
+        return ResponseEntity.ok().build();
     }
 
     /**

@@ -40,4 +40,8 @@ public class BoardService {
 public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId);
     }
+
+    public void updateStatus(Long boardId, String status) {
+        boardMapper.updateStatus(boardId, status);
+    }
 }

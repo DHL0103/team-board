@@ -39,6 +39,10 @@
         INSERT INTO boards (name, color, description) VALUES (#{name}, #{color}, #{description})
     </insert>
 
+    <update id="updateStatus">
+        UPDATE boards SET status = #{status} WHERE id = #{id}
+    </update>
+
     <select id="getBoardsByMemberId" resultMap="boardResponseDtoMap">
         SELECT b.id, b.name, b.description, b.color, b.status,
                COUNT(bm2.member_id) AS member_count
