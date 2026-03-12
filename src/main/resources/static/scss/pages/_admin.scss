@@ -350,7 +350,14 @@
   &.role-manager   { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
   &.role-user      { background: $bg;     color: $text-muted; border: 1px solid $border; }
   &.role-requested { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
-  &.role-invited   { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+  &.role-invited    { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+  &.role-suspended  { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+
+  &--toggle {
+    cursor: pointer;
+    transition: opacity 0.15s;
+    &:hover { opacity: 0.75; }
+  }
 }
 
 // ── 보드 컬러 도트 ──
