@@ -57,3 +57,75 @@ if (tbody) {
 
     render();
 }
+
+// ── 멤버 상세 모달 ──
+const detailModal = document.getElementById("memberDetailModal");
+const modalUsername = document.getElementById("modal-member-username");
+const modalBoardList = document.getElementById("modal-board-list");
+const btnCloseDetail = document.getElementById("btn-close-member-detail");
+
+const ROLE_LABEL = { MANAGER: "Manager", USER: "User", REQUESTED: "가입 요청", INVITED: "초대됨" };
+const ROLE_CLASS = { MANAGER: "role-manager", USER: "role-user", REQUESTED: "role-requested", INVITED: "role-invited" };
+
+function openDetailModal(memberId, username) {
+    modalUsername.textContent = username;
+    modalBoardList.innerHTML = "<div class=\"admin-empty\">불러오는 중...</div>";
+    detailModal.classList.add("open");
+    document.body.style.overflow = "hidden";
+
+    fetch(`/admin/api/members/${memberId}/boards`)
+        .then(res => res.json())
+        .then(boards => {
+            if (boards.length === 0) {
+                modalBoardList.innerHTML = "<div class=\"admin-empty\">소속 보드가 없습니다.</div>";
+                return;
+            }
+            const rows = boards.map(b => {
+                const label = ROLE_LABEL[b.boardRole] ?? b.boardRole;
+                const cls = ROLE_CLASS[b.boardRole] ?? "";
+                return `<tr>
+                    <td>${b.boardName}</td>
+                    <td><span class="role-badge ${cls}">${label}</span></td>
+                </tr>`;
+            }).join("");
+            modalBoardList.innerHTML = `<table class="admin-table">
+                <thead><tr><th>보드</th><th style="width:110px;">역할</th></tr></thead>
+                <tbody>${rows}</tbody>
+            </table>`;
+        })
+        .catch(() => {
+            modalBoardList.innerHTML = "<div class=\"admin-empty\">불러오기 실패</div>";
+        });
+}
+
+function closeDetailModal() {
+    detailModal.classList.remove("open");
+    document.body.style.overflow = "";
+}
+
+if (tbody) {
+    tbody.addEventListener("click", e => {
+        const row = e.target.closest("tr[data-member-id]");
+        if (row) {
+            openDetailModal(row.dataset.memberId, row.dataset.username);
+        }
+    });
+}
+
+if (btnCloseDetail) {
+    btnCloseDetail.addEventListener("click", closeDetailModal);
+}
+
+if (detailModal) {
+    detailModal.addEventListener("click", e => {
+        if (e.target === detailModal) {
+            closeDetailModal();
+        }
+    });
+}
+
+document.addEventListener("keydown", e => {
+    if (e.key === "Escape" && detailModal && detailModal.classList.contains("open")) {
+        closeDetailModal();
+    }
+});

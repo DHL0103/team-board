@@ -42,6 +42,7 @@
         <tbody id="member-tbody">
           <tr class="admin-table-row"
               th:each="member : ${members}"
+              th:data-member-id="${member.id}"
               th:data-username="${member.username}"
               th:data-role="${member.role}">
             <td th:text="${member.id}"></td>
@@ -57,6 +58,18 @@
       <div class="pagination-wrap" id="pagination-wrap"></div>
     </div>
 
+  </div>
+
+  <div class="modal-overlay" id="memberDetailModal">
+    <div class="modal-box modal-box--admin">
+      <div class="modal-title" id="modal-member-username"></div>
+      <div id="modal-board-list">
+        <div class="admin-empty">소속 보드가 없습니다.</div>
+      </div>
+      <div class="modal-actions" style="margin-top:20px;">
+        <button type="button" class="btn-admin-edit" id="btn-close-member-detail">닫기</button>
+      </div>
+    </div>
   </div>
 
   <script th:src="@{/js/common.js}"></script>
