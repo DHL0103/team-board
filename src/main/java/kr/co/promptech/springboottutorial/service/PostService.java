@@ -111,7 +111,7 @@ public class PostService {
         return posts.stream().map(PostResponseDto::new).toList();
     }
 
-    public void updatePost(Long id, PostCreateDto postCreateDto) {
+    public void updatePost(Long id, PostCreateDto postCreateDto, List<MultipartFile> files, List<Long> deleteFileIds) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
@@ -126,6 +126,9 @@ public class PostService {
                 postMemberMapper.save(id, assigneeId);
             }
         }
+
+        postFileService.deleteFiles(deleteFileIds);
+        postFileService.saveFiles(files, id);
     }
 
     public List<BoardMemberResponseDto> getAssigneesByPostId(Long postId) {
