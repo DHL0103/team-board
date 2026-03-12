@@ -4,6 +4,8 @@ import kr.co.promptech.springboottutorial.model.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface MemberMapper {
 
@@ -16,4 +18,6 @@ public interface MemberMapper {
     void insertMember(Member member);
 
     void updatePassword(@Param("id") Long id, @Param("password") String encodedPassword);
+
+    List<Member> selectAllMembers();
 }

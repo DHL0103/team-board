@@ -4,6 +4,9 @@ import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
+
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -48,5 +51,11 @@ public class MemberService {
                 .build();
         memberMapper.insertMember(member);
         return true;
+    }
+
+    public List<MemberResponseDto> getAllMemberDto() {
+        return memberMapper.selectAllMembers().stream()
+                .map(MemberResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
