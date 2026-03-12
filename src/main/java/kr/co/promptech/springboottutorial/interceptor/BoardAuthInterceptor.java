@@ -41,13 +41,7 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 3. 멤버 여부 확인
-        if (!boardMemberService.isMember(boardId, user.getId())) {
-            response.sendRedirect("/board/" + boardId + "/request");
-            return false;
-        }
-
-        // 4. 비활성 보드는 매니저만 접근 허용
+        // 3. 비활성 보드는 매니저만 접근 허용
         Board board = boardService.getBoardById(boardId);
         if (board != null && "INACTIVE".equals(board.getStatus())) {
             if (!boardMemberService.isManager(boardId, user.getId())) {
@@ -55,6 +49,14 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
+
+        // 4. 멤버 여부 확인
+        if (!boardMemberService.isMember(boardId, user.getId())) {
+            response.sendRedirect("/board/" + boardId + "/request");
+            return false;
+        }
+
+
 
         return true;
     }
