@@ -82,10 +82,11 @@ public class PostService {
         return post.getId();
     }
 
-    public void deletePost(Post post) {
-        postFileService.deleteFilesByPostId(post.getId());
-        postMapper.deletePost(post);
+    public void deletePost(Long id) {
+        postFileService.deleteFilesByPostId(id);
+        postMapper.deletePost(id);
     }
+
 
     public List<PostResponseDto> getPostDtosByBoardId(Long boardId) {
         return postMapper.getPostsByBoardId(boardId).stream()

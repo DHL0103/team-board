@@ -82,8 +82,7 @@ public class PostController {
      */
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable Long boardId, @PathVariable Long id) {
-        Post post = postService.getPostById(id);
-        postService.deletePost(post);
+        postService.deletePost(id);
         return "redirect:/board/" + boardId;
     }
 
