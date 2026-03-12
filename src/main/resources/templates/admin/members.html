@@ -8,189 +8,59 @@
 
 <body>
 
-    <div th:replace="~{fragments/header :: back-header}"></div>
+  <div th:replace="~{fragments/header :: back-header}"></div>
 
-    <div class="admin-wrap">
+  <div class="admin-wrap">
 
-        <nav class="admin-nav">
-            <a href="/admin/request" class="admin-nav-item">승인 요청</a>
-            <a href="/admin/members" class="admin-nav-item active">멤버 관리</a>
-            <a href="/admin/boards" class="admin-nav-item">보드 관리</a>
-        </nav>
+    <nav class="admin-nav">
+      <a href="/admin/request" class="admin-nav-item">승인 요청</a>
+      <a href="/admin/members" class="admin-nav-item active">멤버 관리</a>
+      <a href="/admin/boards" class="admin-nav-item">보드 관리</a>
+    </nav>
 
-        <!-- 멤버 목록 섹션 -->
-        <div class="admin-section">
-            <div class="admin-section-header">
-                <div>
-                    <div class="admin-section-title">멤버 목록</div>
-                    <div class="admin-section-meta">멤버를 클릭하면 소속 보드를 변경할 수 있습니다.</div>
-                </div>
-                <button class="btn-admin-primary" id="btn-open-create">
-                    <svg width="10" height="10"><use href="/img/icons.svg#icon-plus"></use></svg>
-                    멤버 추가
-                </button>
-            </div>
-
-            <div class="admin-empty" th:if="${#lists.isEmpty(memberList)}">
-                등록된 멤버가 없습니다.
-            </div>
-
-            <table class="admin-table" th:unless="${#lists.isEmpty(memberList)}">
-                <thead>
-                    <tr>
-                        <th>아이디</th>
-                        <th>권한</th>
-                        <th>소속 보드</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <!-- 매니저 그룹 -->
-                <tbody>
-                    <tr class="table-group-label">
-                        <td colspan="4">매니저</td>
-                    </tr>
-                    <tr class="admin-table-row" th:each="member : ${memberList}" th:if="${member.role == 'ROLE_MANAGER'}">
-                        <td th:text="${member.username}">username</td>
-                        <td>
-                            <span class="role-badge role-manager">Manager</span>
-                        </td>
-                        <td>
-                            <span th:if="${member.boardId != null}"
-                                  th:text="${boardMap != null and boardMap[member.boardId] != null ? boardMap[member.boardId] : member.boardId}">보드명</span>
-                            <span th:unless="${member.boardId != null}" style="color: var(--text-muted);">미배정</span>
-                        </td>
-                        <td style="display:flex; gap:8px; align-items:center;">
-                            <button class="btn-admin-edit btn-open-edit"
-                                    th:data-member-id="${member.id}"
-                                    th:data-board-id="${member.boardId}"
-                                    th:data-role="${member.role}">수정</button>
-                            <button type="button" class="btn-admin-danger btn-open-delete-member"
-                                    th:data-member-id="${member.id}"
-                                    th:data-username="${member.username}">삭제</button>
-                        </td>
-                    </tr>
-                </tbody>
-                <!-- 멤버 그룹 -->
-                <tbody>
-                    <tr class="table-group-label">
-                        <td colspan="4">멤버</td>
-                    </tr>
-                    <tr class="admin-table-row" th:each="member : ${memberList}" th:if="${member.role == 'ROLE_USER'}">
-                        <td th:text="${member.username}">username</td>
-                        <td>
-                            <span class="role-badge role-user">User</span>
-                        </td>
-                        <td>
-                            <span th:if="${member.boardId != null}"
-                                  th:text="${boardMap != null and boardMap[member.boardId] != null ? boardMap[member.boardId] : member.boardId}">보드명</span>
-                            <span th:unless="${member.boardId != null}" style="color: var(--text-muted);">미배정</span>
-                        </td>
-                        <td style="display:flex; gap:8px; align-items:center;">
-                            <button class="btn-admin-edit btn-open-edit"
-                                    th:data-member-id="${member.id}"
-                                    th:data-board-id="${member.boardId}"
-                                    th:data-role="${member.role}">수정</button>
-                            <button type="button" class="btn-admin-danger btn-open-delete-member"
-                                    th:data-member-id="${member.id}"
-                                    th:data-username="${member.username}">삭제</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <div class="admin-section">
+      <div class="admin-section-header">
+        <div>
+          <div class="admin-section-title">멤버 목록</div>
+          <div class="admin-section-meta" th:text="${#lists.size(members)} + '명'"></div>
         </div>
+        <input type="text" id="member-search" class="form-input" placeholder="아이디 검색" style="max-width:200px;">
+      </div>
 
+      <div class="admin-empty" th:if="${#lists.isEmpty(members)}">
+        등록된 멤버가 없습니다.
+      </div>
+
+      <table class="admin-table" th:unless="${#lists.isEmpty(members)}">
+        <thead>
+          <tr>
+            <th style="width:60px;">#</th>
+            <th>아이디</th>
+            <th style="width:110px;">권한</th>
+          </tr>
+        </thead>
+        <tbody id="member-tbody">
+          <tr class="admin-table-row"
+              th:each="member : ${members}"
+              th:data-username="${member.username}"
+              th:data-role="${member.role}">
+            <td th:text="${member.id}"></td>
+            <td th:text="${member.username}"></td>
+            <td>
+              <span th:if="${member.role.name() == 'ROLE_ADMIN'}" class="role-badge role-admin">Admin</span>
+              <span th:if="${member.role.name() == 'ROLE_USER'}" class="role-badge role-user">User</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-wrap" id="pagination-wrap"></div>
     </div>
 
-    <!-- 멤버 생성 모달 -->
-    <div class="modal-overlay" id="createMemberModal">
-        <div class="modal-box modal-box--admin">
-            <div class="modal-title">멤버 추가</div>
+  </div>
 
-            <form action="/admin/member/create" method="post">
-                <div class="form-group">
-                    <label>아이디</label>
-                    <input class="input-field" type="text" name="username" placeholder="아이디를 입력하세요" required>
-                </div>
-                <div class="form-group">
-                    <label>비밀번호</label>
-                    <input class="input-field" type="password" name="password" placeholder="비밀번호를 입력하세요" required>
-                </div>
-                <div class="form-group">
-                    <label>권한</label>
-                    <select class="select-field" name="role">
-                        <option value="ROLE_USER">User</option>
-                        <option value="ROLE_MANAGER">Manager</option>
-                        <option value="ROLE_ADMIN">Admin</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>소속 보드</label>
-                    <select class="select-field" name="boardId">
-                        <option value="">미배정</option>
-                        <option th:each="board : ${boardList}"
-                                th:value="${board.id}"
-                                th:text="${board.name}">보드명</option>
-                    </select>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-modal-cancel" id="btn-close-create">취소</button>
-                    <button type="submit" class="btn-modal-confirm">추가</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 멤버 수정 모달 -->
-    <div class="modal-overlay" id="editMemberModal">
-        <div class="modal-box modal-box--admin">
-            <div class="modal-title">멤버 수정</div>
-
-            <form id="editMemberForm" action="/admin/member/update/0" method="post">
-                <div class="form-group">
-                    <label>권한</label>
-                    <select class="select-field" name="role" id="edit-role-select">
-                        <option value="ROLE_USER">User</option>
-                        <option value="ROLE_MANAGER">Manager</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>소속 보드</label>
-                    <select class="select-field" name="boardId" id="edit-board-select">
-                        <option value="">미배정</option>
-                        <option th:each="board : ${boardList}"
-                                th:value="${board.id}"
-                                th:text="${board.name}">보드명</option>
-                    </select>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" class="btn-modal-cancel" id="btn-close-edit">취소</button>
-                    <button type="submit" class="btn-modal-confirm">저장</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 멤버 삭제 확인 모달 -->
-    <div class="modal-overlay" id="deleteMemberModal">
-        <div class="modal-box modal-box--admin">
-            <div class="modal-icon">
-                <svg width="20" height="20"><use href="/img/icons.svg#icon-trash-lg"></use></svg>
-            </div>
-            <div class="modal-title">멤버를 삭제하시겠습니까?</div>
-            <div class="modal-desc"><span id="delete-member-name"></span> 멤버를 삭제하면 작성한 모든 게시물과 첨부파일이 함께 삭제됩니다.</div>
-            <div class="modal-actions">
-                <button type="button" class="btn-modal-cancel" id="btn-delete-member-cancel">취소</button>
-                <form id="deleteMemberForm" method="post" style="display:inline;">
-                    <button type="submit" class="btn-modal-delete">삭제</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script th:src="@{/js/common.js}"></script>
-    <script th:src="@{/js/admin.js}"></script>
+  <script th:src="@{/js/common.js}"></script>
+  <script th:src="@{/js/admin_members.js}"></script>
 
 </body>
 
