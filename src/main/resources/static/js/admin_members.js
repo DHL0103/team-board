@@ -84,7 +84,7 @@ function openDetailModal(memberId, username) {
                 const label = ROLE_LABEL[b.boardRole] ?? b.boardRole;
                 const cls = ROLE_CLASS[b.boardRole] ?? "";
                 return `<tr>
-                    <td>${b.boardName}</td>
+                    <td><a href="/board/${b.boardId}" class="admin-board-link">${b.boardName}</a></td>
                     <td><span class="role-badge ${cls}">${label}</span></td>
                 </tr>`;
             }).join("");

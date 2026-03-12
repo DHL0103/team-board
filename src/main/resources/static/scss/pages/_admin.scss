@@ -353,6 +353,14 @@
   &.role-invited   { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
 }
 
+// ── 보드 링크 ──
+.admin-board-link {
+  color: $text;
+  text-decoration: none;
+  font-weight: 500;
+  &:hover { text-decoration: underline; }
+}
+
 // ── 페이지네이션 ──
 .pagination-wrap {
   display: flex;
