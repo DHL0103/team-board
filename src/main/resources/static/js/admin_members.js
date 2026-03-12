@@ -4,10 +4,28 @@ const tbody = document.getElementById("member-tbody");
 const searchInput = document.getElementById("member-search");
 const paginationWrap = document.getElementById("pagination-wrap");
 
+const btnFilterActive = document.getElementById("btn-filter-active");
+const btnFilterSuspended = document.getElementById("btn-filter-suspended");
+
 if (tbody) {
     const allRows = Array.from(tbody.querySelectorAll("tr"));
-    let filteredRows = allRows;
+    let filteredRows = [];
     let currentPage = 1;
+    let currentFilter = "active";
+
+    function applyFilters() {
+        const query = searchInput.value.trim().toLowerCase();
+        filteredRows = allRows.filter(row => {
+            const role = row.dataset.role;
+            const matchesFilter = currentFilter === "active"
+                ? role !== "ROLE_SUSPENDED"
+                : role === "ROLE_SUSPENDED";
+            const matchesSearch = row.dataset.username.toLowerCase().includes(query);
+            return matchesFilter && matchesSearch;
+        });
+        currentPage = 1;
+        render();
+    }
 
     function render() {
         const start = (currentPage - 1) * PAGE_SIZE;
@@ -48,14 +66,27 @@ if (tbody) {
         paginationWrap.appendChild(next);
     }
 
-    searchInput.addEventListener("input", () => {
-        const query = searchInput.value.trim().toLowerCase();
-        filteredRows = allRows.filter(row => row.dataset.username.toLowerCase().includes(query));
-        currentPage = 1;
-        render();
-    });
+    if (btnFilterActive) {
+        btnFilterActive.addEventListener("click", () => {
+            currentFilter = "active";
+            btnFilterActive.classList.add("active");
+            btnFilterSuspended.classList.remove("active");
+            applyFilters();
+        });
+    }
 
-    render();
+    if (btnFilterSuspended) {
+        btnFilterSuspended.addEventListener("click", () => {
+            currentFilter = "suspended";
+            btnFilterSuspended.classList.add("active");
+            btnFilterActive.classList.remove("active");
+            applyFilters();
+        });
+    }
+
+    searchInput.addEventListener("input", () => { applyFilters(); });
+
+    applyFilters();
 }
 
 // ── 역할 토글 (User ↔ Suspended) ──
@@ -123,6 +154,7 @@ if (btnRoleChangeConfirm) {
                 roleChangeModal.classList.remove("open");
                 document.body.style.overflow = "";
                 pendingRoleChange = null;
+                applyFilters();
             });
     });
 }

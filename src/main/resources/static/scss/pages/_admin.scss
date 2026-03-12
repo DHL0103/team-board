@@ -360,6 +360,16 @@
   }
 }
 
+// ── 필터 버튼 ──
+.filter-btn {
+  white-space: nowrap;
+  &.active {
+    background: $text;
+    color: white;
+    border-color: $text;
+  }
+}
+
 // ── 보드 컬러 도트 ──
 .board-color-dot {
   display: inline-block;

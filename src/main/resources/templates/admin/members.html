@@ -23,7 +23,11 @@
           <div class="admin-section-title">멤버 목록</div>
           <div class="admin-section-meta" th:text="${#lists.size(members)} + '명'"></div>
         </div>
-        <input type="text" id="member-search" class="form-input" placeholder="아이디 검색" style="max-width:200px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button type="button" class="btn-admin-edit filter-btn active" id="btn-filter-active">활성</button>
+          <button type="button" class="btn-admin-edit filter-btn" id="btn-filter-suspended">정지</button>
+          <input type="text" id="member-search" class="form-input" placeholder="아이디 검색" style="max-width:200px;">
+        </div>
       </div>
 
       <div class="admin-empty" th:if="${#lists.isEmpty(members)}">
