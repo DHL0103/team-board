@@ -1,16 +1,21 @@
 package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.exception.PostNotFoundException;
+import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.BoardMember;
+import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
+import kr.co.promptech.springboottutorial.mapper.PostRejectionMapper;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.PostDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,8 @@ public class PostService {
     private final PostMemberMapper postMemberMapper;
     private final BoardMemberMapper boardMemberMapper;
     private final BoardMemberService boardMemberService;
+    private final BoardMapper boardMapper;
+    private final PostRejectionMapper postRejectionMapper;
 
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
@@ -142,5 +149,30 @@ public class PostService {
 
     public void updateStatus(Long id, PostStatus status) {
         postMapper.updateStatus(id, status);
+    }
+
+    public PostDetailDto getPostDetail(Long postId, CustomUser user) {
+        Post post = getPostById(postId);
+        Board board = boardMapper.getBoardById(post.getBoardId());
+        boolean canModify = user != null && canModify(postId, post.getBoardId(), user.getId(), user.getRole());
+
+        return PostDetailDto.builder()
+                .id(post.getId())
+                .boardId(post.getBoardId())
+                .memberId(post.getMemberId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .status(post.getStatus())
+                .dueDate(post.getDueDate())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .postFiles(postFileService.getFilesByPostId(postId))
+                .rejections(postRejectionMapper.findAllByPostId(postId))
+                .boardName(board != null ? board.getName() : null)
+                .boardColor(board != null ? board.getColor() : null)
+                .canModify(canModify)
+                .boardUserList(boardMemberService.getUsersByBoardId(post.getBoardId()))
+                .postAssignees(postMemberMapper.findAssigneesByPostId(postId))
+                .build();
     }
 }
