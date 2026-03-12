@@ -225,6 +225,40 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+// ── 보드 활성/비활성 필터 ──
+const allBoardCards = Array.from(document.querySelectorAll(".board-grid-card[data-status]"));
+const boardCountLabel = document.getElementById("board-count-label");
+const btnBoardFilterActive = document.getElementById("btn-board-filter-active");
+const btnBoardFilterInactive = document.getElementById("btn-board-filter-inactive");
+
+function applyBoardFilter(showStatus) {
+    let count = 0;
+    allBoardCards.forEach(card => {
+        const visible = card.dataset.status === showStatus;
+        card.style.display = visible ? "" : "none";
+        if (visible) { count++; }
+    });
+    boardCountLabel.textContent = `총 ${count}개의 보드`;
+}
+
+if (btnBoardFilterActive) {
+    btnBoardFilterActive.addEventListener("click", () => {
+        btnBoardFilterActive.classList.add("active");
+        btnBoardFilterInactive.classList.remove("active");
+        applyBoardFilter("ACTIVE");
+    });
+}
+
+if (btnBoardFilterInactive) {
+    btnBoardFilterInactive.addEventListener("click", () => {
+        btnBoardFilterInactive.classList.add("active");
+        btnBoardFilterActive.classList.remove("active");
+        applyBoardFilter("INACTIVE");
+    });
+}
+
+applyBoardFilter("ACTIVE");
+
 // ── 보드 생성 모달 ──
 const createBoardModal = document.getElementById("createBoardModal");
 const btnOpenBoardCreate = document.getElementById("btn-open-board-create");

@@ -17,7 +17,11 @@
     <div class="page-top">
         <div>
             <div class="page-title">내 보드</div>
-            <div class="page-meta" th:text="'총 ' + ${#lists.size(boardList)} + '개의 보드'">총 0개의 보드</div>
+            <div class="page-meta" id="board-count-label">총 0개의 보드</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+            <button type="button" class="btn-admin-edit filter-btn active" id="btn-board-filter-active">활성</button>
+            <button type="button" class="btn-admin-edit filter-btn" id="btn-board-filter-inactive">비활성</button>
         </div>
     </div>
 
@@ -33,6 +37,7 @@
                th:each="board : ${boardList}"
                th:href="@{'/board/' + ${board.id}}"
                th:classappend="${'palette-' + board.color}"
+               th:data-status="${board.status}"
                >
                 <div class="board-grid-card-bar"></div>
                 <div class="board-grid-card-body">
