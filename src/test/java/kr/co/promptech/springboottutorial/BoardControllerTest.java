@@ -161,6 +161,20 @@ class BoardControllerTest {
                 .andExpect(redirectedUrl("/board/" + BOARD_ID));
     }
 
+    @Test
+    @DisplayName("GET /board/{boardId}/request - INVITED 유저 → isInvited=true")
+    void boardRequest_invited() throws Exception {
+        given(boardMemberService.isMember(BOARD_ID, USER_ID)).willReturn(false);
+        given(boardMemberService.isRequested(BOARD_ID, USER_ID)).willReturn(false);
+        given(boardMemberService.isInvited(BOARD_ID, USER_ID)).willReturn(true);
+        given(boardService.getBoardDtoById(BOARD_ID)).willReturn(mockBoardDto());
+
+        mockMvc.perform(get("/board/{boardId}/request", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("isInvited", true))
+                .andExpect(view().name("board/request"));
+    }
+
     // ── 4. POST /board/{boardId}/request ──
 
     @Test
@@ -173,6 +187,20 @@ class BoardControllerTest {
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/request"));
 
         verify(boardMemberService).save(BOARD_ID, USER_ID, BoardRole.REQUESTED);
+    }
+
+    @Test
+    @DisplayName("POST /board/{boardId}/request - INVITED 유저는 저장하지 않고 리다이렉트")
+    void boardRequestPost_invited() throws Exception {
+        given(boardMemberService.isInvited(BOARD_ID, USER_ID)).willReturn(true);
+
+        mockMvc.perform(post("/board/{boardId}/request", BOARD_ID)
+                        .with(user(mockUser(MemberRole.ROLE_USER)))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/request"));
+
+        verify(boardMemberService, never()).save(any(), any(), any());
     }
 
     // ── 5. GET /board/{boardId}/post_list ──

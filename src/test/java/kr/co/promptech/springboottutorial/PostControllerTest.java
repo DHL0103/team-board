@@ -148,8 +148,6 @@ class PostControllerTest {
     @Test
     @DisplayName("POST /delete/{id} - 게시글 삭제 후 보드 상세로 리다이렉트")
     void deletePost() throws Exception {
-        Post post = mockPost("PROGRESS");
-        given(postService.getPostById(POST_ID)).willReturn(post);
         given(postService.isAssignee(POST_ID, USER_ID)).willReturn(true);
 
         mockMvc.perform(post("/board/{boardId}/post/delete/{id}", BOARD_ID, POST_ID)
@@ -158,7 +156,7 @@ class PostControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID));
 
-        verify(postService).deletePost(post);
+        verify(postService).deletePost(POST_ID);
     }
 
     @Test

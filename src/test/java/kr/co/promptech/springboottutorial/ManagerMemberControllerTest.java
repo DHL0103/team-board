@@ -5,8 +5,12 @@ import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.model.Board;
+import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +47,9 @@ class ManagerMemberControllerTest {
     private MemberService memberService;
 
     @MockBean
+    private BoardService boardService;
+
+    @MockBean
     private PostService postService;
 
     @MockBean
@@ -63,6 +70,8 @@ class ManagerMemberControllerTest {
         given(memberService.getMemberByUsername("test_fe")).willReturn(new MemberResponseDto(member));
         given(boardMemberService.isMember(BOARD_ID, USER_ID)).willReturn(true);
         given(boardMemberService.isManager(BOARD_ID, USER_ID)).willReturn(true);
+        given(boardService.getBoardDtoById(BOARD_ID)).willReturn(
+                new BoardResponseDto(Board.builder().id(BOARD_ID).name("테스트보드").color("p1").build()));
     }
 
     // ── 1. GET /board/{boardId}/manager/members ──
@@ -79,7 +88,52 @@ class ManagerMemberControllerTest {
                 .andExpect(view().name("manager/members"));
     }
 
-    // ── 2. POST /approve/{memberId} ──
+    // ── 2. GET /board/{boardId}/manager/members?search ──
+
+    @Test
+    @DisplayName("GET /manager/members?search - 검색어가 있으면 inviteResults 모델에 포함")
+    void membersPage_withSearch() throws Exception {
+        List<BoardMemberResponseDto> results = List.of(new BoardMemberResponseDto(3L, "alice", null));
+        given(boardMemberService.getMembersByBoardId(BOARD_ID)).willReturn(Collections.emptyList());
+        given(boardMemberService.searchMembersForInvite(BOARD_ID, "ali")).willReturn(results);
+
+        mockMvc.perform(get("/board/{boardId}/manager/members", BOARD_ID)
+                        .param("search", "ali")
+                        .with(user(mockUser())))
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("search", "ali"))
+                .andExpect(model().attributeExists("inviteResults"))
+                .andExpect(view().name("manager/members"));
+    }
+
+    // ── 3. POST /invite/{memberId} ──
+
+    @Test
+    @DisplayName("POST /invite/{memberId} - INVITED 저장 후 리다이렉트")
+    void inviteMember() throws Exception {
+        mockMvc.perform(post("/board/{boardId}/manager/members/invite/{memberId}", BOARD_ID, TARGET_MEMBER_ID)
+                        .with(user(mockUser()))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
+
+        verify(boardMemberService).save(BOARD_ID, TARGET_MEMBER_ID, BoardRole.INVITED);
+    }
+
+    @Test
+    @DisplayName("POST /invite/{memberId}?search - 초대 후 검색 상태 유지 리다이렉트")
+    void inviteMember_withSearch() throws Exception {
+        mockMvc.perform(post("/board/{boardId}/manager/members/invite/{memberId}", BOARD_ID, TARGET_MEMBER_ID)
+                        .param("search", "ali")
+                        .with(user(mockUser()))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members?search=ali"));
+
+        verify(boardMemberService).save(BOARD_ID, TARGET_MEMBER_ID, BoardRole.INVITED);
+    }
+
+    // ── 5. POST /approve/{memberId} ──
 
     @Test
     @DisplayName("POST /approve/{memberId} - REQUESTED 멤버를 USER로 승인")
