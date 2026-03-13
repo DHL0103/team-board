@@ -34,6 +34,23 @@ public class ManagerMemberController {
         return "manager/members";
     }
 
+
+    /**
+     * @param boardId  보드 ID
+     * @param memberId 승인할 멤버 ID
+     * @return manager/members 리다이렉트
+     * 가입 요청(REQUESTED) 멤버를 USER로 승인
+     */
+    @PostMapping("/invite/{memberId}")
+    public String inviteMember(@PathVariable Long boardId, @PathVariable Long memberId,
+                               @RequestParam(required = false) String search) {
+        boardMemberService.save(boardId, memberId, BoardRole.INVITED);
+        if (search != null && !search.isBlank()) {
+            return "redirect:/board/" + boardId + "/manager/members?search=" + search;
+        }
+        return "redirect:/board/" + boardId + "/manager/members";
+    }
+
     /**
      * @param boardId  보드 ID
      * @param memberId 승인할 멤버 ID
