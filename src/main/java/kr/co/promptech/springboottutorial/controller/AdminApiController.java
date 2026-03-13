@@ -47,11 +47,12 @@ public class AdminApiController {
     @PostMapping("/boards/{boardId}/status")
     public ResponseEntity<Void> updateBoardStatus(@PathVariable Long boardId,
                                                    @RequestParam String status) {
-        if (!"ACTIVE".equals(status) && !"INACTIVE".equals(status)) {
+        try {
+            boardService.updateStatus(boardId, status);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
-        boardService.updateStatus(boardId, status);
-        return ResponseEntity.ok().build();
     }
 
     /**
@@ -62,10 +63,11 @@ public class AdminApiController {
     @PostMapping("/members/{memberId}/role")
     public ResponseEntity<Void> updateMemberRole(@PathVariable Long memberId,
                                                   @RequestParam MemberRole role) {
-        if (role == MemberRole.ROLE_ADMIN) {
+        try {
+            memberService.updateRole(memberId, role);
+            return ResponseEntity.ok().build();
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
-        memberService.updateRole(memberId, role);
-        return ResponseEntity.ok().build();
     }
 }

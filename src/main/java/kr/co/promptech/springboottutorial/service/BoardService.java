@@ -42,6 +42,9 @@ public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
     }
 
     public void updateStatus(Long boardId, String status) {
+        if (!"ACTIVE".equals(status) && !"INACTIVE".equals(status)) {
+            throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + status);
+        }
         boardMapper.updateStatus(boardId, status);
     }
 }

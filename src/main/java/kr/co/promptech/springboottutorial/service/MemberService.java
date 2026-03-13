@@ -60,6 +60,9 @@ public class MemberService {
     }
 
     public void updateRole(Long memberId, MemberRole role) {
+        if (role == MemberRole.ROLE_ADMIN) {
+            throw new IllegalArgumentException("ROLE_ADMIN으로 변경할 수 없습니다.");
+        }
         memberMapper.updateRole(memberId, role);
     }
 }
