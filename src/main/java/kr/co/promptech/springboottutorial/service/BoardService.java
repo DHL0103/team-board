@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -46,5 +47,12 @@ public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
             throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + status);
         }
         boardMapper.updateStatus(boardId, status);
+    }
+
+    public void updateBoard(Long boardId, BoardUpdateDto dto) {
+        if (!"ACTIVE".equals(dto.getStatus()) && !"INACTIVE".equals(dto.getStatus())) {
+            throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + dto.getStatus());
+        }
+        boardMapper.updateBoard(boardId, dto);
     }
 }
