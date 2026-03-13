@@ -41,6 +41,11 @@
   </div>
 </header>
 
+<nav th:fragment="admin-nav(activePage)" class="admin-nav">
+  <a href="/admin/members" class="admin-nav-item" th:classappend="${activePage == 'members'} ? 'active'">멤버 관리</a>
+  <a href="/admin/boards" class="admin-nav-item" th:classappend="${activePage == 'boards'} ? 'active'">보드 관리</a>
+</nav>
+
 <div th:fragment="board-breadcrumb(boardId, boardName, currentPage)" class="breadcrumb-row">
   <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
   <a th:href="@{'/board/' + ${boardId}}" th:text="${boardName}">보드명</a> <span class="breadcrumb-sep">›</span>

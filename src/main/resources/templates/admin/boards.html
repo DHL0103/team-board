@@ -12,10 +12,7 @@
 
   <div class="admin-wrap">
 
-    <nav class="admin-nav">
-      <a href="/admin/members" class="admin-nav-item">멤버 관리</a>
-      <a href="/admin/boards" class="admin-nav-item active">보드 관리</a>
-    </nav>
+    <div th:replace="~{fragments/header :: admin-nav('boards')}"></div>
 
     <div class="admin-section">
       <div class="admin-section-header">
