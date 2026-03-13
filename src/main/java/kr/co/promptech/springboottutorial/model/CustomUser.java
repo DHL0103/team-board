@@ -25,4 +25,9 @@ public class CustomUser extends User {
     public MemberRole getRole() {
         return role;
     }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return role != MemberRole.ROLE_SUSPENDED;
+    }
 }

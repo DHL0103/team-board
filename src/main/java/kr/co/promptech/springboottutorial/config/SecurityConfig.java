@@ -5,12 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +25,7 @@ public class SecurityConfig {
                         (formLogin) -> formLogin
                                 .loginPage("/member/login")
                                 .loginProcessingUrl("/member/login")  // POST 요청 처리
-                                .failureUrl("/member/login?error=true")    // 실패 시 이 URL로
+                                .failureHandler(authenticationFailureHandler())    // 실패 시 이 URL로
                                 .defaultSuccessUrl("/board", true)
                 )
                 .logout(
@@ -47,6 +49,19 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return (request, response, exception) -> {
+            String redirectUrl;
+            if (exception instanceof LockedException) {
+                redirectUrl = "/member/login?error=suspended";
+            } else {
+                redirectUrl = "/member/login?error=true";
+            }
+            response.sendRedirect(redirectUrl);
+        };
     }
 
     @Bean

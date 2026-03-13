@@ -18,7 +18,11 @@
         <div class="login-subtitle">계정 정보를 입력해 주세요</div>
       </div>
 
-      <div class="error-msg" th:if="${param.error != null}">
+      <div class="error-msg" th:if="${param.error != null and param.error[0] == 'suspended'}">
+        <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
+        <span>계정이 정지된 상태입니다. 관리자에게 문의하세요.</span>
+      </div>
+      <div class="error-msg" th:if="${param.error != null and param.error[0] == 'true'}">
         <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
         <span>아이디 또는 비밀번호가 올바르지 않습니다.</span>
       </div>
