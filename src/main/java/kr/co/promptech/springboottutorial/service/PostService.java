@@ -138,7 +138,7 @@ public class PostService {
     }
 
     public boolean isAssignee(Long postId, Long memberId) {
-        return postMemberMapper.countByPostIdAndMemberId(postId, memberId) > 0;
+        return postMemberMapper.existsByPostIdAndMemberId(postId, memberId);
     }
 
     public boolean canModify(Long postId, Long boardId, Long memberId, MemberRole role) {
