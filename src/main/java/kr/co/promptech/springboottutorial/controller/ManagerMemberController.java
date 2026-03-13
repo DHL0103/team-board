@@ -2,6 +2,7 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ManagerMemberController {
 
     private final BoardMemberService boardMemberService;
+    private final BoardService boardService;
 
     /**
      * @param boardId 조회할 보드 ID
@@ -26,7 +28,7 @@ public class ManagerMemberController {
      */
     @GetMapping
     public String membersPage(@PathVariable Long boardId, Model model) {
-        model.addAttribute("boardId", boardId);
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("memberList", boardMemberService.getMembersByBoardId(boardId));
         return "manager/members";
     }

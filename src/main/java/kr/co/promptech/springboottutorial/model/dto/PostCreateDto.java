@@ -14,4 +14,5 @@ public class PostCreateDto {
     String content;
     String dueDate;
     List<MultipartFile> files;
+    List<Long> assigneeIds;
 }

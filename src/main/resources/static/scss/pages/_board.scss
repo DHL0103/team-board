@@ -97,13 +97,6 @@
   width: 100%;
 }
 
-// card-team-line status 색상 (col-p* 와 동일한 opacity)
-.card-team-line {
-  &.bar-progress  { background: #2563eb; opacity: 0.2; }
-  &.bar-requested { background: #d97706; opacity: 0.2; }
-  &.bar-completed { background: #059669; opacity: 0.2; }
-  &.bar-rejected  { background: #dc2626; opacity: 0.2; }
-}
 
 .post-list-card {
   display: block;

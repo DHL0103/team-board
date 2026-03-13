@@ -20,4 +20,6 @@ public interface BoardMemberMapper {
     void delete(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
 
     List<BoardMemberResponseDto> findMembersByBoardId(Long boardId);
+
+    List<BoardMemberResponseDto> findUsersByBoardId(@Param("boardId") Long boardId);
 }

@@ -15,7 +15,7 @@ public interface PostMapper {
 
     void createPost(Post post);
 
-    void deletePost(Post post);
+    void deletePost(@Param("id") Long id);
 
     void updatePost(@Param("id") Long id, @Param("title") String title,
                     @Param("content") String content, @Param("dueDate") LocalDateTime dueDate);

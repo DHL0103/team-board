@@ -48,4 +48,8 @@ public class BoardMemberService {
     public List<BoardMemberResponseDto> getMembersByBoardId(Long boardId) {
         return boardMemberMapper.findMembersByBoardId(boardId);
     }
+
+    public List<BoardMemberResponseDto> getUsersByBoardId(Long boardId) {
+        return boardMemberMapper.findUsersByBoardId(boardId);
+    }
 }

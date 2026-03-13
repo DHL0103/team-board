@@ -55,10 +55,7 @@ public class BoardController {
      */
     @GetMapping("/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
-        model.addAttribute("board", boardService.getBoardDtoById(boardId));
-        model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
-        boolean isManager = MemberRole.ROLE_ADMIN == user.getRole() || boardMemberService.isManager(boardId, user.getId());
-        model.addAttribute("isManager", isManager);
+        model.addAttribute("board", boardService.getBoardDetail(boardId, user));
         return "board/detail";
     }
 

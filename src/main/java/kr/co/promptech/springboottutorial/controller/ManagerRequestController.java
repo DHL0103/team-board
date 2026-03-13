@@ -2,7 +2,7 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
-import kr.co.promptech.springboottutorial.service.PostRejectionService;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class ManagerRequestController {
 
     private final PostService postService;
-    private final PostRejectionService postRejectionService;
+    private final BoardService boardService;
 
     /**
      * @param boardId 조회할 보드 ID
@@ -27,7 +27,7 @@ public class ManagerRequestController {
      */
     @GetMapping
     public String requestsPage(@PathVariable Long boardId, Model model) {
-        model.addAttribute("boardId", boardId);
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("requestList", postService.getRequestedPostDtosByBoardId(boardId));
         return "manager/requests";
     }
@@ -39,8 +39,12 @@ public class ManagerRequestController {
      * 포스트 상태를 APPROVED로 변경
      */
     @PostMapping("/approve/{postId}")
-    public String approve(@PathVariable Long boardId, @PathVariable Long postId) {
+    public String approve(@PathVariable Long boardId, @PathVariable Long postId,
+                          @RequestParam(required = false) String source) {
         postService.updateStatus(postId, PostStatus.APPROVED);
+        if ("detail".equals(source)) {
+            return "redirect:/board/" + boardId + "/post/" + postId;
+        }
         return "redirect:/board/" + boardId + "/manager/requests";
     }
 
@@ -53,9 +57,14 @@ public class ManagerRequestController {
      * 포스트 상태를 REJECTED로 변경하고 반려 사유 저장
      */
     @PostMapping("/reject/{postId}")
-    public String reject(@PathVariable Long boardId, @PathVariable Long postId, @RequestParam String reason, @AuthenticationPrincipal CustomUser user) {
-        postService.updateStatus(postId, PostStatus.REJECTED);
-        postRejectionService.save(postId, reason, user.getId());
+    public String reject(@PathVariable Long boardId, @PathVariable Long postId,
+                         @RequestParam String reason,
+                         @RequestParam(required = false) String source,
+                         @AuthenticationPrincipal CustomUser user) {
+        postService.rejectPost(postId, reason, user.getId());
+        if ("detail".equals(source)) {
+            return "redirect:/board/" + boardId + "/post/" + postId;
+        }
         return "redirect:/board/" + boardId + "/manager/requests";
     }
 }

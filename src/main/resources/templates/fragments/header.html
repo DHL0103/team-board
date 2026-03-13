@@ -32,10 +32,16 @@
     <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
     <a href="/board" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
-      보드로 돌아가기
+      메인으로
     </a>
   </div>
 </header>
+
+<div th:fragment="board-breadcrumb(boardId, boardName, currentPage)" class="breadcrumb-row">
+  <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
+  <a th:href="@{'/board/' + ${boardId}}" th:text="${boardName}">보드명</a> <span class="breadcrumb-sep">›</span>
+  <span th:text="${currentPage}">현재 페이지</span>
+</div>
 
 <header th:fragment="main-header">
   <a href="/board" class="logo">

@@ -1,12 +1,15 @@
 package kr.co.promptech.springboottutorial;
 
 import kr.co.promptech.springboottutorial.controller.ManagerRequestController;
+import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
@@ -50,6 +53,9 @@ class ManagerRequestControllerTest {
     private MemberService memberService;
 
     @MockBean
+    private BoardService boardService;
+
+    @MockBean
     private UserDetailsService userDetailsService;
 
     private static final Long BOARD_ID = 1L;
@@ -74,6 +80,12 @@ class ManagerRequestControllerTest {
     @Test
     @DisplayName("GET /board/{boardId}/manager/requests - 승인 요청 목록 페이지 반환")
     void requestsPage() throws Exception {
+        Board mockBoardEntity = Board.builder()
+                .id(BOARD_ID)
+                .name("테스트 보드")
+                .build();
+        BoardResponseDto mockBoardDto = new BoardResponseDto(mockBoardEntity);
+        given(boardService.getBoardDtoById(BOARD_ID)).willReturn(mockBoardDto);
         given(postService.getRequestedPostDtosByBoardId(BOARD_ID)).willReturn(Collections.emptyList());
 
         mockMvc.perform(get("/board/{boardId}/manager/requests", BOARD_ID)
@@ -108,6 +120,38 @@ class ManagerRequestControllerTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/requests"));
+
+        verify(postService).updateStatus(POST_ID, PostStatus.REJECTED);
+        verify(postRejectionService).save(POST_ID, "내용 보완 필요", USER_ID);
+    }
+
+    // ── 4. POST /approve/{postId}?source=detail ──
+
+    @Test
+    @DisplayName("POST /approve/{postId}?source=detail - 상세 페이지로 리다이렉트")
+    void approve_fromDetail() throws Exception {
+        mockMvc.perform(post("/board/{boardId}/manager/requests/approve/{postId}", BOARD_ID, POST_ID)
+                        .param("source", "detail")
+                        .with(user(mockUser()))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/post/" + POST_ID));
+
+        verify(postService).updateStatus(POST_ID, PostStatus.APPROVED);
+    }
+
+    // ── 5. POST /reject/{postId}?source=detail ──
+
+    @Test
+    @DisplayName("POST /reject/{postId}?source=detail - 상세 페이지로 리다이렉트")
+    void reject_fromDetail() throws Exception {
+        mockMvc.perform(post("/board/{boardId}/manager/requests/reject/{postId}", BOARD_ID, POST_ID)
+                        .param("reason", "내용 보완 필요")
+                        .param("source", "detail")
+                        .with(user(mockUser()))
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/post/" + POST_ID));
 
         verify(postService).updateStatus(POST_ID, PostStatus.REJECTED);
         verify(postRejectionService).save(POST_ID, "내용 보완 필요", USER_ID);

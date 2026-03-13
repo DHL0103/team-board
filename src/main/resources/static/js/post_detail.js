@@ -6,10 +6,21 @@ const btnEditClose = document.getElementById("btn-edit-close");
 function closeEditModal() {
     editModal.classList.remove("open");
     document.body.style.overflow = "";
-    // 새 파일 첨부 초기화
     editFileDataTransfer = new DataTransfer();
     if (editFileInput) editFileInput.files = editFileDataTransfer.files;
     if (editFileChipList) editFileChipList.innerHTML = '';
+    if (btnEditAddAssignee) {
+        editSelectedAssignees.clear();
+        editOriginalAssignees.forEach((username, memberId) => editSelectedAssignees.set(memberId, username));
+        renderEditSelectedAssignees();
+        if (editAssigneeOptionList) {
+            editAssigneeOptionList.querySelectorAll('.assignee-option').forEach(o => {
+                o.style.display = editSelectedAssignees.has(o.dataset.memberId) ? 'none' : '';
+            });
+        }
+        if (editAssigneeSearch) { editAssigneeSearch.value = ''; }
+        if (editAssigneeDropdown) { editAssigneeDropdown.classList.remove('open'); }
+    }
 }
 
 if (btnEdit) {
@@ -24,6 +35,35 @@ if (btnEditClose) {
 if (editModal) {
     editModal.addEventListener("click", (e) => {
         if (e.target.id === "editModal") closeEditModal();
+    });
+}
+
+// ── 반려 모달 ──
+const rejectModal = document.getElementById("rejectModal");
+const btnReject = document.querySelector(".btn-reject");
+const btnRejectClose = document.getElementById("btn-reject-close");
+const boardId = document.body.dataset.boardId;
+
+if (btnReject) {
+    btnReject.addEventListener("click", () => {
+        document.getElementById("rejectForm").action =
+            "/board/" + boardId + "/manager/requests/reject/" + btnReject.dataset.postId;
+        rejectModal.classList.add("open");
+        document.body.style.overflow = "hidden";
+    });
+}
+if (btnRejectClose) {
+    btnRejectClose.addEventListener("click", () => {
+        rejectModal.classList.remove("open");
+        document.body.style.overflow = "";
+    });
+}
+if (rejectModal) {
+    rejectModal.addEventListener("click", (e) => {
+        if (e.target.id === "rejectModal") {
+            rejectModal.classList.remove("open");
+            document.body.style.overflow = "";
+        }
     });
 }
 
@@ -211,6 +251,123 @@ if (editFileChipList) {
         renderEditFileChips();
     });
 }
+
+// ── 수정 모달 담당자 선택 ──
+const btnEditAddAssignee = document.getElementById('btn-edit-add-assignee');
+const editAssigneeDropdown = document.getElementById('edit-assignee-dropdown');
+const editAssigneeSearch = document.getElementById('edit-assignee-search');
+const editAssigneeOptionList = document.getElementById('edit-assignee-option-list');
+const editSelectedAssigneeList = document.getElementById('edit-selected-assignee-list');
+const editSelectedAssignees = new Map();
+
+// 서버 렌더링된 기존 담당자로 초기화
+if (editSelectedAssigneeList) {
+    editSelectedAssigneeList.querySelectorAll('.selected-assignee-chip').forEach(chip => {
+        editSelectedAssignees.set(chip.dataset.memberId, chip.dataset.username);
+        const opt = editAssigneeOptionList && editAssigneeOptionList.querySelector(`[data-member-id="${chip.dataset.memberId}"]`);
+        if (opt) { opt.style.display = 'none'; }
+    });
+}
+
+// 모달 닫기 시 복원용 원본 저장
+const editOriginalAssignees = new Map(editSelectedAssignees);
+
+if (btnEditAddAssignee) {
+    btnEditAddAssignee.addEventListener('click', (e) => {
+        e.stopPropagation();
+        editAssigneeDropdown.classList.toggle('open');
+        if (editAssigneeDropdown.classList.contains('open')) {
+            editAssigneeSearch.focus();
+        }
+    });
+}
+
+document.addEventListener('click', (e) => {
+    if (editAssigneeDropdown && !e.target.closest('#edit-assignee-picker')) {
+        editAssigneeDropdown.classList.remove('open');
+    }
+});
+
+if (editAssigneeSearch) {
+    editAssigneeSearch.addEventListener('input', () => {
+        const query = editAssigneeSearch.value.trim().toLowerCase();
+        editAssigneeOptionList.querySelectorAll('.assignee-option').forEach(opt => {
+            if (editSelectedAssignees.has(opt.dataset.memberId)) {
+                opt.style.display = 'none';
+                return;
+            }
+            opt.style.display = opt.dataset.username.toLowerCase().includes(query) ? '' : 'none';
+        });
+    });
+}
+
+if (editAssigneeOptionList) {
+    editAssigneeOptionList.addEventListener('click', (e) => {
+        const opt = e.target.closest('.assignee-option');
+        if (!opt) { return; }
+        editSelectedAssignees.set(opt.dataset.memberId, opt.dataset.username);
+        opt.style.display = 'none';
+        renderEditSelectedAssignees();
+        editAssigneeSearch.value = '';
+        editAssigneeDropdown.classList.remove('open');
+    });
+}
+
+function renderEditSelectedAssignees() {
+    if (!editSelectedAssigneeList) { return; }
+    editSelectedAssigneeList.innerHTML = '';
+    editSelectedAssignees.forEach((username, memberId) => {
+        const chip = document.createElement('span');
+        chip.className = 'selected-assignee-chip';
+        chip.dataset.memberId = memberId;
+        chip.dataset.username = username;
+        chip.innerHTML = `<span class="assignee-chip-name">${username}</span><button type="button" class="selected-assignee-remove" data-member-id="${memberId}">×</button>`;
+        editSelectedAssigneeList.appendChild(chip);
+    });
+}
+
+if (editSelectedAssigneeList) {
+    editSelectedAssigneeList.addEventListener('click', (e) => {
+        const removeBtn = e.target.closest('.selected-assignee-remove');
+        if (!removeBtn) { return; }
+        const memberId = removeBtn.dataset.memberId;
+        editSelectedAssignees.delete(memberId);
+        const opt = editAssigneeOptionList && editAssigneeOptionList.querySelector(`[data-member-id="${memberId}"]`);
+        if (opt) { opt.style.display = ''; }
+        renderEditSelectedAssignees();
+    });
+}
+
+const editPostForm = document.getElementById('edit-post-form');
+if (editPostForm) {
+    editPostForm.addEventListener('submit', () => {
+        editPostForm.querySelectorAll('input[name="assigneeIds"]').forEach(el => el.remove());
+        editSelectedAssignees.forEach((username, memberId) => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'assigneeIds';
+            input.value = memberId;
+            editPostForm.appendChild(input);
+        });
+    });
+}
+
+// ── 담당자 칩 드롭다운 ──
+const btnAssigneeChip = document.getElementById('btn-assignee-chip');
+const assigneeChipDropdown = document.getElementById('assignee-chip-dropdown');
+
+if (btnAssigneeChip) {
+    btnAssigneeChip.addEventListener('click', (e) => {
+        e.stopPropagation();
+        assigneeChipDropdown.classList.toggle('open');
+    });
+}
+
+document.addEventListener('click', (e) => {
+    if (assigneeChipDropdown && !e.target.closest('.assignee-chip-wrap')) {
+        assigneeChipDropdown.classList.remove('open');
+    }
+});
 
 // ── 반려 패널 위치 동적 조정 ──
 const rejectionPanel = document.querySelector('.rejection-panel');

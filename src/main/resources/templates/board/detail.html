@@ -16,7 +16,7 @@
     </div>
     <div class="page-meta" th:text="${board.description}">설명</div>
     <div class="board-detail-header__action" style="display:flex; gap:8px;">
-      <a th:if="${isManager}" th:href="@{'/board/' + ${board.id} + '/manager/members'}" class="btn-edit">
+      <a th:if="${board.manager}" th:href="@{'/board/' + ${board.id} + '/manager/members'}" class="btn-edit">
         <svg width="14" height="14"><use href="/img/icons.svg#icon-settings"></use></svg>
         매니저 페이지
       </a>
@@ -33,7 +33,7 @@
     <div class="row justify-content-center">
 
       <!-- 진행 중 + 반려-->
-      <div class="col-md-4" th:with="progressPosts=${postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
+      <div class="col-md-4" th:with="progressPosts=${board.postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
         <div class="kanban-col">
           <a class="col-header col-p1" th:href="@{'/board/' + ${board.id} + '/post_list?status=PROGRESS'}">
             <span class="team-badge badge-p1">
@@ -52,8 +52,6 @@
             <div class="board-card"
                  th:each="post : ${progressPosts}"
                  th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-              <div class="card-team-line"
-                   th:classappend="${post.status == 'REJECTED' ? 'col-p5' : 'col-p1'}"></div>
               <div class="card-top">
                 <div class="card-title" th:text="${post.title}">제목</div>
                 <span class="status-chip"
@@ -78,7 +76,7 @@
       </div>
 
       <!-- 검토 중 (승인 요청 ) -->
-      <div class="col-md-4" th:with="reviewPosts=${postList.?[status == 'REQUESTED']}">
+      <div class="col-md-4" th:with="reviewPosts=${board.postList.?[status == 'REQUESTED']}">
         <div class="kanban-col">
           <a class="col-header col-p2" th:href="@{'/board/' + ${board.id} + '/post_list?status=REQUESTED'}">
             <span class="team-badge badge-p2">
@@ -97,7 +95,6 @@
             <div class="board-card"
                  th:each="post : ${reviewPosts}"
                  th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-              <div class="card-team-line col-p2"></div>
               <div class="card-top">
                 <div class="card-title" th:text="${post.title}">제목</div>
                 <span class="status-chip chip-requested">승인 요청</span>
@@ -120,7 +117,7 @@
       </div>
 
       <!-- 완료 -->
-      <div class="col-md-4" th:with="completedPosts=${postList.?[status == 'APPROVED']}">
+      <div class="col-md-4" th:with="completedPosts=${board.postList.?[status == 'APPROVED']}">
         <div class="kanban-col">
           <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=APPROVED'}">
             <span class="team-badge badge-p4">
@@ -139,7 +136,6 @@
             <div class="board-card"
                  th:each="post : ${completedPosts}"
                  th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-              <div class="card-team-line col-p4"></div>
               <div class="card-top">
                 <div class="card-title" th:text="${post.title}">제목</div>
                 <span class="status-chip chip-completed">완료</span>
@@ -176,7 +172,7 @@
           <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
         </button>
       </div>
-      <form th:action="@{'/board/' + ${board.id} + '/post/create'}" method="post" enctype="multipart/form-data">
+      <form id="create-post-form" th:action="@{'/board/' + ${board.id} + '/post/create'}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="boardId" th:value="${board.id}">
         <div class="form-group">
           <label class="form-label">제목</label>
@@ -205,6 +201,28 @@
               <div class="due-days" id="create-due-days"></div>
             </div>
             <button type="button" class="due-clear-btn" id="btn-create-clear-due">선택 초기화</button>
+          </div>
+        </div>
+        <div class="form-group" th:if="${!board.boardUserList.isEmpty()}">
+          <label class="form-label">담당자 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
+          <div class="selected-assignee-list" id="selected-assignee-list"></div>
+          <div class="assignee-picker" id="assignee-picker">
+            <button type="button" class="assignee-add-btn" id="btn-add-assignee">
+              <svg width="10" height="10"><use href="/img/icons.svg#icon-plus"></use></svg>
+              담당자 추가
+            </button>
+            <div class="assignee-dropdown" id="assignee-dropdown">
+              <input type="text" class="assignee-search-input" id="create-assignee-search"
+                     placeholder="이름으로 검색" autocomplete="off">
+              <div class="assignee-option-list" id="assignee-option-list">
+                <button type="button" class="assignee-option"
+                        th:each="member : ${board.boardUserList}"
+                        th:data-member-id="${member.memberId}"
+                        th:data-username="${member.username}"
+                        th:text="${member.username}">
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="form-group">

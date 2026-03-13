@@ -5,6 +5,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
+import kr.co.promptech.springboottutorial.model.enums.PostStatus;
+import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -17,26 +19,16 @@ import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class PostAuthInterceptor implements HandlerInterceptor {
+public class PostMemberAuthInterceptor implements HandlerInterceptor {
 
+    private final BoardMemberService boardMemberService;
     private final PostService postService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long boardId = Long.parseLong(pathVariables.get("boardId"));
-
-        String postIdStr = pathVariables.get("postId");
-        if (postIdStr == null) {
-            return true;
-        }
-        Long postId;
-        try {
-            postId = Long.parseLong(postIdStr);
-        } catch (NumberFormatException e) {
-            // create, delete, update 등 비숫자 세그먼트는 통과
-            return true;
-        }
+        Long postId = Long.parseLong(pathVariables.get("id"));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUser user)) {
@@ -44,18 +36,26 @@ public class PostAuthInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        // 시스템 레벨 관리자는 통과
         if (MemberRole.ROLE_ADMIN == user.getRole()) {
             return true;
         }
 
-        // post가 해당 board 소속인지 확인 (IDOR 방어)
+        if (boardMemberService.isManager(boardId, user.getId())) {
+            return true;
+        }
+
         Post post = postService.getPostById(postId);
-        if (post == null || !post.getBoardId().equals(boardId)) {
+        if (PostStatus.APPROVED.name().equals(post.getStatus())
+                || PostStatus.REQUESTED.name().equals(post.getStatus())) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN);
             return false;
         }
 
-        return true;
+        if (postService.isAssignee(postId, user.getId())) {
+            return true;
+        }
+
+        response.sendError(HttpServletResponse.SC_FORBIDDEN);
+        return false;
     }
 }

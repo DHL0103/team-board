@@ -27,4 +27,13 @@
         ORDER BY bm.board_role, m.username
     </select>
 
+    <select id="findUsersByBoardId" resultType="kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto">
+        SELECT bm.member_id, m.username, bm.board_role
+        FROM board_members bm
+        JOIN members m ON bm.member_id = m.id
+        WHERE bm.board_id = #{boardId}
+          AND bm.board_role = 'USER'
+        ORDER BY m.username
+    </select>
+
 </mapper>

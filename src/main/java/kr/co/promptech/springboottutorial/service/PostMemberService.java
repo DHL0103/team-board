@@ -18,7 +18,7 @@ public class PostMemberService {
     }
 
     public boolean isAssignee(Long postId, Long memberId) {
-        return postMemberMapper.countByPostIdAndMemberId(postId, memberId) > 0;
+        return postMemberMapper.existsByPostIdAndMemberId(postId, memberId);
     }
 
     public void save(Long postId, Long memberId) {
