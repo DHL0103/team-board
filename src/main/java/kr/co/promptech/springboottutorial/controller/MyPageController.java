@@ -28,8 +28,7 @@ public class MyPageController {
     public String myPage(@AuthenticationPrincipal CustomUser user,
                          @ModelAttribute PasswordChangeDto passwordChangeDto,
                          Model model) {
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+        populateMyPageModel(model, user);
         return "mypage";
     }
 
@@ -42,20 +41,13 @@ public class MyPageController {
                                  BindingResult bindingResult,
                                  HttpServletRequest request,
                                  Model model) {
-        if (!passwordChangeDto.getNewPassword().equals(passwordChangeDto.getNewPasswordConfirm())) {
-            bindingResult.rejectValue("newPasswordConfirm", "mismatch", "새 비밀번호가 일치하지 않습니다.");
-        }
         if (bindingResult.hasErrors()) {
-            model.addAttribute("username", user.getUsername());
-            model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+            populateMyPageModel(model, user);
             return "mypage";
         }
-        boolean success = memberService.changePassword(user.getId(),
-                passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
-        if (!success) {
+        if (!memberService.changePassword(user.getId(), passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword())) {
             bindingResult.rejectValue("currentPassword", "wrong", "현재 비밀번호가 올바르지 않습니다.");
-            model.addAttribute("username", user.getUsername());
-            model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+            populateMyPageModel(model, user);
             return "mypage";
         }
         SecurityContextHolder.clearContext();
@@ -64,6 +56,11 @@ public class MyPageController {
             session.invalidate();
         }
         return "redirect:/member/login?passwordChanged=true";
+    }
+
+    private void populateMyPageModel(Model model, CustomUser user) {
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
     }
 
     /**
