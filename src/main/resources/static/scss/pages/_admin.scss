@@ -435,3 +435,14 @@
 
   &:hover { opacity: 0.75; }
 }
+
+
+// ── 보드 설정 폼 ──
+.settings-form {
+  padding: 18px 24px 24px;
+
+  .form-group {
+    max-width: 480px;
+    margin-bottom: 20px;
+  }
+}
