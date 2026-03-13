@@ -75,7 +75,6 @@ public class BoardController {
         }
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("isRequested", boardMemberService.isRequested(boardId, user.getId()));
-        model.addAttribute("isInvited", boardMemberService.isInvited(boardId, user.getId()));
         return "board/request";
     }
 
@@ -87,9 +86,6 @@ public class BoardController {
      */
     @PostMapping("/{boardId}/request")
     public String boardRequestPost(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
-        if (boardMemberService.isInvited(boardId, user.getId())) {
-            return "redirect:/board/" + boardId + "/request";
-        }
         boardMemberService.save(boardId, user.getId(), BoardRole.REQUESTED);
         return "redirect:/board/" + boardId + "/request";
     }
