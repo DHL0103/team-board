@@ -6,10 +6,7 @@ import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,9 +24,13 @@ public class ManagerMemberController {
      * memberList(BoardMemberResponseDto) 전달
      */
     @GetMapping
-    public String membersPage(@PathVariable Long boardId, Model model) {
+    public String membersPage(@PathVariable Long boardId, @RequestParam(required = false) String search, Model model) {
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("memberList", boardMemberService.getMembersByBoardId(boardId));
+        if (search != null && !search.isBlank()) {
+            model.addAttribute("search", search);
+            model.addAttribute("inviteResults", boardMemberService.searchMembersForInvite(boardId, search));
+        }
         return "manager/members";
     }
 
