@@ -12,8 +12,8 @@
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
-<div class="detail-wrap" th:with="palette=${boardColor}">
-  <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${post.boardId}, boardName=${boardName}, currentPage=${post.title})}"></div>
+<div class="detail-wrap" th:with="palette=${post.boardColor}">
+  <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${post.boardId}, boardName=${post.boardName}, currentPage=${post.title})}"></div>
 
   <div class="toast" id="errorToast"
        th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error != null ? '본인이 작성한 글만 삭제할 수 있습니다.' : '')}">
@@ -24,24 +24,24 @@
       <div class="post-meta-row">
         <span class="team-badge" th:classappend="${'badge-' + palette}">
           <span class="team-dot"></span>
-          <span th:text="${boardName}">팀</span>
+          <span th:text="${post.boardName}">팀</span>
         </span>
         <span class="status-chip"
-              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : 'chip-completed'}"
-              th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : '완료'}"></span>
+              th:classappend="'chip-' + ${#strings.toLowerCase(post.status.name())}"
+              th:text="${post.status.label}"></span>
         <span class="due-chip" id="due-chip"
               th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
           <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
           <span class="due-label"
                 th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
         </span>
-        <div class="assignee-chip-wrap" th:if="${postAssignees != null and !#lists.isEmpty(postAssignees)}">
+        <div class="assignee-chip-wrap" th:if="${post.postAssignees != null and !#lists.isEmpty(post.postAssignees)}">
           <button type="button" class="assignee-chip" id="btn-assignee-chip">
             <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
-            <span th:text="${#lists.size(postAssignees)}">0</span>
+            <span th:text="${#lists.size(post.postAssignees)}">0</span>
           </button>
           <div class="assignee-chip-dropdown" id="assignee-chip-dropdown">
-            <div class="assignee-chip-item" th:each="assignee : ${postAssignees}" th:text="${assignee.username}">이름</div>
+            <div class="assignee-chip-item" th:each="assignee : ${post.postAssignees}" th:text="${assignee.username}">이름</div>
           </div>
         </div>
       </div>
@@ -58,13 +58,13 @@
       <div class="post-content" th:text="${post.content}">내용</div>
     </div>
 
-    <div class="post-files" th:if="${postFiles != null and !#lists.isEmpty(postFiles)}">
+    <div class="post-files" th:if="${post.postFiles != null and !#lists.isEmpty(post.postFiles)}">
       <div class="post-files-label">
         <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
         첨부파일
       </div>
       <div class="file-chip-list">
-        <a class="file-chip" th:each="file : ${postFiles}"
+        <a class="file-chip" th:each="file : ${post.postFiles}"
            th:href="@{/files/{storedPath}(storedPath=${file.storedPath}, name=${file.originalName})}"
            th:text="${file.originalName}"
            target="_blank"></a>
@@ -73,22 +73,23 @@
 
     <div class="post-actions">
       <div class="post-actions-left">
-        <button th:if="${canModify}" class="btn-delete" id="btn-delete">
+        <button th:if="${post.canModify}" class="btn-delete" id="btn-delete">
           <svg width="13" height="13"><use href="/img/icons.svg#icon-trash"></use></svg> 삭제
         </button>
       </div>
       <div class="post-actions-right">
-        <button th:if="${canModify}" class="btn-edit" id="btn-edit">수정</button>
-        <form th:if="${canModify and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
+        <button th:if="${post.canModify}" class="btn-edit" id="btn-edit">수정</button>
+        <form th:if="${post.canModify and (post.status.name() == 'PROGRESS' or post.status.name() == 'REJECTED')}"
+              th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
-        <form th:if="${canModify and post.status == 'REQUESTED'}"
+        <form th:if="${post.canModify and post.status.name() == 'REQUESTED'}"
               th:action="@{/board/{b}/manager/requests/approve/{id}(b=${post.boardId},id=${post.id})}"
               method="post" style="margin:0;">
           <input type="hidden" name="source" value="detail">
           <button type="submit" class="btn-approve">승인</button>
         </form>
-        <button th:if="${canModify and (post.status == 'REQUESTED' or post.status == 'APPROVED')}"
+        <button th:if="${post.canModify and (post.status.name() == 'REQUESTED' or post.status.name() == 'APPROVED')}"
                 type="button" class="btn-reject"
                 th:data-post-id="${post.id}">반려</button>
       </div>
@@ -96,13 +97,13 @@
   </div>
 
   <!-- 반려 이력 사이드바 -->
-  <div class="rejection-panel" th:if="${rejections != null and not #lists.isEmpty(rejections)}">
+  <div class="rejection-panel" th:if="${post.rejections != null and not #lists.isEmpty(post.rejections)}">
     <div class="rejection-panel-header">
       <span class="rejection-panel-title">반려 이력</span>
-      <span class="rejection-panel-count" th:text="${#lists.size(rejections)} + '건'">0건</span>
+      <span class="rejection-panel-count" th:text="${#lists.size(post.rejections)} + '건'">0건</span>
     </div>
     <div class="rejection-list">
-      <div class="rejection-item" th:each="rejection : ${rejections}"
+      <div class="rejection-item" th:each="rejection : ${post.rejections}"
            th:data-rejected-by="${rejection.rejectedBy}">
         <div class="rejection-date">
           <span class="rejection-rejector">로딩 중...</span>
@@ -147,7 +148,7 @@
     <div class="modal-header">
       <div class="modal-title-row">
         <span class="modal-title">작업 수정</span>
-        <span class="modal-team-badge" th:classappend="${'badge-' + palette}" th:text="${boardName}">팀</span>
+        <span class="modal-team-badge" th:classappend="${'badge-' + palette}" th:text="${post.boardName}">팀</span>
       </div>
       <button type="button" class="modal-close" id="btn-edit-close">
         <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
@@ -184,21 +185,21 @@
           <button type="button" class="due-clear-btn" id="btn-edit-clear-due">선택 초기화</button>
         </div>
       </div>
-      <div class="form-group" th:if="${postFiles != null and !#lists.isEmpty(postFiles)}">
+      <div class="form-group" th:if="${post.postFiles != null and !#lists.isEmpty(post.postFiles)}">
         <label class="form-label">기존 첨부파일 <span style="color:var(--text-muted);font-weight:400;">(체크 시 삭제)</span></label>
         <div class="existing-file-list">
-          <label class="existing-file-item" th:each="file : ${postFiles}">
+          <label class="existing-file-item" th:each="file : ${post.postFiles}">
             <input type="checkbox" name="deleteFileIds" th:value="${file.id}">
             <span class="file-name" th:text="${file.originalName}">파일명</span>
           </label>
         </div>
       </div>
 
-      <div class="form-group" th:if="${boardUserList != null and !boardUserList.isEmpty()}">
+      <div class="form-group" th:if="${post.boardUserList != null and !post.boardUserList.isEmpty()}">
         <label class="form-label">담당자 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
         <div class="selected-assignee-list" id="edit-selected-assignee-list">
           <span class="selected-assignee-chip"
-                th:each="assignee : ${postAssignees}"
+                th:each="assignee : ${post.postAssignees}"
                 th:data-member-id="${assignee.memberId}"
                 th:data-username="${assignee.username}">
             <span class="assignee-chip-name" th:text="${assignee.username}"></span>
@@ -215,7 +216,7 @@
                    placeholder="이름으로 검색" autocomplete="off">
             <div class="assignee-option-list" id="edit-assignee-option-list">
               <button type="button" class="assignee-option"
-                      th:each="member : ${boardUserList}"
+                      th:each="member : ${post.boardUserList}"
                       th:data-member-id="${member.memberId}"
                       th:data-username="${member.username}"
                       th:text="${member.username}">
