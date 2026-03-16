@@ -3,8 +3,11 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.mapper.CommentMapper;
 import kr.co.promptech.springboottutorial.model.Comment;
 import kr.co.promptech.springboottutorial.model.dto.CommentCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.CommentResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -22,5 +25,9 @@ public class CommentService {
                 .depth(dto.getDepth())
                 .build();
         commentMapper.save(comment);
+    }
+
+    public List<CommentResponseDto> findByPostId(Long postId, Long boardId) {
+        return commentMapper.findByPostId(postId, boardId);
     }
 }

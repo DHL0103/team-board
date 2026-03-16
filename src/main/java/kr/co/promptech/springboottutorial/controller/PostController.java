@@ -7,6 +7,7 @@ import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.service.CommentService;
 import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
@@ -29,6 +30,7 @@ public class PostController {
     private final BoardService boardService;
     private final PostRejectionService postRejectionService;
     private final BoardMemberService boardMemberService;
+    private final CommentService commentService;
 
     /**
      * @param postId 조회할 게시글 PK
@@ -55,6 +57,7 @@ public class PostController {
 
         model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(post.getBoardId()));
         model.addAttribute("postAssignees", postService.getAssigneesByPostId(postId));
+        model.addAttribute("commentList", commentService.findByPostId(postId, post.getBoardId()));
 
         return "post/detail";
     }

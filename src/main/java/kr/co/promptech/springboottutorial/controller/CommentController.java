@@ -19,10 +19,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public String addComment(@ModelAttribute CommentCreateDto dto,
-                             @AuthenticationPrincipal CustomUser user,
-                             @PathVariable Long boardId,
-                             @PathVariable Long postId) {
+    public String addComment(@PathVariable Long boardId,
+                             @PathVariable Long postId,
+                             @ModelAttribute CommentCreateDto dto,
+                             @AuthenticationPrincipal CustomUser user) {
         commentService.save(user.getId(), dto);
         return "redirect:/board/" + boardId + "/post/" + postId;
     }

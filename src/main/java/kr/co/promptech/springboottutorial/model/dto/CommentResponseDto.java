@@ -14,6 +14,7 @@ public class    CommentResponseDto {
     private Long postId;
     private Long memberId;
     private String authorUsername;
+    private String authorRole;           // ADMIN, MANAGER, null(일반)
     private String parentAuthorUsername; // depth 1일 때 @표시용
     private String content;
     private LocalDateTime createdAt;

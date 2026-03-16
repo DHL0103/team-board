@@ -8,4 +8,40 @@
         VALUES (#{postId}, #{memberId}, #{content}, #{parentId}, #{groupId}, #{depth})
     </insert>
 
+    <resultMap id="commentResponseDtoMap" type="kr.co.promptech.springboottutorial.model.dto.CommentResponseDto">
+        <constructor>
+            <idArg column="id"                     javaType="Long"/>
+            <arg   column="post_id"                javaType="Long"/>
+            <arg   column="member_id"              javaType="Long"/>
+            <arg   column="author_username"        javaType="String"/>
+            <arg   column="author_role"            javaType="String"/>
+            <arg   column="parent_author_username" javaType="String"/>
+            <arg   column="content"                javaType="String"/>
+            <arg   column="created_at"             javaType="java.time.LocalDateTime"/>
+            <arg   column="parent_id"              javaType="Long"/>
+            <arg   column="group_id"               javaType="Long"/>
+            <arg   column="depth"                  javaType="_int"/>
+            <arg   column="is_deleted"             javaType="_boolean"/>
+        </constructor>
+    </resultMap>
+
+    <select id="findByPostId" resultMap="commentResponseDtoMap">
+        SELECT c.id, c.post_id, c.member_id,
+               m.username AS author_username,
+               CASE
+                   WHEN m.role = 'ROLE_ADMIN'        THEN 'ADMIN'
+                   WHEN bm.board_role = 'MANAGER'    THEN 'MANAGER'
+                   ELSE NULL
+               END AS author_role,
+               pm.username AS parent_author_username,
+               c.content, c.created_at, c.parent_id, c.group_id, c.depth, c.is_deleted
+        FROM comments c
+        JOIN members m ON c.member_id = m.id
+        LEFT JOIN comments pc ON c.parent_id = pc.id
+        LEFT JOIN members pm ON pc.member_id = pm.id
+        LEFT JOIN board_members bm ON bm.member_id = c.member_id AND bm.board_id = #{boardId}
+        WHERE c.post_id = #{postId}
+        ORDER BY COALESCE(c.group_id, c.id), c.created_at
+    </select>
+
 </mapper>
