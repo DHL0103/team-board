@@ -30,6 +30,10 @@
   </a>
   <div style="display:flex; align-items:center; gap:8px;">
     <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">관리자</a>
+    <a href="/board/search" class="btn-back">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-search"></use></svg>
+      보드 탐색
+    </a>
     <a href="/member/mypage" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
       마이페이지
@@ -61,6 +65,10 @@
   </a>
   <div style="display:flex; align-items:center; gap:8px;">
     <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">관리자</a>
+    <a href="/board/search" class="btn-back">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-search"></use></svg>
+      보드 탐색
+    </a>
     <a href="/member/mypage" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
       마이페이지
