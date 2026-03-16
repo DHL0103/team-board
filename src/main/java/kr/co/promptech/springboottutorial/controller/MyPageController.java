@@ -69,17 +69,12 @@ public class MyPageController {
     @PostMapping("/boards/{boardId}/accept")
     public String acceptInvite(@AuthenticationPrincipal CustomUser user,
                                @PathVariable Long boardId,
-                               @RequestParam(required = false) String from) {
-        if (!boardMemberService.isInvited(boardId,
-                user.getId())) {
+                               @RequestParam(required = false) String redirectUrl) {
+        if (!boardMemberService.isInvited(boardId, user.getId())) {
             return "redirect:/member/mypage";
         }
         boardMemberService.updateRole(boardId, user.getId(), BoardRole.USER);
-
-        if ("board".equals(from)) {
-            return "redirect:/board/" + boardId;
-        }
-        return "redirect:/member/mypage";
+        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/member/mypage";
     }
 
     /**
@@ -88,11 +83,8 @@ public class MyPageController {
     @PostMapping("/boards/{boardId}/reject")
     public String rejectInvite(@AuthenticationPrincipal CustomUser user,
                                @PathVariable Long boardId,
-                               @RequestParam(required = false) String from) {
+                               @RequestParam(required = false) String redirectUrl) {
         boardMemberService.delete(boardId, user.getId());
-        if ("board".equals(from)) {
-            return "redirect:/board";
-        }
-        return "redirect:/member/mypage";
+        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/member/mypage";
     }
 }
