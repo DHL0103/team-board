@@ -397,3 +397,40 @@ if (rejectionPanel) {
     window.addEventListener('resize', adjustRejectionPanel);
     adjustRejectionPanel();
 }
+
+// ── 답글 ──
+(function () {
+    var parentIdInput  = document.getElementById('commentParentId');
+    var groupIdInput   = document.getElementById('commentGroupId');
+    var depthInput     = document.getElementById('commentDepth');
+    var replyTarget    = document.getElementById('commentReplyTarget');
+    var textarea       = document.getElementById('commentTextarea');
+
+    document.querySelectorAll('.btn-reply').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var commentId = btn.dataset.commentId;
+            var groupId   = btn.dataset.groupId;
+            var author    = btn.dataset.author;
+
+            parentIdInput.value = commentId;
+            groupIdInput.value  = groupId;
+            depthInput.value    = '1';
+
+            replyTarget.style.display = 'flex';
+            replyTarget.innerHTML =
+                '@' + author + ' 에게 답글' +
+                ' <button type="button" class="btn-reply-cancel">×</button>';
+
+            replyTarget.querySelector('.btn-reply-cancel').addEventListener('click', function () {
+                parentIdInput.value = '';
+                groupIdInput.value  = '';
+                depthInput.value    = '0';
+                replyTarget.style.display = 'none';
+                replyTarget.innerHTML = '';
+            });
+
+            if (textarea) { textarea.focus(); }
+        });
+    });
+})();
+
