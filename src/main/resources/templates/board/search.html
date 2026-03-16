@@ -40,7 +40,7 @@
                     th:classappend="${board.myRole == 'MANAGER'} ? 'role-manager' : 'role-user'"
                     th:text="${board.myRole == 'MANAGER'} ? '매니저' : '멤버'">역할</span>
             </div>
-            <div class="search-board-desc" th:if="${board.description != null and !board.description.isEmpty()}" th:text="${board.description}">설명</div>
+            <div class="search-board-desc" th:text="${board.description}">설명</div>
             <div class="search-board-meta">
               <svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>
               <span th:text="${board.memberCount} + '명'">0명</span>
