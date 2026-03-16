@@ -58,4 +58,27 @@
         WHERE id = #{id}
     </update>
 
+    <resultMap id="boardSearchResultDtoMap" type="kr.co.promptech.springboottutorial.model.dto.BoardSearchResultDto">
+        <constructor>
+            <idArg column="id"           javaType="Long"/>
+            <arg   column="name"         javaType="String"/>
+            <arg   column="description"  javaType="String"/>
+            <arg   column="color"        javaType="String"/>
+            <arg   column="status"       javaType="String"/>
+            <arg   column="member_count" javaType="_long"/>
+            <arg   column="my_role"      javaType="String"/>
+        </constructor>
+    </resultMap>
+
+    <select id="searchBoards" resultMap="boardSearchResultDtoMap">
+        SELECT b.id, b.name, b.description, b.color, b.status,
+               COUNT(bm2.member_id) AS member_count,
+               bm_me.board_role AS my_role
+        FROM boards b
+        LEFT JOIN board_members bm_me ON b.id = bm_me.board_id AND bm_me.member_id = #{memberId}
+        LEFT JOIN board_members bm2 ON b.id = bm2.board_id AND bm2.board_role IN ('USER', 'MANAGER')
+        WHERE b.name LIKE CONCAT('%', #{keyword}, '%')
+        GROUP BY b.id
+    </select>
+
 </mapper>

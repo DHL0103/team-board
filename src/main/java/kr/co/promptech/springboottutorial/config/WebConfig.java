@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(boardAuthInterceptor)
                 .addPathPatterns("/board/{boardId}", "/board/{boardId}/**")
-                .excludePathPatterns("/board/{boardId}/request", "/board/create");
+                .excludePathPatterns("/board/{boardId}/request", "/board/create", "/board/search");
 
         registry.addInterceptor(boardManagerAuthInterceptor)
                 .addPathPatterns("/board/{boardId}/manager/**");

@@ -127,4 +127,13 @@ public class BoardController {
         boardMemberService.save(boardId, user.getId(), BoardRole.MANAGER);
         return "redirect:/board";
     }
+
+    @GetMapping("/search")
+    public String searchBoards(@RequestParam(defaultValue = "") String keyword,
+                               Model model,
+                               @AuthenticationPrincipal CustomUser user) {
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("boardList", boardService.searchBoards(keyword, user.getId()));
+        return "board/search";
+    }
 }
