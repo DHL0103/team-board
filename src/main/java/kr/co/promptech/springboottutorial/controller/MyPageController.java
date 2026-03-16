@@ -70,7 +70,12 @@ public class MyPageController {
     public String acceptInvite(@AuthenticationPrincipal CustomUser user,
                                @PathVariable Long boardId,
                                @RequestParam(required = false) String from) {
+        if (!boardMemberService.isInvited(boardId,
+                user.getId())) {
+            return "redirect:/member/mypage";
+        }
         boardMemberService.updateRole(boardId, user.getId(), BoardRole.USER);
+
         if ("board".equals(from)) {
             return "redirect:/board/" + boardId;
         }
