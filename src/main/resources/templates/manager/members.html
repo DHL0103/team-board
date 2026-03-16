@@ -121,7 +121,7 @@
               <form th:action="@{'/board/' + ${board.id} + '/manager/members/approve/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-primary">승인</button>
               </form>
-              <form th:action="@{'/board/' + ${board.id} + '/manager/members/' + ${member.memberId} + '/remove'}" method="post" style="margin:0;">
+              <form th:action="@{'/board/' + ${board.id} + '/manager/members/remove/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-danger">거절</button>
               </form>
             </td>
