@@ -116,6 +116,8 @@
 
 .invite-search-result {
   padding: 0 24px 18px;
+  max-height: 440px;
+  overflow-y: auto;
 }
 
 .invite-result-msg {

@@ -43,7 +43,6 @@
         LEFT JOIN board_members bm ON bm.member_id = m.id AND bm.board_id = #{boardId}
         WHERE m.username LIKE CONCAT('%', #{username}, '%')
         ORDER BY m.username
-        LIMIT 10
     </select>
 
     <select id="findInvitedBoardsByMemberId" resultType="kr.co.promptech.springboottutorial.model.dto.InvitedBoardDto">
