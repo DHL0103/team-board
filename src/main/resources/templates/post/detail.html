@@ -130,15 +130,26 @@
           <span class="comment-writer"
                 th:classappend="${comment.authorRole == 'ADMIN'} ? 'comment-writer--admin' : (${comment.authorRole == 'MANAGER'} ? 'comment-writer--manager' : '')"
                 th:text="${comment.authorUsername}">작성자</span>
+          <span class="comment-deleted-badge" th:if="${comment.deleted and post.currentUserIsManagerOrAdmin}">삭제됨</span>
           <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm')}">01.01</span>
           <button type="button" class="btn-reply"
+                  th:unless="${comment.deleted}"
                   th:data-comment-id="${comment.id}"
                   th:data-group-id="${comment.groupId != null ? comment.groupId : comment.id}"
                   th:data-author="${comment.authorUsername}">답글</button>
           <button type="button" class="btn-comment-edit"
-                  th:if="${comment.memberId == post.currentMemberId}">수정</button>
+                  th:if="${!comment.deleted and comment.memberId == post.currentMemberId}">수정</button>
+          <form th:unless="${comment.deleted}"
+                th:if="${comment.memberId == post.currentMemberId or post.currentUserIsManagerOrAdmin}"
+                th:action="@{/board/{b}/post/{p}/comment/{c}/delete(b=${post.boardId},p=${post.id},c=${comment.id})}"
+                method="post" class="comment-delete-form">
+            <button type="submit" class="btn-comment-delete">삭제</button>
+          </form>
         </div>
-        <div class="comment-content"><span th:if="${comment.parentAuthorUsername != null}" class="comment-mention" th:text="'@' + ${comment.parentAuthorUsername}"></span><span th:text="${comment.content}">내용</span></div>
+        <div class="comment-content"
+             th:if="${!comment.deleted or post.currentUserIsManagerOrAdmin}"
+             th:classappend="${comment.deleted} ? 'comment-content--deleted'"><span th:if="${comment.parentAuthorUsername != null}" class="comment-mention" th:text="'@' + ${comment.parentAuthorUsername}"></span><span th:text="${comment.content}">내용</span></div>
+        <div class="comment-deleted-msg" th:if="${comment.deleted and !post.currentUserIsManagerOrAdmin}">삭제된 댓글입니다.</div>
       </div>
     </div>
 
