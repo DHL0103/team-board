@@ -13,4 +13,6 @@ public interface CommentMapper {
     void save(Comment comment);
 
     List<CommentResponseDto> findByPostId(@Param("postId") Long postId, @Param("boardId") Long boardId);
+
+    void update(@Param("id") Long id, @Param("memberId") Long memberId, @Param("content") String content);
 }

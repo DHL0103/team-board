@@ -25,6 +25,12 @@
         </constructor>
     </resultMap>
 
+    <update id="update">
+        UPDATE comments
+        SET content = #{content}
+        WHERE id = #{id} AND member_id = #{memberId}
+    </update>
+
     <select id="findByPostId" resultMap="commentResponseDtoMap">
         SELECT c.id, c.post_id, c.member_id,
                m.username AS author_username,

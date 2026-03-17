@@ -30,4 +30,8 @@ public class CommentService {
     public List<CommentResponseDto> findByPostId(Long postId, Long boardId) {
         return commentMapper.findByPostId(postId, boardId);
     }
+
+    public void update(Long commentId, Long memberId, String content) {
+        commentMapper.update(commentId, memberId, content);
+    }
 }
