@@ -15,4 +15,8 @@ public interface CommentMapper {
     List<CommentResponseDto> findByPostId(@Param("postId") Long postId, @Param("boardId") Long boardId);
 
     void update(@Param("id") Long id, @Param("memberId") Long memberId, @Param("content") String content);
+
+    Comment findById(@Param("id") Long id);
+
+    void softDelete(@Param("id") Long id);
 }

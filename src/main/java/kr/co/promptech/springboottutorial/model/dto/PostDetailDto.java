@@ -29,4 +29,5 @@ public class PostDetailDto {
     private List<BoardMemberResponseDto> postAssignees;
     private List<CommentResponseDto> commentList;
     private Long currentMemberId;
+    private boolean currentUserIsManagerOrAdmin;
 }

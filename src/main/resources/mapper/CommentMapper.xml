@@ -25,6 +25,16 @@
         </constructor>
     </resultMap>
 
+    <select id="findById" resultType="kr.co.promptech.springboottutorial.model.Comment">
+        SELECT id, post_id, member_id, content, created_at, parent_id, group_id, depth, is_deleted
+        FROM comments
+        WHERE id = #{id}
+    </select>
+
+    <update id="softDelete">
+        UPDATE comments SET is_deleted = true WHERE id = #{id}
+    </update>
+
     <update id="update">
         UPDATE comments
         SET content = #{content}

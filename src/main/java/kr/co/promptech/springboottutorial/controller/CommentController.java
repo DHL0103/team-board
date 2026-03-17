@@ -34,4 +34,13 @@ public class CommentController {
         commentService.update(commentId, user.getId(), content);
         return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
     }
+
+    @PostMapping("/{commentId}/delete")
+    public String deleteComment(@PathVariable Long boardId,
+                                @PathVariable Long postId,
+                                @PathVariable Long commentId,
+                                @AuthenticationPrincipal CustomUser user) {
+        commentService.delete(commentId, user.getId(), user.getRole(), boardId);
+        return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
+    }
 }

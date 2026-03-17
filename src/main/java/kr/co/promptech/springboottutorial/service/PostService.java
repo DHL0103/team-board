@@ -157,6 +157,8 @@ public class PostService {
         Post post = getPostById(postId);
         Board board = boardMapper.getBoardById(post.getBoardId());
         boolean canModify = user != null && canModify(postId, post.getBoardId(), user.getId(), user.getRole());
+        boolean isManagerOrAdmin = user != null && (user.getRole() == MemberRole.ROLE_ADMIN
+                || boardMemberService.isManager(post.getBoardId(), user.getId()));
 
         return PostDetailDto.builder()
                 .id(post.getId())
@@ -177,6 +179,7 @@ public class PostService {
                 .postAssignees(postMemberMapper.findAssigneesByPostId(postId))
                 .commentList(commentService.findByPostId(postId, post.getBoardId()))
                 .currentMemberId(user != null ? user.getId() : null)
+                .currentUserIsManagerOrAdmin(isManagerOrAdmin)
                 .build();
     }
 }
