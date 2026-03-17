@@ -31,8 +31,8 @@ public class RestAdminController {
      * 멤버 상세 모달에서 소속 보드 및 역할을 lazy 로딩으로 조회
      */
     @GetMapping("/members/{memberId}/boards")
-    public List<MemberBoardDto> getMemberBoards(@PathVariable Long memberId) {
-        return boardMemberService.getBoardsByMemberId(memberId);
+    public ResponseEntity<List<MemberBoardDto>> getMemberBoards(@PathVariable Long memberId) {
+        return ResponseEntity.ok(boardMemberService.getBoardsByMemberId(memberId));
     }
 
     /**
