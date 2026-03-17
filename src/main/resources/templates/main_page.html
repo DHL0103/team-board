@@ -14,21 +14,20 @@
 
     <div th:replace="~{fragments/header :: main-header}"></div>
 
-    <div class="board-search-bar">
-        <div class="board-search-wrap">
-            <svg width="14" height="14"><use href="/img/icons.svg#icon-search"></use></svg>
-            <input type="text" class="board-search-input" id="boardSearchInput" placeholder="보드 검색...">
-        </div>
-    </div>
-
     <div class="page-top">
-        <div>
-            <div class="page-title">내 보드</div>
-            <div class="page-meta" id="board-count-label">총 0개의 보드</div>
-        </div>
-        <div style="display:flex; gap:8px;">
-            <button type="button" class="btn-admin-edit filter-btn active" id="btn-board-filter-active">활성</button>
-            <button type="button" class="btn-admin-edit filter-btn" id="btn-board-filter-inactive">비활성</button>
+        <div class="page-top-row">
+            <div>
+                <div class="page-title">내 보드</div>
+                <div class="page-meta" id="board-count-label">총 0개의 보드</div>
+            </div>
+            <div class="board-search-wrap">
+                <svg width="14" height="14"><use href="/img/icons.svg#icon-search"></use></svg>
+                <input type="text" class="board-search-input" id="boardSearchInput" placeholder="보드 검색...">
+            </div>
+            <div style="display:flex; gap:8px;">
+                <button type="button" class="btn-admin-edit filter-btn active" id="btn-board-filter-active">활성</button>
+                <button type="button" class="btn-admin-edit filter-btn" id="btn-board-filter-inactive">비활성</button>
+            </div>
         </div>
     </div>
 

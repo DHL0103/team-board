@@ -14,22 +14,31 @@ $backend:  map-get($teams, backend);
 $frontend: map-get($teams, frontend);
 $design:   map-get($teams, design);
 
-// ── 보드 검색바 ──
-.board-search-bar {
+// ── 페이지 상단 ──
+.page-top {
+  padding: 32px 32px 20px;
   display: flex;
-  justify-content: center;
-  padding: 20px 32px 0;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.page-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
 }
 
 .board-search-wrap {
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 100%;
-  max-width: 400px;
+  flex: 1;
+  max-width: 320px;
   border: 1px solid $border;
   border-radius: 8px;
-  padding: 8px 14px;
+  padding: 7px 12px;
   background: $surface;
   transition: border-color 0.15s;
   color: $text-muted;
@@ -46,15 +55,6 @@ $design:   map-get($teams, design);
   background: transparent;
   width: 100%;
   &::placeholder { color: $text-muted; }
-}
-
-// ── 페이지 상단 ──
-.page-top {
-  padding: 32px 32px 20px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-
 }
 
 .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
