@@ -24,6 +24,11 @@
           <svg width="13" height="13"><use href="/img/icons.svg#icon-search"></use></svg>
           <input type="text" class="post-list-search-input" id="postListSearchInput" placeholder="제목 검색...">
         </div>
+        <div class="post-list-sort-group">
+          <button type="button" class="post-list-sort-btn active" data-sort="newest">최신순</button>
+          <button type="button" class="post-list-sort-btn" data-sort="oldest">오래된순</button>
+          <button type="button" class="post-list-sort-btn" data-sort="due">마감순</button>
+        </div>
         <a class="btn-edit post-list-back" th:href="@{'/board/' + ${board.id}}">
           <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
           칸반으로
@@ -40,7 +45,9 @@
       <div class="post-list-body" th:unless="${#lists.isEmpty(postList)}">
         <a class="post-list-card"
            th:each="post : ${postList}"
-           th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
+           th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}"
+           th:data-created-at="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"
+           th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
           <div class="card-top">
             <div class="card-title" th:text="${post.title}">제목</div>
             <span class="status-chip"

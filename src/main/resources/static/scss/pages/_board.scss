@@ -122,6 +122,36 @@
   .post-list-back { margin-left: auto; }
 }
 
+.post-list-sort-group {
+  display: flex;
+  gap: 2px;
+  background: $border-soft;
+  padding: 3px;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.post-list-sort-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: none;
+  background: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: $text-sub;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+
+  &.active {
+    background: $surface;
+    color: $text;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  &:not(.active):hover { color: $text; }
+}
+
 .post-list-search-wrap {
   display: flex;
   align-items: center;
