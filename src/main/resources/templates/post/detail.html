@@ -9,7 +9,8 @@
 <body th:data-member-id="${post.memberId}"
       th:data-board-id="${post.boardId}"
       th:data-post-id="${post.id}"
-      th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+      th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}"
+      th:data-current-member-id="${post.currentMemberId}">
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
@@ -148,9 +149,15 @@
         <input type="hidden" name="groupId" id="commentGroupId" value="">
         <input type="hidden" name="depth" id="commentDepth" value="0">
         <div class="comment-reply-target" id="commentReplyTarget"></div>
-        <div class="comment-input-row">
-          <textarea class="comment-textarea" name="content" placeholder="댓글을 입력하세요..." id="commentTextarea"></textarea>
-          <button type="submit" class="btn-comment-submit">등록</button>
+        <div class="comment-form-header">
+          <span class="comment-form-author" id="commentAuthorName"></span>
+          <span class="comment-char-count" id="commentCharCount">0/256</span>
+        </div>
+        <div class="comment-input-wrap">
+          <textarea class="comment-textarea" name="content" placeholder="댓글을 입력하세요..." id="commentTextarea" rows="1" maxlength="256"></textarea>
+          <div class="comment-input-footer">
+            <button type="submit" class="btn-comment-submit">등록</button>
+          </div>
         </div>
       </form>
     </div>

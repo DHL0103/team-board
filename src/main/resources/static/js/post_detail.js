@@ -434,6 +434,32 @@ if (rejectionPanel) {
     });
 })();
 
+// ── 댓글 작성자 이름 + 글자수 카운터 ──
+(function () {
+    var currentMemberId = parseInt(document.body.dataset.currentMemberId);
+    var authorName      = document.getElementById('commentAuthorName');
+    var charCount       = document.getElementById('commentCharCount');
+    var textarea        = document.getElementById('commentTextarea');
+    var MAX             = 256;
+
+    if (authorName && currentMemberId) {
+        fetchUsername(currentMemberId).then(function (name) {
+            authorName.textContent = name;
+        });
+    }
+
+    if (textarea && charCount) {
+        textarea.addEventListener('input', function () {
+            var len = this.value.length;
+            charCount.textContent = len + '/' + MAX;
+            charCount.classList.toggle('near-limit', len >= MAX - 16);
+
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+})();
+
 // ── 댓글 수정 ──
 (function () {
     var boardId = document.body.dataset.boardId;

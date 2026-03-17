@@ -502,18 +502,44 @@
     border-top: 1px solid $border-soft;
     background: $bg;
 
-    .comment-input-row { display: flex; gap: 10px; align-items: flex-end; }
+    .comment-input-wrap {
+      border: 1px solid $border;
+      border-radius: 8px;
+      background: $surface;
+      transition: border-color 0.15s;
+      &:focus-within { border-color: #9ca3af; }
+    }
     .comment-textarea {
-      flex: 1; resize: none; border: 1px solid $border; border-radius: 8px;
-      padding: 6px 10px; font-family: 'Inter', sans-serif; font-size: 13px;
-      color: $text; background: $surface; outline: none; transition: border-color 0.15s;
-      min-height: 32px; max-height: 120px;
-      &:focus { border-color: #9ca3af; }
+      width: 100%; resize: none; border: none; border-radius: 8px 8px 0 0;
+      padding: 8px 12px; font-family: 'Inter', sans-serif; font-size: 13px;
+      color: $text; background: transparent; outline: none;
+      min-height: 36px; overflow-y: hidden; display: block; box-sizing: border-box;
       &::placeholder { color: $text-muted; }
     }
+    .comment-form-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .comment-form-author {
+      font-size: 12px;
+      font-weight: 600;
+      color: $text;
+    }
+    .comment-char-count {
+      font-size: 11px;
+      color: $text-muted;
+      &.near-limit { color: #dc2626; }
+    }
+    .comment-input-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding: 6px 8px;
+    }
     .btn-comment-submit {
-      background: $text; color: white; border: none; padding: 10px 18px;
-      border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer;
+      background: $text; color: white; border: none; padding: 5px 14px;
+      border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;
       font-family: 'Inter', sans-serif; white-space: nowrap; transition: background 0.15s;
       &:hover { background: #374151; }
     }
