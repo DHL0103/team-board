@@ -14,6 +14,13 @@
 
     <div th:replace="~{fragments/header :: main-header}"></div>
 
+    <div class="board-search-bar">
+        <div class="board-search-wrap">
+            <svg width="14" height="14"><use href="/img/icons.svg#icon-search"></use></svg>
+            <input type="text" class="board-search-input" id="boardSearchInput" placeholder="보드 검색...">
+        </div>
+    </div>
+
     <div class="page-top">
         <div>
             <div class="page-title">내 보드</div>
