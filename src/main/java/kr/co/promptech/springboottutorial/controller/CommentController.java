@@ -22,7 +22,7 @@ public class CommentController {
                              @ModelAttribute CommentCreateDto dto,
                              @AuthenticationPrincipal CustomUser user) {
         commentService.save(user.getId(), dto);
-        return "redirect:/board/" + boardId + "/post/" + postId;
+        return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
     }
 
     @PostMapping("/{commentId}/edit")
@@ -32,6 +32,6 @@ public class CommentController {
                               @RequestParam String content,
                               @AuthenticationPrincipal CustomUser user) {
         commentService.update(commentId, user.getId(), content);
-        return "redirect:/board/" + boardId + "/post/" + postId;
+        return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
     }
 }
