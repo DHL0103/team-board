@@ -46,7 +46,7 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
         Board board = boardService.getBoardById(boardId);
         if (board != null && BoardStatus.INACTIVE == board.getStatus()) {
             if (!boardMemberService.isManager(boardId, user.getId())) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                response.sendRedirect("/board/" + boardId + "/inactive");
                 return false;
             }
         }

@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
+import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
@@ -85,6 +86,18 @@ public class BoardController {
      * @return board/request 페이지로 리다이렉트
      * board_members 테이블에 role을 requested로 저장
      */
+    @GetMapping("/{boardId}/inactive")
+    public String boardInactive(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
+        BoardResponseDto board = boardService.getBoardDtoById(boardId);
+        if (board == null || BoardStatus.ACTIVE.name().equals(board.getStatus())
+                || MemberRole.ROLE_ADMIN == user.getRole()
+                || boardMemberService.isManager(boardId, user.getId())) {
+            return "redirect:/board/" + boardId;
+        }
+        model.addAttribute("board", board);
+        return "board/inactive";
+    }
+
     @PostMapping("/{boardId}/request")
     public String boardRequestPost(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
         boardMemberService.save(boardId, user.getId(), BoardRole.REQUESTED);
