@@ -1,4 +1,4 @@
-package kr.co.promptech.springboottutorial.controller;
+package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.model.dto.MemberBoardDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/api")
-public class AdminApiController {
+public class RestAdminController {
 
     private final BoardMemberService boardMemberService;
     private final MemberService memberService;
