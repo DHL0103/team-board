@@ -432,7 +432,7 @@
     }
   }
 
-  .btn-reply {
+  .btn-reply, .btn-comment-edit {
     padding: 2px 8px;
     font-size: 11px;
     font-weight: 500;
@@ -444,6 +444,35 @@
     font-family: 'Inter', sans-serif;
     transition: all 0.15s;
     &:hover { color: $text; border-color: #d1d5db; }
+  }
+
+  .comment-edit-area {
+    margin-top: 4px;
+
+    .comment-edit-textarea {
+      width: 100%; resize: none; border: 1px solid $border; border-radius: 8px;
+      padding: 6px 10px; font-family: 'Inter', sans-serif; font-size: 13px;
+      color: $text; background: $surface; outline: none; transition: border-color 0.15s;
+      min-height: 60px;
+      &:focus { border-color: #9ca3af; }
+    }
+
+    .comment-edit-actions {
+      display: flex; justify-content: flex-end; gap: 6px; margin-top: 6px;
+
+      button {
+        padding: 4px 12px; font-size: 12px; font-weight: 500; border-radius: 6px;
+        cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s;
+      }
+      .btn-comment-edit-cancel {
+        background: none; border: 1px solid $border; color: $text-muted;
+        &:hover { border-color: #d1d5db; color: $text; }
+      }
+      .btn-comment-edit-save {
+        background: $text; border: 1px solid $text; color: white;
+        &:hover { background: #374151; }
+      }
+    }
   }
 
   .comment-reply-target {

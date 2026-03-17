@@ -8,6 +8,7 @@
 
 <body th:data-member-id="${post.memberId}"
       th:data-board-id="${post.boardId}"
+      th:data-post-id="${post.id}"
       th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
 
 <div th:replace="~{fragments/header :: back-header}"></div>
@@ -122,7 +123,8 @@
       <div class="comment-empty" th:if="${#lists.isEmpty(post.commentList)}">댓글이 없습니다.</div>
       <div th:each="comment : ${post.commentList}"
            class="comment-item"
-           th:classappend="${comment.depth == 1} ? 'comment-item--reply'">
+           th:classappend="${comment.depth == 1} ? 'comment-item--reply'"
+           th:data-comment-id="${comment.id}">
         <div class="comment-top">
           <span class="comment-writer"
                 th:classappend="${comment.authorRole == 'ADMIN'} ? 'comment-writer--admin' : (${comment.authorRole == 'MANAGER'} ? 'comment-writer--manager' : '')"
@@ -132,6 +134,8 @@
                   th:data-comment-id="${comment.id}"
                   th:data-group-id="${comment.groupId != null ? comment.groupId : comment.id}"
                   th:data-author="${comment.authorUsername}">답글</button>
+          <button type="button" class="btn-comment-edit"
+                  th:if="${comment.memberId == post.currentMemberId}">수정</button>
         </div>
         <div class="comment-content"><span th:if="${comment.parentAuthorUsername != null}" class="comment-mention" th:text="'@' + ${comment.parentAuthorUsername}"></span><span th:text="${comment.content}">내용</span></div>
       </div>

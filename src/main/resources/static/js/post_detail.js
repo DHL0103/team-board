@@ -434,3 +434,52 @@ if (rejectionPanel) {
     });
 })();
 
+// ── 댓글 수정 ──
+(function () {
+    var boardId = document.body.dataset.boardId;
+    var postId  = document.body.dataset.postId;
+
+    document.querySelectorAll('.btn-comment-edit').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var item       = btn.closest('.comment-item');
+            var contentDiv = item.querySelector('.comment-content');
+            var commentId  = item.dataset.commentId;
+            var currentText = item.querySelector('.comment-content span:last-child').textContent;
+
+            contentDiv.style.display = 'none';
+
+            var editArea = document.createElement('div');
+            editArea.className = 'comment-edit-area';
+            editArea.innerHTML =
+                '<textarea class="comment-edit-textarea">' + currentText + '</textarea>' +
+                '<div class="comment-edit-actions">' +
+                    '<button type="button" class="btn-comment-edit-cancel">취소</button>' +
+                    '<button type="button" class="btn-comment-edit-save">저장</button>' +
+                '</div>';
+            contentDiv.insertAdjacentElement('afterend', editArea);
+
+            editArea.querySelector('.btn-comment-edit-cancel').addEventListener('click', function () {
+                contentDiv.style.display = '';
+                editArea.remove();
+            });
+
+            editArea.querySelector('.btn-comment-edit-save').addEventListener('click', function () {
+                var content = editArea.querySelector('.comment-edit-textarea').value.trim();
+                if (!content) { return; }
+
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/board/' + boardId + '/post/' + postId + '/comment/' + commentId + '/edit';
+
+                var input = document.createElement('input');
+                input.type  = 'hidden';
+                input.name  = 'content';
+                input.value = content;
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+    });
+})();
