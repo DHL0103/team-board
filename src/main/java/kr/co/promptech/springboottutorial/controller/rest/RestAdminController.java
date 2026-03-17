@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.model.dto.MemberBoardDto;
+import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
@@ -46,13 +47,9 @@ public class RestAdminController {
      */
     @PostMapping("/boards/{boardId}/status")
     public ResponseEntity<Void> updateBoardStatus(@PathVariable Long boardId,
-                                                   @RequestParam String status) {
-        try {
-            boardService.updateStatus(boardId, status);
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+                                                   @RequestParam BoardStatus status) {
+        boardService.updateStatus(boardId, status);
+        return ResponseEntity.ok().build();
     }
 
     /**
