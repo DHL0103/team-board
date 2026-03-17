@@ -30,7 +30,7 @@ public class BoardService {
     }
 
     public BoardResponseDto getBoardDtoById(Long id) {
-        return new BoardResponseDto(boardMapper.getBoardById(id));
+        return boardMapper.getBoardDtoById(id);
     }
 
     public Long createBoard(BoardCreateDto boardCreateDto) {

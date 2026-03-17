@@ -30,6 +30,10 @@
   </a>
   <div style="display:flex; align-items:center; gap:8px;">
     <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <a href="/member/mypage" class="btn-back">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
+      마이페이지
+    </a>
     <a href="/board" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
       메인으로
@@ -52,6 +56,10 @@
   </a>
   <div style="display:flex; align-items:center; gap:8px;">
     <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <a href="/member/mypage" class="btn-back">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
+      마이페이지
+    </a>
     <form th:action="@{/member/logout}" method="post" style="margin:0;">
       <button type="submit" class="btn-back">로그아웃</button>
     </form>

@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.model.BoardMember;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.InvitedBoardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,18 @@ public class BoardMemberService {
         return BoardRole.REQUESTED.name().equals(bm.getBoardRole());
     }
 
+    public boolean isInvited(Long boardId, Long memberId) {
+        BoardMember bm = boardMemberMapper.findByBoardIdAndMemberId(boardId, memberId);
+        if (bm == null) {
+            return false;
+        }
+        return BoardRole.INVITED.name().equals(bm.getBoardRole());
+    }
+
     public void save(Long boardId, Long memberId, BoardRole boardRole) {
+        if (boardMemberMapper.findByBoardIdAndMemberId(boardId, memberId) != null) {
+            throw new IllegalStateException("이미 보드에 추가된 멤버입니다.");
+        }
         boardMemberMapper.save(boardId, memberId, boardRole);
     }
 
@@ -51,5 +63,13 @@ public class BoardMemberService {
 
     public List<BoardMemberResponseDto> getUsersByBoardId(Long boardId) {
         return boardMemberMapper.findUsersByBoardId(boardId);
+    }
+
+    public List<InvitedBoardDto> getInvitedBoards(Long memberId) {
+        return boardMemberMapper.findInvitedBoardsByMemberId(memberId);
+    }
+
+    public List<BoardMemberResponseDto> searchMembersForInvite(Long boardId, String username) {
+        return boardMemberMapper.searchMembersWithBoardRole(boardId, username);
     }
 }

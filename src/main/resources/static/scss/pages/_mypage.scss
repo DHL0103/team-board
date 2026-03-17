@@ -1,0 +1,198 @@
+@use "../abstract/variables" as *;
+
+.mypage-wrap {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 48px 72px;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 20px 16px 48px;
+  }
+}
+
+// ── 왼쪽: 내 정보 ──
+.mypage-profile {
+  flex: 0 0 340px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  overflow: hidden;
+  animation: fadeUp 0.3s ease both;
+
+  @media (max-width: 768px) { flex: none; width: 100%; }
+}
+
+.mypage-profile-header {
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid $border-soft;
+
+  .profile-label { font-size: 11px; font-weight: 600; color: $text-muted; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 8px; }
+  .profile-username { font-size: 18px; font-weight: 700; color: $text; letter-spacing: -0.3px; }
+}
+
+.mypage-profile-body {
+  padding: 24px 28px;
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: $text;
+    margin-bottom: 16px;
+  }
+}
+
+.mypage-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 14px;
+
+  label {
+    font-size: 12px;
+    font-weight: 500;
+    color: $text-sub;
+  }
+}
+
+.mypage-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid $border;
+  border-radius: 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: $text;
+  background: $surface;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+
+  &:focus { border-color: $text-sub; box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.1); }
+  &::placeholder { color: $text-muted; }
+  &.input-error { border-color: #fca5a5; &:focus { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1); } }
+}
+
+.mypage-input-error-msg {
+  font-size: 12px;
+  color: #dc2626;
+  display: none;
+  &.visible { display: block; }
+}
+
+.btn-change-password {
+  width: 100%;
+  background: $text;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background 0.15s, transform 0.15s;
+
+  &:hover { background: #374151; transform: translateY(-1px); }
+  &:active { transform: translateY(0); }
+}
+
+// ── 오른쪽: 초대된 board 목록 ──
+.mypage-invites {
+  flex: 1;
+  animation: fadeUp 0.3s ease 0.06s both;
+}
+
+.mypage-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+
+  .section-title { font-size: 14px; font-weight: 700; color: $text; }
+  .section-count { font-size: 11px; font-weight: 500; background: $surface; color: $text-muted; padding: 1px 7px; border-radius: 20px; border: 1px solid $border; }
+}
+
+.invite-empty {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+}
+
+.invite-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: box-shadow 0.15s;
+
+  &:hover { box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); }
+}
+
+.invite-board-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+
+  .invite-board-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    @each $key, $val in $palettes {
+      &.dot-#{$key} { background: var(--#{$key}-color); }
+    }
+  }
+
+  .invite-board-name { font-size: 14px; font-weight: 600; color: $text; }
+}
+
+.invite-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-invite-accept {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #a7f3d0;
+  background: #ecfdf5;
+  color: #059669;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  &:hover { background: #d1fae5; }
+}
+
+.btn-invite-reject {
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1px solid #fecaca;
+  background: $surface;
+  color: #dc2626;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  &:hover { background: #fef2f2; }
+}

@@ -11,4 +11,17 @@
         SELECT * FROM members WHERE username = #{username}
     </select>
 
+    <select id="existsByUsername" resultType="boolean">
+        SELECT COUNT(*) > 0 FROM members WHERE username = #{username}
+    </select>
+
+    <insert id="insertMember" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO members (username, password, role)
+        VALUES (#{username}, #{password}, #{role})
+    </insert>
+
+    <update id="updatePassword">
+        UPDATE members SET password = #{password} WHERE id = #{id}
+    </update>
+
 </mapper>

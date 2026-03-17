@@ -36,4 +36,22 @@
         ORDER BY m.username
     </select>
 
+
+    <select id="searchMembersWithBoardRole" resultType="kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto">
+        SELECT m.id AS member_id, m.username, bm.board_role
+        FROM members m
+        LEFT JOIN board_members bm ON bm.member_id = m.id AND bm.board_id = #{boardId}
+        WHERE m.username LIKE CONCAT('%', #{username}, '%')
+        ORDER BY m.username
+    </select>
+
+    <select id="findInvitedBoardsByMemberId" resultType="kr.co.promptech.springboottutorial.model.dto.InvitedBoardDto">
+        SELECT b.id AS boardId, b.name AS boardName, b.color AS boardColor
+        FROM board_members bm
+        JOIN boards b ON bm.board_id = b.id
+        WHERE bm.member_id = #{memberId}
+          AND bm.board_role = 'INVITED'
+        ORDER BY b.name
+    </select>
+
 </mapper>

@@ -13,6 +13,8 @@ public interface BoardMapper {
 
     Board getBoardById(Long id);
 
+    BoardResponseDto getBoardDtoById(Long id);
+
     void createBoard(Board board);
 
     List<BoardResponseDto> getBoardsByMemberId(Long memberId);

@@ -23,6 +23,13 @@
         <span>아이디 또는 비밀번호가 올바르지 않습니다.</span>
       </div>
 
+      <div class="success-msg" th:if="${param.registered != null}">
+        <span>회원가입이 완료됐습니다. 로그인해 주세요.</span>
+      </div>
+      <div class="success-msg" th:if="${param.passwordChanged != null}">
+        <span>비밀번호가 변경됐습니다. 다시 로그인해 주세요.</span>
+      </div>
+
       <form th:action="@{/member/login}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" th:if="${_csrf != null}" />
 
@@ -43,7 +50,7 @@
 
       <hr class="divider">
       <div class="login-footer">
-        계정 문의는 관리자에게 연락해 주세요
+        계정이 없으신가요? <a th:href="@{/member/signup}">회원가입</a>
       </div>
 
     </div>

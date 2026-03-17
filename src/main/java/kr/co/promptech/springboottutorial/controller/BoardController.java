@@ -75,6 +75,7 @@ public class BoardController {
         }
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("isRequested", boardMemberService.isRequested(boardId, user.getId()));
+        model.addAttribute("isInvited", boardMemberService.isInvited(boardId, user.getId()));
         return "board/request";
     }
 
