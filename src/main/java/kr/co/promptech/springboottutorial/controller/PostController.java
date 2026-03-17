@@ -1,15 +1,9 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
-import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
-import kr.co.promptech.springboottutorial.service.BoardMemberService;
-import kr.co.promptech.springboottutorial.service.BoardService;
-import kr.co.promptech.springboottutorial.model.Post;
-import kr.co.promptech.springboottutorial.service.CommentService;
 import kr.co.promptech.springboottutorial.service.PostFileService;
-import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,38 +21,10 @@ public class PostController {
 
     private final PostService postService;
     private final PostFileService postFileService;
-    private final BoardService boardService;
-    private final PostRejectionService postRejectionService;
-    private final BoardMemberService boardMemberService;
-    private final CommentService commentService;
 
-    /**
-     * @param postId 조회할 게시글 PK
-     * @param model  뷰에 전달할 데이터 컨테이너
-     * @param user   현재 로그인한 사용자 정보 (optional)
-     * @return 게시글 상세 뷰 이름 (post/detail)
-     * 게시글 상세 페이지 렌더링. 첨부파일, 반려사유, 보드 정보, 작성자 여부를 함께 전달
-     */
     @GetMapping("/{postId}")
     public String getPostDetailPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal CustomUser user) {
-        Post post = postService.getPostById(postId);
-        model.addAttribute("post", postService.getPostDtoById(postId));
-        model.addAttribute("postFiles", postFileService.getFilesByPostId(postId));
-        model.addAttribute("rejections", postRejectionService.getByPostId(postId));
-        Board board = boardService.getBoardById(post.getBoardId());
-        if (board != null) {
-            model.addAttribute("boardName", board.getName());
-            model.addAttribute("boardColor", board.getColor());
-        }
-
-        boolean canModify = user != null && postService.canModify(
-                postId, post.getBoardId(), user.getId(), user.getRole());
-        model.addAttribute("canModify", canModify);
-
-        model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(post.getBoardId()));
-        model.addAttribute("postAssignees", postService.getAssigneesByPostId(postId));
-        model.addAttribute("commentList", commentService.findByPostId(postId, post.getBoardId()));
-
+        model.addAttribute("post", postService.getPostDetail(postId, user));
         return "post/detail";
     }
 
