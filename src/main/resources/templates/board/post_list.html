@@ -19,7 +19,11 @@
         <span class="status-chip"
               th:classappend="${status == 'PROGRESS' ? 'chip-progress' : status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
               th:text="${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : status == 'APPROVED' ? '완료' : status}">진행 중</span>
-        <span class="col-count" th:text="${#lists.size(postList)} + '건'">0건</span>
+        <span class="col-count" id="postListCount" th:text="${#lists.size(postList)} + '건'">0건</span>
+        <div class="post-list-search-wrap">
+          <svg width="13" height="13"><use href="/img/icons.svg#icon-search"></use></svg>
+          <input type="text" class="post-list-search-input" id="postListSearchInput" placeholder="제목 검색...">
+        </div>
         <a class="btn-edit post-list-back" th:href="@{'/board/' + ${board.id}}">
           <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
           칸반으로

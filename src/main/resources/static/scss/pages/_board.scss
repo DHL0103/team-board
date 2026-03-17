@@ -122,6 +122,33 @@
   .post-list-back { margin-left: auto; }
 }
 
+.post-list-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid $border;
+  border-radius: 7px;
+  padding: 5px 10px;
+  background: $surface;
+  color: $text-muted;
+  transition: border-color 0.15s;
+  flex: 1;
+  max-width: 280px;
+
+  &:focus-within { border-color: #9ca3af; color: $text-sub; }
+}
+
+.post-list-search-input {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  color: $text;
+  background: transparent;
+  width: 100%;
+  &::placeholder { color: $text-muted; }
+}
+
 .post-list-empty {
   display: flex;
   flex-direction: column;
@@ -175,6 +202,7 @@ a.col-header {
 .glow-line {
   height: 2px;
   margin: 0 32px 20px;
+  flex-shrink: 0;
 
   @each $key, $val in $palettes {
     &.glow-#{$key} {
