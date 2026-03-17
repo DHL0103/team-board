@@ -55,11 +55,7 @@ public class BoardController {
      */
     @GetMapping("/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
-        model.addAttribute("board", boardService.getBoardDtoById(boardId));
-        model.addAttribute("postList", postService.getPostDtosByBoardId(boardId));
-        boolean isManager = MemberRole.ROLE_ADMIN == user.getRole() || boardMemberService.isManager(boardId, user.getId());
-        model.addAttribute("isManager", isManager);
-        model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(boardId));
+        model.addAttribute("board", boardService.getBoardDetail(boardId, user));
         return "board/detail";
     }
 
@@ -91,9 +87,6 @@ public class BoardController {
      */
     @PostMapping("/{boardId}/request")
     public String boardRequestPost(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
-        if (boardMemberService.isInvited(boardId, user.getId())) {
-            return "redirect:/board/" + boardId + "/request";
-        }
         boardMemberService.save(boardId, user.getId(), BoardRole.REQUESTED);
         return "redirect:/board/" + boardId + "/request";
     }

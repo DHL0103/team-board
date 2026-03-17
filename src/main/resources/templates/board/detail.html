@@ -10,13 +10,30 @@
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
-  <th:block th:replace="~{fragments/board-header :: board-header(${board}, ${isManager})}"></th:block>
+  <div class="board-detail-header">
+    <div class="board-title-row">
+      <div class="page-title" th:text="${board.name}" th:style="|color: var(--${board.color}-color)|">보드명</div>
+    </div>
+    <div class="page-meta" th:text="${board.description}">설명</div>
+    <div class="board-detail-header__action" style="display:flex; gap:8px;">
+      <a th:if="${board.manager}" th:href="@{'/board/' + ${board.id} + '/manager/members'}" class="btn-edit">
+        <svg width="14" height="14"><use href="/img/icons.svg#icon-settings"></use></svg>
+        매니저 페이지
+      </a>
+      <button class="btn-request" id="btn-create-post">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
+        작업 추가
+      </button>
+    </div>
+  </div>
+
+  <div class="glow-line" th:classappend="${'glow-' + board.color}"></div>
 
   <div class="kanban-wrap">
     <div class="row justify-content-center">
 
       <!-- 진행 중 + 반려-->
-      <div class="col-md-4" th:with="progressPosts=${postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
+      <div class="col-md-4" th:with="progressPosts=${board.postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
         <div class="kanban-col">
           <a class="col-header col-p1" th:href="@{'/board/' + ${board.id} + '/post_list?status=PROGRESS'}">
             <span class="team-badge badge-p1">
@@ -59,7 +76,7 @@
       </div>
 
       <!-- 검토 중 (승인 요청 ) -->
-      <div class="col-md-4" th:with="reviewPosts=${postList.?[status == 'REQUESTED']}">
+      <div class="col-md-4" th:with="reviewPosts=${board.postList.?[status == 'REQUESTED']}">
         <div class="kanban-col">
           <a class="col-header col-p2" th:href="@{'/board/' + ${board.id} + '/post_list?status=REQUESTED'}">
             <span class="team-badge badge-p2">
@@ -100,7 +117,7 @@
       </div>
 
       <!-- 완료 -->
-      <div class="col-md-4" th:with="completedPosts=${postList.?[status == 'APPROVED']}">
+      <div class="col-md-4" th:with="completedPosts=${board.postList.?[status == 'APPROVED']}">
         <div class="kanban-col">
           <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=APPROVED'}">
             <span class="team-badge badge-p4">
@@ -186,7 +203,7 @@
             <button type="button" class="due-clear-btn" id="btn-create-clear-due">선택 초기화</button>
           </div>
         </div>
-        <div class="form-group" th:if="${!boardUserList.isEmpty()}">
+        <div class="form-group" th:if="${!board.boardUserList.isEmpty()}">
           <label class="form-label">담당자 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
           <div class="selected-assignee-list" id="selected-assignee-list"></div>
           <div class="assignee-picker" id="assignee-picker">
@@ -199,7 +216,7 @@
                      placeholder="이름으로 검색" autocomplete="off">
               <div class="assignee-option-list" id="assignee-option-list">
                 <button type="button" class="assignee-option"
-                        th:each="member : ${boardUserList}"
+                        th:each="member : ${board.boardUserList}"
                         th:data-member-id="${member.memberId}"
                         th:data-username="${member.username}"
                         th:text="${member.username}">
