@@ -46,6 +46,7 @@ public class SecurityConfig {
                 )
                 .sessionManagement(session -> session
                         .sessionConcurrency(concurrency -> concurrency
+                                .maximumSessions(-1)
                                 .sessionRegistry(sessionRegistry())
                                 .expiredUrl("/member/login?error=suspended")
                         )
