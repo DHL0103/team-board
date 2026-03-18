@@ -49,8 +49,8 @@
             <td th:text="${member.username}"></td>
             <td>
               <span th:if="${member.role.name() == 'ROLE_ADMIN'}" class="role-badge role-admin">Admin</span>
-              <span th:if="${member.role.name() == 'ROLE_USER'}" class="role-badge role-user role-badge--toggle" title="클릭하여 정지">User</span>
-              <span th:if="${member.role.name() == 'ROLE_SUSPENDED'}" class="role-badge role-suspended role-badge--toggle" title="클릭하여 복구">정지</span>
+              <span th:if="${member.role.name() == 'ROLE_USER'}" class="role-badge role-user">User</span>
+              <span th:if="${member.role.name() == 'ROLE_SUSPENDED'}" class="role-badge role-suspended">정지</span>
             </td>
           </tr>
         </tbody>
@@ -61,17 +61,6 @@
 
   </div>
 
-  <div class="modal-overlay" id="roleChangeModal">
-    <div class="modal-box modal-box--admin">
-      <div class="modal-title" id="role-change-title"></div>
-      <div class="modal-desc" id="role-change-desc"></div>
-      <div class="modal-actions" style="margin-top:20px;">
-        <button type="button" class="btn-modal-cancel" id="btn-role-change-cancel">취소</button>
-        <button type="button" class="btn-modal-confirm" id="btn-role-change-confirm">확인</button>
-      </div>
-    </div>
-  </div>
-
   <div class="modal-overlay" id="memberDetailModal">
     <div class="modal-box modal-box--admin">
       <div class="modal-title" id="modal-member-username"></div>
@@ -80,6 +69,7 @@
       </div>
       <div class="modal-actions" style="margin-top:20px;">
         <button type="button" class="btn-admin-edit" id="btn-close-member-detail">닫기</button>
+        <button type="button" id="btn-member-role-action" style="display:none;"></button>
       </div>
     </div>
   </div>

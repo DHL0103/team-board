@@ -17,7 +17,7 @@ public class BoardResponseDto {
         this.name = board.getName();
         this.description = board.getDescription();
         this.color = board.getColor();
-        this.status = board.getStatus();
+        this.status = board.getStatus() != null ? board.getStatus().name() : null;
         this.memberCount = 0;
     }
 

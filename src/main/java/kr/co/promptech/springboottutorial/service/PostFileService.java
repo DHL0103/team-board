@@ -2,9 +2,12 @@ package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.mapper.PostFileMapper;
 import kr.co.promptech.springboottutorial.model.PostFile;
+import kr.co.promptech.springboottutorial.model.dto.FileDownloadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,6 +29,23 @@ public class PostFileService {
 
     public List<PostFile> getFilesByPostId(Long postId) {
         return postFileMapper.findByPostId(postId);
+    }
+
+    public FileDownloadDto getFileForDownload(String storedPath, String displayName) throws IOException {
+        Path filePath = Paths.get(uploadDir).resolve(storedPath).normalize();
+        Resource resource = new UrlResource(filePath.toUri());
+
+        if (!resource.exists() || !resource.isReadable()) {
+            return null;
+        }
+
+        String contentType = Files.probeContentType(filePath);
+        if (contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        String name = (displayName != null && !displayName.isBlank()) ? displayName : storedPath;
+        return new FileDownloadDto(resource, contentType, name);
     }
 
     public void deleteFiles(List<Long> ids) {

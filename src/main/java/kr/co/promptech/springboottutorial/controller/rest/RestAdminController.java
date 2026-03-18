@@ -1,6 +1,7 @@
-package kr.co.promptech.springboottutorial.controller;
+package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.model.dto.MemberBoardDto;
+import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
@@ -19,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/api")
-public class AdminApiController {
+public class RestAdminController {
 
     private final BoardMemberService boardMemberService;
     private final MemberService memberService;
@@ -31,8 +32,8 @@ public class AdminApiController {
      * 멤버 상세 모달에서 소속 보드 및 역할을 lazy 로딩으로 조회
      */
     @GetMapping("/members/{memberId}/boards")
-    public List<MemberBoardDto> getMemberBoards(@PathVariable Long memberId) {
-        return boardMemberService.getBoardsByMemberId(memberId);
+    public ResponseEntity<List<MemberBoardDto>> getMemberBoards(@PathVariable Long memberId) {
+        return ResponseEntity.ok(boardMemberService.getBoardsByMemberId(memberId));
     }
 
     /**
@@ -46,13 +47,9 @@ public class AdminApiController {
      */
     @PostMapping("/boards/{boardId}/status")
     public ResponseEntity<Void> updateBoardStatus(@PathVariable Long boardId,
-                                                   @RequestParam String status) {
-        try {
-            boardService.updateStatus(boardId, status);
-            return ResponseEntity.ok().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().build();
-        }
+                                                   @RequestParam BoardStatus status) {
+        boardService.updateStatus(boardId, status);
+        return ResponseEntity.ok().build();
     }
 
     /**

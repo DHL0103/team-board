@@ -29,8 +29,8 @@
           <span th:text="${post.boardName}">팀</span>
         </span>
         <span class="status-chip"
-              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : 'chip-completed'}"
-              th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : '완료'}"></span>
+              th:classappend="'chip-' + ${#strings.toLowerCase(post.status.name())}"
+              th:text="${post.status.label}"></span>
         <span class="due-chip" id="due-chip"
               th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
           <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
