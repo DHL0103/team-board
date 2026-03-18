@@ -442,7 +442,14 @@
   padding: 18px 24px 24px;
 
   .form-group {
-    max-width: 480px;
+    max-width: 640px;
     margin-bottom: 20px;
+  }
+
+  textarea.form-input {
+    resize: vertical;
+    height: auto;
+    min-height: 76px;
+    font-size: 13px;
   }
 }
