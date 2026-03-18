@@ -205,6 +205,7 @@ a.col-header {
 .glow-line {
   height: 2px;
   margin: 0 32px 20px;
+  flex-shrink: 0;
 
   @each $key, $val in $palettes {
     &.glow-#{$key} {

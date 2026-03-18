@@ -6,6 +6,7 @@ import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardSearchResultDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardUpdateDto;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
@@ -58,6 +59,10 @@ public class BoardService {
             throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + dto.getStatus());
         }
         boardMapper.updateBoard(boardId, dto);
+    }
+
+    public List<BoardSearchResultDto> searchBoards(String keyword, Long memberId) {
+        return boardMapper.searchBoards(keyword, memberId);
     }
 
     @Transactional(readOnly = true)

@@ -1,0 +1,177 @@
+@use "../abstract/variables" as *;
+
+.search-wrap {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 24px 72px;
+}
+
+// ── 상단 검색 영역 ──
+.search-header {
+  margin-bottom: 28px;
+}
+
+.search-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: $text;
+  margin: 0 0 16px;
+}
+
+.search-form-row {
+  display: flex;
+  gap: 8px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 9px 14px;
+  border: 1px solid $border;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  color: $text;
+  background: $surface;
+  outline: none;
+  transition: border-color 0.15s;
+
+  &:focus { border-color: $text-sub; }
+  &::placeholder { color: $text-muted; }
+}
+
+.btn-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  background: $text;
+  color: white;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+
+  &:hover { background: #374151; }
+}
+
+// ── 빈 상태 ──
+.search-empty {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 60px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+}
+
+// ── 카드 리스트 ──
+.search-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+// ── 보드 카드 ──
+.search-card {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: box-shadow 0.15s;
+  animation: fadeUp 0.3s ease both;
+
+  &:hover { box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07); }
+}
+
+.search-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.search-board-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  @each $key, $val in $palettes {
+    &.dot-#{$key} { background: var(--#{$key}-color); }
+  }
+}
+
+.search-card-info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.search-board-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: $text;
+}
+
+.search-board-desc {
+  font-size: 12px;
+  color: $text-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 1em;
+}
+
+.search-board-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: $text-muted;
+}
+
+// ── 우측 액션 영역 ──
+.search-card-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.btn-board-go {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: $text-sub;
+  background: $surface;
+  border: 1px solid $border;
+  text-decoration: none;
+  transition: all 0.15s;
+
+  &:hover { border-color: #d1d5db; color: $text; }
+}
+
+// ── 페이지네이션 ──
+.search-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 24px 0 0;
+}

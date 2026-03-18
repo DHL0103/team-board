@@ -21,7 +21,7 @@
           <div class="admin-section-title">유저 초대</div>
         </div>
       </div>
-      <form th:action="@{'/board/' + ${boardId} + '/manager/members'}" method="get" class="invite-search-form">
+      <form th:action="@{'/board/' + ${board.id} + '/manager/members'}" method="get" class="invite-search-form">
         <input type="text" name="search" th:value="${search}" class="form-input" placeholder="아이디로 검색">
         <button type="submit" class="btn-admin-edit">검색</button>
       </form>
