@@ -34,12 +34,29 @@
 
     // ── 페이지 렌더 ──
     function render() {
-        var start = (currentPage - 1) * PAGE_SIZE;
-        var end   = start + PAGE_SIZE;
-        cards.forEach(function (card) { card.style.display = 'none'; });
-        filteredCards.slice(start, end).forEach(function (card) { card.style.display = ''; });
+        var start    = (currentPage - 1) * PAGE_SIZE;
+        var end      = start + PAGE_SIZE;
+        var toShow   = filteredCards.slice(start, end);
+        var stagger  = 45;
+        var duration = '0.3s';
+
+        cards.forEach(function (card) {
+            card.style.animation = '';
+            card.style.animationDelay = '';
+            card.style.display = 'none';
+        });
+
         if (countLabel) { countLabel.textContent = filteredCards.length + '건'; }
         renderPagination();
+
+        // display:none이 브라우저에 반영된 다음 프레임에서 애니메이션 시작
+        requestAnimationFrame(function () {
+            toShow.forEach(function (card, i) {
+                card.style.animationDelay = (i * stagger) + 'ms';
+                card.style.animation = 'fadeUp ' + duration + ' ease both';
+                card.style.display = '';
+            });
+        });
     }
 
     function renderPagination() {
