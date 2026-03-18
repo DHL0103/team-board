@@ -52,4 +52,10 @@
         GROUP BY b.id
     </select>
 
+    <update id="updateBoard">
+        UPDATE boards
+        SET name = #{dto.name}, color = #{dto.color}, description = #{dto.description}, status = #{dto.status}
+        WHERE id = #{id}
+    </update>
+
 </mapper>

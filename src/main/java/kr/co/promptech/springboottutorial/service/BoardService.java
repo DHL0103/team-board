@@ -6,6 +6,7 @@ import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardUpdateDto;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import lombok.RequiredArgsConstructor;
@@ -44,12 +45,19 @@ public class BoardService {
         return board.getId();
     }
 
-public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
+    public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId);
     }
 
     public void updateStatus(Long boardId, BoardStatus status) {
         boardMapper.updateStatus(boardId, status);
+    }
+
+    public void updateBoard(Long boardId, BoardUpdateDto dto) {
+        if (!"ACTIVE".equals(dto.getStatus()) && !"INACTIVE".equals(dto.getStatus())) {
+            throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + dto.getStatus());
+        }
+        boardMapper.updateBoard(boardId, dto);
     }
 
     @Transactional(readOnly = true)

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>보드 설정</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+</head>
+
+<body>
+
+  <div th:replace="~{fragments/header :: back-header}"></div>
+
+  <div class="admin-wrap">
+    <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='보드 설정')}"></div>
+
+    <div th:replace="~{fragments/manager-nav :: manager-nav(boardId=${board.id}, activePage='settings')}"></div>
+
+    <div class="admin-section">
+      <div class="admin-section-header">
+        <div>
+          <div class="admin-section-title">보드 설정</div>
+          <div class="admin-section-meta">보드의 기본 정보와 상태를 수정할 수 있습니다.</div>
+        </div>
+      </div>
+
+      <form th:action="@{'/board/' + ${board.id} + '/manager/settings'}" method="post" class="settings-form">
+        <div class="form-group">
+          <label class="form-label">이름</label>
+          <input class="form-input" type="text" name="name" th:value="${board.name}" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">컬러</label>
+          <div class="color-swatch-row">
+            <label class="color-swatch"><input type="radio" name="color" value="p1" th:checked="${board.color == 'p1'}"><span class="swatch-dot" style="background: var(--p1-color);"></span></label>
+            <label class="color-swatch"><input type="radio" name="color" value="p2" th:checked="${board.color == 'p2'}"><span class="swatch-dot" style="background: var(--p2-color);"></span></label>
+            <label class="color-swatch"><input type="radio" name="color" value="p3" th:checked="${board.color == 'p3'}"><span class="swatch-dot" style="background: var(--p3-color);"></span></label>
+            <label class="color-swatch"><input type="radio" name="color" value="p4" th:checked="${board.color == 'p4'}"><span class="swatch-dot" style="background: var(--p4-color);"></span></label>
+            <label class="color-swatch"><input type="radio" name="color" value="p5" th:checked="${board.color == 'p5'}"><span class="swatch-dot" style="background: var(--p5-color);"></span></label>
+            <label class="color-swatch"><input type="radio" name="color" value="p6" th:checked="${board.color == 'p6'}"><span class="swatch-dot" style="background: var(--p6-color);"></span></label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">설명 <span style="color:var(--text-muted); font-weight:400;">(선택)</span></label>
+          <textarea class="form-input" name="description" rows="3" th:text="${board.description}"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">상태</label>
+          <div class="color-swatch-row" style="gap:12px;">
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px;">
+              <input type="radio" name="status" value="ACTIVE" th:checked="${board.status == 'ACTIVE'}">
+              <span class="status-badge status-active">활성</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:6px; cursor:pointer; font-size:13px;">
+              <input type="radio" name="status" value="INACTIVE" th:checked="${board.status == 'INACTIVE'}">
+              <span class="status-badge status-inactive">비활성</span>
+            </label>
+          </div>
+        </div>
+
+        <div style="padding: 0 24px 20px;">
+          <button type="submit" class="btn-admin-primary">저장</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/common.js}"></script>
+
+</body>
+
+</html>
