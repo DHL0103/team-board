@@ -1,14 +1,19 @@
 (function () {
-    var searchInput = document.getElementById('postListSearchInput');
-    var countLabel  = document.getElementById('postListCount');
-    var listBody    = document.querySelector('.post-list-body');
-    var sortBtns    = document.querySelectorAll('.post-list-sort-btn');
-    var cards       = Array.from(document.querySelectorAll('.post-list-card'));
-    var currentSort = 'newest';
+    var PAGE_SIZE = 10;
+
+    var searchInput    = document.getElementById('postListSearchInput');
+    var countLabel     = document.getElementById('postListCount');
+    var listBody       = document.querySelector('.post-list-body');
+    var paginationWrap = document.getElementById('post-list-pagination');
+    var sortBtns       = document.querySelectorAll('.post-list-sort-btn');
+    var cards          = Array.from(document.querySelectorAll('.post-list-card'));
+    var currentSort    = 'newest';
+    var currentPage    = 1;
+    var filteredCards  = [];
 
     // ── 정렬 ──
     function sortCards() {
-        var sorted = cards.slice().sort(function (a, b) {
+        cards = cards.slice().sort(function (a, b) {
             if (currentSort === 'newest') {
                 return b.dataset.createdAt > a.dataset.createdAt ? 1 : -1;
             }
@@ -24,21 +29,60 @@
             }
             return 0;
         });
-        sorted.forEach(function (card) { listBody.appendChild(card); });
-        cards = sorted;
+        cards.forEach(function (card) { listBody.appendChild(card); });
+    }
+
+    // ── 페이지 렌더 ──
+    function render() {
+        var start = (currentPage - 1) * PAGE_SIZE;
+        var end   = start + PAGE_SIZE;
+        cards.forEach(function (card) { card.style.display = 'none'; });
+        filteredCards.slice(start, end).forEach(function (card) { card.style.display = ''; });
+        if (countLabel) { countLabel.textContent = filteredCards.length + '건'; }
+        renderPagination();
+    }
+
+    function renderPagination() {
+        if (!paginationWrap) { return; }
+        var totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
+        paginationWrap.innerHTML = '';
+
+        if (totalPages <= 1) { return; }
+
+        var prev = document.createElement('button');
+        prev.className = 'page-btn';
+        prev.textContent = '이전';
+        prev.disabled = currentPage === 1;
+        prev.addEventListener('click', function () { currentPage--; render(); });
+        paginationWrap.appendChild(prev);
+
+        for (var i = 1; i <= totalPages; i++) {
+            (function (page) {
+                var btn = document.createElement('button');
+                btn.className = 'page-btn' + (page === currentPage ? ' active' : '');
+                btn.textContent = page;
+                btn.addEventListener('click', function () { currentPage = page; render(); });
+                paginationWrap.appendChild(btn);
+            })(i);
+        }
+
+        var next = document.createElement('button');
+        next.className = 'page-btn';
+        next.textContent = '다음';
+        next.disabled = currentPage === totalPages;
+        next.addEventListener('click', function () { currentPage++; render(); });
+        paginationWrap.appendChild(next);
     }
 
     // ── 검색 필터 ──
     function applySearch() {
         var query = searchInput ? searchInput.value.trim().toLowerCase() : '';
-        var count = 0;
-        cards.forEach(function (card) {
+        filteredCards = cards.filter(function (card) {
             var titleEl = card.querySelector('.card-title');
-            var matches = !query || (titleEl && titleEl.textContent.toLowerCase().includes(query));
-            card.style.display = matches ? '' : 'none';
-            if (matches) { count++; }
+            return !query || (titleEl && titleEl.textContent.toLowerCase().includes(query));
         });
-        if (countLabel) { countLabel.textContent = count + '건'; }
+        currentPage = 1;
+        render();
     }
 
     // ── 정렬 버튼 ──
@@ -56,4 +100,6 @@
     if (searchInput) {
         searchInput.addEventListener('input', applySearch);
     }
+
+    applySearch();
 })();
