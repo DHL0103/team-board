@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.model.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -18,4 +19,9 @@ public class PasswordChangeDto {
 
     @NotBlank(message = "새 비밀번호 확인을 입력해 주세요.")
     private final String newPasswordConfirm;
+
+    @AssertTrue(message = "새 비밀번호가 일치하지 않습니다.")
+    public boolean isNewPasswordConfirm() {
+        return newPassword != null && newPassword.equals(newPasswordConfirm);
+    }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title th:text="${board.name}">보드</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+</head>
+
+<body>
+
+  <div th:replace="~{fragments/header :: back-header}"></div>
+
+  <th:block th:replace="~{fragments/board-header :: board-header(${board}, null)}"></th:block>
+
+  <div class="board-request-wrap">
+    <div class="board-grid-empty-icon">
+      <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
+    </div>
+    <div class="board-request-msg">비활성화된 보드입니다.</div>
+    <div class="board-request-sub">관리자에 의해 비활성화된 보드로 현재 접근할 수 없습니다.</div>
+    <a href="/board" class="btn-edit" style="margin-top:4px;">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
+      보드 목록으로
+    </a>
+  </div>
+
+  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/js/common.js}"></script>
+
+</body>
+
+</html>

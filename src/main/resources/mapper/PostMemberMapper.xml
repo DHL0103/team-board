@@ -19,8 +19,8 @@
         DELETE FROM post_members WHERE post_id = #{postId}
     </delete>
 
-    <select id="countByPostIdAndMemberId" resultType="int">
-        SELECT COUNT(*) FROM post_members WHERE post_id = #{postId} AND member_id = #{memberId}
+    <select id="existsByPostIdAndMemberId" resultType="boolean">
+        SELECT EXISTS(SELECT 1 FROM post_members WHERE post_id = #{postId} AND member_id = #{memberId})
     </select>
 
     <insert id="save">

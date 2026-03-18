@@ -28,6 +28,24 @@ function initDueChips() {
 
 initDueChips();
 
+// ── 보드 설명 접기/펼치기 ──
+(function () {
+    var desc = document.getElementById("boardDescription");
+    var btn  = document.getElementById("btnDescToggle");
+    if (!desc || !btn) { return; }
+
+    desc.classList.add("page-meta--clamp");
+
+    if (desc.scrollHeight > desc.clientHeight) {
+        btn.style.display = "";
+    }
+
+    btn.addEventListener("click", function () {
+        var clamped = desc.classList.toggle("page-meta--clamp");
+        btn.textContent = clamped ? "자세히 보기" : "접기";
+    });
+})();
+
 // ── 회원 이름 캐싱 및 조회 유틸 ──
 const memberCache = {};
 
