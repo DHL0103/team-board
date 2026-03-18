@@ -2,7 +2,9 @@ package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
+import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -18,4 +20,6 @@ public interface BoardMapper {
     void createBoard(Board board);
 
     List<BoardResponseDto> getBoardsByMemberId(Long memberId);
+
+    void updateStatus(@Param("id") Long id, @Param("status") BoardStatus status);
 }

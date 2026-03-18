@@ -2,9 +2,12 @@ package kr.co.promptech.springboottutorial.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
+import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,6 +22,7 @@ import java.util.Map;
 public class BoardAuthInterceptor implements HandlerInterceptor {
 
     private final BoardMemberService boardMemberService;
+    private final BoardService boardService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -38,13 +42,23 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        // 3. 멤버 여부 확인
+        // 3. 비활성 보드는 매니저만 접근 허용
+        Board board = boardService.getBoardById(boardId);
+        if (board != null && BoardStatus.INACTIVE == board.getStatus()) {
+            if (!boardMemberService.isManager(boardId, user.getId())) {
+                response.sendRedirect("/board/" + boardId + "/inactive");
+                return false;
+            }
+        }
+
+        // 4. 멤버 여부 확인
         if (!boardMemberService.isMember(boardId, user.getId())) {
-            // 멤버가 아니면 request 페이지로 강제 이동시키고 컨트롤러 진입 막기
             response.sendRedirect("/board/" + boardId + "/request");
             return false;
         }
 
-        return true; // 멤버면 컨트롤러로 통과!
+
+
+        return true;
     }
 }

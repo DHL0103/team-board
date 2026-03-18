@@ -29,7 +29,7 @@
     Team Board
   </a>
   <div style="display:flex; align-items:center; gap:8px;">
-    <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">관리자</a>
     <a href="/member/mypage" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
       마이페이지
@@ -40,6 +40,11 @@
     </a>
   </div>
 </header>
+
+<nav th:fragment="admin-nav(activePage)" class="admin-nav">
+  <a href="/admin/members" class="admin-nav-item" th:classappend="${activePage == 'members'} ? 'active'">멤버 관리</a>
+  <a href="/admin/boards" class="admin-nav-item" th:classappend="${activePage == 'boards'} ? 'active'">보드 관리</a>
+</nav>
 
 <div th:fragment="board-breadcrumb(boardId, boardName, currentPage)" class="breadcrumb-row">
   <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
@@ -55,7 +60,7 @@
     Team Board
   </a>
   <div style="display:flex; align-items:center; gap:8px;">
-    <a sec:authorize="hasRole('ADMIN')" href="/admin/request" class="btn-back">관리자</a>
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">관리자</a>
     <a href="/member/mypage" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
       마이페이지

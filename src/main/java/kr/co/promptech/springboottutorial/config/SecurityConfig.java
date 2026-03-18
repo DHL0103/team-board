@@ -5,12 +5,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +28,7 @@ public class SecurityConfig {
                         (formLogin) -> formLogin
                                 .loginPage("/member/login")
                                 .loginProcessingUrl("/member/login")  // POST 요청 처리
-                                .failureUrl("/member/login?error=true")    // 실패 시 이 URL로
+                                .failureHandler(authenticationFailureHandler())    // 실패 시 이 URL로
                                 .defaultSuccessUrl("/board", true)
                 )
                 .logout(
@@ -37,7 +42,14 @@ public class SecurityConfig {
                                 .requestMatchers("/member/login", "/member/signup").permitAll()
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+                                .anyRequest().hasAnyRole("USER", "ADMIN")
+                )
+                .sessionManagement(session -> session
+                        .sessionConcurrency(concurrency -> concurrency
+                                .maximumSessions(-1)
+                                .sessionRegistry(sessionRegistry())
+                                .expiredUrl("/member/login?error=suspended")
+                        )
                 )
                 .csrf((csrf) -> csrf.disable()) // 테스트 시에는 CSRF를 꺼두어야 Postman POST 요청이 잘 들어갑니다.
         ;
@@ -47,6 +59,29 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return (request, response, exception) -> {
+            String redirectUrl;
+            if (exception instanceof LockedException) {
+                redirectUrl = "/member/login?error=suspended";
+            } else {
+                redirectUrl = "/member/login?error=true";
+            }
+            response.sendRedirect(redirectUrl);
+        };
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 
     @Bean

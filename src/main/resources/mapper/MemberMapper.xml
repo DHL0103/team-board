@@ -24,4 +24,12 @@
         UPDATE members SET password = #{password} WHERE id = #{id}
     </update>
 
+    <select id="selectAllMembers" resultType="kr.co.promptech.springboottutorial.model.Member">
+        SELECT * FROM members ORDER BY id
+    </select>
+
+    <update id="updateRole">
+        UPDATE members SET role = #{role} WHERE id = #{id}
+    </update>
+
 </mapper>

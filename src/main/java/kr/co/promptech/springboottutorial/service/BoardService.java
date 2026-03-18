@@ -6,6 +6,7 @@ import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
+import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,10 @@ public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
         return boardMapper.getBoardsByMemberId(memberId);
     }
 
+    public void updateStatus(Long boardId, BoardStatus status) {
+        boardMapper.updateStatus(boardId, status);
+    }
+
     @Transactional(readOnly = true)
     public BoardDetailDto getBoardDetail(Long boardId, CustomUser user) {
         BoardResponseDto board = getBoardDtoById(boardId);
@@ -64,5 +69,4 @@ public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
                 .boardUserList(boardMemberService.getUsersByBoardId(boardId))
                 .build();
     }
-
 }
