@@ -3,7 +3,6 @@ package kr.co.promptech.springboottutorial.controller;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.service.BoardService;
-import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 public class ManagerRequestController {
 
     private final PostService postService;
-    private final PostRejectionService postRejectionService;
     private final BoardService boardService;
 
     /**
@@ -29,8 +27,7 @@ public class ManagerRequestController {
      */
     @GetMapping
     public String requestsPage(@PathVariable Long boardId, Model model) {
-        model.addAttribute("boardId", boardId);
-        model.addAttribute("boardName", boardService.getBoardDtoById(boardId).getName());
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("requestList", postService.getRequestedPostDtosByBoardId(boardId));
         return "manager/requests";
     }
@@ -64,8 +61,7 @@ public class ManagerRequestController {
                          @RequestParam String reason,
                          @RequestParam(required = false) String source,
                          @AuthenticationPrincipal CustomUser user) {
-        postService.updateStatus(postId, PostStatus.REJECTED);
-        postRejectionService.save(postId, reason, user.getId());
+        postService.rejectPost(postId, reason, user.getId());
         if ("detail".equals(source)) {
             return "redirect:/board/" + boardId + "/post/" + postId;
         }

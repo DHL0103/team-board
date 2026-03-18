@@ -6,12 +6,7 @@ import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,11 +24,8 @@ public class ManagerMemberController {
      * memberList(BoardMemberResponseDto) 전달
      */
     @GetMapping
-    public String membersPage(@PathVariable Long boardId,
-                              @RequestParam(required = false) String search,
-                              Model model) {
-        model.addAttribute("boardId", boardId);
-        model.addAttribute("boardName", boardService.getBoardDtoById(boardId).getName());
+    public String membersPage(@PathVariable Long boardId, @RequestParam(required = false) String search, Model model) {
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("memberList", boardMemberService.getMembersByBoardId(boardId));
         if (search != null && !search.isBlank()) {
             model.addAttribute("search", search);
@@ -41,6 +33,7 @@ public class ManagerMemberController {
         }
         return "manager/members";
     }
+
 
     /**
      * @param boardId  보드 ID
@@ -58,6 +51,12 @@ public class ManagerMemberController {
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
+    /**
+     * @param boardId  보드 ID
+     * @param memberId 승인할 멤버 ID
+     * @return manager/members 리다이렉트
+     * 가입 요청(REQUESTED) 멤버를 USER로 승인
+     */
     @PostMapping("/approve/{memberId}")
     public String approveMember(@PathVariable Long boardId, @PathVariable Long memberId) {
         boardMemberService.updateRole(boardId, memberId, BoardRole.USER);

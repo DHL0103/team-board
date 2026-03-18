@@ -1,14 +1,8 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
-import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
-import kr.co.promptech.springboottutorial.service.BoardMemberService;
-import kr.co.promptech.springboottutorial.service.BoardService;
-import kr.co.promptech.springboottutorial.model.Post;
-import kr.co.promptech.springboottutorial.service.PostFileService;
-import kr.co.promptech.springboottutorial.service.PostRejectionService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,37 +19,10 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final PostFileService postFileService;
-    private final BoardService boardService;
-    private final PostRejectionService postRejectionService;
-    private final BoardMemberService boardMemberService;
 
-    /**
-     * @param postId 조회할 게시글 PK
-     * @param model  뷰에 전달할 데이터 컨테이너
-     * @param user   현재 로그인한 사용자 정보 (optional)
-     * @return 게시글 상세 뷰 이름 (post/detail)
-     * 게시글 상세 페이지 렌더링. 첨부파일, 반려사유, 보드 정보, 작성자 여부를 함께 전달
-     */
     @GetMapping("/{postId}")
     public String getPostDetailPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal CustomUser user) {
-        Post post = postService.getPostById(postId);
-        model.addAttribute("post", postService.getPostDtoById(postId));
-        model.addAttribute("postFiles", postFileService.getFilesByPostId(postId));
-        model.addAttribute("rejections", postRejectionService.getByPostId(postId));
-        Board board = boardService.getBoardById(post.getBoardId());
-        if (board != null) {
-            model.addAttribute("boardName", board.getName());
-            model.addAttribute("boardColor", board.getColor());
-        }
-
-        boolean canModify = user != null && postService.canModify(
-                postId, post.getBoardId(), user.getId(), user.getRole());
-        model.addAttribute("canModify", canModify);
-
-        model.addAttribute("boardUserList", boardMemberService.getUsersByBoardId(post.getBoardId()));
-        model.addAttribute("postAssignees", postService.getAssigneesByPostId(postId));
-
+        model.addAttribute("post", postService.getPostDetail(postId, user));
         return "post/detail";
     }
 
@@ -70,8 +37,7 @@ public class PostController {
     public String createPost(PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @AuthenticationPrincipal CustomUser user) {
-        Long postId = postService.createPost(postCreateDto, user.getId());
-        postFileService.saveFiles(files, postId);
+        postService.createPost(postCreateDto, user.getId(), files);
         return "redirect:/board/{boardId}";
     }
 
@@ -100,9 +66,7 @@ public class PostController {
                              PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds) {
-        postService.updatePost(id, postCreateDto);
-        postFileService.deleteFiles(deleteFileIds);
-        postFileService.saveFiles(files, id);
+        postService.updatePost(id, postCreateDto, files, deleteFileIds);
         return "redirect:/board/" + boardId + "/post/" + id;
     }
 

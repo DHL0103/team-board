@@ -44,6 +44,9 @@ public class BoardMemberService {
     }
 
     public void save(Long boardId, Long memberId, BoardRole boardRole) {
+        if (boardMemberMapper.findByBoardIdAndMemberId(boardId, memberId) != null) {
+            throw new IllegalStateException("이미 보드에 추가된 멤버입니다.");
+        }
         boardMemberMapper.save(boardId, memberId, boardRole);
     }
 
