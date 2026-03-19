@@ -1,6 +1,7 @@
 import { Editor } from 'https://esm.sh/@tiptap/core@2';
 import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2';
 import Image from 'https://esm.sh/@tiptap/extension-image@2';
+import Underline from 'https://esm.sh/@tiptap/extension-underline@2';
 
 function initEditor(editorId, inputId, toolbarId, initialContent) {
     const editorEl = document.getElementById(editorId);
@@ -13,6 +14,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
         extensions: [
             StarterKit,
             Image.configure({ inline: false, allowBase64: false }),
+            Underline,
         ],
         content: initialContent || '',
     });
@@ -24,6 +26,8 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
         .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 2 }).run());
     toolbar.querySelector('[data-cmd="h3"]')
         .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 3 }).run());
+    toolbar.querySelector('[data-cmd="underline"]')
+        .addEventListener('click', () => editor.chain().focus().toggleUnderline().run());
     toolbar.querySelector('[data-cmd="bold"]')
         .addEventListener('click', () => editor.chain().focus().toggleBold().run());
     toolbar.querySelector('[data-cmd="italic"]')
@@ -64,7 +68,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
 }
 
 function updateToolbar(editor, toolbar) {
-    const states = ['bold', 'italic', 'strike', 'bulletList', 'orderedList', 'codeBlock'];
+    const states = ['underline', 'bold', 'italic', 'strike', 'bulletList', 'orderedList', 'codeBlock'];
     states.forEach(name => {
         const btn = toolbar.querySelector(`[data-cmd="${name}"]`);
         if (btn) {
