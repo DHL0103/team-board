@@ -1,3 +1,20 @@
+// ── 햄버거 메뉴 ──
+(function () {
+    const hamburger = document.getElementById('hamburger');
+    const navMenu   = document.getElementById('nav-menu');
+    if (!hamburger || !navMenu) { return; }
+
+    hamburger.addEventListener('click', function () {
+        navMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!hamburger.contains(e.target) && !navMenu.contains(e.target)) {
+            navMenu.classList.remove('open');
+        }
+    });
+})();
+
 // ── 토스트 유틸 ──
 function showToast(message) {
     const toast = document.getElementById("errorToast");

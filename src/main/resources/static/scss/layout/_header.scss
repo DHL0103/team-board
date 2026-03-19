@@ -38,6 +38,77 @@ header {
   }
 }
 
+// ── 햄버거 버튼 ──
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: $text;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+
+  @media (max-width: 639px) {
+    display: flex;
+  }
+}
+
+// ── 네비 메뉴 ──
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  @media (max-width: 639px) {
+    display: flex;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 8px 16px 12px;
+    gap: 4px;
+    background: $surface;
+    border-bottom: 1px solid $border;
+    z-index: 99;
+    opacity: 0;
+    transform: translateY(-6px);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+
+    &.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .btn-back {
+      justify-content: flex-start;
+    }
+
+    form {
+      margin: 0;
+
+      .btn-back {
+        width: 100%;
+      }
+    }
+  }
+}
+
 // 뒤로가기 버튼 (상세 페이지)
 .btn-back {
   display: inline-flex;
