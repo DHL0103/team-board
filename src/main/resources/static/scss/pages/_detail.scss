@@ -85,6 +85,8 @@
       strong { font-weight: 600; }
       em { font-style: italic; }
       s { text-decoration: line-through; }
+      a { color: #2563eb; text-decoration: underline; }
+      a:hover { color: #1d4ed8; }
       img { max-width: 100%; height: auto; border-radius: 6px; display: block; margin: 8px 0; }
       pre {
         background: #2b2b2b;
