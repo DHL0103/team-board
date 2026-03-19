@@ -22,4 +22,6 @@ public interface PostFileMapper {
     List<PostFile> findByStoredPaths(@Param("storedPaths") List<String> storedPaths);
 
     void deleteByIds(@Param("ids") List<Long> ids);
+
+    List<PostFile> findOrphanInlineImages();
 }

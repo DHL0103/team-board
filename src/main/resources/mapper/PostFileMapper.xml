@@ -45,4 +45,11 @@
         </foreach>
     </delete>
 
+    <select id="findOrphanInlineImages" resultType="kr.co.promptech.springboottutorial.model.PostFile">
+        SELECT * FROM post_files
+        WHERE post_id IS NULL
+          AND inline = true
+          AND created_at &lt; NOW() - INTERVAL 24 HOUR
+    </select>
+
 </mapper>
