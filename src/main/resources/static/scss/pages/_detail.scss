@@ -73,8 +73,16 @@
       font-size: 14px;
       color: $text;
       line-height: 1.75;
-      white-space: pre-wrap;
       word-break: break-word;
+
+      p { margin: 0 0 8px; &:last-child { margin-bottom: 0; } }
+      ul, ol { padding-left: 20px; margin: 0 0 8px; }
+      ul li { list-style-type: disc; }
+      ol li { list-style-type: decimal; }
+      strong { font-weight: 600; }
+      em { font-style: italic; }
+      s { text-decoration: line-through; }
+      img { max-width: 100%; height: auto; border-radius: 6px; display: block; margin: 8px 0; }
     }
   }
 
