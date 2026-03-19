@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.exception.PostNotFoundException;
+import kr.co.promptech.springboottutorial.util.HtmlSanitizer;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.BoardMember;
 import kr.co.promptech.springboottutorial.model.CustomUser;
@@ -36,6 +37,7 @@ public class PostService {
     private final BoardMapper boardMapper;
     private final PostRejectionService postRejectionService;
     private final CommentService commentService;
+    private final HtmlSanitizer htmlSanitizer;
 
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
@@ -64,9 +66,11 @@ public class PostService {
             dueDate = LocalDateTime.parse(dueDateStr);
         }
 
+        String sanitizedContent = htmlSanitizer.sanitize(postCreateDto.getContent());
+
         Post post = Post.builder()
                 .title(postCreateDto.getTitle())
-                .content(postCreateDto.getContent())
+                .content(sanitizedContent)
                 .dueDate(dueDate)
                 .memberId(memberId)
                 .boardId(postCreateDto.getBoardId())
@@ -75,6 +79,8 @@ public class PostService {
                 .build();
 
         postMapper.createPost(post);
+
+        postFileService.linkInlineImages(sanitizedContent, post.getId());
 
         // board USER가 생성한 경우 본인을 자동으로 담당자에 추가
         BoardMember bm = boardMemberMapper.findByBoardIdAndMemberId(post.getBoardId(), memberId);
@@ -120,7 +126,12 @@ public class PostService {
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
             dueDate = LocalDateTime.parse(dueDateStr);
         }
-        postMapper.updatePost(id, postCreateDto.getTitle(), postCreateDto.getContent(), dueDate);
+
+        String sanitizedContent = htmlSanitizer.sanitize(postCreateDto.getContent());
+        String oldContent = getPostById(id).getContent();
+        postFileService.syncInlineImages(oldContent, sanitizedContent, id);
+
+        postMapper.updatePost(id, postCreateDto.getTitle(), sanitizedContent, dueDate);
 
         postMemberMapper.deleteByPostId(id);
         List<Long> assigneeIds = postCreateDto.getAssigneeIds();

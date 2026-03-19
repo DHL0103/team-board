@@ -20,4 +20,29 @@
         DELETE FROM post_files WHERE id = #{id}
     </delete>
 
+    <update id="linkInlineImages">
+        UPDATE post_files
+        SET post_id = #{postId}
+        WHERE stored_path IN
+        <foreach item="path" collection="storedPaths" open="(" separator="," close=")">
+            #{path}
+        </foreach>
+        AND post_id IS NULL
+    </update>
+
+    <select id="findByStoredPaths" resultType="kr.co.promptech.springboottutorial.model.PostFile">
+        SELECT * FROM post_files
+        WHERE stored_path IN
+        <foreach item="path" collection="storedPaths" open="(" separator="," close=")">
+            #{path}
+        </foreach>
+    </select>
+
+    <delete id="deleteByIds">
+        DELETE FROM post_files WHERE id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>
