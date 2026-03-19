@@ -86,6 +86,15 @@
       em { font-style: italic; }
       s { text-decoration: line-through; }
       img { max-width: 100%; height: auto; border-radius: 6px; display: block; margin: 8px 0; }
+      pre {
+        background: #2b2b2b;
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin: 0 0 8px;
+        overflow-x: auto;
+        code { font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 13px; background: none; padding: 0; color: #a9b7c6; line-height: 1.6; }
+      }
+      code { font-family: 'JetBrains Mono', 'Courier New', Courier, monospace; font-size: 13px; background: #2b2b2b; padding: 1px 5px; border-radius: 3px; color: #a9b7c6; }
     }
   }
 
