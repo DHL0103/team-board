@@ -18,6 +18,12 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
     });
 
     // ── 툴바 버튼 ──
+    toolbar.querySelector('[data-cmd="h1"]')
+        .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 1 }).run());
+    toolbar.querySelector('[data-cmd="h2"]')
+        .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 2 }).run());
+    toolbar.querySelector('[data-cmd="h3"]')
+        .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 3 }).run());
     toolbar.querySelector('[data-cmd="bold"]')
         .addEventListener('click', () => editor.chain().focus().toggleBold().run());
     toolbar.querySelector('[data-cmd="italic"]')
@@ -61,6 +67,12 @@ function updateToolbar(editor, toolbar) {
         const btn = toolbar.querySelector(`[data-cmd="${name}"]`);
         if (btn) {
             btn.classList.toggle('active', editor.isActive(name));
+        }
+    });
+    [1, 2, 3].forEach(level => {
+        const btn = toolbar.querySelector(`[data-cmd="h${level}"]`);
+        if (btn) {
+            btn.classList.toggle('active', editor.isActive('heading', { level }));
         }
     });
 }
