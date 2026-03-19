@@ -14,7 +14,7 @@ public interface PostMemberMapper {
 
     List<BoardMemberResponseDto> findAssigneesByPostId(Long postId);
 
-    int countByPostIdAndMemberId(@Param("postId") Long postId, @Param("memberId") Long memberId);
+    boolean existsByPostIdAndMemberId(@Param("postId") Long postId, @Param("memberId") Long memberId);
 
     void save(@Param("postId") Long postId, @Param("memberId") Long memberId);
 

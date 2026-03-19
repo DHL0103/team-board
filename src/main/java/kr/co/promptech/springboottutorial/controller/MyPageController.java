@@ -28,8 +28,7 @@ public class MyPageController {
     public String myPage(@AuthenticationPrincipal CustomUser user,
                          @ModelAttribute PasswordChangeDto passwordChangeDto,
                          Model model) {
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+        populateMyPageModel(model, user);
         return "mypage";
     }
 
@@ -42,20 +41,13 @@ public class MyPageController {
                                  BindingResult bindingResult,
                                  HttpServletRequest request,
                                  Model model) {
-        if (!passwordChangeDto.getNewPassword().equals(passwordChangeDto.getNewPasswordConfirm())) {
-            bindingResult.rejectValue("newPasswordConfirm", "mismatch", "새 비밀번호가 일치하지 않습니다.");
-        }
         if (bindingResult.hasErrors()) {
-            model.addAttribute("username", user.getUsername());
-            model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+            populateMyPageModel(model, user);
             return "mypage";
         }
-        boolean success = memberService.changePassword(user.getId(),
-                passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
-        if (!success) {
+        if (!memberService.changePassword(user.getId(), passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword())) {
             bindingResult.rejectValue("currentPassword", "wrong", "현재 비밀번호가 올바르지 않습니다.");
-            model.addAttribute("username", user.getUsername());
-            model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+            populateMyPageModel(model, user);
             return "mypage";
         }
         SecurityContextHolder.clearContext();
@@ -66,18 +58,23 @@ public class MyPageController {
         return "redirect:/member/login?passwordChanged=true";
     }
 
+    private void populateMyPageModel(Model model, CustomUser user) {
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+    }
+
     /**
      * 초대 수락 — INVITED → USER
      */
     @PostMapping("/boards/{boardId}/accept")
     public String acceptInvite(@AuthenticationPrincipal CustomUser user,
                                @PathVariable Long boardId,
-                               @RequestParam(required = false) String from) {
-        boardMemberService.updateRole(boardId, user.getId(), BoardRole.USER);
-        if ("board".equals(from)) {
-            return "redirect:/board/" + boardId;
+                               @RequestParam(required = false) String redirectUrl) {
+        if (!boardMemberService.isInvited(boardId, user.getId())) {
+            return "redirect:/member/mypage";
         }
-        return "redirect:/member/mypage";
+        boardMemberService.updateRole(boardId, user.getId(), BoardRole.USER);
+        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/member/mypage";
     }
 
     /**
@@ -86,11 +83,8 @@ public class MyPageController {
     @PostMapping("/boards/{boardId}/reject")
     public String rejectInvite(@AuthenticationPrincipal CustomUser user,
                                @PathVariable Long boardId,
-                               @RequestParam(required = false) String from) {
+                               @RequestParam(required = false) String redirectUrl) {
         boardMemberService.delete(boardId, user.getId());
-        if ("board".equals(from)) {
-            return "redirect:/board";
-        }
-        return "redirect:/member/mypage";
+        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/member/mypage";
     }
 }

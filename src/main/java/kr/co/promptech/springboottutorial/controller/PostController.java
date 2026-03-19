@@ -3,7 +3,6 @@ package kr.co.promptech.springboottutorial.controller;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
-import kr.co.promptech.springboottutorial.service.PostFileService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +19,6 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
-    private final PostFileService postFileService;
 
     @GetMapping("/{postId}")
     public String getPostDetailPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal CustomUser user) {
@@ -39,8 +37,7 @@ public class PostController {
     public String createPost(PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @AuthenticationPrincipal CustomUser user) {
-        Long postId = postService.createPost(postCreateDto, user.getId());
-        postFileService.saveFiles(files, postId);
+        postService.createPost(postCreateDto, user.getId(), files);
         return "redirect:/board/{boardId}";
     }
 
@@ -69,9 +66,7 @@ public class PostController {
                              PostCreateDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds) {
-        postService.updatePost(id, postCreateDto);
-        postFileService.deleteFiles(deleteFileIds);
-        postFileService.saveFiles(files, id);
+        postService.updatePost(id, postCreateDto, files, deleteFileIds);
         return "redirect:/board/" + boardId + "/post/" + id;
     }
 

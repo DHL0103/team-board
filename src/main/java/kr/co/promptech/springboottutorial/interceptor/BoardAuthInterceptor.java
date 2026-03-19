@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
+import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
@@ -43,9 +44,9 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
 
         // 3. 비활성 보드는 매니저만 접근 허용
         Board board = boardService.getBoardById(boardId);
-        if (board != null && "INACTIVE".equals(board.getStatus())) {
+        if (board != null && BoardStatus.INACTIVE == board.getStatus()) {
             if (!boardMemberService.isManager(boardId, user.getId())) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                response.sendRedirect("/board/" + boardId + "/inactive");
                 return false;
             }
         }

@@ -38,6 +38,7 @@
   max-width: 614px;
 }
 
+
 .board-member-count {
   display: inline-flex;
   align-items: center;
@@ -57,6 +58,10 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 8px;
+}
+
+.board-detail-header .page-meta {
+  max-width: 614px;
 }
 
 .neon-badge {

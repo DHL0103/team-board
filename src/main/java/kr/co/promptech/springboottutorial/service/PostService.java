@@ -9,6 +9,7 @@ import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
+import kr.co.promptech.springboottutorial.mapper.PostRejectionMapper;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
@@ -19,6 +20,7 @@ import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,7 +56,8 @@ public class PostService {
                 .toList();
     }
 
-    public Long createPost(PostCreateDto postCreateDto, Long memberId) {
+    @Transactional
+    public void createPost(PostCreateDto postCreateDto, Long memberId, List<MultipartFile> files) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
@@ -87,9 +90,10 @@ public class PostService {
             }
         }
 
-        return post.getId();
+        postFileService.saveFiles(files, post.getId());
     }
 
+    @Transactional
     public void deletePost(Long id) {
         postFileService.deleteFilesByPostId(id);
         postMapper.deletePost(id);
@@ -109,7 +113,8 @@ public class PostService {
         return posts.stream().map(PostResponseDto::new).toList();
     }
 
-    public void updatePost(Long id, PostCreateDto postCreateDto) {
+    @Transactional
+    public void updatePost(Long id, PostCreateDto postCreateDto, List<MultipartFile> files, List<Long> deleteFileIds) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
@@ -124,6 +129,9 @@ public class PostService {
                 postMemberMapper.save(id, assigneeId);
             }
         }
+
+        postFileService.deleteFiles(deleteFileIds);
+        postFileService.saveFiles(files, id);
     }
 
     public List<BoardMemberResponseDto> getAssigneesByPostId(Long postId) {
@@ -131,7 +139,7 @@ public class PostService {
     }
 
     public boolean isAssignee(Long postId, Long memberId) {
-        return postMemberMapper.countByPostIdAndMemberId(postId, memberId) > 0;
+        return postMemberMapper.existsByPostIdAndMemberId(postId, memberId);
     }
 
     public boolean canModify(Long postId, Long boardId, Long memberId, MemberRole role) {
@@ -148,6 +156,7 @@ public class PostService {
         return isAssignee(postId, memberId);
     }
 
+    @Transactional
     public void updateStatus(Long id, PostStatus status) {
         postMapper.updateStatus(id, status);
     }
@@ -157,6 +166,8 @@ public class PostService {
         postMapper.updateStatus(postId, PostStatus.REJECTED);
         postRejectionService.save(postId, reason, rejectedBy);
     }
+
+
 
     @Transactional(readOnly = true)
     public PostDetailDto getPostDetail(Long postId, CustomUser user) {

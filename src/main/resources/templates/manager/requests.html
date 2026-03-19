@@ -6,14 +6,14 @@
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body th:data-board-id="${boardId}">
+<body th:data-board-id="${board.id}">
 
     <div th:replace="~{fragments/header :: back-header}"></div>
 
     <div class="admin-wrap">
-        <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${boardId}, boardName=${boardName}, currentPage='매니저 페이지')}"></div>
+        <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='매니저 페이지')}"></div>
 
-        <div th:replace="~{fragments/manager-nav :: manager-nav(boardId=${boardId}, activePage='requests')}"></div>
+        <div th:replace="~{fragments/manager-nav :: manager-nav(boardId=${board.id}, activePage='requests')}"></div>
 
         <!-- 승인 요청 섹션 -->
         <div class="admin-section">
@@ -31,7 +31,7 @@
 
             <div class="request-list" th:unless="${#lists.isEmpty(requestList)}">
                 <div class="request-card" th:each="post : ${requestList}">
-                    <a class="request-card-info" th:href="@{'/board/' + ${boardId} + '/post/' + ${post.id}}">
+                    <a class="request-card-info" th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
                         <div class="request-card-title" th:text="${post.title}">작업 제목</div>
                         <div class="request-card-meta">
                             <span th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
@@ -44,7 +44,7 @@
                         </div>
                     </a>
                     <div class="request-card-actions">
-                        <form th:action="@{'/board/' + ${boardId} + '/manager/requests/approve/' + ${post.id}}" method="post" style="display:inline;">
+                        <form th:action="@{'/board/' + ${board.id} + '/manager/requests/approve/' + ${post.id}}" method="post" style="display:inline;">
                             <button type="submit" class="btn-approve">승인</button>
                         </form>
                         <button type="button" class="btn-reject"
