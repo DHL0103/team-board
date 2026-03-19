@@ -192,6 +192,7 @@ public class PostFileService {
                     .originalName(originalName)
                     .storedPath(savedName)
                     .fileSize(file.getSize())
+                    .inline(false)
                     .createdAt(LocalDateTime.now())
                     .build();
             postFileMapper.saveFile(postFile);
