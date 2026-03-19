@@ -8,7 +8,9 @@
 
 <body th:data-member-id="${post.memberId}"
       th:data-board-id="${post.boardId}"
-      th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+      th:data-post-id="${post.id}"
+      th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}"
+      th:data-current-member-id="${post.currentMemberId}">
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
@@ -27,8 +29,8 @@
           <span th:text="${post.boardName}">팀</span>
         </span>
         <span class="status-chip"
-              th:classappend="'chip-' + ${#strings.toLowerCase(post.status.name())}"
-              th:text="${post.status.label}"></span>
+              th:classappend="'chip-' + ${#strings.toLowerCase(post.status)}"
+              th:text="${post.status == 'PROGRESS' ? '진행 중' : (post.status == 'REQUESTED' ? '승인 요청' : (post.status == 'APPROVED' ? '완료' : '반려'))}"></span>
         <span class="due-chip" id="due-chip"
               th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
           <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
@@ -71,7 +73,7 @@
       </div>
     </div>
 
-    <div class="post-actions">
+    <div class="post-actions" th:if="${post.canModify}">
       <div class="post-actions-left">
         <button th:if="${post.canModify}" class="btn-delete" id="btn-delete">
           <svg width="13" height="13"><use href="/img/icons.svg#icon-trash"></use></svg> 삭제
@@ -79,17 +81,16 @@
       </div>
       <div class="post-actions-right">
         <button th:if="${post.canModify}" class="btn-edit" id="btn-edit">수정</button>
-        <form th:if="${post.canModify and (post.status.name() == 'PROGRESS' or post.status.name() == 'REJECTED')}"
-              th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
+        <form th:if="${post.canModify and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
-        <form th:if="${post.canModify and post.status.name() == 'REQUESTED'}"
+        <form th:if="${post.canModify and post.status == 'REQUESTED'}"
               th:action="@{/board/{b}/manager/requests/approve/{id}(b=${post.boardId},id=${post.id})}"
               method="post" style="margin:0;">
           <input type="hidden" name="source" value="detail">
           <button type="submit" class="btn-approve">승인</button>
         </form>
-        <button th:if="${post.canModify and (post.status.name() == 'REQUESTED' or post.status.name() == 'APPROVED')}"
+        <button th:if="${post.canModify and (post.status == 'REQUESTED' or post.status == 'APPROVED')}"
                 type="button" class="btn-reject"
                 th:data-post-id="${post.id}">반려</button>
       </div>
@@ -114,29 +115,60 @@
     </div>
   </div>
 
-  <div class="comment-section">
+  <div class="comment-section" id="comment-section">
     <div class="comment-header">
       <span class="comment-header-title">피드백 & 댓글</span>
-      <span class="comment-count-badge"
-            th:text="${commentList != null ? #lists.size(commentList) : 0} + '개'">0개</span>
+      <span class="comment-count-badge" th:text="${#lists.size(post.commentList)} + '개'">0개</span>
     </div>
     <div class="comment-list">
-      <div class="comment-empty" th:if="${commentList == null or #lists.isEmpty(commentList)}">댓글이 없습니다.</div>
-      <div class="comment-item" th:each="comment : ${commentList}">
+      <div class="comment-empty" th:if="${#lists.isEmpty(post.commentList)}">댓글이 없습니다.</div>
+      <div th:each="comment : ${post.commentList}"
+           class="comment-item"
+           th:classappend="${comment.depth == 1} ? 'comment-item--reply'"
+           th:data-comment-id="${comment.id}">
         <div class="comment-top">
-          <div class="avatar-md" th:text="${#strings.substring(comment.writerName, 0, 1)}">U</div>
-          <span class="comment-writer" th:text="${comment.writerName}">작성자</span>
+          <span class="comment-writer"
+                th:classappend="${comment.authorRole == 'ADMIN'} ? 'comment-writer--admin' : (${comment.authorRole == 'MANAGER'} ? 'comment-writer--manager' : '')"
+                th:text="${comment.authorUsername}">작성자</span>
+          <span class="comment-deleted-badge" th:if="${comment.deleted and post.currentUserIsManagerOrAdmin}">삭제됨</span>
           <span class="comment-date" th:text="${#temporals.format(comment.createdAt, 'MM.dd HH:mm')}">01.01</span>
+          <button type="button" class="btn-reply"
+                  th:unless="${comment.deleted}"
+                  th:data-comment-id="${comment.id}"
+                  th:data-group-id="${comment.groupId != null ? comment.groupId : comment.id}"
+                  th:data-author="${comment.authorUsername}">답글</button>
+          <button type="button" class="btn-comment-edit"
+                  th:if="${!comment.deleted and comment.memberId == post.currentMemberId}">수정</button>
+          <form th:unless="${comment.deleted}"
+                th:if="${comment.memberId == post.currentMemberId or post.currentUserIsManagerOrAdmin}"
+                th:action="@{/board/{b}/post/{p}/comment/{c}/delete(b=${post.boardId},p=${post.id},c=${comment.id})}"
+                method="post" class="comment-delete-form">
+            <button type="submit" class="btn-comment-delete">삭제</button>
+          </form>
         </div>
-        <div class="comment-content" th:text="${comment.content}">내용</div>
+        <div class="comment-content"
+             th:if="${!comment.deleted or post.currentUserIsManagerOrAdmin}"
+             th:classappend="${comment.deleted} ? 'comment-content--deleted'"><span th:if="${comment.parentAuthorUsername != null}" class="comment-mention" th:text="'@' + ${comment.parentAuthorUsername}"></span><span th:text="${comment.content}">내용</span></div>
+        <div class="comment-deleted-msg" th:if="${comment.deleted and !post.currentUserIsManagerOrAdmin}">삭제된 댓글입니다.</div>
       </div>
     </div>
+
     <div class="comment-form">
-      <form th:action="'/post/' + ${post.id} + '/comment'" method="post">
-        <div class="comment-input-row">
-            <textarea class="comment-textarea" name="content" placeholder="댓글을 입력하세요..."
-                      id="commentTextarea"></textarea>
-          <button type="submit" class="btn-comment-submit">등록</button>
+      <form th:action="@{/board/{boardId}/post/{postId}/comment(boardId=${post.boardId},postId=${post.id})}" method="post" id="commentForm">
+        <input type="hidden" name="postId" th:value="${post.id}">
+        <input type="hidden" name="parentId" id="commentParentId" value="">
+        <input type="hidden" name="groupId" id="commentGroupId" value="">
+        <input type="hidden" name="depth" id="commentDepth" value="0">
+        <div class="comment-reply-target" id="commentReplyTarget"></div>
+        <div class="comment-form-header">
+          <span class="comment-form-author" id="commentAuthorName"></span>
+          <span class="comment-char-count" id="commentCharCount">0/256</span>
+        </div>
+        <div class="comment-input-wrap">
+          <textarea class="comment-textarea" name="content" placeholder="댓글을 입력하세요..." id="commentTextarea" rows="1" maxlength="256"></textarea>
+          <div class="comment-input-footer">
+            <button type="submit" class="btn-comment-submit">등록</button>
+          </div>
         </div>
       </form>
     </div>

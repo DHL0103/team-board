@@ -34,7 +34,8 @@ public class PostService {
     private final BoardMemberMapper boardMemberMapper;
     private final BoardMemberService boardMemberService;
     private final BoardMapper boardMapper;
-    private final PostRejectionMapper postRejectionMapper;
+    private final PostRejectionService postRejectionService;
+    private final CommentService commentService;
 
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
@@ -163,14 +164,17 @@ public class PostService {
     @Transactional
     public void rejectPost(Long postId, String reason, Long rejectedBy) {
         postMapper.updateStatus(postId, PostStatus.REJECTED);
-        postRejectionMapper.save(postId, reason, rejectedBy, LocalDateTime.now());
+        postRejectionService.save(postId, reason, rejectedBy);
     }
+
 
     @Transactional(readOnly = true)
     public PostDetailDto getPostDetail(Long postId, CustomUser user) {
         Post post = getPostById(postId);
         Board board = boardMapper.getBoardById(post.getBoardId());
         boolean canModify = user != null && canModify(postId, post.getBoardId(), user.getId(), user.getRole());
+        boolean isManagerOrAdmin = user != null && (user.getRole() == MemberRole.ROLE_ADMIN
+                || boardMemberService.isManager(post.getBoardId(), user.getId()));
 
         return PostDetailDto.builder()
                 .id(post.getId())
@@ -178,17 +182,20 @@ public class PostService {
                 .memberId(post.getMemberId())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .status(PostStatus.valueOf(post.getStatus()))
+                .status(post.getStatus())
                 .dueDate(post.getDueDate())
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .postFiles(postFileService.getFilesByPostId(postId))
-                .rejections(postRejectionMapper.findAllByPostId(postId))
+                .rejections(postRejectionService.getByPostId(postId))
                 .boardName(board != null ? board.getName() : null)
                 .boardColor(board != null ? board.getColor() : null)
                 .canModify(canModify)
                 .boardUserList(boardMemberService.getUsersByBoardId(post.getBoardId()))
                 .postAssignees(postMemberMapper.findAssigneesByPostId(postId))
+                .commentList(commentService.findByPostId(postId, post.getBoardId()))
+                .currentMemberId(user != null ? user.getId() : null)
+                .currentUserIsManagerOrAdmin(isManagerOrAdmin)
                 .build();
     }
 }

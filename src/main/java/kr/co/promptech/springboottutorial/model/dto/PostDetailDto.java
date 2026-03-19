@@ -2,7 +2,6 @@ package kr.co.promptech.springboottutorial.model.dto;
 
 import kr.co.promptech.springboottutorial.model.PostFile;
 import kr.co.promptech.springboottutorial.model.PostRejection;
-import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,7 +16,7 @@ public class PostDetailDto {
     private Long memberId;
     private String title;
     private String content;
-    private PostStatus status;
+    private String status;
     private LocalDateTime dueDate;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -28,4 +27,7 @@ public class PostDetailDto {
     private boolean canModify;
     private List<BoardMemberResponseDto> boardUserList;
     private List<BoardMemberResponseDto> postAssignees;
+    private List<CommentResponseDto> commentList;
+    private Long currentMemberId;
+    private boolean currentUserIsManagerOrAdmin;
 }

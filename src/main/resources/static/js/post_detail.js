@@ -397,3 +397,115 @@ if (rejectionPanel) {
     window.addEventListener('resize', adjustRejectionPanel);
     adjustRejectionPanel();
 }
+
+// ── 답글 ──
+(function () {
+    var parentIdInput  = document.getElementById('commentParentId');
+    var groupIdInput   = document.getElementById('commentGroupId');
+    var depthInput     = document.getElementById('commentDepth');
+    var replyTarget    = document.getElementById('commentReplyTarget');
+    var textarea       = document.getElementById('commentTextarea');
+
+    document.querySelectorAll('.btn-reply').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var commentId = btn.dataset.commentId;
+            var groupId   = btn.dataset.groupId;
+            var author    = btn.dataset.author;
+
+            parentIdInput.value = commentId;
+            groupIdInput.value  = groupId;
+            depthInput.value    = '1';
+
+            replyTarget.style.display = 'flex';
+            replyTarget.innerHTML =
+                '@' + author + ' 에게 답글' +
+                ' <button type="button" class="btn-reply-cancel">×</button>';
+
+            replyTarget.querySelector('.btn-reply-cancel').addEventListener('click', function () {
+                parentIdInput.value = '';
+                groupIdInput.value  = '';
+                depthInput.value    = '0';
+                replyTarget.style.display = 'none';
+                replyTarget.innerHTML = '';
+            });
+
+            if (textarea) { textarea.focus(); }
+        });
+    });
+})();
+
+// ── 댓글 작성자 이름 + 글자수 카운터 ──
+(function () {
+    var currentMemberId = parseInt(document.body.dataset.currentMemberId);
+    var authorName      = document.getElementById('commentAuthorName');
+    var charCount       = document.getElementById('commentCharCount');
+    var textarea        = document.getElementById('commentTextarea');
+    var MAX             = 256;
+
+    if (authorName && currentMemberId) {
+        fetchUsername(currentMemberId).then(function (name) {
+            authorName.textContent = name;
+        });
+    }
+
+    if (textarea && charCount) {
+        textarea.addEventListener('input', function () {
+            var len = this.value.length;
+            charCount.textContent = len + '/' + MAX;
+            charCount.classList.toggle('near-limit', len >= MAX - 16);
+
+            this.style.height = 'auto';
+            this.style.height = this.scrollHeight + 'px';
+        });
+    }
+})();
+
+// ── 댓글 수정 ──
+(function () {
+    var boardId = document.body.dataset.boardId;
+    var postId  = document.body.dataset.postId;
+
+    document.querySelectorAll('.btn-comment-edit').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            var item       = btn.closest('.comment-item');
+            var contentDiv = item.querySelector('.comment-content');
+            var commentId  = item.dataset.commentId;
+            var currentText = item.querySelector('.comment-content span:last-child').textContent;
+
+            contentDiv.style.display = 'none';
+
+            var editArea = document.createElement('div');
+            editArea.className = 'comment-edit-area';
+            editArea.innerHTML =
+                '<textarea class="comment-edit-textarea">' + currentText + '</textarea>' +
+                '<div class="comment-edit-actions">' +
+                    '<button type="button" class="btn-comment-edit-cancel">취소</button>' +
+                    '<button type="button" class="btn-comment-edit-save">저장</button>' +
+                '</div>';
+            contentDiv.insertAdjacentElement('afterend', editArea);
+
+            editArea.querySelector('.btn-comment-edit-cancel').addEventListener('click', function () {
+                contentDiv.style.display = '';
+                editArea.remove();
+            });
+
+            editArea.querySelector('.btn-comment-edit-save').addEventListener('click', function () {
+                var content = editArea.querySelector('.comment-edit-textarea').value.trim();
+                if (!content) { return; }
+
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/board/' + boardId + '/post/' + postId + '/comment/' + commentId + '/edit';
+
+                var input = document.createElement('input');
+                input.type  = 'hidden';
+                input.name  = 'content';
+                input.value = content;
+                form.appendChild(input);
+
+                document.body.appendChild(form);
+                form.submit();
+            });
+        });
+    });
+})();
