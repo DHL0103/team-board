@@ -2,6 +2,7 @@ import { Editor } from 'https://esm.sh/@tiptap/core@2';
 import StarterKit from 'https://esm.sh/@tiptap/starter-kit@2';
 import Image from 'https://esm.sh/@tiptap/extension-image@2';
 import Underline from 'https://esm.sh/@tiptap/extension-underline@2';
+import Link from 'https://esm.sh/@tiptap/extension-link@2';
 
 function initEditor(editorId, inputId, toolbarId, initialContent) {
     const editorEl = document.getElementById(editorId);
@@ -15,6 +16,10 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
             StarterKit,
             Image.configure({ inline: false, allowBase64: false }),
             Underline,
+            Link.configure({
+                openOnClick: false,
+                HTMLAttributes: { target: '_blank', rel: 'noopener noreferrer' },
+            }),
         ],
         content: initialContent || '',
     });
@@ -26,6 +31,17 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
         .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 2 }).run());
     toolbar.querySelector('[data-cmd="h3"]')
         .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 3 }).run());
+    toolbar.querySelector('[data-cmd="link"]').addEventListener('click', () => {
+        if (editor.isActive('link')) {
+            editor.chain().focus().unsetLink().run();
+            return;
+        }
+        const { from, to } = editor.state.selection;
+        const selectedText = editor.state.doc.textBetween(from, to).trim();
+        if (selectedText) {
+            editor.chain().focus().setLink({ href: selectedText }).run();
+        }
+    });
     toolbar.querySelector('[data-cmd="underline"]')
         .addEventListener('click', () => editor.chain().focus().toggleUnderline().run());
     toolbar.querySelector('[data-cmd="bold"]')
@@ -68,7 +84,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
 }
 
 function updateToolbar(editor, toolbar) {
-    const states = ['underline', 'bold', 'italic', 'strike', 'bulletList', 'orderedList', 'codeBlock'];
+    const states = ['link', 'underline', 'bold', 'italic', 'strike', 'bulletList', 'orderedList', 'codeBlock'];
     states.forEach(name => {
         const btn = toolbar.querySelector(`[data-cmd="${name}"]`);
         if (btn) {
