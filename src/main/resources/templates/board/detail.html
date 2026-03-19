@@ -13,7 +13,7 @@
   <th:block th:replace="~{fragments/board-header :: board-header(${board}, ${board.manager})}"></th:block>
 
   <div class="kanban-wrap">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center gy-3">
 
       <!-- 진행 중 + 반려-->
       <div class="col-md-4" th:with="progressPosts=${board.postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
