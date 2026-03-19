@@ -102,6 +102,18 @@
     background: $bg;
     border-bottom: 1px solid $border-soft;
   }
+
+  @media (max-width: 639px) {
+    th, td { padding: 10px 12px; }
+
+    .table-group-label td { padding: 8px 12px 6px; }
+
+    td[style*="display:flex"] {
+      flex-wrap: wrap;
+      gap: 6px !important;
+      justify-content: flex-end;
+    }
+  }
 }
 
 .invite-search-form {
