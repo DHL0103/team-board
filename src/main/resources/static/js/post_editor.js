@@ -34,6 +34,8 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
         .addEventListener('click', () => editor.chain().focus().toggleBulletList().run());
     toolbar.querySelector('[data-cmd="orderedList"]')
         .addEventListener('click', () => editor.chain().focus().toggleOrderedList().run());
+    toolbar.querySelector('[data-cmd="codeBlock"]')
+        .addEventListener('click', () => editor.chain().focus().toggleCodeBlock().run());
 
     // ── 이미지 업로드 ──
     const imgInput = toolbar.querySelector('.editor-img-input');
@@ -62,7 +64,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
 }
 
 function updateToolbar(editor, toolbar) {
-    const states = ['bold', 'italic', 'strike', 'bulletList', 'orderedList'];
+    const states = ['bold', 'italic', 'strike', 'bulletList', 'orderedList', 'codeBlock'];
     states.forEach(name => {
         const btn = toolbar.querySelector(`[data-cmd="${name}"]`);
         if (btn) {
