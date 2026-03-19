@@ -4,12 +4,12 @@
 <mapper namespace="kr.co.promptech.springboottutorial.mapper.PostFileMapper">
 
     <insert id="saveFile" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO post_files (post_id, original_name, stored_path, file_size, created_at)
-        VALUES (#{postId}, #{originalName}, #{storedPath}, #{fileSize}, #{createdAt})
+        INSERT INTO post_files (post_id, original_name, stored_path, file_size, inline, created_at)
+        VALUES (#{postId}, #{originalName}, #{storedPath}, #{fileSize}, #{inline}, #{createdAt})
     </insert>
 
     <select id="findByPostId" resultType="kr.co.promptech.springboottutorial.model.PostFile">
-        SELECT * FROM post_files WHERE post_id = #{postId}
+        SELECT * FROM post_files WHERE post_id = #{postId} AND inline = false
     </select>
 
     <select id="findById" resultType="kr.co.promptech.springboottutorial.model.PostFile">
