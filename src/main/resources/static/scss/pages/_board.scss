@@ -155,6 +155,23 @@
   margin-bottom: 16px;
 
   .post-list-back { margin-left: auto; }
+
+  @media (max-width: 639px) {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+
+    .status-chip      { grid-column: 1; grid-row: 1; align-self: center; justify-self: start; }
+    .col-count        { grid-column: 2; grid-row: 1; align-self: center; text-align: center; }
+    .post-list-back   { grid-column: 3; grid-row: 1; justify-self: end; align-self: center; }
+    .post-list-search-wrap {
+      grid-column: 1 / -1; grid-row: 2;
+      max-width: 100%;
+    }
+    .post-list-sort-group {
+      grid-column: 1 / -1; grid-row: 3;
+      justify-self: center;
+    }
+  }
 }
 
 .post-list-sort-group {
