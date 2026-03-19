@@ -79,6 +79,7 @@
         LEFT JOIN board_members bm2 ON b.id = bm2.board_id AND bm2.board_role IN ('USER', 'MANAGER')
         WHERE b.name LIKE CONCAT('%', #{keyword}, '%')
         GROUP BY b.id
+        ORDER BY b.id DESC
     </select>
 
 </mapper>
