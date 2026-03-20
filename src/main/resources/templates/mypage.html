@@ -10,111 +10,139 @@
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
-<div class="mypage-wrap">
+<div class="mypage-layout">
 
-  <!-- 왼쪽: 내 정보 -->
-  <div class="mypage-profile">
-    <div class="mypage-profile-header">
-      <div class="profile-label">내 계정</div>
-      <div class="profile-username" th:text="${username}">username</div>
-    </div>
-    <div class="mypage-profile-body">
-      <div class="section-title">비밀번호 변경</div>
+  <!-- 사이드바 -->
+  <aside class="mypage-sidebar">
+    <button class="sidebar-item active" data-section="profile">
+      내 정보
+    </button>
+    <button class="sidebar-item" data-section="assigned">
+      내 담당 작업
+      <span class="sidebar-badge" th:if="${!#lists.isEmpty(assignedPosts)}"
+            th:text="${#lists.size(assignedPosts)}"></span>
+    </button>
+    <button class="sidebar-item" data-section="invites">
+      받은 초대
+      <span class="sidebar-badge" th:if="${!#lists.isEmpty(invitedBoards)}"
+            th:text="${#lists.size(invitedBoards)}"></span>
+    </button>
+  </aside>
 
-      <form th:action="@{/member/mypage/password}" th:object="${passwordChangeDto}" method="post">
+  <!-- 콘텐츠 영역 -->
+  <div class="mypage-content">
 
-        <div class="mypage-form-group">
-          <label for="currentPassword">현재 비밀번호</label>
-          <input class="mypage-input" th:classappend="${#fields.hasErrors('currentPassword')} ? 'input-error'"
-                 type="password" th:field="*{currentPassword}" placeholder="현재 비밀번호">
-          <span class="mypage-input-error-msg visible" th:if="${#fields.hasErrors('currentPassword')}"
-                th:errors="*{currentPassword}"></span>
+    <!-- 내 정보 -->
+    <div class="mypage-section active" id="section-profile">
+      <div class="mypage-section-header">
+        <span class="section-title">내 정보</span>
+      </div>
+      <div class="mypage-profile">
+        <div class="mypage-profile-header">
+          <div class="profile-label">내 계정</div>
+          <div class="profile-username" th:text="${username}">username</div>
         </div>
+        <div class="mypage-profile-body">
+          <div class="section-title">비밀번호 변경</div>
 
-        <div class="mypage-form-group">
-          <label for="newPassword">새 비밀번호</label>
-          <input class="mypage-input" th:classappend="${#fields.hasErrors('newPassword')} ? 'input-error'"
-                 type="password" th:field="*{newPassword}" placeholder="4~20자">
-          <span class="mypage-input-error-msg visible" th:if="${#fields.hasErrors('newPassword')}"
-                th:errors="*{newPassword}"></span>
+          <form th:action="@{/member/mypage/password}" th:object="${passwordChangeDto}" method="post">
+
+            <div class="mypage-form-group">
+              <label for="currentPassword">현재 비밀번호</label>
+              <input class="mypage-input" th:classappend="${#fields.hasErrors('currentPassword')} ? 'input-error'"
+                     type="password" th:field="*{currentPassword}" placeholder="현재 비밀번호">
+              <span class="mypage-input-error-msg visible" th:if="${#fields.hasErrors('currentPassword')}"
+                    th:errors="*{currentPassword}"></span>
+            </div>
+
+            <div class="mypage-form-group">
+              <label for="newPassword">새 비밀번호</label>
+              <input class="mypage-input" th:classappend="${#fields.hasErrors('newPassword')} ? 'input-error'"
+                     type="password" th:field="*{newPassword}" placeholder="4~20자">
+              <span class="mypage-input-error-msg visible" th:if="${#fields.hasErrors('newPassword')}"
+                    th:errors="*{newPassword}"></span>
+            </div>
+
+            <div class="mypage-form-group">
+              <label for="newPasswordConfirm">새 비밀번호 확인</label>
+              <input class="mypage-input" th:classappend="${#fields.hasErrors('newPasswordConfirm')} ? 'input-error'"
+                     type="password" th:field="*{newPasswordConfirm}" placeholder="새 비밀번호 재입력">
+              <span class="mypage-input-error-msg visible" th:if="${#fields.hasErrors('newPasswordConfirm')}"
+                    th:errors="*{newPasswordConfirm}"></span>
+            </div>
+
+            <button type="submit" class="btn-change-password">비밀번호 변경</button>
+          </form>
         </div>
-
-        <div class="mypage-form-group">
-          <label for="newPasswordConfirm">새 비밀번호 확인</label>
-          <input class="mypage-input" th:classappend="${#fields.hasErrors('newPasswordConfirm')} ? 'input-error'"
-                 type="password" th:field="*{newPasswordConfirm}" placeholder="새 비밀번호 재입력">
-          <span class="mypage-input-error-msg visible" th:if="${#fields.hasErrors('newPasswordConfirm')}"
-                th:errors="*{newPasswordConfirm}"></span>
-        </div>
-
-        <button type="submit" class="btn-change-password">비밀번호 변경</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- 오른쪽: board 초대 목록 -->
-  <div class="mypage-invites">
-    <div class="mypage-section-header">
-      <span class="section-title">받은 board 초대</span>
-      <span class="section-count" th:text="${#lists.size(invitedBoards)} + '건'">0건</span>
+      </div>
     </div>
 
-    <div class="invite-empty" th:if="${#lists.isEmpty(invitedBoards)}">
-      받은 초대가 없습니다.
-    </div>
+    <!-- 내 담당 작업 -->
+    <div class="mypage-section" id="section-assigned">
+      <div class="mypage-section-header">
+        <span class="section-title">내 담당 작업</span>
+        <span class="section-count" th:text="${#lists.size(assignedPosts)} + '건'">0건</span>
+      </div>
 
-    <div th:each="board : ${invitedBoards}">
-      <div class="invite-card">
-        <a class="invite-board-info" th:href="@{'/board/' + ${board.boardId}}">
-          <span class="invite-board-dot" th:classappend="${'dot-' + board.boardColor}"></span>
-          <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
+      <div class="assigned-empty" th:if="${#lists.isEmpty(assignedPosts)}">
+        진행 중이거나 반려된 담당 작업이 없습니다.
+      </div>
+
+      <div class="assigned-list" th:unless="${#lists.isEmpty(assignedPosts)}">
+        <a class="assigned-card"
+           th:each="post : ${assignedPosts}"
+           th:href="@{'/board/' + ${post.boardId} + '/post/' + ${post.id}}">
+          <div class="assigned-card-top">
+            <div class="assigned-card-board">
+              <span class="invite-board-dot" th:classappend="${'dot-' + post.boardColor}"></span>
+              <span class="assigned-board-name" th:text="${post.boardName}">보드명</span>
+            </div>
+            <span class="status-chip"
+                  th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : 'chip-rejected'}"
+                  th:text="${post.status == 'PROGRESS' ? '진행 중' : '반려'}"></span>
+          </div>
+          <div class="assigned-card-bottom">
+            <div class="assigned-card-title" th:text="${post.title}">제목</div>
+            <span class="due-chip"
+                  th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+              <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+              <span class="due-label"
+                    th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
+            </span>
+          </div>
         </a>
-        <div class="invite-actions">
-          <form th:action="@{/member/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
-            <button type="submit" class="btn-invite-accept">수락</button>
-          </form>
-          <form th:action="@{/member/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
-            <button type="submit" class="btn-invite-reject">거절</button>
-          </form>
+      </div>
+    </div>
+
+    <!-- 받은 초대 -->
+    <div class="mypage-section" id="section-invites">
+      <div class="mypage-section-header">
+        <span class="section-title">받은 board 초대</span>
+        <span class="section-count" th:text="${#lists.size(invitedBoards)} + '건'">0건</span>
+      </div>
+
+      <div class="invite-empty" th:if="${#lists.isEmpty(invitedBoards)}">
+        받은 초대가 없습니다.
+      </div>
+
+      <div th:each="board : ${invitedBoards}">
+        <div class="invite-card">
+          <a class="invite-board-info" th:href="@{'/board/' + ${board.boardId}}">
+            <span class="invite-board-dot" th:classappend="${'dot-' + board.boardColor}"></span>
+            <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
+          </a>
+          <div class="invite-actions">
+            <form th:action="@{/member/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
+              <button type="submit" class="btn-invite-accept">수락</button>
+            </form>
+            <form th:action="@{/member/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
+              <button type="submit" class="btn-invite-reject">거절</button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-</div>
-
-<!-- 내 담당 작업 -->
-<div class="mypage-assigned-section">
-  <div class="mypage-section-header">
-    <span class="section-title">내 담당 작업</span>
-    <span class="section-count" th:text="${#lists.size(assignedPosts)} + '건'">0건</span>
-  </div>
-
-  <div class="assigned-empty" th:if="${#lists.isEmpty(assignedPosts)}">
-    진행 중이거나 반려된 담당 작업이 없습니다.
-  </div>
-
-  <div class="assigned-list" th:unless="${#lists.isEmpty(assignedPosts)}">
-    <a class="assigned-card"
-       th:each="post : ${assignedPosts}"
-       th:href="@{'/board/' + ${post.boardId} + '/post/' + ${post.id}}">
-      <div class="assigned-card-board">
-        <span class="invite-board-dot" th:classappend="${'dot-' + post.boardColor}"></span>
-        <span class="assigned-board-name" th:text="${post.boardName}">보드명</span>
-      </div>
-      <div class="assigned-card-title" th:text="${post.title}">제목</div>
-      <div class="assigned-card-right">
-        <span class="status-chip"
-              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : 'chip-rejected'}"
-              th:text="${post.status == 'PROGRESS' ? '진행 중' : '반려'}"></span>
-        <span class="due-chip"
-              th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
-          <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
-          <span class="due-label"
-                th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
-        </span>
-      </div>
-    </a>
   </div>
 </div>
 
