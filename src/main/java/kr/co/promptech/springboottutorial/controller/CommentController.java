@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import jakarta.validation.Valid;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.CommentCreateDto;
 import kr.co.promptech.springboottutorial.service.CommentService;
@@ -19,7 +20,7 @@ public class CommentController {
     @PostMapping
     public String addComment(@PathVariable Long boardId,
                              @PathVariable Long postId,
-                             @ModelAttribute CommentCreateDto dto,
+                             @Valid @ModelAttribute CommentCreateDto dto,
                              @AuthenticationPrincipal CustomUser user) {
         commentService.save(user.getId(), dto);
         return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
