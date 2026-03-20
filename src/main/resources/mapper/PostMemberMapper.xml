@@ -15,6 +15,14 @@
         ORDER BY m.username
     </select>
 
+    <select id="findPostIdsByBoardIdAndMemberId" resultType="_long">
+        SELECT pm.post_id
+        FROM post_members pm
+        JOIN posts p ON pm.post_id = p.id
+        WHERE pm.member_id = #{memberId}
+          AND p.board_id = #{boardId}
+    </select>
+
     <delete id="deleteByPostId">
         DELETE FROM post_members WHERE post_id = #{postId}
     </delete>

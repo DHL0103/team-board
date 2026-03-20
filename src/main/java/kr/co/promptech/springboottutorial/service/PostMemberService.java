@@ -5,7 +5,9 @@ import kr.co.promptech.springboottutorial.model.PostMember;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -27,5 +29,9 @@ public class PostMemberService {
 
     public void delete(Long postId, Long memberId) {
         postMemberMapper.delete(postId, memberId);
+    }
+
+    public Set<Long> getMyPostIds(Long boardId, Long memberId) {
+        return new HashSet<>(postMemberMapper.findPostIdsByBoardIdAndMemberId(boardId, memberId));
     }
 }

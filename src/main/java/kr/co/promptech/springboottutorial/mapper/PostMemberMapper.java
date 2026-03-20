@@ -21,4 +21,6 @@ public interface PostMemberMapper {
     void delete(@Param("postId") Long postId, @Param("memberId") Long memberId);
 
     void deleteByPostId(Long postId);
+
+    List<Long> findPostIdsByBoardIdAndMemberId(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
 }
