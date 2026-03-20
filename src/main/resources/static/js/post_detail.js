@@ -23,10 +23,23 @@ function closeEditModal() {
     }
 }
 
+const editTitleInput = document.getElementById("edit-title");
+const editTitleCount = document.getElementById("editTitleCount");
+if (editTitleInput && editTitleCount) {
+    editTitleInput.addEventListener("input", () => {
+        const len = editTitleInput.value.length;
+        editTitleCount.textContent = len + "/100";
+        editTitleCount.classList.toggle("near-limit", len >= 90);
+    });
+}
+
 if (btnEdit) {
     btnEdit.addEventListener("click", () => {
         editModal.classList.add("open");
         document.body.style.overflow = "hidden";
+        if (editTitleInput && editTitleCount) {
+            editTitleCount.textContent = editTitleInput.value.length + "/100";
+        }
     });
 }
 if (btnEditClose) {
