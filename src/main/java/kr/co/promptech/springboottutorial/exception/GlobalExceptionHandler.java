@@ -9,6 +9,11 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(PostNotFoundException.class)
+    public String handlePostNotFound() {
+        return "error/404";
+    }
+
     @ExceptionHandler(MaxUploadSizeExceededException.class)
     public String handleMaxUploadSize(HttpServletRequest request) {
         String referer = request.getHeader("Referer");
