@@ -10,6 +10,10 @@
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
+  <div class="toast" id="errorToast"
+       th:text="${param.error == 'validation' ? '입력값이 올바르지 않습니다.' : (param.error != null ? '오류가 발생했습니다.' : '')}">
+  </div>
+
   <div class="admin-wrap">
     <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='보드 설정')}"></div>
 
@@ -26,7 +30,7 @@
       <form th:action="@{'/board/' + ${board.id} + '/manager/settings'}" method="post" class="settings-form">
         <div class="form-group">
           <label class="form-label">이름</label>
-          <input class="form-input" type="text" name="name" th:value="${board.name}" required>
+          <input class="form-input" type="text" name="name" th:value="${board.name}" maxlength="50" required>
         </div>
 
         <div class="form-group">
@@ -43,7 +47,7 @@
 
         <div class="form-group">
           <label class="form-label">설명 <span style="color:var(--text-muted); font-weight:400;">(선택)</span></label>
-          <textarea class="form-input" name="description" rows="3" th:text="${board.description}"></textarea>
+          <textarea class="form-input" name="description" rows="3" maxlength="500" th:text="${board.description}"></textarea>
         </div>
 
         <div class="form-group">
@@ -70,6 +74,7 @@
 
   <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
   <script th:src="@{/js/common.js}"></script>
+  <script th:src="@{/js/manager_settings.js}"></script>
 
 </body>
 

@@ -1,3 +1,12 @@
+// ── 에러 토스트 ──
+window.addEventListener('load', () => {
+    const toast = document.getElementById('errorToast');
+    if (toast && toast.textContent.trim()) {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+});
+
 // 카드 클릭 → 상세 페이지 이동
 document.querySelectorAll('.board-card[data-href]').forEach(card => {
     card.addEventListener('click', () => {
