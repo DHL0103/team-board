@@ -109,6 +109,23 @@ header {
   }
 }
 
+// 헤더 우측 영역 (유저명 + 햄버거 + nav-menu)
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// 로그인 유저명
+.nav-username {
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-muted;
+  padding: 0 4px;
+
+  &::before { content: '@'; }
+}
+
 // 뒤로가기 버튼 (상세 페이지)
 .btn-back {
   display: inline-flex;
