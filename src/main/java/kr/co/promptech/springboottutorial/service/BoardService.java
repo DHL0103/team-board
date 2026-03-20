@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.service;
 
+import kr.co.promptech.springboottutorial.exception.BoardNotFoundException;
 import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
@@ -68,6 +69,9 @@ public class BoardService {
     @Transactional(readOnly = true)
     public BoardDetailDto getBoardDetail(Long boardId, CustomUser user) {
         BoardResponseDto board = getBoardDtoById(boardId);
+        if (board == null) {
+            throw new BoardNotFoundException(boardId);
+        }
         boolean isManager = user.getRole() == MemberRole.ROLE_ADMIN
                 || boardMemberService.isManager(boardId, user.getId());
         return BoardDetailDto.builder()

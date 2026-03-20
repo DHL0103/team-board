@@ -10,8 +10,8 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(PostNotFoundException.class)
-    public String handlePostNotFound() {
+    @ExceptionHandler({PostNotFoundException.class, BoardNotFoundException.class})
+    public String handleNotFound() {
         return "error/404";
     }
 
@@ -42,5 +42,10 @@ public class GlobalExceptionHandler {
             return "redirect:" + referer;
         }
         return "redirect:/board";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleUnexpected() {
+        return "error/500";
     }
 }
