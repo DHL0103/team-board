@@ -6,9 +6,11 @@
     var listBody       = document.querySelector('.post-list-body');
     var paginationWrap = document.getElementById('post-list-pagination');
     var sortBtns       = document.querySelectorAll('.post-list-sort-btn');
+    var btnMineFilter  = document.getElementById('btn-mine-filter');
     var cards          = Array.from(document.querySelectorAll('.post-list-card'));
     var currentSort    = 'newest';
     var currentPage    = 1;
+    var currentMineOnly = false;
     var filteredCards  = [];
 
     // ── 정렬 ──
@@ -91,12 +93,14 @@
         paginationWrap.appendChild(next);
     }
 
-    // ── 검색 필터 ──
+    // ── 검색 + 내 담당 필터 ──
     function applySearch() {
         var query = searchInput ? searchInput.value.trim().toLowerCase() : '';
         filteredCards = cards.filter(function (card) {
             var titleEl = card.querySelector('.card-title');
-            return !query || (titleEl && titleEl.textContent.toLowerCase().includes(query));
+            var matchesSearch = !query || (titleEl && titleEl.textContent.toLowerCase().includes(query));
+            var matchesMine = !currentMineOnly || card.dataset.isMine === 'true';
+            return matchesSearch && matchesMine;
         });
         currentPage = 1;
         render();
@@ -116,6 +120,15 @@
     // ── 검색 입력 ──
     if (searchInput) {
         searchInput.addEventListener('input', applySearch);
+    }
+
+    // ── 내 담당 필터 ──
+    if (btnMineFilter) {
+        btnMineFilter.addEventListener('click', function () {
+            currentMineOnly = !currentMineOnly;
+            btnMineFilter.classList.toggle('active', currentMineOnly);
+            applySearch();
+        });
     }
 
     applySearch();
