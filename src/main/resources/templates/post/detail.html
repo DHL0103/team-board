@@ -18,7 +18,7 @@
   <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${post.boardId}, boardName=${post.boardName}, currentPage=${post.title})}"></div>
 
   <div class="toast" id="errorToast"
-       th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error == 'validation' ? '입력값이 올바르지 않습니다.' : (param.error != null ? '본인이 작성한 글만 삭제할 수 있습니다.' : ''))}">
+       th:text="${param.error != null ? (param.error[0] == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '본인이 작성한 글만 삭제할 수 있습니다.')) : ''}">
   </div>
 
   <div class="post-card">

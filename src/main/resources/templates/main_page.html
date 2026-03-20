@@ -9,7 +9,7 @@
 <body>
 
     <div class="toast" id="errorToast"
-         th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error == 'validation' ? '입력값이 올바르지 않습니다.' : (param.error != null ? '오류가 발생했습니다.' : ''))}">
+         th:text="${param.error != null ? (param.error[0] == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.')) : ''}">
     </div>
 
     <div th:replace="~{fragments/header :: main-header}"></div>
