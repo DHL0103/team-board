@@ -1,5 +1,6 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import jakarta.validation.Valid;
 import kr.co.promptech.springboottutorial.model.dto.BoardUpdateDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class ManagerSettingController {
     }
 
     @PostMapping
-    public String updateSettings(@PathVariable Long boardId, @ModelAttribute BoardUpdateDto boardUpdateDto) {
+    public String updateSettings(@PathVariable Long boardId, @Valid @ModelAttribute BoardUpdateDto boardUpdateDto) {
         boardService.updateBoard(boardId, boardUpdateDto);
         return "redirect:/board/" + boardId + "/manager/settings";
     }

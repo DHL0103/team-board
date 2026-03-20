@@ -10,6 +10,7 @@ import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -128,7 +129,7 @@ public class BoardController {
      * 보드 생성 후 생성자를 해당 보드의 MANAGER로 board_members에 등록
      */
     @PostMapping("/create")
-    public String createBoard(@ModelAttribute BoardCreateDto boardCreateDto, @AuthenticationPrincipal CustomUser user) {
+    public String createBoard(@Valid @ModelAttribute BoardCreateDto boardCreateDto, @AuthenticationPrincipal CustomUser user) {
         Long boardId = boardService.createBoard(boardCreateDto);
         boardMemberService.save(boardId, user.getId(), BoardRole.MANAGER);
         return "redirect:/board";
