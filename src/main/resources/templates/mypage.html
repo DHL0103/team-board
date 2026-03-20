@@ -83,6 +83,41 @@
 
 </div>
 
+<!-- 내 담당 작업 -->
+<div class="mypage-assigned-section">
+  <div class="mypage-section-header">
+    <span class="section-title">내 담당 작업</span>
+    <span class="section-count" th:text="${#lists.size(assignedPosts)} + '건'">0건</span>
+  </div>
+
+  <div class="assigned-empty" th:if="${#lists.isEmpty(assignedPosts)}">
+    진행 중이거나 반려된 담당 작업이 없습니다.
+  </div>
+
+  <div class="assigned-list" th:unless="${#lists.isEmpty(assignedPosts)}">
+    <a class="assigned-card"
+       th:each="post : ${assignedPosts}"
+       th:href="@{'/board/' + ${post.boardId} + '/post/' + ${post.id}}">
+      <div class="assigned-card-board">
+        <span class="invite-board-dot" th:classappend="${'dot-' + post.boardColor}"></span>
+        <span class="assigned-board-name" th:text="${post.boardName}">보드명</span>
+      </div>
+      <div class="assigned-card-title" th:text="${post.title}">제목</div>
+      <div class="assigned-card-right">
+        <span class="status-chip"
+              th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : 'chip-rejected'}"
+              th:text="${post.status == 'PROGRESS' ? '진행 중' : '반려'}"></span>
+        <span class="due-chip"
+              th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
+          <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
+          <span class="due-label"
+                th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
+        </span>
+      </div>
+    </a>
+  </div>
+</div>
+
 <script th:src="@{/js/common.js}"></script>
 <script th:src="@{/js/mypage.js}"></script>
 </body>
