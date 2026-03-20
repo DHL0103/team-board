@@ -12,6 +12,10 @@
         SELECT * FROM post_files WHERE post_id = #{postId} AND inline = false
     </select>
 
+    <select id="findAllByPostId" resultType="kr.co.promptech.springboottutorial.model.PostFile">
+        SELECT * FROM post_files WHERE post_id = #{postId}
+    </select>
+
     <select id="findById" resultType="kr.co.promptech.springboottutorial.model.PostFile">
         SELECT * FROM post_files WHERE id = #{id}
     </select>

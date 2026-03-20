@@ -13,6 +13,8 @@ public interface PostFileMapper {
 
     List<PostFile> findByPostId(Long postId);
 
+    List<PostFile> findAllByPostId(Long postId);
+
     PostFile findById(Long id);
 
     void deleteById(Long id);
