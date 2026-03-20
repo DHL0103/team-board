@@ -44,6 +44,16 @@ const btnReject = document.querySelector(".btn-reject");
 const btnRejectClose = document.getElementById("btn-reject-close");
 const boardId = document.body.dataset.boardId;
 
+const rejectReasonTextarea = document.getElementById("rejectReason");
+const rejectReasonCount = document.getElementById("rejectReasonCount");
+if (rejectReasonTextarea && rejectReasonCount) {
+    rejectReasonTextarea.addEventListener("input", () => {
+        const len = rejectReasonTextarea.value.length;
+        rejectReasonCount.textContent = len + "/300";
+        rejectReasonCount.classList.toggle("near-limit", len >= 270);
+    });
+}
+
 if (btnReject) {
     btnReject.addEventListener("click", () => {
         document.getElementById("rejectForm").action =
