@@ -8,6 +8,7 @@ import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
+import kr.co.promptech.springboottutorial.service.PostMemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
@@ -28,6 +29,7 @@ public class BoardController {
     private final BoardService boardService;
     private final PostService postService;
     private final BoardMemberService boardMemberService;
+    private final PostMemberService postMemberService;
 
     /**
      * @param model 뷰에 전달할 데이터 컨테이너
@@ -58,6 +60,7 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
         model.addAttribute("board", boardService.getBoardDetail(boardId, user));
+        model.addAttribute("myPostIds", postMemberService.getMyPostIds(boardId, user.getId()));
         return "board/detail";
     }
 
@@ -114,11 +117,12 @@ public class BoardController {
      * board(BoardResponseDto), postList(PostResponseDto) 전달
      */
     @GetMapping("/{boardId}/post_list")
-    public String postList(@PathVariable Long boardId, @RequestParam String status, Model model) {
+    public String postList(@PathVariable Long boardId, @RequestParam String status, Model model, @AuthenticationPrincipal CustomUser user) {
         BoardResponseDto board = boardService.getBoardDtoById(boardId);
         model.addAttribute("board", board);
         model.addAttribute("status", status);
         model.addAttribute("postList", postService.getPostDtosByBoardIdAndStatus(boardId, status));
+        model.addAttribute("myPostIds", postMemberService.getMyPostIds(boardId, user.getId()));
         return "board/post_list";
     }
 

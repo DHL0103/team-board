@@ -55,7 +55,10 @@
                           th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
                   </span>
                 </div>
-                <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+                <div class="card-right">
+                  <svg th:if="${myPostIds.contains(post.id)}" class="card-mine-icon" width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
+                  <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -96,7 +99,10 @@
                           th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
                   </span>
                 </div>
-                <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+                <div class="card-right">
+                  <svg th:if="${myPostIds.contains(post.id)}" class="card-mine-icon" width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
+                  <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -137,7 +143,10 @@
                           th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
                   </span>
                 </div>
-                <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+                <div class="card-right">
+                  <svg th:if="${myPostIds.contains(post.id)}" class="card-mine-icon" width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
+                  <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
+                </div>
               </div>
             </div>
           </div>
