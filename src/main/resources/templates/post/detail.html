@@ -339,7 +339,8 @@
     <form id="rejectForm" method="post">
       <input type="hidden" name="source" value="detail">
       <div class="form-group">
-        <textarea name="reason" class="form-input" placeholder="반려 사유를 입력하세요" maxlength="300" required></textarea>
+        <textarea name="reason" id="rejectReason" class="form-input" placeholder="반려 사유를 입력하세요" maxlength="300" required></textarea>
+        <span class="char-count" id="rejectReasonCount">0/300</span>
       </div>
       <button type="submit" class="btn-submit" style="background:#e11d48;">반려 확정</button>
     </form>

@@ -247,6 +247,17 @@ if (selectedAssigneeList) {
     });
 }
 
+// ── 제목 글자수 카운터 ──
+const createTitleInput = document.getElementById('create-title');
+const createTitleCount = document.getElementById('createTitleCount');
+if (createTitleInput && createTitleCount) {
+    createTitleInput.addEventListener('input', () => {
+        const len = createTitleInput.value.length;
+        createTitleCount.textContent = len + '/100';
+        createTitleCount.classList.toggle('near-limit', len >= 90);
+    });
+}
+
 const createPostForm = document.getElementById('create-post-form');
 createPostForm.addEventListener('submit', () => {
     createPostForm.querySelectorAll('input[name="assigneeIds"]').forEach(el => el.remove());
