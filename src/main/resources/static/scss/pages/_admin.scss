@@ -331,19 +331,7 @@
   &:hover { background: #fef2f2; }
 }
 
-// ── 모달 (공통 modal-overlay/modal-box 재사용, 추가 변형만) ──
-.modal-box--admin {
-  max-width: 460px;
-
-  .modal-title {
-    font-size: 15px;
-    font-weight: 700;
-    color: $text;
-    margin-bottom: 20px;
-  }
-}
-
-// ── 폼 (input-field, form-group은 _detail.scss 공용) ──
+// ── 폼 ──
 .select-field {
   width: 100%;
   padding: 8px 10px;

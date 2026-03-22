@@ -1,0 +1,60 @@
+@use "../abstract/variables" as *;
+
+// ── 팀 배지 / 상태 칩 / 마감일 칩 공통 베이스 ──
+.team-badge, .status-chip, .due-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.team-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.team-badge {
+  @each $key, $val in $palettes {
+    &.badge-#{$key} {
+      background: var(--#{$key}-bg);
+      color: var(--#{$key}-color);
+      border: 1px solid var(--#{$key}-border);
+      .team-dot { background: var(--#{$key}-color); }
+    }
+  }
+}
+
+.status-chip {
+  // .chip-* 형태 (detail, board 페이지)
+  &.chip-progress  { background: var(--status-progress-bg);  color: var(--status-progress-color); }
+  &.chip-requested { background: var(--status-requested-bg); color: var(--status-requested-color); }
+  &.chip-completed { background: var(--status-completed-bg); color: var(--status-completed-color); }
+  &.chip-rejected  { background: var(--status-rejected-bg);  color: var(--status-rejected-color); }
+
+  // 접두사 없는 형태 (main 칸반)
+  &.progress  { background: var(--status-progress-bg);  color: var(--status-progress-color); }
+  &.requested { background: var(--status-requested-bg); color: var(--status-requested-color); }
+  &.rejected  { background: var(--status-rejected-bg);  color: var(--status-rejected-color); }
+}
+
+.due-chip {
+  flex-shrink: 0;
+  white-space: nowrap;
+  svg { width: 10px; height: 10px; }
+
+  // .due-* 형태 (detail 페이지)
+  &.due-safe { background: var(--due-safe-bg); color: var(--due-safe); }
+  &.due-warn { background: var(--due-warn-bg); color: var(--due-warn); }
+  &.due-over { background: var(--due-over-bg); color: var(--due-over); }
+  &.due-none { background: $bg; color: $text-muted; border: 1px solid $border; }
+
+  // 접두사 없는 형태 (main 칸반)
+  &.safe { background: var(--due-safe-bg); color: var(--due-safe); }
+  &.warn { background: var(--due-warn-bg); color: var(--due-warn); }
+  &.over { background: var(--due-over-bg); color: var(--due-over); }
+  &.none { background: $bg; color: $text-muted; border: 1px solid $border; }
+}
