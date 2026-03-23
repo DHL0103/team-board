@@ -88,7 +88,7 @@
         진행 중이거나 반려된 담당 작업이 없습니다.
       </div>
 
-      <div class="assigned-list" th:unless="${#lists.isEmpty(assignedPosts)}">
+      <div class="assigned-list" id="assigned-list" th:unless="${#lists.isEmpty(assignedPosts)}">
         <a class="assigned-card"
            th:each="post : ${assignedPosts}"
            th:href="@{'/board/' + ${post.boardId} + '/post/' + ${post.id}}">
@@ -112,6 +112,7 @@
           </div>
         </a>
       </div>
+      <div class="pagination-wrap" id="assigned-pagination"></div>
     </div>
 
     <!-- 받은 초대 -->
@@ -125,22 +126,25 @@
         받은 초대가 없습니다.
       </div>
 
-      <div th:each="board : ${invitedBoards}">
-        <div class="invite-card">
-          <a class="invite-board-info" th:href="@{'/board/' + ${board.boardId}}">
-            <span class="invite-board-dot" th:classappend="${'dot-' + board.boardColor}"></span>
-            <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
-          </a>
-          <div class="invite-actions">
-            <form th:action="@{/member/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
-              <button type="submit" class="btn-invite-accept">수락</button>
-            </form>
-            <form th:action="@{/member/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
-              <button type="submit" class="btn-invite-reject">거절</button>
-            </form>
+      <div id="invite-list">
+        <div th:each="board : ${invitedBoards}">
+          <div class="invite-card">
+            <a class="invite-board-info" th:href="@{'/board/' + ${board.boardId}}">
+              <span class="invite-board-dot" th:classappend="${'dot-' + board.boardColor}"></span>
+              <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
+            </a>
+            <div class="invite-actions">
+              <form th:action="@{/member/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
+                <button type="submit" class="btn-invite-accept">수락</button>
+              </form>
+              <form th:action="@{/member/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
+                <button type="submit" class="btn-invite-reject">거절</button>
+              </form>
+            </div>
           </div>
         </div>
       </div>
+      <div class="pagination-wrap" id="invite-pagination"></div>
     </div>
 
   </div>
