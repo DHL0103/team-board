@@ -46,6 +46,11 @@
             <div class="assignee-chip-item" th:each="assignee : ${post.postAssignees}" th:text="${assignee.username}">이름</div>
           </div>
         </div>
+        <button type="button" class="rejection-toggle-btn" id="btn-rejection-toggle"
+                th:if="${post.rejections != null and not #lists.isEmpty(post.rejections)}">
+          반려 이력
+          <span class="rejection-toggle-count" th:text="${#lists.size(post.rejections)}">0</span>
+        </button>
       </div>
       <div class="post-title" th:text="${post.title}">제목</div>
       <div class="post-info-row">

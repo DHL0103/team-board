@@ -411,11 +411,24 @@ document.addEventListener('click', (e) => {
 
 // ── 반려 패널 위치 동적 조정 ──
 const rejectionPanel = document.querySelector('.rejection-panel');
+const btnRejectionToggle = document.getElementById('btn-rejection-toggle');
+
 if (rejectionPanel) {
     const detailWrap = document.querySelector('.detail-wrap');
 
     function adjustRejectionPanel() {
-        if (window.innerWidth <= 768) return; // 모바일은 CSS media query가 처리
+        if (window.innerWidth <= 768) {
+            // 모바일: 인라인 스타일 초기화 → CSS가 제어
+            rejectionPanel.style.position = '';
+            rejectionPanel.style.top = '';
+            rejectionPanel.style.right = '';
+            rejectionPanel.style.width = '';
+            rejectionPanel.style.marginBottom = '';
+            return;
+        }
+        // 데스크탑: 모바일 토글 초기화
+        rejectionPanel.classList.remove('mobile-open');
+        if (btnRejectionToggle) { btnRejectionToggle.classList.remove('active'); }
 
         const spaceRight = window.innerWidth - detailWrap.getBoundingClientRect().right;
 
@@ -436,6 +449,13 @@ if (rejectionPanel) {
 
     window.addEventListener('resize', adjustRejectionPanel);
     adjustRejectionPanel();
+}
+
+if (btnRejectionToggle && rejectionPanel) {
+    btnRejectionToggle.addEventListener('click', () => {
+        const isOpen = rejectionPanel.classList.toggle('mobile-open');
+        btnRejectionToggle.classList.toggle('active', isOpen);
+    });
 }
 
 // ── 답글 ──

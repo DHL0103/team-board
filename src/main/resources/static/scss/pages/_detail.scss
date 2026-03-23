@@ -379,17 +379,55 @@
   right: 40px;
   width: 260px;
   z-index: 10;
-
-  @media (max-width: 768px) {
-    position: static;
-    width: 100%;
-    margin-bottom: 16px;
-  }
   background: var(--status-rejected-bg);
   border: 1px solid #fecdd3;
   border-radius: 10px;
   padding: 16px;
   animation: fadeUp 0.35s ease both;
+
+  @media (max-width: 768px) {
+    display: none;
+    position: static;
+    width: 100%;
+    margin-bottom: 16px;
+
+    &.mobile-open {
+      display: block;
+    }
+  }
+}
+
+.rejection-toggle-btn {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    background: var(--status-rejected-bg);
+    color: var(--status-rejected-color);
+    border: 1px solid #fecdd3;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    flex-shrink: 0;
+    transition: background 0.15s;
+
+    &:hover { background: #ffe4e6; }
+    &.active { background: #fecdd3; }
+  }
+}
+
+.rejection-toggle-count {
+  background: white;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  padding: 0 5px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .rejection-panel-header {
