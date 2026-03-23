@@ -20,7 +20,41 @@ $design:   map-get($teams, design);
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+}
 
+.page-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 16px;
+}
+
+.board-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 320px;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 7px 12px;
+  background: $surface;
+  transition: border-color 0.15s;
+  color: $text-muted;
+
+  &:focus-within { border-color: #9ca3af; color: $text-sub; }
+}
+
+.board-search-input {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: $text;
+  background: transparent;
+  width: 100%;
+  &::placeholder { color: $text-muted; }
 }
 
 .page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }

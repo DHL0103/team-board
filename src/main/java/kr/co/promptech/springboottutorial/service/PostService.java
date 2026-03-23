@@ -168,6 +168,7 @@ public class PostService {
     }
 
 
+
     @Transactional(readOnly = true)
     public PostDetailDto getPostDetail(Long postId, CustomUser user) {
         Post post = getPostById(postId);

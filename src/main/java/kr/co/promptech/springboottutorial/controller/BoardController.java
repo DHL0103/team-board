@@ -135,11 +135,8 @@ public class BoardController {
     }
 
     @GetMapping("/search")
-    public String searchBoards(@RequestParam(defaultValue = "") String keyword,
-                               Model model,
-                               @AuthenticationPrincipal CustomUser user) {
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("boardList", boardService.searchBoards(keyword, user.getId()));
+    public String searchBoards(Model model, @AuthenticationPrincipal CustomUser user) {
+        model.addAttribute("boardList", boardService.searchBoards("", user.getId()));
         return "board/search";
     }
 }

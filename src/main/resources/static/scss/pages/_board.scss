@@ -34,6 +34,11 @@
   max-width: 614px;
 }
 
+.board-detail-header .page-meta {
+  max-width: 614px;
+}
+
+
 .board-member-count {
   display: inline-flex;
   align-items: center;
@@ -150,6 +155,63 @@
   margin-bottom: 16px;
 
   .post-list-back { margin-left: auto; }
+}
+
+.post-list-sort-group {
+  display: flex;
+  gap: 2px;
+  background: $border-soft;
+  padding: 3px;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.post-list-sort-btn {
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: none;
+  background: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: $text-sub;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+
+  &.active {
+    background: $surface;
+    color: $text;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  &:not(.active):hover { color: $text; }
+}
+
+.post-list-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid $border;
+  border-radius: 7px;
+  padding: 5px 10px;
+  background: $surface;
+  color: $text-muted;
+  transition: border-color 0.15s;
+  flex: 1;
+  max-width: 280px;
+
+  &:focus-within { border-color: #9ca3af; color: $text-sub; }
+}
+
+.post-list-search-input {
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  color: $text;
+  background: transparent;
+  width: 100%;
+  &::placeholder { color: $text-muted; }
 }
 
 .post-list-empty {
