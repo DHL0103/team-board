@@ -19,9 +19,17 @@
   font-size: 12px;
   color: $text-muted;
   margin-bottom: 20px;
+  min-width: 0;
 
-  a { color: $text-muted; text-decoration: none; &:hover { color: $text-sub; } }
-  .breadcrumb-sep { opacity: 0.4; }
+  a { color: $text-muted; text-decoration: none; white-space: nowrap; &:hover { color: $text-sub; } }
+  .breadcrumb-sep { opacity: 0.4; flex-shrink: 0; }
+
+  span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
 }
 
 
