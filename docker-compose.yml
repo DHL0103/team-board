@@ -8,5 +8,6 @@ services:
       MYSQL_DATABASE: onboarding
     ports:
       - "3307:3306"  # 내 컴퓨터(3307) -> 도커(3306) 연결
+    command: --default-time-zone=Asia/Seoul
     volumes:
       - ./mysql_data:/var/lib/mysql
