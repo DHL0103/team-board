@@ -438,4 +438,30 @@
   font-size: 13px;
   color: $text;
   line-height: 1.5;
+
+  &.clamped {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &.expanded {
+    display: block;
+    overflow: visible;
+  }
+}
+
+.rejection-reason-toggle {
+  display: block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: $text-muted;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  &:hover { color: $text-sub; }
 }

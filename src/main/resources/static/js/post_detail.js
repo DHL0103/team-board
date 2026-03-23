@@ -136,6 +136,23 @@ document.querySelectorAll('.rejection-item').forEach(async item => {
     span.textContent = name;
 });
 
+// ── 반려 사유 더보기 ──
+document.querySelectorAll('.rejection-reason').forEach(el => {
+    const fullHeight = el.scrollHeight;
+    el.classList.add('clamped');
+    if (fullHeight > el.clientHeight) {
+        const btn = document.createElement('button');
+        btn.className = 'rejection-reason-toggle';
+        btn.textContent = '더보기';
+        btn.addEventListener('click', () => {
+            const expanded = el.classList.toggle('expanded');
+            el.classList.toggle('clamped', !expanded);
+            btn.textContent = expanded ? '접기' : '더보기';
+        });
+        el.insertAdjacentElement('afterend', btn);
+    }
+});
+
 // ── 에러 토스트 ──
 window.addEventListener("load", () => {
     const toast = document.getElementById("errorToast");
