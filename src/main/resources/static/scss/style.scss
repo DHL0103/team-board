@@ -27,6 +27,7 @@ body {
   color: variables.$text;
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   margin: 0;
