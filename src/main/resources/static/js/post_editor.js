@@ -100,13 +100,8 @@ function updateToolbar(editor, toolbar) {
 }
 
 // ── 초기화 ──
-const createEditorEl = document.getElementById('create-editor');
-if (createEditorEl) {
-    initEditor('create-editor', 'create-content', 'create-toolbar', '');
-}
-
-const editEditorEl = document.getElementById('edit-editor');
-if (editEditorEl) {
-    const initialContent = editEditorEl.dataset.content || '';
-    initEditor('edit-editor', 'edit-content', 'edit-toolbar', initialContent);
+const postEditorEl = document.getElementById('post-editor');
+if (postEditorEl) {
+    const initialContent = postEditorEl.dataset.content || '';
+    initEditor('post-editor', 'post-content', 'post-toolbar', initialContent);
 }
