@@ -68,7 +68,9 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
         fetch('/post/image', { method: 'POST', body: formData })
             .then(res => res.json())
             .then(data => {
-                editor.chain().focus().setImage({ src: data.url }).insertContentAt(editor.state.doc.content.size, { type: 'paragraph' }).run();
+                editor.chain().focus().setImage({ src: data.url }).run();
+                const endPos = editor.state.doc.content.size;
+                editor.chain().insertContentAt(endPos, { type: 'paragraph' }).run();
             });
         imgInput.value = '';
     });
