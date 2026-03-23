@@ -31,7 +31,11 @@ if (tbody) {
         const start = (currentPage - 1) * PAGE_SIZE;
         const end = start + PAGE_SIZE;
         allRows.forEach(row => { row.style.display = "none"; });
-        filteredRows.slice(start, end).forEach(row => { row.style.display = ""; });
+        filteredRows.slice(start, end).forEach((row, i) => {
+            row.style.display = "";
+            const numCell = row.querySelector(".row-num");
+            if (numCell) { numCell.textContent = start + i + 1; }
+        });
         renderPagination();
     }
 

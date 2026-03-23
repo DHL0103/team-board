@@ -45,7 +45,7 @@
               th:data-member-id="${member.id}"
               th:data-username="${member.username}"
               th:data-role="${member.role}">
-            <td th:text="${member.id}"></td>
+            <td class="row-num" th:text="${member.id}"></td>
             <td th:text="${member.username}"></td>
             <td>
               <span th:if="${member.role.name() == 'ROLE_ADMIN'}" class="role-badge role-admin">Admin</span>
