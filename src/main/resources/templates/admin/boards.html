@@ -49,7 +49,8 @@
             <td>
               <a th:href="@{'/board/' + ${board.id}}" class="admin-board-link" th:text="${board.name}"></a>
             </td>
-            <td style="color:var(--text-sub); max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" th:text="${board.description != null ? board.description : '-'}"></td>
+            <td style="color:var(--text-sub); max-width:300px; font-size:12px; word-break:break-word;"
+                th:text="${board.description != null ? board.description : '-'}"></td>
             <td th:text="${board.memberCount}"></td>
             <td style="text-align:center;">
               <span th:if="${board.status == 'ACTIVE'}"
