@@ -49,7 +49,14 @@
         });
 
         if (countLabel) { countLabel.textContent = filteredCards.length + '건'; }
-        renderPagination();
+
+        if (paginationWrap) {
+            var totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
+            renderPagination(paginationWrap, totalPages, currentPage, function (page) {
+                currentPage = page;
+                render();
+            });
+        }
 
         // display:none이 브라우저에 반영된 다음 프레임에서 애니메이션 시작
         requestAnimationFrame(function () {
@@ -59,38 +66,6 @@
                 card.style.display = '';
             });
         });
-    }
-
-    function renderPagination() {
-        if (!paginationWrap) { return; }
-        var totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
-        paginationWrap.innerHTML = '';
-
-        if (totalPages <= 1) { return; }
-
-        var prev = document.createElement('button');
-        prev.className = 'page-btn';
-        prev.textContent = '이전';
-        prev.disabled = currentPage === 1;
-        prev.addEventListener('click', function () { currentPage--; render(); });
-        paginationWrap.appendChild(prev);
-
-        for (var i = 1; i <= totalPages; i++) {
-            (function (page) {
-                var btn = document.createElement('button');
-                btn.className = 'page-btn' + (page === currentPage ? ' active' : '');
-                btn.textContent = page;
-                btn.addEventListener('click', function () { currentPage = page; render(); });
-                paginationWrap.appendChild(btn);
-            })(i);
-        }
-
-        var next = document.createElement('button');
-        next.className = 'page-btn';
-        next.textContent = '다음';
-        next.disabled = currentPage === totalPages;
-        next.addEventListener('click', function () { currentPage++; render(); });
-        paginationWrap.appendChild(next);
     }
 
     // ── 검색 + 내 담당 필터 ──

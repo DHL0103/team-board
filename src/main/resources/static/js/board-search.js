@@ -7,7 +7,7 @@
   var pagination = document.getElementById('searchPagination');
   var emptyEl = document.getElementById('search-empty');
   var container = document.getElementById('search-card-list');
-  var currentPage = 0;
+  var currentPage = 1;
   var currentSort = 'recent';
 
   function getFiltered() {
@@ -32,8 +32,8 @@
 
   function render() {
     var filtered = getSorted(getFiltered());
-    var totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-    if (currentPage >= totalPages) { currentPage = 0; }
+    var totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+    if (currentPage > totalPages) { currentPage = 1; }
 
     // DOM 순서 재배치 후 전부 숨김
     filtered.forEach(function (c) {
@@ -47,51 +47,26 @@
     });
 
     // 현재 페이지 카드만 표시
-    filtered.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE).forEach(function (c) {
+    filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).forEach(function (c) {
       c.style.display = '';
     });
 
     if (emptyEl) { emptyEl.style.display = filtered.length === 0 ? '' : 'none'; }
 
-    renderPagination(totalPages);
-  }
-
-  function renderPagination(totalPages) {
-    if (!pagination) { return; }
-    pagination.innerHTML = '';
-    if (totalPages <= 1) { return; }
-
-    var prev = document.createElement('button');
-    prev.className = 'page-btn';
-    prev.textContent = '←';
-    prev.disabled = currentPage === 0;
-    prev.addEventListener('click', function () { currentPage--; render(); });
-    pagination.appendChild(prev);
-
-    for (var i = 0; i < totalPages; i++) {
-      (function (p) {
-        var btn = document.createElement('button');
-        btn.className = 'page-btn' + (p === currentPage ? ' active' : '');
-        btn.textContent = p + 1;
-        btn.addEventListener('click', function () { currentPage = p; render(); });
-        pagination.appendChild(btn);
-      })(i);
+    if (pagination) {
+      renderPagination(pagination, totalPages, currentPage, function (page) {
+        currentPage = page;
+        render();
+      });
     }
-
-    var next = document.createElement('button');
-    next.className = 'page-btn';
-    next.textContent = '→';
-    next.disabled = currentPage === totalPages - 1;
-    next.addEventListener('click', function () { currentPage++; render(); });
-    pagination.appendChild(next);
   }
 
   if (searchInput) {
-    searchInput.addEventListener('input', function () { currentPage = 0; render(); });
+    searchInput.addEventListener('input', function () { currentPage = 1; render(); });
   }
 
   if (statusSelect) {
-    statusSelect.addEventListener('change', function () { currentPage = 0; render(); });
+    statusSelect.addEventListener('change', function () { currentPage = 1; render(); });
   }
 
   sortBtns.forEach(function (btn) {
@@ -99,7 +74,7 @@
       currentSort = btn.dataset.sort;
       sortBtns.forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      currentPage = 0;
+      currentPage = 1;
       render();
     });
   });
