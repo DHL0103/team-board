@@ -52,25 +52,7 @@ if (btnDeleteCancel) {
     });
 }
 
-const memberId = parseInt(document.body.dataset.memberId);
 const existingDueDateStr = document.body.dataset.dueDate || '';
-
-// ── 작성자 이름 Fetch ──
-App.fetchUsername(memberId).then(name => {
-    document.getElementById("writer-name").textContent = name;
-});
-
-// ── 반려자 이름 Fetch ──
-document.querySelectorAll('.rejection-item').forEach(async item => {
-    const rejectedBy = item.dataset.rejectedBy;
-    const span = item.querySelector('.rejection-rejector');
-    if (!rejectedBy) {
-        span.textContent = '';
-        return;
-    }
-    const name = await App.fetchUsername(rejectedBy);
-    span.textContent = name;
-});
 
 // ── 반려 사유 더보기 ──
 document.querySelectorAll('.rejection-reason').forEach(el => {
@@ -208,19 +190,11 @@ if (btnRejectionToggle && rejectionPanel) {
     });
 })();
 
-// ── 댓글 작성자 이름 + 글자수 카운터 ──
+// ── 댓글 글자수 카운터 ──
 (function () {
-    var currentMemberId = parseInt(document.body.dataset.currentMemberId);
-    var authorName      = document.getElementById('commentAuthorName');
-    var charCount       = document.getElementById('commentCharCount');
-    var textarea        = document.getElementById('commentTextarea');
-    var MAX             = 256;
-
-    if (authorName && currentMemberId) {
-        App.fetchUsername(currentMemberId).then(function (name) {
-            authorName.textContent = name;
-        });
-    }
+    var charCount = document.getElementById('commentCharCount');
+    var textarea  = document.getElementById('commentTextarea');
+    var MAX       = 256;
 
     if (textarea && charCount) {
         textarea.addEventListener('input', function () {

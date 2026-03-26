@@ -6,11 +6,10 @@
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body th:data-member-id="${post.memberId}"
-      th:data-board-id="${post.boardId}"
+<body th:data-board-id="${post.boardId}"
       th:data-post-id="${post.id}"
       th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}"
-      th:data-current-member-id="${post.currentMemberId}">
+>
 
 <div th:replace="~{fragments/header :: back-header}"></div>
 
@@ -54,7 +53,7 @@
       </div>
       <div class="post-title" th:text="${post.title}">제목</div>
       <div class="post-info-row">
-        <div class="post-info-item"><span id="writer-name" style="font-weight:500;">로딩 중...</span></div>
+        <div class="post-info-item"><span th:text="${post.writerName}" style="font-weight:500;">작성자</span></div>
         <div class="post-info-item"><span
                 th:text="${#temporals.format(post.createdAt, 'yyyy.MM.dd HH:mm')} + ' 등록'">등록일</span></div>
         <div class="post-info-item" th:if="${post.updatedAt != null}"><span
@@ -109,10 +108,9 @@
       <span class="rejection-panel-count" th:text="${#lists.size(post.rejections)} + '건'">0건</span>
     </div>
     <div class="rejection-list">
-      <div class="rejection-item" th:each="rejection : ${post.rejections}"
-           th:data-rejected-by="${rejection.rejectedBy}">
+      <div class="rejection-item" th:each="rejection : ${post.rejections}">
         <div class="rejection-date">
-          <span class="rejection-rejector">로딩 중...</span>
+          <span class="rejection-rejector" th:text="${rejection.rejectorName}">반려자</span>
           <span th:text="${#temporals.format(rejection.createdAt, 'MM.dd HH:mm')}">01.01</span>
         </div>
         <div class="rejection-reason" th:text="${rejection.reason}">반려 사유</div>
@@ -166,7 +164,7 @@
         <input type="hidden" name="depth" id="commentDepth" value="0">
         <div class="comment-reply-target" id="commentReplyTarget"></div>
         <div class="comment-form-header">
-          <span class="comment-form-author" id="commentAuthorName"></span>
+          <span class="comment-form-author" th:text="${post.currentMemberName}"></span>
           <span class="comment-char-count" id="commentCharCount">0/256</span>
         </div>
         <div class="comment-input-wrap">
