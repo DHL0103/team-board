@@ -1,7 +1,8 @@
 // style.scss
 
-// ── 1. @use는 반드시 파일 최상단에 ──
 @use "abstract/variables";
+@use "abstract/base";
+@use "abstract/animations";
 @use "components/badge";
 @use "components/modal";
 @use "components/assignee";
@@ -16,51 +17,3 @@
 @use "pages/mypage";
 @use "pages/search";
 @use "pages/editor";
-
-// ── 2. 리셋 & 기본 설정 ──
-*, *::before, *::after { box-sizing: border-box; }
-
-html, body { height: 100%; }
-
-body {
-  background-color: variables.$bg;
-  color: variables.$text;
-  font-family: 'Inter', sans-serif;
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-button, input, select, textarea {
-  font-family: inherit;
-}
-
-// ── 3. 공통 글자수 카운터 ──
-.char-count {
-  display: block;
-  text-align: right;
-  font-size: 11px;
-  color: variables.$text-muted;
-  margin-top: 3px;
-  &.near-limit { color: #dc2626; }
-}
-
-// ── 4. 공통 애니메이션 (딱 한 번만 선언) ──
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.96) translateY(8px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
