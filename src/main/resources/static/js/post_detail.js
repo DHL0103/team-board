@@ -25,13 +25,7 @@ function closeEditModal() {
 
 const editTitleInput = document.getElementById("edit-title");
 const editTitleCount = document.getElementById("editTitleCount");
-if (editTitleInput && editTitleCount) {
-    editTitleInput.addEventListener("input", () => {
-        const len = editTitleInput.value.length;
-        editTitleCount.textContent = len + "/100";
-        editTitleCount.classList.toggle("near-limit", len >= 90);
-    });
-}
+initCharCounter(editTitleInput, editTitleCount, 100, 90);
 
 if (btnEdit) {
     btnEdit.addEventListener("click", () => {
@@ -59,13 +53,7 @@ const boardId = document.body.dataset.boardId;
 
 const rejectReasonTextarea = document.getElementById("rejectReason");
 const rejectReasonCount = document.getElementById("rejectReasonCount");
-if (rejectReasonTextarea && rejectReasonCount) {
-    rejectReasonTextarea.addEventListener("input", () => {
-        const len = rejectReasonTextarea.value.length;
-        rejectReasonCount.textContent = len + "/300";
-        rejectReasonCount.classList.toggle("near-limit", len >= 270);
-    });
-}
+initCharCounter(rejectReasonTextarea, rejectReasonCount, 300, 270);
 
 if (btnReject) {
     btnReject.addEventListener("click", () => {
@@ -150,15 +138,6 @@ document.querySelectorAll('.rejection-reason').forEach(el => {
             btn.textContent = expanded ? '접기' : '더보기';
         });
         el.insertAdjacentElement('afterend', btn);
-    }
-});
-
-// ── 에러 토스트 ──
-window.addEventListener("load", () => {
-    const toast = document.getElementById("errorToast");
-    if (toast && toast.textContent.trim()) {
-        toast.classList.add("show");
-        setTimeout(() => toast.classList.remove("show"), 3000);
     }
 });
 

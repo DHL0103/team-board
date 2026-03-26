@@ -217,14 +217,6 @@ if (createModal) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const toast = document.getElementById("errorToast");
-    if (toast && toast.textContent.trim()) {
-        toast.classList.add("show");
-        setTimeout(() => toast.classList.remove("show"), 3000);
-    }
-});
-
 // ── 보드 검색 + 활성/비활성 필터 ──
 const allBoardCards = Array.from(document.querySelectorAll(".board-grid-card[data-status]"));
 const boardCountLabel = document.getElementById("board-count-label");
@@ -291,14 +283,10 @@ if (createBoardModal && btnOpenBoardCreate) {
     document.getElementById("btn-cancel-board-create").addEventListener("click", closeBoard);
     createBoardModal.addEventListener("click", e => { if (e.target === createBoardModal) closeBoard(); });
 
-    const createBoardNameInput = document.getElementById("createBoardName");
-    const createBoardNameCount = document.getElementById("createBoardNameCount");
-    if (createBoardNameInput && createBoardNameCount) {
-        createBoardNameInput.addEventListener("input", () => {
-            const len = createBoardNameInput.value.length;
-            createBoardNameCount.textContent = len + "/50";
-            createBoardNameCount.classList.toggle("near-limit", len >= 45);
-        });
-    }
+    initCharCounter(
+        document.getElementById("createBoardName"),
+        document.getElementById("createBoardNameCount"),
+        50, 45
+    );
 }
 
