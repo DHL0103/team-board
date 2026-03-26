@@ -36,8 +36,6 @@
 // ── App 네임스페이스 ──
 const App = (function () {
 
-    // ── private ──
-    const _memberCache = {};
 
     // ── 토스트 ──
     function showToast(message) {
@@ -447,22 +445,6 @@ const App = (function () {
         };
     }
 
-    // ── 회원 이름 조회 ──
-    async function fetchUsername(memberId) {
-        if (!memberId) { return "알 수 없음"; }
-        if (_memberCache[memberId]) { return _memberCache[memberId]; }
-
-        try {
-            const res = await fetch(`/member/${memberId}`);
-            if (!res.ok) { throw new Error("Network response was not ok"); }
-            const member = await res.json();
-            _memberCache[memberId] = member.username;
-            return member.username;
-        } catch {
-            return "알 수 없음";
-        }
-    }
-
     return {
         showToast,
         initDueChips,
@@ -476,7 +458,6 @@ const App = (function () {
         initFileAttachment,
         initPasswordValidation,
         initAssigneePicker,
-        fetchUsername,
     };
 })();
 

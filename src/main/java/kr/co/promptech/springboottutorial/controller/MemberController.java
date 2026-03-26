@@ -1,7 +1,6 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import jakarta.validation.Valid;
-import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.model.dto.SignupRequestDto;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -14,17 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
-
-    /**
-     * @param id 조회할 멤버의 PK
-     * @return 해당 멤버 객체 (JSON)
-     * id로 특정 멤버 정보를 조회하는 REST API
-     */
-    @GetMapping("/{id}")
-    @ResponseBody
-    public Member getMemberDetailPage(@PathVariable Long id) {
-        return memberService.getMemberById(id);
-    }
 
     /**
      * @return 로그인 폼 뷰 이름 (login_form)
