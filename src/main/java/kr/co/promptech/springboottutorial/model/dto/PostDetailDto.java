@@ -1,7 +1,6 @@
 package kr.co.promptech.springboottutorial.model.dto;
 
 import kr.co.promptech.springboottutorial.model.PostFile;
-import kr.co.promptech.springboottutorial.model.PostRejection;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,6 +13,7 @@ public class PostDetailDto {
     private Long id;
     private Long boardId;
     private Long memberId;
+    private String writerName;
     private String title;
     private String content;
     private String status;
@@ -21,7 +21,7 @@ public class PostDetailDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<PostFile> postFiles;
-    private List<PostRejection> rejections;
+    private List<PostRejectionDto> rejections;
     private String boardName;
     private String boardColor;
     private boolean canModify;
@@ -29,5 +29,6 @@ public class PostDetailDto {
     private List<BoardMemberResponseDto> postAssignees;
     private List<CommentResponseDto> commentList;
     private Long currentMemberId;
+    private String currentMemberName;
     private boolean currentUserIsManagerOrAdmin;
 }

@@ -8,6 +8,7 @@ import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
+import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostRejectionMapper;
@@ -38,6 +39,7 @@ public class PostService {
     private final PostRejectionService postRejectionService;
     private final CommentService commentService;
     private final HtmlSanitizer htmlSanitizer;
+    private final MemberMapper memberMapper;
 
     public Post getPostById(Long id) {
         Post post = postMapper.getPostById(id);
@@ -192,6 +194,7 @@ public class PostService {
                 .id(post.getId())
                 .boardId(post.getBoardId())
                 .memberId(post.getMemberId())
+                .writerName(memberMapper.findUsernameById(post.getMemberId()))
                 .title(post.getTitle())
                 .content(post.getContent())
                 .status(post.getStatus())
@@ -199,7 +202,7 @@ public class PostService {
                 .createdAt(post.getCreatedAt())
                 .updatedAt(post.getUpdatedAt())
                 .postFiles(postFileService.getFilesByPostId(postId))
-                .rejections(postRejectionService.getByPostId(postId))
+                .rejections(postRejectionService.getDtosByPostId(postId))
                 .boardName(board != null ? board.getName() : null)
                 .boardColor(board != null ? board.getColor() : null)
                 .canModify(canModify)
@@ -207,6 +210,7 @@ public class PostService {
                 .postAssignees(postMemberMapper.findAssigneesByPostId(postId))
                 .commentList(commentService.findByPostId(postId, post.getBoardId()))
                 .currentMemberId(user != null ? user.getId() : null)
+                .currentMemberName(user != null ? user.getUsername() : null)
                 .currentUserIsManagerOrAdmin(isManagerOrAdmin)
                 .build();
     }

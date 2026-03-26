@@ -7,6 +7,10 @@
         SELECT * FROM members WHERE id = #{id}
     </select>
 
+    <select id="findUsernameById" resultType="String">
+        SELECT username FROM members WHERE id = #{id}
+    </select>
+
     <select id="findByUsername" resultType="kr.co.promptech.springboottutorial.model.Member">
         SELECT * FROM members WHERE username = #{username}
     </select>

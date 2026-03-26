@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.PostRejection;
+import kr.co.promptech.springboottutorial.model.dto.PostRejectionDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,4 +15,6 @@ public interface PostRejectionMapper {
               @Param("rejectedBy") Long rejectedBy, @Param("createdAt") LocalDateTime createdAt);
 
     List<PostRejection> findAllByPostId(Long postId);
+
+    List<PostRejectionDto> findAllByPostIdWithNames(Long postId);
 }

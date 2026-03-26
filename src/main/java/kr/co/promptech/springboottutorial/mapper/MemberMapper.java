@@ -12,6 +12,8 @@ public interface MemberMapper {
 
     Member selectMemberById(Long id);
 
+    String findUsernameById(Long id);
+
     Member findByUsername(String username);
 
     boolean existsByUsername(String username);
