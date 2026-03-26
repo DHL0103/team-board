@@ -16,9 +16,7 @@ btnCreatePost.addEventListener('click', () => {
 
 function closeCreateModal() {
     createModal.classList.remove('open');
-    createFileDataTransfer = new DataTransfer();
-    createFileInput.files = createFileDataTransfer.files;
-    createFileChipList.innerHTML = '';
+    createFileManager.reset();
     if (btnAddAssignee) {
         selectedAssignees.clear();
         if (selectedAssigneeList) { selectedAssigneeList.innerHTML = ''; }
@@ -120,49 +118,7 @@ btnCreateClear.addEventListener('click', () => {
 });
 
 // 파일 첨부
-let createFileDataTransfer = new DataTransfer();
-const createFileInput = document.getElementById('create-file-input');
-const btnCreateFileAttach = document.getElementById('btn-create-file-attach');
-const createFileChipList = document.getElementById('create-file-chip-list');
-
-btnCreateFileAttach.addEventListener('click', () => {
-    createFileInput.click();
-});
-
-createFileInput.addEventListener('change', () => {
-    for (const file of createFileInput.files) {
-        if (file.size > 10 * 1024 * 1024) {
-            alert(`${file.name}: 파일 크기는 10MB를 초과할 수 없습니다.`);
-            continue;
-        }
-        createFileDataTransfer.items.add(file);
-    }
-    createFileInput.files = createFileDataTransfer.files;
-    renderCreateFileChips();
-});
-
-function renderCreateFileChips() {
-    createFileChipList.innerHTML = '';
-    for (let i = 0; i < createFileDataTransfer.files.length; i++) {
-        const file = createFileDataTransfer.files[i];
-        const chip = document.createElement('span');
-        chip.className = 'file-chip';
-        chip.innerHTML = `${file.name}<button type="button" class="file-chip-remove" data-index="${i}">×</button>`;
-        createFileChipList.appendChild(chip);
-    }
-}
-
-createFileChipList.addEventListener('click', (e) => {
-    if (!e.target.classList.contains('file-chip-remove')) return;
-    const idx = parseInt(e.target.dataset.index);
-    const newDt = new DataTransfer();
-    for (let i = 0; i < createFileDataTransfer.files.length; i++) {
-        if (i !== idx) newDt.items.add(createFileDataTransfer.files[i]);
-    }
-    createFileDataTransfer = newDt;
-    createFileInput.files = createFileDataTransfer.files;
-    renderCreateFileChips();
-});
+const createFileManager = initFileAttachment('create-file-input', 'btn-create-file-attach', 'create-file-chip-list');
 
 renderCreateCalendar();
 
