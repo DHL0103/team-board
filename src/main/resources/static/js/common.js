@@ -321,6 +321,133 @@ function initPasswordValidation(passwordInputId, confirmInputId, errorClass, err
     }
 }
 
+// ── 모달 공통 초기화 ──
+function initModals() {
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+        overlay.addEventListener('click', e => {
+            if (e.target === overlay) { closeModal(overlay.id); }
+        });
+    });
+    document.querySelectorAll('.modal-close').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const overlay = btn.closest('.modal-overlay');
+            if (overlay) { closeModal(overlay.id); }
+        });
+    });
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+        }
+    });
+}
+
+initModals();
+
+// ── 담당자 선택 피커 유틸 ──
+function initAssigneePicker({ addBtnId, dropdownId, searchId, optionListId, selectedListId, pickerId, formId, inputName = 'assigneeIds' }) {
+    const addBtn       = document.getElementById(addBtnId);
+    const dropdown     = document.getElementById(dropdownId);
+    const search       = searchId ? document.getElementById(searchId) : null;
+    const optionList   = document.getElementById(optionListId);
+    const selectedList = document.getElementById(selectedListId);
+    if (!addBtn || !dropdown || !optionList || !selectedList) { return null; }
+
+    const selected = new Map();
+
+    // 서버 렌더링된 기존 담당자로 초기화
+    selectedList.querySelectorAll('.selected-assignee-chip').forEach(chip => {
+        selected.set(chip.dataset.memberId, chip.dataset.username);
+        const opt = optionList.querySelector(`[data-member-id="${chip.dataset.memberId}"]`);
+        if (opt) { opt.style.display = 'none'; }
+    });
+
+    const original = new Map(selected);
+
+    function renderChips() {
+        selectedList.innerHTML = '';
+        selected.forEach((username, memberId) => {
+            const chip = document.createElement('span');
+            chip.className = 'selected-assignee-chip';
+            chip.dataset.memberId = memberId;
+            chip.dataset.username = username;
+            chip.innerHTML = `<span class="assignee-chip-name">${username}</span>`
+                + `<button type="button" class="selected-assignee-remove" data-member-id="${memberId}">×</button>`;
+            selectedList.appendChild(chip);
+        });
+    }
+
+    addBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+        if (dropdown.classList.contains('open') && search) { search.focus(); }
+    });
+
+    if (pickerId) {
+        document.addEventListener('click', e => {
+            if (!e.target.closest('#' + pickerId)) { dropdown.classList.remove('open'); }
+        });
+    }
+
+    if (search) {
+        search.addEventListener('input', () => {
+            const query = search.value.trim().toLowerCase();
+            optionList.querySelectorAll('.assignee-option').forEach(opt => {
+                if (selected.has(opt.dataset.memberId)) { opt.style.display = 'none'; return; }
+                opt.style.display = opt.dataset.username.toLowerCase().includes(query) ? '' : 'none';
+            });
+        });
+    }
+
+    optionList.addEventListener('click', e => {
+        const opt = e.target.closest('.assignee-option');
+        if (!opt) { return; }
+        selected.set(opt.dataset.memberId, opt.dataset.username);
+        opt.style.display = 'none';
+        renderChips();
+        if (search) { search.value = ''; }
+        dropdown.classList.remove('open');
+    });
+
+    selectedList.addEventListener('click', e => {
+        const removeBtn = e.target.closest('.selected-assignee-remove');
+        if (!removeBtn) { return; }
+        const memberId = removeBtn.dataset.memberId;
+        selected.delete(memberId);
+        const opt = optionList.querySelector(`[data-member-id="${memberId}"]`);
+        if (opt) { opt.style.display = ''; }
+        renderChips();
+    });
+
+    if (formId) {
+        const form = document.getElementById(formId);
+        if (form) {
+            form.addEventListener('submit', () => {
+                form.querySelectorAll(`input[name="${inputName}"]`).forEach(el => el.remove());
+                selected.forEach((username, memberId) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = inputName;
+                    input.value = memberId;
+                    form.appendChild(input);
+                });
+            });
+        }
+    }
+
+    return {
+        reset() {
+            selected.clear();
+            original.forEach((username, memberId) => selected.set(memberId, username));
+            renderChips();
+            optionList.querySelectorAll('.assignee-option').forEach(opt => {
+                opt.style.display = selected.has(opt.dataset.memberId) ? 'none' : '';
+            });
+            if (search) { search.value = ''; }
+            dropdown.classList.remove('open');
+        }
+    };
+}
+
 // ── 에러 토스트 자동 표시 ──
 window.addEventListener('load', function () {
     const toast = document.getElementById('errorToast');
