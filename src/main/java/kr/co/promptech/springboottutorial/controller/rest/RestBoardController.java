@@ -1,0 +1,36 @@
+package kr.co.promptech.springboottutorial.controller.rest;
+
+import kr.co.promptech.springboottutorial.model.CustomUser;
+import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
+import kr.co.promptech.springboottutorial.service.BoardService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/boards")
+public class RestBoardController {
+
+    private final BoardService boardService;
+
+    /**
+     * @param status ACTIVE | INACTIVE
+     * @param q      보드명 검색어 (선택)
+     * @param user   현재 로그인 사용자
+     * @return 상태와 검색어 조건에 맞는 보드 목록 (JSON)
+     */
+    @GetMapping
+    public ResponseEntity<List<BoardResponseDto>> getBoards(
+            @RequestParam String status,
+            @RequestParam(defaultValue = "") String q,
+            @AuthenticationPrincipal CustomUser user) {
+        return ResponseEntity.ok(boardService.getBoardDtosByStatus(status, q, user));
+    }
+}

@@ -52,6 +52,31 @@
         GROUP BY b.id
     </select>
 
+    <select id="getBoardsByMemberIdAndStatus" resultMap="boardResponseDtoMap">
+        SELECT b.id, b.name, b.description, b.color, b.status,
+               COUNT(bm2.member_id) AS member_count
+        FROM boards b
+        JOIN board_members bm ON b.id = bm.board_id AND bm.member_id = #{memberId} AND bm.board_role IN ('USER', 'MANAGER')
+        LEFT JOIN board_members bm2 ON b.id = bm2.board_id AND bm2.board_role IN ('USER', 'MANAGER')
+        WHERE b.status = #{status}
+        <if test="keyword != null and keyword != ''">
+            AND b.name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        GROUP BY b.id
+    </select>
+
+    <select id="getAllBoardsByStatus" resultMap="boardResponseDtoMap">
+        SELECT b.id, b.name, b.description, b.color, b.status,
+               COUNT(bm.member_id) AS member_count
+        FROM boards b
+        LEFT JOIN board_members bm ON b.id = bm.board_id AND bm.board_role IN ('USER', 'MANAGER')
+        WHERE b.status = #{status}
+        <if test="keyword != null and keyword != ''">
+            AND b.name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        GROUP BY b.id
+    </select>
+
     <update id="updateBoard">
         UPDATE boards
         SET name = #{dto.name}, color = #{dto.color}, description = #{dto.description}, status = #{dto.status}

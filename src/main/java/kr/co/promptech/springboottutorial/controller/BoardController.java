@@ -31,20 +31,8 @@ public class BoardController {
     private final BoardMemberService boardMemberService;
     private final PostMemberService postMemberService;
 
-    /**
-     * @param model 뷰에 전달할 데이터 컨테이너
-     * @param user  현재 로그인한 사용자 정보
-     * @return 메인 페이지 뷰 이름 (main_page)
-     * ADMIN이면 전체 보드 목록, 일반 USER면 소속 보드 목록만 반환
-     * model에 담기는 boardList는 BoardResponseDto
-     */
     @GetMapping
-    public String getAllBoard(Model model, @AuthenticationPrincipal CustomUser user) {
-        if (MemberRole.ROLE_ADMIN == user.getRole()) {
-            model.addAttribute("boardList", boardService.getAllBoardDtos());
-        } else {
-            model.addAttribute("boardList", boardService.getBoardDtosByMemberId(user.getId()));
-        }
+    public String getMainPage() {
         return "main_page";
     }
 
