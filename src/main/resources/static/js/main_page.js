@@ -35,7 +35,7 @@ document.querySelectorAll(".board-card").forEach(async card => {
     if (card.dataset.status === "COMPLETED") return;
     const memberId = card.dataset.memberId;
     if (!memberId) return;
-    const name = await fetchUsername(memberId);
+    const name = await App.fetchUsername(memberId);
     card.querySelector(".writer-name").textContent = name;
 });
 
@@ -99,20 +99,15 @@ const btnOpenBoardCreate = document.getElementById("btn-open-board-create");
 
 if (createBoardModal && btnOpenBoardCreate) {
     btnOpenBoardCreate.addEventListener("click", () => {
-        createBoardModal.classList.add("open");
-        document.body.style.overflow = "hidden";
+        App.openModal("createBoardModal");
     });
 
-    const closeBoard = () => {
-        createBoardModal.classList.remove("open");
-        document.body.style.overflow = "";
-    };
+    const closeBoard = () => { App.closeModal("createBoardModal"); };
 
     document.getElementById("btn-close-board-create").addEventListener("click", closeBoard);
     document.getElementById("btn-cancel-board-create").addEventListener("click", closeBoard);
-    createBoardModal.addEventListener("click", e => { if (e.target === createBoardModal) closeBoard(); });
 
-    initCharCounter(
+    App.initCharCounter(
         document.getElementById("createBoardName"),
         document.getElementById("createBoardNameCount"),
         50, 45

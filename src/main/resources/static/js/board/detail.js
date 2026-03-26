@@ -9,11 +9,11 @@ document.querySelectorAll('.board-card[data-href]').forEach(card => {
 const btnCreatePost = document.getElementById('btn-create-post');
 
 btnCreatePost.addEventListener('click', () => {
-    openModal('createModal');
+    App.openModal('createModal');
 });
 
 function closeCreateModal() {
-    closeModal('createModal');
+    App.closeModal('createModal');
     createFileManager.reset();
     if (createAssigneePicker) { createAssigneePicker.reset(); }
 }
@@ -22,13 +22,13 @@ const btnCreateClose = document.getElementById('btn-create-close');
 btnCreateClose.addEventListener('click', closeCreateModal);
 
 // 마감일 피커 (생성 모달)
-initDatePicker('create', { formatDisplay: (m, d) => `${parseInt(m)}/${parseInt(d)}` });
+App.initDatePicker('create', { formatDisplay: (m, d) => `${parseInt(m)}/${parseInt(d)}` });
 
 // 파일 첨부
-const createFileManager = initFileAttachment('create-file-input', 'btn-create-file-attach', 'create-file-chip-list');
+const createFileManager = App.initFileAttachment('create-file-input', 'btn-create-file-attach', 'create-file-chip-list');
 
 // 담당자 선택
-const createAssigneePicker = initAssigneePicker({
+const createAssigneePicker = App.initAssigneePicker({
     addBtnId:      'btn-add-assignee',
     dropdownId:    'assignee-dropdown',
     searchId:      'create-assignee-search',
@@ -39,7 +39,7 @@ const createAssigneePicker = initAssigneePicker({
 });
 
 // ── 제목 글자수 카운터 ──
-initCharCounter(
+App.initCharCounter(
     document.getElementById('create-title'),
     document.getElementById('createTitleCount'),
     100, 90

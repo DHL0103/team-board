@@ -3,18 +3,18 @@ const btnEdit = document.getElementById("btn-edit");
 const btnEditClose = document.getElementById("btn-edit-close");
 
 function closeEditModal() {
-    closeModal("editModal");
+    App.closeModal("editModal");
     if (editFileManager) { editFileManager.reset(); }
     if (editAssigneePicker) { editAssigneePicker.reset(); }
 }
 
 const editTitleInput = document.getElementById("edit-title");
 const editTitleCount = document.getElementById("editTitleCount");
-initCharCounter(editTitleInput, editTitleCount, 100, 90);
+App.initCharCounter(editTitleInput, editTitleCount, 100, 90);
 
 if (btnEdit) {
     btnEdit.addEventListener("click", () => {
-        openModal("editModal");
+        App.openModal("editModal");
     });
 }
 if (btnEditClose) {
@@ -27,13 +27,13 @@ const boardId = document.body.dataset.boardId;
 
 const rejectReasonTextarea = document.getElementById("rejectReason");
 const rejectReasonCount = document.getElementById("rejectReasonCount");
-initCharCounter(rejectReasonTextarea, rejectReasonCount, 300, 270);
+App.initCharCounter(rejectReasonTextarea, rejectReasonCount, 300, 270);
 
 if (btnReject) {
     btnReject.addEventListener("click", () => {
         document.getElementById("rejectForm").action =
             "/board/" + boardId + "/manager/requests/reject/" + btnReject.dataset.postId;
-        openModal("rejectModal");
+        App.openModal("rejectModal");
     });
 }
 
@@ -43,12 +43,12 @@ const btnDeleteCancel = document.getElementById("btn-delete-cancel");
 
 if (btnDelete) {
     btnDelete.addEventListener("click", () => {
-        openModal("deleteModal");
+        App.openModal("deleteModal");
     });
 }
 if (btnDeleteCancel) {
     btnDeleteCancel.addEventListener("click", () => {
-        closeModal("deleteModal");
+        App.closeModal("deleteModal");
     });
 }
 
@@ -56,7 +56,7 @@ const memberId = parseInt(document.body.dataset.memberId);
 const existingDueDateStr = document.body.dataset.dueDate || '';
 
 // ── 작성자 이름 Fetch ──
-fetchUsername(memberId).then(name => {
+App.fetchUsername(memberId).then(name => {
     document.getElementById("writer-name").textContent = name;
 });
 
@@ -68,7 +68,7 @@ document.querySelectorAll('.rejection-item').forEach(async item => {
         span.textContent = '';
         return;
     }
-    const name = await fetchUsername(rejectedBy);
+    const name = await App.fetchUsername(rejectedBy);
     span.textContent = name;
 });
 
@@ -90,13 +90,13 @@ document.querySelectorAll('.rejection-reason').forEach(el => {
 });
 
 // ── 수정 모달 캘린더 피커 ──
-initDatePicker('edit', { initialDate: existingDueDateStr });
+App.initDatePicker('edit', { initialDate: existingDueDateStr });
 
 // ── 수정 모달 파일 첨부 ──
-const editFileManager = initFileAttachment('edit-file-input', 'btn-edit-file-attach', 'edit-file-chip-list');
+const editFileManager = App.initFileAttachment('edit-file-input', 'btn-edit-file-attach', 'edit-file-chip-list');
 
 // ── 수정 모달 담당자 선택 ──
-const editAssigneePicker = initAssigneePicker({
+const editAssigneePicker = App.initAssigneePicker({
     addBtnId:      'btn-edit-add-assignee',
     dropdownId:    'edit-assignee-dropdown',
     searchId:      'edit-assignee-search',
@@ -217,7 +217,7 @@ if (btnRejectionToggle && rejectionPanel) {
     var MAX             = 256;
 
     if (authorName && currentMemberId) {
-        fetchUsername(currentMemberId).then(function (name) {
+        App.fetchUsername(currentMemberId).then(function (name) {
             authorName.textContent = name;
         });
     }

@@ -4,14 +4,14 @@ var assignedList      = document.getElementById('assigned-list');
 var assignedPagination = document.getElementById('assigned-pagination');
 if (assignedList && assignedPagination) {
     var assignedItems = Array.from(assignedList.querySelectorAll('.assigned-card'));
-    makePaginator(assignedItems, assignedPagination, PAGE_SIZE);
+    App.makePaginator(assignedItems, assignedPagination, PAGE_SIZE);
 }
 
 var inviteList      = document.getElementById('invite-list');
 var invitePagination = document.getElementById('invite-pagination');
 if (inviteList && invitePagination) {
     var inviteItems = Array.from(inviteList.children);
-    makePaginator(inviteItems, invitePagination, PAGE_SIZE);
+    App.makePaginator(inviteItems, invitePagination, PAGE_SIZE);
 }
 
 // ── 사이드바 탭 전환 ──
@@ -31,4 +31,4 @@ sidebarItems.forEach(item => {
 });
 
 // ── 비밀번호 변경 폼 검증 ──
-initPasswordValidation('newPassword', 'newPasswordConfirm', 'mypage-input-error-msg', '새 비밀번호가 일치하지 않습니다.');
+App.initPasswordValidation('newPassword', 'newPasswordConfirm', 'mypage-input-error-msg', '새 비밀번호가 일치하지 않습니다.');

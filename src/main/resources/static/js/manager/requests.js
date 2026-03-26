@@ -5,6 +5,6 @@ document.querySelectorAll(".btn-reject").forEach(btn => {
     btn.addEventListener("click", () => {
         document.getElementById("rejectForm").action =
             "/board/" + boardId + "/manager/requests/reject/" + btn.dataset.postId;
-        openModal("rejectModal");
+        App.openModal("rejectModal");
     });
 });

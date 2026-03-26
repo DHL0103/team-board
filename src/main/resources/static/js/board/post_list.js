@@ -52,7 +52,7 @@
 
         if (paginationWrap) {
             const totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
-            renderPagination(paginationWrap, totalPages, currentPage, page => {
+            App.renderPagination(paginationWrap, totalPages, currentPage, page => {
                 currentPage = page;
                 render();
             });

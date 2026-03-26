@@ -54,7 +54,7 @@
     if (emptyEl) { emptyEl.style.display = filtered.length === 0 ? '' : 'none'; }
 
     if (pagination) {
-      renderPagination(pagination, totalPages, currentPage, page => {
+      App.renderPagination(pagination, totalPages, currentPage, page => {
         currentPage = page;
         render();
       });

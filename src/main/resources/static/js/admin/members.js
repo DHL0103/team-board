@@ -37,7 +37,7 @@ if (tbody) {
             if (numCell) { numCell.textContent = start + i + 1; }
         });
         const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
-        renderPagination(paginationWrap, totalPages, currentPage, function (page) {
+        App.renderPagination(paginationWrap, totalPages, currentPage, function (page) {
             currentPage = page;
             render();
         });
@@ -99,8 +99,7 @@ function openDetailModal(row) {
         btnRoleAction.style.display = "none";
     }
 
-    detailModal.classList.add("open");
-    document.body.style.overflow = "hidden";
+    App.openModal("memberDetailModal");
 
     fetch(`/admin/api/members/${memberId}/boards`)
         .then(res => res.json())
@@ -128,8 +127,7 @@ function openDetailModal(row) {
 }
 
 function closeDetailModal() {
-    detailModal.classList.remove("open");
-    document.body.style.overflow = "";
+    App.closeModal("memberDetailModal");
     currentDetailRow = null;
 }
 

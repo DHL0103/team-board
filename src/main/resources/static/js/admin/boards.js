@@ -15,7 +15,7 @@ if (tbody) {
         allRows.forEach(row => { row.style.display = "none"; });
         filteredRows.slice(start, end).forEach(row => { row.style.display = ""; });
         const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
-        renderPagination(paginationWrap, totalPages, currentPage, function (page) {
+        App.renderPagination(paginationWrap, totalPages, currentPage, function (page) {
             currentPage = page;
             render();
         });

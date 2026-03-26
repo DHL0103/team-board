@@ -2,7 +2,7 @@
 document.querySelectorAll(".btn-reject").forEach(btn => {
     btn.addEventListener("click", () => {
         document.getElementById("rejectForm").action = "/admin/reject/" + btn.dataset.postId;
-        openModal("rejectModal");
+        App.openModal("rejectModal");
     });
 });
 
@@ -10,8 +10,8 @@ document.querySelectorAll(".btn-reject").forEach(btn => {
 const btnOpenCreate = document.getElementById("btn-open-create");
 if (btnOpenCreate) {
     btnOpenCreate.addEventListener("click", () => {
-        if (document.getElementById("createMemberModal")) openModal("createMemberModal");
-        else if (document.getElementById("createBoardModal")) openModal("createBoardModal");
+        if (document.getElementById("createMemberModal")) App.openModal("createMemberModal");
+        else if (document.getElementById("createBoardModal")) App.openModal("createBoardModal");
     });
 }
 
@@ -19,8 +19,8 @@ if (btnOpenCreate) {
 const btnCloseCreate = document.getElementById("btn-close-create");
 if (btnCloseCreate) {
     btnCloseCreate.addEventListener("click", () => {
-        if (document.getElementById("createMemberModal")) closeModal("createMemberModal");
-        else if (document.getElementById("createBoardModal")) closeModal("createBoardModal");
+        if (document.getElementById("createMemberModal")) App.closeModal("createMemberModal");
+        else if (document.getElementById("createBoardModal")) App.closeModal("createBoardModal");
     });
 }
 
@@ -28,8 +28,8 @@ if (btnCloseCreate) {
 const btnCloseEdit = document.getElementById("btn-close-edit");
 if (btnCloseEdit) {
     btnCloseEdit.addEventListener("click", () => {
-        if (document.getElementById("editMemberModal")) closeModal("editMemberModal");
-        else if (document.getElementById("editBoardModal")) closeModal("editBoardModal");
+        if (document.getElementById("editMemberModal")) App.closeModal("editMemberModal");
+        else if (document.getElementById("editBoardModal")) App.closeModal("editBoardModal");
     });
 }
 
@@ -38,13 +38,13 @@ document.querySelectorAll(".btn-open-delete-member").forEach(btn => {
     btn.addEventListener("click", () => {
         document.getElementById("delete-member-name").textContent = btn.dataset.username;
         document.getElementById("deleteMemberForm").action = `/admin/member/delete/${btn.dataset.memberId}`;
-        openModal("deleteMemberModal");
+        App.openModal("deleteMemberModal");
     });
 });
 
 const btnDeleteMemberCancel = document.getElementById("btn-delete-member-cancel");
 if (btnDeleteMemberCancel) {
-    btnDeleteMemberCancel.addEventListener("click", () => closeModal("deleteMemberModal"));
+    btnDeleteMemberCancel.addEventListener("click", () => App.closeModal("deleteMemberModal"));
 }
 
 // ── 수정 버튼 — 데이터 채우고 모달 열기 ──
@@ -59,7 +59,7 @@ document.querySelectorAll(".btn-open-edit").forEach(btn => {
             if (roleSelect) roleSelect.value = btn.dataset.role ?? "ROLE_USER";
             const select = document.getElementById("edit-board-select");
             if (select) select.value = btn.dataset.boardId ?? "";
-            openModal("editMemberModal");
+            App.openModal("editMemberModal");
             return;
         }
 
@@ -70,7 +70,7 @@ document.querySelectorAll(".btn-open-edit").forEach(btn => {
             document.getElementById("edit-board-name").value = btn.dataset.boardName ?? "";
             document.getElementById("edit-board-slug").value = btn.dataset.boardSlug ?? "";
             document.getElementById("edit-board-desc").value = btn.dataset.boardDesc ?? "";
-            openModal("editBoardModal");
+            App.openModal("editBoardModal");
         }
     });
 });
