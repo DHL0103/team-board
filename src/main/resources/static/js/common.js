@@ -63,6 +63,91 @@ initDueChips();
     });
 })();
 
+// ── 날짜 피커 유틸 ──
+// prefix 예시: 'create' → create-due-days, create-month-label, btn-create-prev-month, ...
+function initDatePicker(prefix, { initialDate = null, formatDisplay = null } = {}) {
+    const daysEl      = document.getElementById(`${prefix}-due-days`);
+    const monthLabel  = document.getElementById(`${prefix}-month-label`);
+    const dueValueEl  = document.getElementById(`${prefix}-due-value`);
+    const displayEl   = document.getElementById(`${prefix}-selected-display`);
+    const prevBtn     = document.getElementById(`btn-${prefix}-prev-month`);
+    const nextBtn     = document.getElementById(`btn-${prefix}-next-month`);
+    const clearBtn    = document.getElementById(`btn-${prefix}-clear-due`);
+    if (!daysEl || !monthLabel) { return; }
+
+    const fmt = formatDisplay || ((m, d) => `${m}.${d} 마감`);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let selectedDate = null;
+    let currentDate  = new Date();
+
+    if (initialDate) {
+        selectedDate = new Date(initialDate + 'T00:00:00');
+        currentDate  = new Date(selectedDate);
+        const m = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const d = String(selectedDate.getDate()).padStart(2, '0');
+        if (displayEl) { displayEl.textContent = fmt(m, d); }
+    }
+
+    function render() {
+        const year  = currentDate.getFullYear();
+        const month = currentDate.getMonth();
+        monthLabel.textContent = `${year}년 ${month + 1}월`;
+        daysEl.innerHTML = '';
+
+        const firstDay  = new Date(year, month, 1).getDay();
+        const lastDate  = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) {
+            const el = document.createElement('div');
+            el.className = 'due-day empty';
+            daysEl.appendChild(el);
+        }
+
+        for (let d = 1; d <= lastDate; d++) {
+            const el = document.createElement('div');
+            el.className = 'due-day';
+            el.textContent = d;
+
+            const thisDate = new Date(year, month, d);
+            const isPast   = thisDate < today;
+            const isToday  = thisDate.getTime() === today.getTime();
+
+            if (isPast)   { el.classList.add('past'); }
+            if (isToday)  { el.classList.add('today'); }
+            if (selectedDate && thisDate.getTime() === selectedDate.getTime()) { el.classList.add('selected'); }
+
+            if (!isPast) {
+                el.addEventListener('click', () => {
+                    selectedDate = thisDate;
+                    const y = String(year);
+                    const m = String(month + 1).padStart(2, '0');
+                    const dd = String(d).padStart(2, '0');
+                    if (dueValueEl) { dueValueEl.value = `${y}-${m}-${dd}T00:00:00`; }
+                    if (displayEl)  { displayEl.textContent = fmt(m, dd); }
+                    render();
+                });
+            }
+            daysEl.appendChild(el);
+        }
+    }
+
+    function clear() {
+        selectedDate = null;
+        if (dueValueEl) { dueValueEl.value = ''; }
+        if (displayEl)  { displayEl.textContent = '선택 안 함'; }
+        render();
+    }
+
+    if (prevBtn)  { prevBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() - 1); render(); }); }
+    if (nextBtn)  { nextBtn.addEventListener('click', () => { currentDate.setMonth(currentDate.getMonth() + 1); render(); }); }
+    if (clearBtn) { clearBtn.addEventListener('click', clear); }
+
+    render();
+}
+
 // ── 모달 유틸 ──
 function openModal(id) {
     document.getElementById(id).classList.add("open");
