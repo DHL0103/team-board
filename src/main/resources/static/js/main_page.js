@@ -1,36 +1,56 @@
-// ── 보드 검색 + 활성/비활성 필터 ──
-const allBoardCards = Array.from(document.querySelectorAll(".board-grid-card[data-status]"));
+// ── 보드 목록 fetch ──
+const boardGrid = document.getElementById("board-grid");
 const boardCountLabel = document.getElementById("board-count-label");
 const btnBoardFilterActive = document.getElementById("btn-board-filter-active");
 const btnBoardFilterInactive = document.getElementById("btn-board-filter-inactive");
 const boardSearchInput = document.getElementById("boardSearchInput");
 
-let currentFilterStatus = "ACTIVE";
+let currentStatus = "ACTIVE";
+let searchTimer = null;
 
-function applyFilters() {
-    const query = boardSearchInput ? boardSearchInput.value.trim().toLowerCase() : "";
-    let count = 0;
-    allBoardCards.forEach(card => {
-        const matchesStatus = card.dataset.status === currentFilterStatus;
-        const nameEl = card.querySelector(".board-grid-card-name");
-        const matchesSearch = !query || (nameEl && nameEl.textContent.toLowerCase().includes(query));
-        const visible = matchesStatus && matchesSearch;
-        card.style.display = visible ? "" : "none";
-        if (visible) { count++; }
-    });
-    boardCountLabel.textContent = `총 ${count}개의 보드`;
+function createBoardCard(board) {
+    const a = document.createElement("a");
+    a.className = `board-grid-card palette-${board.color}`;
+    a.href = `/board/${board.id}`;
+    a.innerHTML =
+        '<div class="board-grid-card-bar"></div>' +
+        '<div class="board-grid-card-body">' +
+            '<div class="board-grid-card-name"></div>' +
+            '<div class="board-grid-card-footer">' +
+                '<span class="board-grid-member-count">' +
+                    '<svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>' +
+                    '<span class="member-count-label"></span>' +
+                '</span>' +
+            '</div>' +
+        '</div>';
+    a.querySelector(".board-grid-card-name").textContent = board.name;
+    a.querySelector(".member-count-label").textContent = board.memberCount;
+    return a;
+}
+
+async function loadBoards(status, keyword) {
+    const params = new URLSearchParams({ status, q: keyword || "" });
+    const res = await fetch(`/api/boards?${params}`);
+    const boards = await res.json();
+
+    boardGrid.querySelectorAll(".board-grid-card").forEach(el => el.remove());
+    boards.forEach(board => boardGrid.appendChild(createBoardCard(board)));
+    boardCountLabel.textContent = `총 ${boards.length}개의 보드`;
 }
 
 if (boardSearchInput) {
-    boardSearchInput.addEventListener("input", applyFilters);
+    boardSearchInput.addEventListener("input", () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => loadBoards(currentStatus, boardSearchInput.value.trim()), 300);
+    });
 }
 
 if (btnBoardFilterActive) {
     btnBoardFilterActive.addEventListener("click", () => {
         btnBoardFilterActive.classList.add("active");
         btnBoardFilterInactive.classList.remove("active");
-        currentFilterStatus = "ACTIVE";
-        applyFilters();
+        currentStatus = "ACTIVE";
+        loadBoards(currentStatus, boardSearchInput ? boardSearchInput.value.trim() : "");
     });
 }
 
@@ -38,12 +58,12 @@ if (btnBoardFilterInactive) {
     btnBoardFilterInactive.addEventListener("click", () => {
         btnBoardFilterInactive.classList.add("active");
         btnBoardFilterActive.classList.remove("active");
-        currentFilterStatus = "INACTIVE";
-        applyFilters();
+        currentStatus = "INACTIVE";
+        loadBoards(currentStatus, boardSearchInput ? boardSearchInput.value.trim() : "");
     });
 }
 
-applyFilters();
+loadBoards("ACTIVE", "");
 
 // ── 보드 생성 모달 ──
 const createBoardModal = document.getElementById("createBoardModal");

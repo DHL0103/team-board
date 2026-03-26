@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <title>Team Board</title>
@@ -32,30 +32,13 @@
     </div>
 
     <div class="board-grid-wrap">
-        <div class="board-grid">
+        <div class="board-grid" id="board-grid">
             <div class="board-grid-card-create" id="btn-open-board-create">
                 <div class="create-icon">
                     <svg width="20" height="20"><use href="/img/icons.svg#icon-plus"></use></svg>
                 </div>
                 <span>만들기</span>
             </div>
-            <a class="board-grid-card"
-               th:each="board : ${boardList}"
-               th:href="@{'/board/' + ${board.id}}"
-               th:classappend="${'palette-' + board.color}"
-               th:data-status="${board.status}"
-               >
-                <div class="board-grid-card-bar"></div>
-                <div class="board-grid-card-body">
-                    <div class="board-grid-card-name" th:text="${board.name}">보드명</div>
-                    <div class="board-grid-card-footer">
-                        <span class="board-grid-member-count">
-                            <svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>
-                            <span class="member-count-label" th:text="${board.memberCount}">-</span>
-                        </span>
-                    </div>
-                </div>
-            </a>
         </div>
     </div>
 
