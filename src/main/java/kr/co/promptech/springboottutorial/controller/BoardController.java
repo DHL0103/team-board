@@ -31,6 +31,9 @@ public class BoardController {
     private final BoardMemberService boardMemberService;
     private final PostMemberService postMemberService;
 
+    /**
+     * @return main_page 뷰
+     */
     @GetMapping
     public String getMainPage() {
         return "main_page";
@@ -127,6 +130,10 @@ public class BoardController {
         return "redirect:/board";
     }
 
+    /**
+     * @param user 가입 가능한 보드 목록 검색을 위한 사용자 정보
+     * @return board/search 보드 탐색 페이지 반환
+     */
     @GetMapping("/search")
     public String searchBoards(Model model, @AuthenticationPrincipal CustomUser user) {
         model.addAttribute("boardList", boardService.searchBoards("", user.getId()));
