@@ -35,4 +35,13 @@ public interface BoardMapper {
     void updateBoard(@Param("id") Long id, @Param("dto") BoardUpdateDto dto);
 
     List<BoardSearchResultDto> searchBoards(@Param("keyword") String keyword, @Param("memberId") Long memberId);
+
+    List<BoardSearchResultDto> getBoardsPagedForSearch(@Param("memberId") Long memberId,
+                                                       @Param("q") String q,
+                                                       @Param("status") String status,
+                                                       @Param("sort") String sort,
+                                                       @Param("offset") int offset,
+                                                       @Param("size") int size);
+
+    long countBoardsForSearch(@Param("q") String q, @Param("status") String status);
 }

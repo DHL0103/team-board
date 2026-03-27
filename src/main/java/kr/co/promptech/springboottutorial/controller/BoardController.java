@@ -132,8 +132,7 @@ public class BoardController {
      * @return board/search 보드 탐색 페이지 반환
      */
     @GetMapping("/search")
-    public String searchBoards(Model model, @AuthenticationPrincipal CustomUser user) {
-        model.addAttribute("boardList", boardService.searchBoards("", user.getId()));
+    public String searchBoards() {
         return "board/search";
     }
 }

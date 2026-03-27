@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
+import kr.co.promptech.springboottutorial.model.dto.BoardPageDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,16 @@ public class RestBoardController {
             @RequestParam(defaultValue = "") String q,
             @AuthenticationPrincipal CustomUser user) {
         return ResponseEntity.ok(boardService.getBoardDtosByStatus(status, q, user));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<BoardPageDto> searchBoards(
+            @RequestParam(defaultValue = "") String q,
+            @RequestParam(defaultValue = "") String status,
+            @RequestParam(defaultValue = "recent") String sort,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @AuthenticationPrincipal CustomUser user) {
+        return ResponseEntity.ok(boardService.getBoardPageForSearch(q, status, sort, user.getId(), page, size));
     }
 }

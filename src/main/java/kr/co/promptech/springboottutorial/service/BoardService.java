@@ -6,6 +6,7 @@ import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardDetailDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardPageDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardSearchResultDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardUpdateDto;
@@ -71,6 +72,15 @@ public class BoardService {
 
     public List<BoardSearchResultDto> searchBoards(String keyword, Long memberId) {
         return boardMapper.searchBoards(keyword, memberId);
+    }
+
+    public BoardPageDto getBoardPageForSearch(String q, String status, String sort, Long memberId, int page, int size) {
+        int offset = page * size;
+        List<BoardSearchResultDto> raw = boardMapper.getBoardsPagedForSearch(memberId, q, status, sort, offset, size + 1);
+        boolean hasMore = raw.size() > size;
+        List<BoardSearchResultDto> boards = hasMore ? raw.subList(0, size) : raw;
+        long totalCount = boardMapper.countBoardsForSearch(q, status);
+        return new BoardPageDto(boards, hasMore, totalCount);
     }
 
     @Transactional(readOnly = true)
