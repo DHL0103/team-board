@@ -57,12 +57,41 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
     toolbar.querySelector('[data-cmd="codeBlock"]')
         .addEventListener('click', () => editor.chain().focus().toggleCodeBlock().run());
 
+    // ── 이미지 카운터 ──
+    const imgCounter = toolbar.querySelector('.editor-img-counter');
+
+    function updateImageCounter() {
+        let count = 0;
+        editor.state.doc.descendants(node => { if (node.type.name === 'image') { count++; } });
+        if (count > 0) {
+            imgCounter.textContent = count + ' / 5';
+            imgCounter.style.display = '';
+        } else {
+            imgCounter.style.display = 'none';
+        }
+    }
+
     // ── 이미지 업로드 ──
     const imgInput = toolbar.querySelector('.editor-img-input');
     toolbar.querySelector('[data-cmd="image"]').addEventListener('click', () => imgInput.click());
     imgInput.addEventListener('change', () => {
         const file = imgInput.files[0];
         if (!file) { return; }
+
+        if (file.size > 5 * 1024 * 1024) {
+            App.showToast('인라인 이미지 크기는 5MB를 초과할 수 없습니다.');
+            imgInput.value = '';
+            return;
+        }
+
+        let imageCount = 0;
+        editor.state.doc.descendants(node => { if (node.type.name === 'image') { imageCount++; } });
+        if (imageCount >= 5) {
+            App.showToast('이미지는 최대 5장까지 첨부할 수 있습니다.');
+            imgInput.value = '';
+            return;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
         fetch('/post/image', { method: 'POST', body: formData })
@@ -77,7 +106,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
 
     // ── 툴바 active 상태 갱신 ──
     editor.on('selectionUpdate', () => updateToolbar(editor, toolbar));
-    editor.on('transaction',     () => updateToolbar(editor, toolbar));
+    editor.on('transaction',     () => { updateToolbar(editor, toolbar); updateImageCounter(); });
 
     // ── form submit 시 HTML 복사 ──
     editorEl.closest('form').addEventListener('submit', () => {

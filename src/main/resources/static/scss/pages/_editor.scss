@@ -58,6 +58,14 @@
   }
 }
 
+.editor-img-counter {
+  font-size: 10px;
+  font-weight: 500;
+  color: variables.$text-muted;
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
 .editor-sep {
   width: 1px;
   height: 18px;

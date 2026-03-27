@@ -103,8 +103,14 @@
         const attachBtn = document.getElementById(attachBtnId);
         if (!fileInput || !chipList) { return; }
 
-        const maxSize = (maxSizeMB ?? 10) * 1024 * 1024;
+        const maxSize      = (maxSizeMB ?? 10) * 1024 * 1024;
+        const totalMaxSize = 50 * 1024 * 1024;
         let dataTransfer = new DataTransfer();
+
+        const counter = document.createElement('div');
+        counter.className = 'file-attach-counter';
+        counter.style.display = 'none';
+        chipList.insertAdjacentElement('afterend', counter);
 
         if (attachBtn) {
             attachBtn.addEventListener('click', function () { fileInput.click(); });
@@ -114,6 +120,14 @@
             for (const file of fileInput.files) {
                 if (file.size > maxSize) {
                     App.showToast(file.name + ': 파일 크기는 ' + (maxSizeMB ?? 10) + 'MB를 초과할 수 없습니다.');
+                    continue;
+                }
+                let currentTotal = 0;
+                for (let i = 0; i < dataTransfer.files.length; i++) {
+                    currentTotal += dataTransfer.files[i].size;
+                }
+                if (currentTotal + file.size > totalMaxSize) {
+                    App.showToast('총 첨부 용량은 50MB를 초과할 수 없습니다.');
                     continue;
                 }
                 dataTransfer.items.add(file);
@@ -136,12 +150,22 @@
 
         function renderChips() {
             chipList.innerHTML = '';
+            let totalSize = 0;
             for (let i = 0; i < dataTransfer.files.length; i++) {
                 const file = dataTransfer.files[i];
+                totalSize += file.size;
                 const chip = document.createElement('span');
                 chip.className = 'file-chip';
                 chip.innerHTML = file.name + '<button type="button" class="file-chip-remove" data-index="' + i + '">×</button>';
                 chipList.appendChild(chip);
+            }
+            const count = dataTransfer.files.length;
+            if (count > 0) {
+                const sizeMB = (totalSize / (1024 * 1024)).toFixed(1);
+                counter.textContent = count + '개 첨부 · ' + sizeMB + 'MB / 50MB';
+                counter.style.display = '';
+            } else {
+                counter.style.display = 'none';
             }
         }
 
@@ -150,6 +174,7 @@
                 dataTransfer = new DataTransfer();
                 fileInput.files = dataTransfer.files;
                 chipList.innerHTML = '';
+                counter.style.display = 'none';
             }
         };
     }
