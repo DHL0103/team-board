@@ -25,4 +25,9 @@ public interface MemberMapper {
     List<Member> selectAllMembers();
 
     void updateRole(@Param("id") Long id, @Param("role") MemberRole role);
+
+    List<Member> getMembersPaged(@Param("q") String q, @Param("filter") String filter,
+                                 @Param("offset") int offset, @Param("size") int size);
+
+    long countMembers(@Param("q") String q, @Param("filter") String filter);
 }

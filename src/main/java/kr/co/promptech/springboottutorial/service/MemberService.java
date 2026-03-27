@@ -3,6 +3,7 @@ package kr.co.promptech.springboottutorial.service;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
+import kr.co.promptech.springboottutorial.model.dto.MemberPageDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 
@@ -60,6 +61,15 @@ public class MemberService {
         return memberMapper.selectAllMembers().stream()
                 .map(MemberResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public MemberPageDto getMemberPage(String q, String filter, int page, int size) {
+        int offset = page * size;
+        List<Member> raw = memberMapper.getMembersPaged(q, filter, offset, size + 1);
+        boolean hasMore = raw.size() > size;
+        List<Member> members = hasMore ? raw.subList(0, size) : raw;
+        long totalCount = memberMapper.countMembers(q, filter);
+        return new MemberPageDto(members.stream().map(MemberResponseDto::new).toList(), hasMore, totalCount);
     }
 
     public void updateRole(Long memberId, MemberRole role) {

@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.model.dto.MemberBoardDto;
+import kr.co.promptech.springboottutorial.model.dto.MemberPageDto;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
@@ -31,6 +32,15 @@ public class RestAdminController {
      * @return 해당 멤버가 속한 보드 목록 (MemberBoardDto JSON)
      * 멤버 상세 모달에서 소속 보드 및 역할을 lazy 로딩으로 조회
      */
+    @GetMapping("/members")
+    public ResponseEntity<MemberPageDto> getMembers(
+            @RequestParam(defaultValue = "") String q,
+            @RequestParam(defaultValue = "active") String filter,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(memberService.getMemberPage(q, filter, page, size));
+    }
+
     @GetMapping("/members/{memberId}/boards")
     public ResponseEntity<List<MemberBoardDto>> getMemberBoards(@PathVariable Long memberId) {
         return ResponseEntity.ok(boardMemberService.getBoardsByMemberId(memberId));

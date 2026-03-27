@@ -19,8 +19,7 @@ public class AdminMemberController {
      * members(MemberResponseDto) 전달
      */
     @GetMapping
-    public String adminMemberPage(Model model) {
-        model.addAttribute("members", memberService.getAllMemberDto());
+    public String adminMemberPage() {
         return "admin/members";
     }
 
