@@ -87,7 +87,7 @@ public class MyPageController {
     public String rejectInvite(@AuthenticationPrincipal CustomUser user,
                                @PathVariable Long boardId,
                                @RequestParam(required = false) String redirectUrl) {
-        boardMemberService.delete(boardId, user.getId());
+        boardMemberService.rejectInvite(boardId, user.getId());
         return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/member/mypage";
     }
 }

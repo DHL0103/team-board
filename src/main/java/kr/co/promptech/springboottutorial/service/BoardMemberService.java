@@ -69,6 +69,10 @@ public class BoardMemberService {
         boardMemberMapper.delete(boardId, memberId);
     }
 
+    public void rejectInvite(Long boardId, Long memberId) {
+        boardMemberMapper.delete(boardId, memberId);
+    }
+
     private void validateNotLastManager(Long boardId, Long memberId, String message) {
         if (isManager(boardId, memberId) && boardMemberMapper.countManagersByBoardId(boardId) <= 1) {
             throw new IllegalStateException(message);
