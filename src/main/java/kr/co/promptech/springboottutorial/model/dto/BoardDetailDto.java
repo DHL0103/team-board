@@ -15,6 +15,5 @@ public class BoardDetailDto {
     private String status;
     private long memberCount;
     private boolean isManager;
-    private List<PostResponseDto> postList;
     private List<BoardMemberResponseDto> boardUserList;
 }

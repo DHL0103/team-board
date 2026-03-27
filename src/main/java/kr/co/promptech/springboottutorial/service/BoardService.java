@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
 
     private final BoardMapper boardMapper;
     private final BoardMemberService boardMemberService;
-    private final PostService postService;
 
     public List<BoardResponseDto> getAllBoardDtos() {
         return boardMapper.getAllBoards();
@@ -89,7 +89,6 @@ public class BoardService {
                 .status(board.getStatus())
                 .memberCount(board.getMemberCount())
                 .isManager(isManager)
-                .postList(postService.getPostDtosByBoardId(boardId))
                 .boardUserList(boardMemberService.getUsersByBoardId(boardId))
                 .build();
     }
