@@ -6,7 +6,7 @@
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body th:data-board-id="${board.id}">
+<body th:data-board-id="${board.id}" th:data-my-post-ids="${myPostIds}">
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
@@ -19,136 +19,50 @@
   <div class="kanban-wrap">
     <div class="row justify-content-center gy-3">
 
-      <!-- 진행 중 + 반려-->
-      <div class="col-md-4" th:with="progressPosts=${board.postList.?[status == 'PROGRESS' or status == 'REJECTED']}">
+      <!-- 진행 중 + 반려 -->
+      <div class="col-md-4">
         <div class="kanban-col">
           <a class="col-header col-p1" th:href="@{'/board/' + ${board.id} + '/post_list?status=PROGRESS'}">
             <span class="team-badge badge-p1">
               <span class="team-dot"></span>
               진행 중
             </span>
-            <span class="col-count" th:text="${#lists.size(progressPosts)}">0</span>
+            <span class="col-count" id="col-count-progress">-</span>
           </a>
-          <div class="col-body">
-            <div class="empty-col" th:if="${#lists.isEmpty(progressPosts)}">
-              <div class="empty-icon">
-                <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
-              </div>
-              <span>작업이 없습니다</span>
-            </div>
-            <div class="board-card"
-                 th:each="post : ${progressPosts}"
-                 th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-              <div class="card-top">
-                <div class="card-title" th:text="${post.title}">제목</div>
-                <span class="status-chip"
-                      th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : 'chip-rejected'}"
-                      th:text="${post.status == 'PROGRESS' ? '진행 중' : '반려'}"></span>
-              </div>
-              <div class="card-content" th:text="${post.plainContent}">내용</div>
-              <div class="card-footer">
-                <div class="card-left">
-                  <span class="due-chip"
-                        th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
-                    <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
-                    <span class="due-label"
-                          th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
-                  </span>
-                </div>
-                <div class="card-right">
-                  <svg th:if="${myPostIds.contains(post.id)}" class="card-mine-icon" width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
-                  <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
-                </div>
-              </div>
-            </div>
+          <div class="col-body" id="col-body-progress">
+            <div class="col-sentinel" id="col-sentinel-progress"></div>
           </div>
         </div>
       </div>
 
-      <!-- 검토 중 (승인 요청 ) -->
-      <div class="col-md-4" th:with="reviewPosts=${board.postList.?[status == 'REQUESTED']}">
+      <!-- 승인 요청 -->
+      <div class="col-md-4">
         <div class="kanban-col">
           <a class="col-header col-p2" th:href="@{'/board/' + ${board.id} + '/post_list?status=REQUESTED'}">
             <span class="team-badge badge-p2">
               <span class="team-dot"></span>
               승인 요청
             </span>
-            <span class="col-count" th:text="${#lists.size(reviewPosts)}">0</span>
+            <span class="col-count" id="col-count-requested">-</span>
           </a>
-          <div class="col-body">
-            <div class="empty-col" th:if="${#lists.isEmpty(reviewPosts)}">
-              <div class="empty-icon">
-                <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
-              </div>
-              <span>작업이 없습니다</span>
-            </div>
-            <div class="board-card"
-                 th:each="post : ${reviewPosts}"
-                 th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-              <div class="card-top">
-                <div class="card-title" th:text="${post.title}">제목</div>
-                <span class="status-chip chip-requested">승인 요청</span>
-              </div>
-              <div class="card-content" th:text="${post.plainContent}">내용</div>
-              <div class="card-footer">
-                <div class="card-left">
-                  <span class="due-chip"
-                        th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
-                    <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
-                    <span class="due-label"
-                          th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
-                  </span>
-                </div>
-                <div class="card-right">
-                  <svg th:if="${myPostIds.contains(post.id)}" class="card-mine-icon" width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
-                  <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
-                </div>
-              </div>
-            </div>
+          <div class="col-body" id="col-body-requested">
+            <div class="col-sentinel" id="col-sentinel-requested"></div>
           </div>
         </div>
       </div>
 
       <!-- 완료 -->
-      <div class="col-md-4" th:with="completedPosts=${board.postList.?[status == 'APPROVED']}">
+      <div class="col-md-4">
         <div class="kanban-col">
           <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=APPROVED'}">
             <span class="team-badge badge-p4">
               <span class="team-dot"></span>
               완료
             </span>
-            <span class="col-count" th:text="${#lists.size(completedPosts)}">0</span>
+            <span class="col-count" id="col-count-approved">-</span>
           </a>
-          <div class="col-body">
-            <div class="empty-col" th:if="${#lists.isEmpty(completedPosts)}">
-              <div class="empty-icon">
-                <svg width="14" height="14"><use href="/img/icons.svg#icon-alert"></use></svg>
-              </div>
-              <span>작업이 없습니다</span>
-            </div>
-            <div class="board-card"
-                 th:each="post : ${completedPosts}"
-                 th:data-href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
-              <div class="card-top">
-                <div class="card-title" th:text="${post.title}">제목</div>
-                <span class="status-chip chip-completed">완료</span>
-              </div>
-              <div class="card-content" th:text="${post.plainContent}">내용</div>
-              <div class="card-footer">
-                <div class="card-left">
-                  <span class="due-chip"
-                        th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
-                    <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
-                    <span class="due-label"
-                          th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
-                  </span>
-                </div>
-                <div class="card-right">
-                  <svg th:if="${myPostIds.contains(post.id)}" class="card-mine-icon" width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
-                  <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
-                </div>
-              </div>
-            </div>
+          <div class="col-body" id="col-body-approved">
+            <div class="col-sentinel" id="col-sentinel-approved"></div>
           </div>
         </div>
       </div>
