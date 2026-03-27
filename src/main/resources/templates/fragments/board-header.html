@@ -19,6 +19,9 @@
         <svg width="14" height="14"><use href="/img/icons.svg#icon-settings"></use></svg>
         매니저 페이지
       </a>
+      <button th:if="${board.member}" type="button" class="btn-edit" id="btn-leave-board">
+        보드 나가기
+      </button>
       <button class="btn-request" id="btn-create-post">
         <svg width="12" height="12"><use href="/img/icons.svg#icon-plus"></use></svg>
         작업 추가

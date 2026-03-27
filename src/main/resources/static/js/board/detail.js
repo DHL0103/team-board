@@ -185,3 +185,34 @@ App.initCharCounter(
     document.getElementById('createTitleCount'),
     100, 90
 );
+
+// ── 보드 나가기 ──
+const btnLeaveBoard    = document.getElementById('btn-leave-board');
+const leaveBoardModal  = document.getElementById('leaveBoardModal');
+const leaveBoardCancel = document.getElementById('leaveBoardCancel');
+const leaveBoardConfirm = document.getElementById('leaveBoardConfirm');
+const formLeaveBoard   = document.getElementById('form-leave-board');
+
+if (btnLeaveBoard) {
+    btnLeaveBoard.addEventListener('click', () => {
+        App.openModal('leaveBoardModal');
+    });
+}
+
+if (leaveBoardCancel) {
+    leaveBoardCancel.addEventListener('click', () => {
+        App.closeModal('leaveBoardModal');
+    });
+}
+
+if (leaveBoardModal) {
+    leaveBoardModal.addEventListener('click', e => {
+        if (e.target === leaveBoardModal) { App.closeModal('leaveBoardModal'); }
+    });
+}
+
+if (leaveBoardConfirm) {
+    leaveBoardConfirm.addEventListener('click', () => {
+        formLeaveBoard.submit();
+    });
+}

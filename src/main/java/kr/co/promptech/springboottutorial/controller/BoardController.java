@@ -127,8 +127,17 @@ public class BoardController {
         return "redirect:/board";
     }
 
+    @PostMapping("/{boardId}/leave")
+    public String leaveBoard(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
+        try {
+            boardMemberService.leaveBoard(boardId, user.getId());
+        } catch (IllegalStateException e) {
+            return "redirect:/board/" + boardId + "?error=last_manager";
+        }
+        return "redirect:/board";
+    }
+
     /**
-     * @param user 가입 가능한 보드 목록 검색을 위한 사용자 정보
      * @return board/search 보드 탐색 페이지 반환
      */
     @GetMapping("/search")

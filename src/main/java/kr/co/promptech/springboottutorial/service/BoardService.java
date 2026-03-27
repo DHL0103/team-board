@@ -91,6 +91,7 @@ public class BoardService {
         }
         boolean isManager = user.getRole() == MemberRole.ROLE_ADMIN
                 || boardMemberService.isManager(boardId, user.getId());
+        boolean isMember = boardMemberService.isMember(boardId, user.getId());
         return BoardDetailDto.builder()
                 .id(board.getId())
                 .name(board.getName())
@@ -99,6 +100,7 @@ public class BoardService {
                 .status(board.getStatus())
                 .memberCount(board.getMemberCount())
                 .isManager(isManager)
+                .isMember(isMember)
                 .boardUserList(boardMemberService.getUsersByBoardId(boardId))
                 .build();
     }

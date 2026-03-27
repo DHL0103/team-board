@@ -11,7 +11,7 @@
   <div th:replace="~{fragments/header :: back-header}"></div>
 
   <div class="toast" id="errorToast"
-       th:text="${param.error != null ? (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.') : ''}">
+       th:text="${param.error != null ? (param.error[0] == 'last_manager' ? '마지막 매니저는 보드를 나갈 수 없습니다.' : param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.') : ''}">
   </div>
 
   <th:block th:replace="~{fragments/board-header :: board-header(${board}, ${board.manager})}"></th:block>
@@ -69,6 +69,19 @@
 
     </div>
   </div>
+
+  <!-- 보드 나가기 확인 모달 -->
+  <div class="modal-overlay" id="leaveBoardModal">
+    <div class="modal-box">
+      <div class="modal-box-title">보드 나가기</div>
+      <p class="modal-box-desc">정말 이 보드에서 나가시겠습니까?</p>
+      <div class="modal-box-actions">
+        <button class="btn btn-secondary" id="leaveBoardCancel">취소</button>
+        <button class="btn btn-danger" id="leaveBoardConfirm">나가기</button>
+      </div>
+    </div>
+  </div>
+  <form id="form-leave-board" th:action="@{'/board/' + ${board.id} + '/leave'}" method="post" style="display:none;"></form>
 
   <!-- 작업 추가 모달 -->
   <div class="modal-overlay" id="createModal">
