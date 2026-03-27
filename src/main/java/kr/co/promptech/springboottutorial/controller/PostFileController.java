@@ -37,9 +37,9 @@ public class PostFileController {
             return ResponseEntity.notFound().build();
         }
 
-        ContentDisposition contentDisposition = ContentDisposition.attachment()
-                .filename(file.getDisplayName(), StandardCharsets.UTF_8)
-                .build();
+        ContentDisposition contentDisposition = (name != null)
+                ? ContentDisposition.attachment().filename(file.getDisplayName(), StandardCharsets.UTF_8).build()
+                : ContentDisposition.inline().build();
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(file.getContentType()))

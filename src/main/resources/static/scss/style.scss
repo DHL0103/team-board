@@ -11,6 +11,7 @@
 @use "pages/board";
 @use "pages/mypage";
 @use "pages/search";
+@use "pages/editor";
 
 // ── 2. 리셋 & 기본 설정 ──
 *, *::before, *::after { box-sizing: border-box; }

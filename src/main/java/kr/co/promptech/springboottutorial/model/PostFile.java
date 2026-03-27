@@ -17,5 +17,6 @@ public class PostFile {
     private String originalName;    // 업로드 원본 파일명
     private String storedPath;      // 서버 저장 경로 (UUID 기반 파일명)
     private Long fileSize;          // 파일 크기 (bytes)
+    private boolean inline;         // 인라인 이미지 여부 (true=에디터 삽입, false=첨부파일)
     private LocalDateTime createdAt; // 업로드 일시
 }

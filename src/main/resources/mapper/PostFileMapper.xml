@@ -4,11 +4,15 @@
 <mapper namespace="kr.co.promptech.springboottutorial.mapper.PostFileMapper">
 
     <insert id="saveFile" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO post_files (post_id, original_name, stored_path, file_size, created_at)
-        VALUES (#{postId}, #{originalName}, #{storedPath}, #{fileSize}, #{createdAt})
+        INSERT INTO post_files (post_id, original_name, stored_path, file_size, inline, created_at)
+        VALUES (#{postId}, #{originalName}, #{storedPath}, #{fileSize}, #{inline}, #{createdAt})
     </insert>
 
     <select id="findByPostId" resultType="kr.co.promptech.springboottutorial.model.PostFile">
+        SELECT * FROM post_files WHERE post_id = #{postId} AND inline = false
+    </select>
+
+    <select id="findAllByPostId" resultType="kr.co.promptech.springboottutorial.model.PostFile">
         SELECT * FROM post_files WHERE post_id = #{postId}
     </select>
 
@@ -19,5 +23,37 @@
     <delete id="deleteById">
         DELETE FROM post_files WHERE id = #{id}
     </delete>
+
+    <update id="linkInlineImages">
+        UPDATE post_files
+        SET post_id = #{postId}
+        WHERE stored_path IN
+        <foreach item="path" collection="storedPaths" open="(" separator="," close=")">
+            #{path}
+        </foreach>
+        AND post_id IS NULL
+    </update>
+
+    <select id="findByStoredPaths" resultType="kr.co.promptech.springboottutorial.model.PostFile">
+        SELECT * FROM post_files
+        WHERE stored_path IN
+        <foreach item="path" collection="storedPaths" open="(" separator="," close=")">
+            #{path}
+        </foreach>
+    </select>
+
+    <delete id="deleteByIds">
+        DELETE FROM post_files WHERE id IN
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="findOrphanInlineImages" resultType="kr.co.promptech.springboottutorial.model.PostFile">
+        SELECT * FROM post_files
+        WHERE post_id IS NULL
+          AND inline = true
+          AND created_at &lt; NOW() - INTERVAL 24 HOUR
+    </select>
 
 </mapper>
