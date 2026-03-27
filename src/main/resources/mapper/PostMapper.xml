@@ -44,6 +44,26 @@
         SELECT * FROM posts WHERE board_id = #{boardId} AND status = #{status}
     </select>
 
+    <select id="getPostsPagedByBoardId" resultType="kr.co.promptech.springboottutorial.model.Post">
+        SELECT * FROM posts
+        WHERE board_id = #{boardId}
+        <choose>
+            <when test='status == "PROGRESS"'>AND status IN ('PROGRESS', 'REJECTED')</when>
+            <otherwise>AND status = #{status}</otherwise>
+        </choose>
+        ORDER BY created_at DESC
+        LIMIT #{size} OFFSET #{offset}
+    </select>
+
+    <select id="countPostsByBoardId" resultType="_long">
+        SELECT COUNT(*) FROM posts
+        WHERE board_id = #{boardId}
+        <choose>
+            <when test='status == "PROGRESS"'>AND status IN ('PROGRESS', 'REJECTED')</when>
+            <otherwise>AND status = #{status}</otherwise>
+        </choose>
+    </select>
+
     <update id="updateStatus">
         UPDATE posts SET status = #{status} WHERE id = #{id}
     </update>

@@ -18,6 +18,7 @@ import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDetailDto;
+import kr.co.promptech.springboottutorial.model.dto.PostPageDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -112,6 +113,15 @@ public class PostService {
         return postMapper.getPostsByBoardId(boardId).stream()
                 .map(PostResponseDto::new)
                 .toList();
+    }
+
+    public PostPageDto getPostPage(Long boardId, String status, int page, int size) {
+        int offset = page * size;
+        List<Post> raw = postMapper.getPostsPagedByBoardId(boardId, status, offset, size + 1);
+        boolean hasMore = raw.size() > size;
+        List<Post> posts = hasMore ? raw.subList(0, size) : raw;
+        long totalCount = postMapper.countPostsByBoardId(boardId, status);
+        return new PostPageDto(posts.stream().map(PostResponseDto::new).toList(), hasMore, totalCount);
     }
 
     public List<PostResponseDto> getPostDtosByBoardIdAndStatus(Long boardId, String status) {
