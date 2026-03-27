@@ -83,7 +83,11 @@ public class ManagerMemberController {
      */
     @PostMapping("/demote/{memberId}")
     public String demoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
-        boardMemberService.updateRole(boardId, memberId, BoardRole.USER);
+        try {
+            boardMemberService.demoteMember(boardId, memberId);
+        } catch (IllegalStateException e) {
+            return "redirect:/board/" + boardId + "/manager/members?error=last_manager";
+        }
         return "redirect:/board/" + boardId + "/manager/members";
     }
 
@@ -95,7 +99,11 @@ public class ManagerMemberController {
      */
     @PostMapping("/remove/{memberId}")
     public String removeMember(@PathVariable Long boardId, @PathVariable Long memberId) {
-        boardMemberService.delete(boardId, memberId);
+        try {
+            boardMemberService.removeMember(boardId, memberId);
+        } catch (IllegalStateException e) {
+            return "redirect:/board/" + boardId + "/manager/members?error=last_manager";
+        }
         return "redirect:/board/" + boardId + "/manager/members";
     }
 }

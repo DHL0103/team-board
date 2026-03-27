@@ -10,6 +10,10 @@
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
+  <div class="toast" id="errorToast"
+       th:text="${param.error != null and param.error[0] == 'last_manager' ? '마지막 매니저에게는 이 작업을 수행할 수 없습니다.' : ''}">
+  </div>
+
   <div class="admin-wrap">
     <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='매니저 페이지')}"></div>
 

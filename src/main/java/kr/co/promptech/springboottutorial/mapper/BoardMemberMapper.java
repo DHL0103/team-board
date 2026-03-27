@@ -30,4 +30,6 @@ public interface BoardMemberMapper {
     List<BoardMemberResponseDto> searchMembersWithBoardRole(@Param("boardId") Long boardId, @Param("username") String username);
 
     List<MemberBoardDto> findBoardsByMemberId(@Param("memberId") Long memberId);
+
+    int countManagersByBoardId(@Param("boardId") Long boardId);
 }

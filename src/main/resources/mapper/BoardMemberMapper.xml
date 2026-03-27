@@ -54,6 +54,10 @@
         ORDER BY b.name
     </select>
 
+    <select id="countManagersByBoardId" resultType="int">
+        SELECT COUNT(*) FROM board_members WHERE board_id = #{boardId} AND board_role = 'MANAGER'
+    </select>
+
     <select id="findBoardsByMemberId" resultType="kr.co.promptech.springboottutorial.model.dto.MemberBoardDto">
         SELECT bm.board_id, b.name AS board_name, b.color AS board_color, bm.board_role
         FROM board_members bm

@@ -54,7 +54,28 @@ public class BoardMemberService {
         boardMemberMapper.updateRole(boardId, memberId, boardRole);
     }
 
+    public void demoteMember(Long boardId, Long memberId) {
+        if (boardMemberMapper.countManagersByBoardId(boardId) <= 1) {
+            throw new IllegalStateException("마지막 매니저는 강등할 수 없습니다.");
+        }
+        boardMemberMapper.updateRole(boardId, memberId, BoardRole.USER);
+    }
+
     public void delete(Long boardId, Long memberId) {
+        boardMemberMapper.delete(boardId, memberId);
+    }
+
+    public void removeMember(Long boardId, Long memberId) {
+        if (isManager(boardId, memberId) && boardMemberMapper.countManagersByBoardId(boardId) <= 1) {
+            throw new IllegalStateException("마지막 매니저는 내보낼 수 없습니다.");
+        }
+        boardMemberMapper.delete(boardId, memberId);
+    }
+
+    public void leaveBoard(Long boardId, Long memberId) {
+        if (isManager(boardId, memberId) && boardMemberMapper.countManagersByBoardId(boardId) <= 1) {
+            throw new IllegalStateException("마지막 매니저는 보드를 나갈 수 없습니다.");
+        }
         boardMemberMapper.delete(boardId, memberId);
     }
 
