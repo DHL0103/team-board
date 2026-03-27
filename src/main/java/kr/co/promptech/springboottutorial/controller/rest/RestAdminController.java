@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/api")
+@RequestMapping("/api/admin")
 public class RestAdminController {
 
     private final BoardMemberService boardMemberService;

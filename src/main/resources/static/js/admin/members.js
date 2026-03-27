@@ -101,7 +101,7 @@ function openDetailModal(row) {
 
     App.openModal("memberDetailModal");
 
-    fetch(`/admin/api/members/${memberId}/boards`)
+    fetch(`/api/admin/members/${memberId}/boards`)
         .then(res => res.json())
         .then(boards => {
             if (boards.length === 0) {
@@ -149,7 +149,7 @@ if (btnRoleAction) {
         const currentRole = currentDetailRow.dataset.role;
         const newRole = currentRole === "ROLE_USER" ? "ROLE_SUSPENDED" : "ROLE_USER";
 
-        fetch(`/admin/api/members/${memberId}/role?role=${newRole}`, { method: "POST" })
+        fetch(`/api/admin/members/${memberId}/role?role=${newRole}`, { method: "POST" })
             .then(res => {
                 if (!res.ok) {
                     return;

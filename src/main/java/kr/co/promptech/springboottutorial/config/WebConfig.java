@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(boardAuthInterceptor)
-                .addPathPatterns("/board/{boardId}", "/board/{boardId}/**")
+                .addPathPatterns("/board/{boardId}", "/board/{boardId}/**", "/api/board/{boardId}/**")
                 .excludePathPatterns("/board/{boardId}/request", "/board/{boardId}/inactive", "/board/create", "/board/search", "/post/image");
 
         registry.addInterceptor(boardManagerAuthInterceptor)

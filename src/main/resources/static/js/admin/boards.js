@@ -84,7 +84,7 @@ if (statusChangeModal) {
         pendingStatusChange = null;
 
         try {
-            const res = await fetch(`/admin/api/boards/${boardId}/status?status=${nextStatus}`, { method: "POST" });
+            const res = await fetch(`/api/admin/boards/${boardId}/status?status=${nextStatus}`, { method: "POST" });
             if (!res.ok) { return; }
 
             const isActive = nextStatus === "ACTIVE";

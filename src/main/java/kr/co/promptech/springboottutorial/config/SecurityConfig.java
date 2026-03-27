@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 .requestMatchers("/member/login", "/member/signup").permitAll()
                                 .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                                 .anyRequest().hasAnyRole("USER", "ADMIN")
                 )
                 .sessionManagement(session -> session
