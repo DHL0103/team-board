@@ -18,7 +18,7 @@
       <div class="admin-section-header">
         <div>
           <div class="admin-section-title">멤버 목록</div>
-          <div class="admin-section-meta" th:text="${#lists.size(members)} + '명'"></div>
+          <div class="admin-section-meta" id="member-count-meta">-</div>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
           <button type="button" class="btn-admin-edit filter-btn active" id="btn-filter-active">활성</button>
@@ -27,11 +27,11 @@
         </div>
       </div>
 
-      <div class="admin-empty" th:if="${#lists.isEmpty(members)}">
+      <div class="admin-empty" id="member-empty" style="display:none;">
         등록된 멤버가 없습니다.
       </div>
 
-      <table class="admin-table" th:unless="${#lists.isEmpty(members)}">
+      <table class="admin-table" id="member-table">
         <thead>
           <tr>
             <th style="width:60px;">#</th>
@@ -39,21 +39,7 @@
             <th style="width:110px;">권한</th>
           </tr>
         </thead>
-        <tbody id="member-tbody">
-          <tr class="admin-table-row"
-              th:each="member : ${members}"
-              th:data-member-id="${member.id}"
-              th:data-username="${member.username}"
-              th:data-role="${member.role}">
-            <td class="row-num" th:text="${member.id}"></td>
-            <td th:text="${member.username}"></td>
-            <td>
-              <span th:if="${member.role.name() == 'ROLE_ADMIN'}" class="role-badge role-admin">Admin</span>
-              <span th:if="${member.role.name() == 'ROLE_USER'}" class="role-badge role-user">User</span>
-              <span th:if="${member.role.name() == 'ROLE_SUSPENDED'}" class="role-badge role-suspended">정지</span>
-            </td>
-          </tr>
-        </tbody>
+        <tbody id="member-tbody"></tbody>
       </table>
 
       <div class="pagination-wrap" id="pagination-wrap"></div>
