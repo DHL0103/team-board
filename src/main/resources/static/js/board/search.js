@@ -1,83 +1,150 @@
 (function () {
-  const PAGE_SIZE = 10;
-  const allCards = Array.from(document.querySelectorAll('.search-card'));
-  const searchInput = document.getElementById('search-input');
-  const statusSelect = document.getElementById('search-status-select');
-  const sortBtns = document.querySelectorAll('[data-sort]');
-  const pagination = document.getElementById('searchPagination');
-  const emptyEl = document.getElementById('search-empty');
-  const container = document.getElementById('search-card-list');
-  let currentPage = 1;
-  let currentSort = 'recent';
+    const PAGE_SIZE = 10;
 
-  function getFiltered() {
-    const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';
-    const status = statusSelect ? statusSelect.value : '';
+    const searchInput  = document.getElementById('search-input');
+    const statusSelect = document.getElementById('search-status-select');
+    const sortBtns     = document.querySelectorAll('[data-sort]');
+    const pagination   = document.getElementById('searchPagination');
+    const emptyEl      = document.getElementById('search-empty');
+    const container    = document.getElementById('search-card-list');
 
-    return allCards.filter(card => {
-      if (keyword && !card.dataset.name.toLowerCase().includes(keyword)) { return false; }
-      if (status && card.dataset.status !== status) { return false; }
-      return true;
-    });
-  }
+    let currentPage   = 1;
+    let currentSort   = 'recent';
+    let debounceTimer = null;
 
-  function getSorted(filtered) {
-    return filtered.slice().sort((a, b) => {
-      if (currentSort === 'members') {
-        return parseInt(b.dataset.memberCount) - parseInt(a.dataset.memberCount);
-      }
-      return parseInt(b.dataset.id) - parseInt(a.dataset.id);
-    });
-  }
+    const ROLE_META = {
+        MANAGER:   { label: '매니저',  cls: 'role-manager'   },
+        USER:      { label: '멤버',    cls: 'role-user'      },
+        INVITED:   { label: '초대됨',  cls: 'role-invited'   },
+        REQUESTED: { label: '요청 중', cls: 'role-requested' },
+    };
 
-  function render() {
-    const filtered = getSorted(getFiltered());
-    const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-    if (currentPage > totalPages) { currentPage = 1; }
+    function createCard(board) {
+        const card = document.createElement('div');
+        card.className = 'search-card';
 
-    // DOM 순서 재배치 후 전부 숨김
-    filtered.forEach(c => {
-      container.appendChild(c);
-      c.style.display = 'none';
-    });
+        const left = document.createElement('div');
+        left.className = 'search-card-left';
 
-    // 필터 제외 카드 숨김
-    allCards.forEach(c => {
-      if (!filtered.includes(c)) { c.style.display = 'none'; }
-    });
+        const dot = document.createElement('span');
+        dot.className = `search-board-dot dot-${board.color}`;
 
-    // 현재 페이지 카드만 표시
-    filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).forEach(c => {
-      c.style.display = '';
-    });
+        const info = document.createElement('div');
+        info.className = 'search-card-info';
 
-    if (emptyEl) { emptyEl.style.display = filtered.length === 0 ? '' : 'none'; }
+        const nameEl = document.createElement('div');
+        nameEl.className = 'search-board-name';
+        nameEl.innerHTML = `<span></span>`;
+        nameEl.querySelector('span').textContent = board.name;
 
-    if (pagination) {
-      App.renderPagination(pagination, totalPages, currentPage, page => {
-        currentPage = page;
-        render();
-      });
+        const descEl = document.createElement('div');
+        descEl.className = 'search-board-desc';
+        descEl.textContent = board.description || '';
+
+        const metaEl = document.createElement('div');
+        metaEl.className = 'search-board-meta';
+        metaEl.innerHTML =
+            '<svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>' +
+            `<span>${board.memberCount}명</span>`;
+        if (board.status === 'INACTIVE') {
+            metaEl.insertAdjacentHTML('beforeend',
+                '<span class="status-badge status-inactive" style="margin-left:4px;">비활성</span>');
+        }
+
+        info.appendChild(nameEl);
+        info.appendChild(descEl);
+        info.appendChild(metaEl);
+        left.appendChild(dot);
+        left.appendChild(info);
+
+        const right = document.createElement('div');
+        right.className = 'search-card-right';
+
+        const roleMeta = ROLE_META[board.myRole];
+        if (roleMeta) {
+            const badge = document.createElement('span');
+            badge.className = `role-badge ${roleMeta.cls}`;
+            badge.textContent = roleMeta.label;
+            right.appendChild(badge);
+        }
+
+        const goBtn = document.createElement('a');
+        goBtn.className = 'btn-board-go';
+        goBtn.href = `/board/${board.id}`;
+        goBtn.textContent = '보드로 이동';
+        right.appendChild(goBtn);
+
+        card.appendChild(left);
+        card.appendChild(right);
+        return card;
     }
-  }
 
-  if (searchInput) {
-    searchInput.addEventListener('input', () => { currentPage = 1; render(); });
-  }
+    async function fetchAndRender() {
+        const params = new URLSearchParams({
+            q:      searchInput ? searchInput.value.trim() : '',
+            status: statusSelect ? statusSelect.value : '',
+            sort:   currentSort,
+            page:   currentPage - 1,
+            size:   PAGE_SIZE,
+        });
 
-  if (statusSelect) {
-    statusSelect.addEventListener('change', () => { currentPage = 1; render(); });
-  }
+        try {
+            const res  = await fetch(`/api/boards/search?${params}`);
+            const data = await res.json();
 
-  sortBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      currentSort = btn.dataset.sort;
-      sortBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentPage = 1;
-      render();
+            container.innerHTML = '';
+
+            if (data.boards.length === 0) {
+                emptyEl.style.display = '';
+            } else {
+                emptyEl.style.display = 'none';
+                data.boards.forEach((board, i) => {
+                    const card = createCard(board);
+                    card.style.animationDelay = (i * 40) + 'ms';
+                    card.style.animation = 'fadeUp 0.3s ease both';
+                    container.appendChild(card);
+                });
+            }
+
+            const totalPages = Math.max(1, Math.ceil(data.totalCount / PAGE_SIZE));
+            if (pagination) {
+                App.renderPagination(pagination, totalPages, currentPage, page => {
+                    currentPage = page;
+                    fetchAndRender();
+                    container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            }
+        } catch (e) {
+            console.error('보드 목록 로드 실패', e);
+        }
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                currentPage = 1;
+                fetchAndRender();
+            }, 250);
+        });
+    }
+
+    if (statusSelect) {
+        statusSelect.addEventListener('change', () => {
+            currentPage = 1;
+            fetchAndRender();
+        });
+    }
+
+    sortBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            sortBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentSort = btn.dataset.sort;
+            currentPage = 1;
+            fetchAndRender();
+        });
     });
-  });
 
-  render();
+    fetchAndRender();
 })();

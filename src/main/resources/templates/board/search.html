@@ -35,38 +35,7 @@
       검색 결과가 없습니다.
     </div>
 
-    <div class="search-card-list" id="search-card-list">
-      <div class="search-card"
-           th:each="board : ${boardList}"
-           th:data-name="${board.name}"
-           th:data-member-count="${board.memberCount}"
-           th:data-id="${board.id}"
-           th:data-status="${board.status}">
-
-        <div class="search-card-left">
-          <span class="search-board-dot" th:classappend="${'dot-' + board.color}"></span>
-          <div class="search-card-info">
-            <div class="search-board-name">
-              <span th:text="${board.name}">보드명</span>
-            </div>
-            <div class="search-board-desc" th:text="${board.description}">설명</div>
-            <div class="search-board-meta">
-              <svg width="11" height="11"><use href="/img/icons.svg#icon-user"></use></svg>
-              <span th:text="${board.memberCount} + '명'">0명</span>
-              <span th:if="${board.status == 'INACTIVE'}" class="status-badge status-inactive" style="margin-left:4px;">비활성</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="search-card-right">
-          <span th:if="${board.myRole == 'MANAGER'}" class="role-badge role-manager">매니저</span>
-          <span th:if="${board.myRole == 'USER'}" class="role-badge role-user">멤버</span>
-          <span th:if="${board.myRole == 'INVITED'}" class="role-badge role-invited">초대됨</span>
-          <span th:if="${board.myRole == 'REQUESTED'}" class="role-badge role-requested">요청 중</span>
-          <a th:href="@{'/board/' + ${board.id}}" class="btn-board-go">보드로 이동</a>
-        </div>
-      </div>
-    </div>
+    <div class="search-card-list" id="search-card-list"></div>
 
     <div class="search-pagination" id="searchPagination"></div>
 
