@@ -28,8 +28,14 @@
     </div>
     Team Board
   </a>
-  <div style="display:flex; align-items:center; gap:8px;">
-    <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">관리자</a>
+  <button class="hamburger" id="hamburger" type="button" aria-label="메뉴 열기">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-menu" id="nav-menu">
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-admin"></use></svg>
+      관리자
+    </a>
     <a href="/board/search" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-search"></use></svg>
       보드 탐색
@@ -63,8 +69,14 @@
     </div>
     Team Board
   </a>
-  <div style="display:flex; align-items:center; gap:8px;">
-    <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">관리자</a>
+  <button class="hamburger" id="hamburger" type="button" aria-label="메뉴 열기">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="nav-menu" id="nav-menu">
+    <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">
+      <svg width="12" height="12"><use href="/img/icons.svg#icon-admin"></use></svg>
+      관리자
+    </a>
     <a href="/board/search" class="btn-back">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-search"></use></svg>
       보드 탐색
@@ -74,7 +86,10 @@
       마이페이지
     </a>
     <form th:action="@{/member/logout}" method="post" style="margin:0;">
-      <button type="submit" class="btn-back">로그아웃</button>
+      <button type="submit" class="btn-back">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-logout"></use></svg>
+        로그아웃
+      </button>
     </form>
   </div>
 </header>

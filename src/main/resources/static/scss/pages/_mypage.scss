@@ -106,6 +106,8 @@
 .mypage-invites {
   flex: 1;
   animation: fadeUp 0.3s ease 0.06s both;
+
+  @media (max-width: 768px) { width: 100%; }
 }
 
 .mypage-section-header {

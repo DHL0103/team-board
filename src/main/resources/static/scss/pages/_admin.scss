@@ -6,6 +6,10 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: 32px 40px 72px;
+
+  @media (max-width: 639px) {
+    padding: 16px 16px 72px;
+  }
 }
 
 // ── 어드민 내비게이션 ──
@@ -46,6 +50,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 
   .admin-section-title {
     font-size: 14px;
@@ -61,6 +67,10 @@
 }
 
 // ── 테이블 ──
+.table-scroll-wrap {
+  overflow-x: auto;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -101,6 +111,18 @@
     color: $text-muted;
     background: $bg;
     border-bottom: 1px solid $border-soft;
+  }
+
+  @media (max-width: 639px) {
+    th, td { padding: 10px 12px; }
+
+    .table-group-label td { padding: 8px 12px 6px; }
+
+    td[style*="display:flex"] {
+      flex-wrap: wrap;
+      gap: 6px !important;
+      justify-content: flex-end;
+    }
   }
 }
 
