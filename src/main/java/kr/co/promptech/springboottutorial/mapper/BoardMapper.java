@@ -13,8 +13,6 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
 
-    List<BoardResponseDto> getAllBoards();
-
     Board getBoardById(Long id);
 
     BoardResponseDto getBoardDtoById(Long id);
@@ -33,8 +31,6 @@ public interface BoardMapper {
     void updateStatus(@Param("id") Long id, @Param("status") BoardStatus status);
 
     void updateBoard(@Param("id") Long id, @Param("dto") BoardUpdateDto dto);
-
-    List<BoardSearchResultDto> searchBoards(@Param("keyword") String keyword, @Param("memberId") Long memberId);
 
     List<BoardSearchResultDto> getBoardsPagedForSearch(@Param("memberId") Long memberId,
                                                        @Param("q") String q,

@@ -26,10 +26,6 @@ public class BoardService {
     private final BoardMapper boardMapper;
     private final BoardMemberService boardMemberService;
 
-    public List<BoardResponseDto> getAllBoardDtos() {
-        return boardMapper.getAllBoards();
-    }
-
     public Board getBoardById(Long id) {
         return boardMapper.getBoardById(id);
     }
@@ -68,10 +64,6 @@ public class BoardService {
             throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + dto.getStatus());
         }
         boardMapper.updateBoard(boardId, dto);
-    }
-
-    public List<BoardSearchResultDto> searchBoards(String keyword, Long memberId) {
-        return boardMapper.searchBoards(keyword, memberId);
     }
 
     public BoardPageDto getBoardPageForSearch(String q, String status, String sort, Long memberId, int page, int size) {

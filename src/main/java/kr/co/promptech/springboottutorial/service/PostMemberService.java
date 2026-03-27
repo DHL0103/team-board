@@ -1,7 +1,6 @@
 package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
-import kr.co.promptech.springboottutorial.model.PostMember;
 import kr.co.promptech.springboottutorial.model.dto.MyAssignedPostDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +14,6 @@ import java.util.Set;
 public class PostMemberService {
 
     private final PostMemberMapper postMemberMapper;
-
-    public List<PostMember> getByPostId(Long postId) {
-        return postMemberMapper.findByPostId(postId);
-    }
 
     public boolean isAssignee(Long postId, Long memberId) {
         return postMemberMapper.existsByPostIdAndMemberId(postId, memberId);
