@@ -52,7 +52,6 @@ public class SecurityConfig {
                                 .expiredUrl("/member/login?error=suspended")
                         )
                 )
-                .csrf((csrf) -> csrf.disable()) // 테스트 시에는 CSRF를 꺼두어야 Postman POST 요청이 잘 들어갑니다.
         ;
         return http.build();
     }
