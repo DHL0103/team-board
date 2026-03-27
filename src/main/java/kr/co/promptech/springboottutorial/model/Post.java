@@ -22,4 +22,5 @@ public class Post {
     private LocalDateTime dueDate;   // 마감 기한
     private LocalDateTime createdAt; // 작성일시
     private LocalDateTime updatedAt; // 수정일시
+    private boolean hasFiles;        // 첨부파일 존재 여부
 }

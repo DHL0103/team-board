@@ -18,6 +18,7 @@ public class PostResponseDto {
     private final LocalDateTime dueDate;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final boolean hasFiles;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -30,5 +31,6 @@ public class PostResponseDto {
         this.dueDate = post.getDueDate();
         this.createdAt = post.getCreatedAt();
         this.updatedAt = post.getUpdatedAt();
+        this.hasFiles = post.isHasFiles();
     }
 }

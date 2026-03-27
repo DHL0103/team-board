@@ -45,7 +45,8 @@
     </select>
 
     <select id="getPostsPagedByBoardId" resultType="kr.co.promptech.springboottutorial.model.Post">
-        SELECT * FROM posts
+        SELECT posts.*, EXISTS(SELECT 1 FROM post_files WHERE post_id = posts.id AND inline = 0) AS has_files
+        FROM posts
         WHERE board_id = #{boardId}
         <choose>
             <when test='status == "PROGRESS"'>AND status IN ('PROGRESS', 'REJECTED')</when>
