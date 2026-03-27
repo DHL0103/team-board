@@ -51,7 +51,13 @@
             <when test='status == "PROGRESS"'>AND status IN ('PROGRESS', 'REJECTED')</when>
             <otherwise>AND status = #{status}</otherwise>
         </choose>
-        ORDER BY created_at DESC
+        <if test="q != null and q != ''">AND title LIKE CONCAT('%', #{q}, '%')</if>
+        <if test="mineOnly">AND EXISTS (SELECT 1 FROM post_members WHERE post_id = posts.id AND member_id = #{memberId})</if>
+        <choose>
+            <when test='sort == "oldest"'>ORDER BY created_at ASC</when>
+            <when test='sort == "due"'>ORDER BY due_date IS NULL, due_date ASC</when>
+            <otherwise>ORDER BY created_at DESC</otherwise>
+        </choose>
         LIMIT #{size} OFFSET #{offset}
     </select>
 
@@ -62,6 +68,8 @@
             <when test='status == "PROGRESS"'>AND status IN ('PROGRESS', 'REJECTED')</when>
             <otherwise>AND status = #{status}</otherwise>
         </choose>
+        <if test="q != null and q != ''">AND title LIKE CONCAT('%', #{q}, '%')</if>
+        <if test="mineOnly">AND EXISTS (SELECT 1 FROM post_members WHERE post_id = posts.id AND member_id = #{memberId})</if>
     </select>
 
     <update id="updateStatus">

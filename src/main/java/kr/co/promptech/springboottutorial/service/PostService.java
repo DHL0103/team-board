@@ -115,12 +115,13 @@ public class PostService {
                 .toList();
     }
 
-    public PostPageDto getPostPage(Long boardId, String status, int page, int size) {
+    public PostPageDto getPostPage(Long boardId, String status, String q, String sort,
+                                   boolean mineOnly, Long memberId, int page, int size) {
         int offset = page * size;
-        List<Post> raw = postMapper.getPostsPagedByBoardId(boardId, status, offset, size + 1);
+        List<Post> raw = postMapper.getPostsPagedByBoardId(boardId, status, q, sort, mineOnly, memberId, offset, size + 1);
         boolean hasMore = raw.size() > size;
         List<Post> posts = hasMore ? raw.subList(0, size) : raw;
-        long totalCount = postMapper.countPostsByBoardId(boardId, status);
+        long totalCount = postMapper.countPostsByBoardId(boardId, status, q, mineOnly, memberId);
         return new PostPageDto(posts.stream().map(PostResponseDto::new).toList(), hasMore, totalCount);
     }
 

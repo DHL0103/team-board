@@ -101,18 +101,15 @@ public class BoardController {
 
     /**
      * @param boardId 조회할 보드 ID
-     * @param status  필터링할 상태값 (PROGRESS / REQUESTED / COMPLETED)
+     * @param status  필터링할 상태값 (PROGRESS / REQUESTED / APPROVED)
      * @param model   뷰에 전달할 데이터 컨테이너
      * @return board/post_list 뷰
-     * PROGRESS는 REJECTED 포스트도 함께 포함하여 반환
-     * board(BoardResponseDto), postList(PostResponseDto) 전달
+     * 게시글 목록은 REST API(/api/board/{boardId}/posts)로 동적 로드
      */
     @GetMapping("/{boardId}/post_list")
     public String postList(@PathVariable Long boardId, @RequestParam String status, Model model, @AuthenticationPrincipal CustomUser user) {
-        BoardResponseDto board = boardService.getBoardDtoById(boardId);
-        model.addAttribute("board", board);
+        model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("status", status);
-        model.addAttribute("postList", postService.getPostDtosByBoardIdAndStatus(boardId, status));
         model.addAttribute("myPostIds", postMemberService.getMyPostIds(boardId, user.getId()));
         return "board/post_list";
     }

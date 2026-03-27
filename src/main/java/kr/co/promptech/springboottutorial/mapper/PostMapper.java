@@ -29,9 +29,13 @@ public interface PostMapper {
     List<Post> getPostsByBoardIdAndStatus(@Param("boardId") Long boardId, @Param("status") String status);
 
     List<Post> getPostsPagedByBoardId(@Param("boardId") Long boardId, @Param("status") String status,
+                                      @Param("q") String q, @Param("sort") String sort,
+                                      @Param("mineOnly") boolean mineOnly, @Param("memberId") Long memberId,
                                       @Param("offset") int offset, @Param("size") int size);
 
-    long countPostsByBoardId(@Param("boardId") Long boardId, @Param("status") String status);
+    long countPostsByBoardId(@Param("boardId") Long boardId, @Param("status") String status,
+                             @Param("q") String q, @Param("mineOnly") boolean mineOnly,
+                             @Param("memberId") Long memberId);
 
     void updateStatus(Long id, PostStatus status);
 }
