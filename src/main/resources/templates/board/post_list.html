@@ -6,7 +6,9 @@
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body>
+<body th:data-board-id="${board.id}"
+      th:data-status="${status}"
+      th:data-my-post-ids="${myPostIds}">
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
@@ -19,7 +21,7 @@
         <span class="status-chip"
               th:classappend="${status == 'PROGRESS' ? 'chip-progress' : status == 'REQUESTED' ? 'chip-requested' : 'chip-completed'}"
               th:text="${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : status == 'APPROVED' ? '완료' : status}">진행 중</span>
-        <span class="col-count" id="postListCount" th:text="${#lists.size(postList)} + '건'">0건</span>
+        <span class="col-count" id="postListCount">-</span>
         <div class="post-list-search-wrap">
           <svg width="13" height="13"><use href="/img/icons.svg#icon-search"></use></svg>
           <input type="text" class="post-list-search-input" id="postListSearchInput" placeholder="제목 검색...">
@@ -41,43 +43,14 @@
         </div>
       </div>
 
-      <div class="post-list-empty" th:if="${#lists.isEmpty(postList)}">
+      <div class="post-list-empty" id="post-list-empty" style="display:none">
         <div class="board-grid-empty-icon">
           <svg width="24" height="24"><use href="/img/icons.svg#icon-alert"></use></svg>
         </div>
-        <div th:text="'해당하는 ' + ${status == 'PROGRESS' ? '진행 중' : status == 'REQUESTED' ? '승인 요청' : status == 'APPROVED' ? '완료' : status} + ' 작업이 없습니다.'">작업이 없습니다.</div>
+        <div>작업이 없습니다.</div>
       </div>
 
-      <div class="post-list-body" th:unless="${#lists.isEmpty(postList)}">
-        <a class="post-list-card"
-           th:each="post : ${postList}"
-           th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}"
-           th:data-created-at="${#temporals.format(post.createdAt, 'yyyy-MM-dd HH:mm:ss')}"
-           th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}"
-           th:data-is-mine="${myPostIds.contains(post.id)}">
-          <div class="card-top">
-            <div class="card-title" th:text="${post.title}">제목</div>
-            <span class="status-chip"
-                  th:classappend="${post.status == 'PROGRESS' ? 'chip-progress' : post.status == 'REQUESTED' ? 'chip-requested' : post.status == 'REJECTED' ? 'chip-rejected' : post.status == 'APPROVED' ? 'chip-completed' : ''}"
-                  th:text="${post.status == 'PROGRESS' ? '진행 중' : post.status == 'REQUESTED' ? '승인 요청' : post.status == 'REJECTED' ? '반려' : post.status == 'APPROVED' ? '완료' : post.status}"></span>
-          </div>
-          <div class="card-content" th:text="${post.plainContent}">내용</div>
-          <div class="card-footer">
-            <div class="card-left">
-              <span class="due-chip"
-                    th:data-due="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}">
-                <svg width="10" height="10"><use href="/img/icons.svg#icon-calendar"></use></svg>
-                <span class="due-label"
-                      th:text="${post.dueDate != null ? #temporals.format(post.dueDate, 'MM.dd') : '기한 없음'}"></span>
-              </span>
-            </div>
-            <div class="card-right">
-              <svg th:if="${myPostIds.contains(post.id)}" class="card-mine-icon" width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
-              <span class="card-date" th:text="${#temporals.format(post.createdAt, 'MM.dd')}"></span>
-            </div>
-          </div>
-        </a>
-      </div>
+      <div class="post-list-body" id="post-list-body"></div>
 
       <div class="pagination-wrap" id="post-list-pagination"></div>
 
