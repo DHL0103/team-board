@@ -189,6 +189,11 @@ $design:   map-get($teams, design);
   color: #3b82f6;
   flex-shrink: 0;
 }
+.card-indicator-icon {
+  color: $text-muted;
+  flex-shrink: 0;
+  opacity: 0.65;
+}
 
 
 .card-top {
