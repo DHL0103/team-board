@@ -1,64 +1,108 @@
 const PAGE_SIZE = 10;
 
-const tbody = document.getElementById("board-tbody");
-const searchInput = document.getElementById("board-search");
+const tbody        = document.getElementById("board-tbody");
+const boardTable   = document.getElementById("board-table");
+const boardEmpty   = document.getElementById("board-empty");
+const countMeta    = document.getElementById("board-count-meta");
+const searchInput  = document.getElementById("board-search");
 const paginationWrap = document.getElementById("pagination-wrap");
 
-if (tbody) {
-    const allRows = Array.from(tbody.querySelectorAll("tr"));
-    let filteredRows = allRows;
-    let currentPage = 1;
+let currentPage   = 1;
+let debounceTimer = null;
 
-    function render() {
-        const start = (currentPage - 1) * PAGE_SIZE;
-        const end = start + PAGE_SIZE;
-        allRows.forEach(row => { row.style.display = "none"; });
-        filteredRows.slice(start, end).forEach(row => { row.style.display = ""; });
-        const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
-        App.renderPagination(paginationWrap, totalPages, currentPage, function (page) {
-            currentPage = page;
-            render();
-        });
-    }
+function createRow(board) {
+    const tr = document.createElement("tr");
+    tr.className = "admin-table-row";
+    tr.dataset.boardId = board.id;
+    tr.dataset.name    = board.name;
 
-    searchInput.addEventListener("input", () => {
-        const query = searchInput.value.trim().toLowerCase();
-        filteredRows = allRows.filter(row => row.dataset.name.toLowerCase().includes(query));
-        currentPage = 1;
-        render();
+    const isActive = board.status === "ACTIVE";
+    tr.innerHTML =
+        `<td><span class="board-color-dot dot-${board.color}"></span></td>` +
+        `<td><a href="/board/${board.id}" class="admin-board-link">${board.name}</a></td>` +
+        `<td style="color:var(--text-sub); max-width:300px; font-size:12px; word-break:break-word;">${board.description ?? '-'}</td>` +
+        `<td>${board.memberCount}</td>` +
+        `<td style="text-align:center;">` +
+            `<span class="status-badge status-badge--toggle ${isActive ? 'status-active' : 'status-inactive'}"` +
+                  ` data-board-id="${board.id}" data-current-status="${board.status}">` +
+                  `${isActive ? '활성' : '비활성'}` +
+            `</span>` +
+        `</td>`;
+    return tr;
+}
+
+async function fetchAndRender() {
+    const params = new URLSearchParams({
+        q:    searchInput ? searchInput.value.trim() : "",
+        status: "",
+        sort:   "recent",
+        page:   currentPage - 1,
+        size:   PAGE_SIZE,
     });
 
-    render();
+    try {
+        const res  = await fetch(`/api/boards/search?${params}`);
+        const data = await res.json();
 
-    tbody.addEventListener("click", e => {
-        if (e.target.closest(".status-badge--toggle")) {
-            return;
+        if (countMeta) { countMeta.textContent = data.totalCount + "개"; }
+
+        tbody.innerHTML = "";
+
+        if (data.boards.length === 0) {
+            boardEmpty.style.display = "";
+            boardTable.style.display = "none";
+        } else {
+            boardEmpty.style.display = "none";
+            boardTable.style.display = "";
+            data.boards.forEach(board => tbody.appendChild(createRow(board)));
         }
-        const row = e.target.closest("tr[data-board-id]");
-        if (row) {
-            window.location.href = "/board/" + row.dataset.boardId;
-        }
+
+        const totalPages = Math.max(1, Math.ceil(data.totalCount / PAGE_SIZE));
+        App.renderPagination(paginationWrap, totalPages, currentPage, page => {
+            currentPage = page;
+            fetchAndRender();
+        });
+    } catch (e) {
+        console.error("보드 목록 로드 실패", e);
+    }
+}
+
+if (searchInput) {
+    searchInput.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            currentPage = 1;
+            fetchAndRender();
+        }, 250);
     });
 }
 
+tbody.addEventListener("click", e => {
+    if (e.target.closest(".status-badge--toggle")) { return; }
+    const row = e.target.closest("tr[data-board-id]");
+    if (row) { window.location.href = "/board/" + row.dataset.boardId; }
+});
+
+fetchAndRender();
+
 // ── 보드 상태 변경 ──
-const statusChangeModal = document.getElementById("statusChangeModal");
-const statusChangeDesc = document.getElementById("statusChangeDesc");
+const statusChangeModal   = document.getElementById("statusChangeModal");
+const statusChangeDesc    = document.getElementById("statusChangeDesc");
 const statusChangeConfirm = document.getElementById("statusChangeConfirm");
-const statusChangeCancel = document.getElementById("statusChangeCancel");
+const statusChangeCancel  = document.getElementById("statusChangeCancel");
 
 let pendingStatusChange = null;
 
 if (statusChangeModal) {
-    document.getElementById("board-tbody").addEventListener("click", e => {
+    tbody.addEventListener("click", e => {
         const badge = e.target.closest(".status-badge--toggle");
         if (!badge) { return; }
         e.stopPropagation();
 
-        const boardId = badge.dataset.boardId;
+        const boardId       = badge.dataset.boardId;
         const currentStatus = badge.dataset.currentStatus;
-        const nextStatus = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
-        const nextLabel = nextStatus === "ACTIVE" ? "활성" : "비활성";
+        const nextStatus    = currentStatus === "ACTIVE" ? "INACTIVE" : "ACTIVE";
+        const nextLabel     = nextStatus === "ACTIVE" ? "활성" : "비활성";
 
         pendingStatusChange = { boardId, nextStatus, badge };
         statusChangeDesc.textContent = `이 보드를 "${nextLabel}" 상태로 변경하시겠습니까?`;
