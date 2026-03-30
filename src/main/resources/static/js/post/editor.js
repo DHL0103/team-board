@@ -57,6 +57,19 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
     toolbar.querySelector('[data-cmd="codeBlock"]')
         .addEventListener('click', () => editor.chain().focus().toggleCodeBlock().run());
 
+    // ── 이미지 카운터 ──
+    const imgCounter = toolbar.querySelector('.editor-img-counter');
+    function updateImageCounter() {
+        let count = 0;
+        editor.state.doc.descendants(node => { if (node.type.name === 'image') { count++; } });
+        if (count > 0) {
+            imgCounter.textContent = count + ' / 5';
+            imgCounter.style.display = '';
+        } else {
+            imgCounter.style.display = 'none';
+        }
+    }
+
     // ── 이미지 업로드 ──
     const imgInput = toolbar.querySelector('.editor-img-input');
     toolbar.querySelector('[data-cmd="image"]').addEventListener('click', () => imgInput.click());
@@ -89,7 +102,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
 
     // ── 툴바 active 상태 갱신 ──
     editor.on('selectionUpdate', () => updateToolbar(editor, toolbar));
-    editor.on('transaction',     () => updateToolbar(editor, toolbar));
+    editor.on('transaction',     () => { updateToolbar(editor, toolbar); updateImageCounter(); });
 
     // ── 글자 수 카운터 ──
     const charCountEl = document.getElementById('post-editor-char-count');
