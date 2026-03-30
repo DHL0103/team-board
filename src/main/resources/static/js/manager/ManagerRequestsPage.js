@@ -1,0 +1,20 @@
+class ManagerRequestsPage {
+
+    static init() {
+        ManagerRequestsPage.#bindRejectModal();
+    }
+
+    static #bindRejectModal() {
+        const boardId = document.body.dataset.boardId;
+
+        document.querySelectorAll('.btn-reject').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.getElementById('rejectForm').action =
+                    '/board/' + boardId + '/manager/requests/reject/' + btn.dataset.postId;
+                Modal.open('rejectModal');
+            });
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => ManagerRequestsPage.init());
