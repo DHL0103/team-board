@@ -302,6 +302,7 @@
       </button>
     </div>
     <form id="rejectForm" method="post">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
       <input type="hidden" name="source" value="detail">
       <div class="form-group">
         <textarea name="reason" id="rejectReason" class="form-input" placeholder="반려 사유를 입력하세요" maxlength="300" required></textarea>
