@@ -60,12 +60,24 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
     // ── 이미지 업로드 ──
     const imgInput = toolbar.querySelector('.editor-img-input');
     toolbar.querySelector('[data-cmd="image"]').addEventListener('click', () => imgInput.click());
+    const MAX_INLINE_IMAGES = 5;
     imgInput.addEventListener('change', () => {
         const file = imgInput.files[0];
         if (!file) { return; }
+
+        let imageCount = 0;
+        editor.state.doc.descendants(node => { if (node.type.name === 'image') { imageCount++; } });
+        if (imageCount >= MAX_INLINE_IMAGES) {
+            App.showToast('이미지는 최대 ' + MAX_INLINE_IMAGES + '개까지 삽입할 수 있습니다.');
+            imgInput.value = '';
+            return;
+        }
+
         const formData = new FormData();
         formData.append('file', file);
-        fetch('/post/image', { method: 'POST', body: formData })
+        const csrfToken  = document.querySelector('meta[name="_csrf"]').content;
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+        fetch('/post/image', { method: 'POST', body: formData, headers: { [csrfHeader]: csrfToken } })
             .then(res => res.json())
             .then(data => {
                 editor.chain().focus().setImage({ src: data.url }).run();
@@ -78,6 +90,18 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
     // ── 툴바 active 상태 갱신 ──
     editor.on('selectionUpdate', () => updateToolbar(editor, toolbar));
     editor.on('transaction',     () => updateToolbar(editor, toolbar));
+
+    // ── 글자 수 카운터 ──
+    const charCountEl = document.getElementById('post-editor-char-count');
+    const MAX_CHARS = 10000;
+    function updateCharCount() {
+        if (!charCountEl) { return; }
+        const len = editor.getText().replace(/\n$/, '').length;
+        charCountEl.textContent = len.toLocaleString();
+        document.getElementById('post-editor-char-counter').classList.toggle('near-limit', len >= MAX_CHARS * 0.9);
+    }
+    editor.on('update', updateCharCount);
+    updateCharCount();
 
     // ── form submit 시 HTML 복사 ──
     editorEl.closest('form').addEventListener('submit', () => {
