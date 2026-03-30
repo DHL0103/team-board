@@ -345,13 +345,14 @@ const App = (function () {
     }
 
     // ── 파일 첨부 ──
-    function initFileAttachment(fileInputId, attachBtnId, chipListId, maxSizeMB) {
+    function initFileAttachment(fileInputId, attachBtnId, chipListId, maxSizeMB, maxCount) {
         const fileInput = document.getElementById(fileInputId);
         const chipList  = document.getElementById(chipListId);
         const attachBtn = document.getElementById(attachBtnId);
         if (!fileInput || !chipList) { return; }
 
-        const maxSize = (maxSizeMB ?? 10) * 1024 * 1024;
+        const maxSize  = (maxSizeMB ?? 10) * 1024 * 1024;
+        const maxFiles = maxCount ?? 5;
         let dataTransfer = new DataTransfer();
 
         if (attachBtn) {
@@ -360,6 +361,10 @@ const App = (function () {
 
         fileInput.addEventListener('change', function () {
             for (const file of fileInput.files) {
+                if (dataTransfer.files.length >= maxFiles) {
+                    showToast('파일은 최대 ' + maxFiles + '개까지 첨부할 수 있습니다.');
+                    break;
+                }
                 if (file.size > maxSize) {
                     showToast(file.name + ': 파일 크기는 ' + (maxSizeMB ?? 10) + 'MB를 초과할 수 없습니다.');
                     continue;
