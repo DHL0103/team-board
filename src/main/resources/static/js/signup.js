@@ -1,1 +1,0 @@
-App.initPasswordValidation('password', 'passwordConfirm');
