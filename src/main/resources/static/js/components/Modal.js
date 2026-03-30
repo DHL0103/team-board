@@ -1,5 +1,7 @@
 class Modal {
 
+    static #initialized = false;
+
     static open(id) {
         document.getElementById(id).classList.add('open');
         document.body.style.overflow = 'hidden';
@@ -11,6 +13,9 @@ class Modal {
     }
 
     static init() {
+        if (Modal.#initialized) { return; }
+        Modal.#initialized = true;
+
         document.querySelectorAll('.modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', e => {
                 if (e.target === overlay) { Modal.close(overlay.id); }
@@ -29,3 +34,5 @@ class Modal {
         });
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => Modal.init());

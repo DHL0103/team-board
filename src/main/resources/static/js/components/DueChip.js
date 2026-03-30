@@ -1,6 +1,11 @@
 class DueChip {
 
+    static #initialized = false;
+
     static init() {
+        if (DueChip.#initialized) { return; }
+        DueChip.#initialized = true;
+
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -18,3 +23,5 @@ class DueChip {
         });
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => DueChip.init());
