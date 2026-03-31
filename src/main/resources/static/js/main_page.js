@@ -290,5 +290,15 @@ if (createBoardModal && btnOpenBoardCreate) {
     document.getElementById("btn-close-board-create").addEventListener("click", closeBoard);
     document.getElementById("btn-cancel-board-create").addEventListener("click", closeBoard);
     createBoardModal.addEventListener("click", e => { if (e.target === createBoardModal) closeBoard(); });
+
+    const createBoardNameInput = document.getElementById("createBoardName");
+    const createBoardNameCount = document.getElementById("createBoardNameCount");
+    if (createBoardNameInput && createBoardNameCount) {
+        createBoardNameInput.addEventListener("input", () => {
+            const len = createBoardNameInput.value.length;
+            createBoardNameCount.textContent = len + "/50";
+            createBoardNameCount.classList.toggle("near-limit", len >= 45);
+        });
+    }
 }
 

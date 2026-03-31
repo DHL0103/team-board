@@ -23,10 +23,23 @@ function closeEditModal() {
     }
 }
 
+const editTitleInput = document.getElementById("edit-title");
+const editTitleCount = document.getElementById("editTitleCount");
+if (editTitleInput && editTitleCount) {
+    editTitleInput.addEventListener("input", () => {
+        const len = editTitleInput.value.length;
+        editTitleCount.textContent = len + "/100";
+        editTitleCount.classList.toggle("near-limit", len >= 90);
+    });
+}
+
 if (btnEdit) {
     btnEdit.addEventListener("click", () => {
         editModal.classList.add("open");
         document.body.style.overflow = "hidden";
+        if (editTitleInput && editTitleCount) {
+            editTitleCount.textContent = editTitleInput.value.length + "/100";
+        }
     });
 }
 if (btnEditClose) {
@@ -43,6 +56,16 @@ const rejectModal = document.getElementById("rejectModal");
 const btnReject = document.querySelector(".btn-reject");
 const btnRejectClose = document.getElementById("btn-reject-close");
 const boardId = document.body.dataset.boardId;
+
+const rejectReasonTextarea = document.getElementById("rejectReason");
+const rejectReasonCount = document.getElementById("rejectReasonCount");
+if (rejectReasonTextarea && rejectReasonCount) {
+    rejectReasonTextarea.addEventListener("input", () => {
+        const len = rejectReasonTextarea.value.length;
+        rejectReasonCount.textContent = len + "/300";
+        rejectReasonCount.classList.toggle("near-limit", len >= 270);
+    });
+}
 
 if (btnReject) {
     btnReject.addEventListener("click", () => {

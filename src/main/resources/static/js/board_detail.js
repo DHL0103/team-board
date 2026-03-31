@@ -1,3 +1,12 @@
+// ── 에러 토스트 ──
+window.addEventListener('load', () => {
+    const toast = document.getElementById('errorToast');
+    if (toast && toast.textContent.trim()) {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+});
+
 // 카드 클릭 → 상세 페이지 이동
 document.querySelectorAll('.board-card[data-href]').forEach(card => {
     card.addEventListener('click', () => {
@@ -235,6 +244,17 @@ if (selectedAssigneeList) {
         const opt = assigneeOptionList.querySelector(`[data-member-id="${memberId}"]`);
         if (opt) { opt.style.display = ''; }
         renderSelectedAssignees();
+    });
+}
+
+// ── 제목 글자수 카운터 ──
+const createTitleInput = document.getElementById('create-title');
+const createTitleCount = document.getElementById('createTitleCount');
+if (createTitleInput && createTitleCount) {
+    createTitleInput.addEventListener('input', () => {
+        const len = createTitleInput.value.length;
+        createTitleCount.textContent = len + '/100';
+        createTitleCount.classList.toggle('near-limit', len >= 90);
     });
 }
 

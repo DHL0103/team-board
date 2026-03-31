@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>500 - 서버 오류</title>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+</head>
+<body>
+<div class="error-page">
+  <div class="error-card">
+
+    <div class="error-icon-wrap">
+      <svg><use href="/img/icons.svg#icon-alert"></use></svg>
+    </div>
+
+    <div class="error-code-row">
+      <span class="error-code">500</span>
+      <div class="error-divider"></div>
+      <span class="error-type">Internal Server Error</span>
+    </div>
+
+    <div class="error-title">서버 오류가 발생했습니다</div>
+
+    <div class="error-desc">
+      예기치 못한 오류가 발생했습니다.<br>
+      잠시 후 다시 시도하거나 관리자에게 문의하세요.
+    </div>
+
+    <div class="error-actions">
+      <a href="/board" class="btn-new">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-home"></use></svg>
+        보드로 돌아가기
+      </a>
+    </div>
+
+    <div class="error-footer">
+      문제가 계속되면 관리자에게 문의하세요
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

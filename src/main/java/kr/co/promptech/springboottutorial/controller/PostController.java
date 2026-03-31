@@ -2,9 +2,10 @@ package kr.co.promptech.springboottutorial.controller;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
-import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.PostDto;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +35,7 @@ public class PostController {
      * 게시글 생성 후 첨부파일 저장. 파일 저장 실패 시 게시글은 유지
      */
     @PostMapping("/create")
-    public String createPost(PostCreateDto postCreateDto,
+    public String createPost(@Valid PostDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @AuthenticationPrincipal CustomUser user) {
         postService.createPost(postCreateDto, user.getId(), files);
@@ -63,7 +64,7 @@ public class PostController {
     @PostMapping("/update/{id}")
     public String updatePost(@PathVariable Long boardId,
                              @PathVariable Long id,
-                             PostCreateDto postCreateDto,
+                             @Valid PostDto postCreateDto,
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds) {
         postService.updatePost(id, postCreateDto, files, deleteFileIds);

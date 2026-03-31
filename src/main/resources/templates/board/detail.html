@@ -10,6 +10,10 @@
 
   <div th:replace="~{fragments/header :: back-header}"></div>
 
+  <div class="toast" id="errorToast"
+       th:text="${param.error != null ? (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.') : ''}">
+  </div>
+
   <th:block th:replace="~{fragments/board-header :: board-header(${board}, ${board.manager})}"></th:block>
 
   <div class="kanban-wrap">
@@ -159,7 +163,8 @@
         <input type="hidden" name="boardId" th:value="${board.id}">
         <div class="form-group">
           <label class="form-label">제목</label>
-          <input type="text" name="title" class="form-input" placeholder="작업 제목을 입력하세요" required />
+          <input type="text" name="title" id="create-title" class="form-input" placeholder="작업 제목을 입력하세요" maxlength="100" required />
+          <span class="char-count" id="createTitleCount">0/100</span>
         </div>
         <div class="form-group">
           <label class="form-label">내용</label>

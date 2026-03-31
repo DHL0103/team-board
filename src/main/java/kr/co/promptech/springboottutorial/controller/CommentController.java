@@ -1,7 +1,8 @@
 package kr.co.promptech.springboottutorial.controller;
 
+import jakarta.validation.Valid;
 import kr.co.promptech.springboottutorial.model.CustomUser;
-import kr.co.promptech.springboottutorial.model.dto.CommentCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.CommentDto;
 import kr.co.promptech.springboottutorial.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +20,7 @@ public class CommentController {
     @PostMapping
     public String addComment(@PathVariable Long boardId,
                              @PathVariable Long postId,
-                             @ModelAttribute CommentCreateDto dto,
+                             @Valid @ModelAttribute CommentDto dto,
                              @AuthenticationPrincipal CustomUser user) {
         commentService.save(user.getId(), dto);
         return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
@@ -29,9 +30,9 @@ public class CommentController {
     public String editComment(@PathVariable Long boardId,
                               @PathVariable Long postId,
                               @PathVariable Long commentId,
-                              @RequestParam String content,
+                              @Valid @ModelAttribute CommentDto dto,
                               @AuthenticationPrincipal CustomUser user) {
-        commentService.update(commentId, user.getId(), content);
+        commentService.update(commentId, user.getId(), dto.getContent());
         return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
     }
 

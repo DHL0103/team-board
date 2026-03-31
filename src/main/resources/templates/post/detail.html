@@ -18,7 +18,7 @@
   <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${post.boardId}, boardName=${post.boardName}, currentPage=${post.title})}"></div>
 
   <div class="toast" id="errorToast"
-       th:text="${param.error == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error != null ? '본인이 작성한 글만 삭제할 수 있습니다.' : '')}">
+       th:text="${param.error != null ? (param.error[0] == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '본인이 작성한 글만 삭제할 수 있습니다.')) : ''}">
   </div>
 
   <div class="post-card">
@@ -189,7 +189,8 @@
     <form id="edit-post-form" th:action="@{/board/{boardId}/post/update/{id}(boardId=${post.boardId},id=${post.id})}" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label">제목</label>
-        <input type="text" name="title" th:value="${post.title}" class="form-input" required />
+        <input type="text" name="title" id="edit-title" th:value="${post.title}" class="form-input" maxlength="100" required />
+        <span class="char-count" id="editTitleCount">0/100</span>
       </div>
       <div class="form-group">
         <label class="form-label">내용</label>
@@ -300,7 +301,8 @@
     <form id="rejectForm" method="post">
       <input type="hidden" name="source" value="detail">
       <div class="form-group">
-        <textarea name="reason" class="form-input" placeholder="반려 사유를 입력하세요" required></textarea>
+        <textarea name="reason" id="rejectReason" class="form-input" placeholder="반려 사유를 입력하세요" maxlength="300" required></textarea>
+        <span class="char-count" id="rejectReasonCount">0/300</span>
       </div>
       <button type="submit" class="btn-submit" style="background:#e11d48;">반려 확정</button>
     </form>

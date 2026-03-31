@@ -185,7 +185,17 @@ button, input, select, textarea {
   &:hover { background: variables.$bg; color: #2563eb; }
 }
 
-// ── 4. 공통 애니메이션 (딱 한 번만 선언) ──
+// ── 4. 공통 글자수 카운터 ──
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  color: variables.$text-muted;
+  margin-top: 3px;
+  &.near-limit { color: #dc2626; }
+}
+
+// ── 5. 공통 애니메이션 (딱 한 번만 선언) ──
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
