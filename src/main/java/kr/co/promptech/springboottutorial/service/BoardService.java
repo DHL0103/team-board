@@ -4,7 +4,7 @@ import kr.co.promptech.springboottutorial.exception.BoardNotFoundException;
 import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
-import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardSearchResultDto;
@@ -36,7 +36,7 @@ public class BoardService {
         return boardMapper.getBoardDtoById(id);
     }
 
-    public Long createBoard(BoardCreateDto boardCreateDto) {
+    public Long createBoard(BoardDto boardCreateDto) {
         Board board = Board.builder()
                 .name(boardCreateDto.getName())
                 .color(boardCreateDto.getColor())
@@ -54,7 +54,7 @@ public class BoardService {
         boardMapper.updateStatus(boardId, status);
     }
 
-    public void updateBoard(Long boardId, BoardCreateDto dto) {
+    public void updateBoard(Long boardId, BoardDto dto) {
         if (!"ACTIVE".equals(dto.getStatus()) && !"INACTIVE".equals(dto.getStatus())) {
             throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + dto.getStatus());
         }

@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class PostCreateDto {
+public class PostDto {
     Long boardId;
     @NotBlank
     @Size(max = 100)
