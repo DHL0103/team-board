@@ -56,6 +56,7 @@ uploads/
 
 # 로컬 설정 파일 (DB 정보 등 민감 정보 포함)
 src/main/resources/application.yml
+src/main/resources/application.properties
 
 #css 맵은 scss디버깅용 파일이라 불필요
 src/main/resources/static/style.css.map
