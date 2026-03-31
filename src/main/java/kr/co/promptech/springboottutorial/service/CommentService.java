@@ -2,7 +2,7 @@ package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.mapper.CommentMapper;
 import kr.co.promptech.springboottutorial.model.Comment;
-import kr.co.promptech.springboottutorial.model.dto.CommentCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.CommentDto;
 import kr.co.promptech.springboottutorial.model.dto.CommentResponseDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class CommentService {
     private final CommentMapper commentMapper;
     private final BoardMemberService boardMemberService;
 
-    public void save(Long memberId, CommentCreateDto dto) {
+    public void save(Long memberId, CommentDto dto) {
         Comment comment = Comment.builder()
                 .postId(dto.getPostId())
                 .memberId(memberId)
