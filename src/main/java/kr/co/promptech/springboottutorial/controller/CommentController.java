@@ -30,9 +30,9 @@ public class CommentController {
     public String editComment(@PathVariable Long boardId,
                               @PathVariable Long postId,
                               @PathVariable Long commentId,
-                              @RequestParam String content,
+                              @Valid @ModelAttribute CommentCreateDto dto,
                               @AuthenticationPrincipal CustomUser user) {
-        commentService.update(commentId, user.getId(), content);
+        commentService.update(commentId, user.getId(), dto.getContent());
         return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
     }
 
