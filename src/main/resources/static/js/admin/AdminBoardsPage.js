@@ -150,7 +150,11 @@ class AdminBoardsPage {
             AdminBoardsPage.#pendingStatusChange = null;
 
             try {
-                const res = await fetch(`/api/admin/boards/${boardId}/status?status=${nextStatus}`, { method: 'POST' });
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
+                const csrfToken  = document.querySelector('meta[name="_csrf"]')?.content;
+                const headers = {};
+                if (csrfHeader && csrfToken) { headers[csrfHeader] = csrfToken; }
+                const res = await fetch(`/api/admin/boards/${boardId}/status?status=${nextStatus}`, { method: 'POST', headers });
                 if (!res.ok) { return; }
 
                 const isActive = nextStatus === 'ACTIVE';

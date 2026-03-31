@@ -222,7 +222,11 @@ class AdminMembersPage {
         const currentRole = AdminMembersPage.#currentDetailRow.dataset.role;
         const newRole     = currentRole === 'ROLE_USER' ? 'ROLE_SUSPENDED' : 'ROLE_USER';
 
-        fetch(`/api/admin/members/${memberId}/role?role=${newRole}`, { method: 'POST' })
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]')?.content;
+        const csrfToken  = document.querySelector('meta[name="_csrf"]')?.content;
+        const headers = {};
+        if (csrfHeader && csrfToken) { headers[csrfHeader] = csrfToken; }
+        fetch(`/api/admin/members/${memberId}/role?role=${newRole}`, { method: 'POST', headers })
             .then(res => {
                 if (!res.ok) { return; }
                 AdminMembersPage.#closeDetailModal();

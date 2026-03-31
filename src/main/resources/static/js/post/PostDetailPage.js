@@ -235,6 +235,15 @@ class PostDetailPage {
                     input.name  = 'content';
                     input.value = content;
                     form.appendChild(input);
+                    const csrfMeta   = document.querySelector('meta[name="_csrf"]');
+                    const csrfParam  = document.querySelector('meta[name="_csrf_param"]');
+                    if (csrfMeta && csrfParam) {
+                        const csrfInput   = document.createElement('input');
+                        csrfInput.type    = 'hidden';
+                        csrfInput.name    = csrfParam.content;
+                        csrfInput.value   = csrfMeta.content;
+                        form.appendChild(csrfInput);
+                    }
                     document.body.appendChild(form);
                     form.submit();
                 });
