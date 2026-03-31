@@ -79,7 +79,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
         if (!file) { return; }
 
         if (file.size > 5 * 1024 * 1024) {
-            App.showToast('인라인 이미지 크기는 5MB를 초과할 수 없습니다.');
+            Toast.show('인라인 이미지 크기는 5MB를 초과할 수 없습니다.');
             imgInput.value = '';
             return;
         }
@@ -87,7 +87,7 @@ function initEditor(editorId, inputId, toolbarId, initialContent) {
         let imageCount = 0;
         editor.state.doc.descendants(node => { if (node.type.name === 'image') { imageCount++; } });
         if (imageCount >= 5) {
-            App.showToast('이미지는 최대 5장까지 첨부할 수 있습니다.');
+            Toast.show('이미지는 최대 5장까지 첨부할 수 있습니다.');
             imgInput.value = '';
             return;
         }
