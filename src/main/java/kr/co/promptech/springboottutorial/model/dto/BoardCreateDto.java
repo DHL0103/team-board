@@ -14,4 +14,5 @@ public class BoardCreateDto {
     private String color;
     @Size(max = 500)
     private String description;
+    private String status;
 }

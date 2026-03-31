@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<th:block th:fragment="editor-form-group(initialContent)">
+  <div class="editor-wrap">
+    <div class="editor-toolbar" id="post-toolbar">
+      <button type="button" class="editor-btn editor-btn--text" data-cmd="h1" title="제목 1">H1</button>
+      <button type="button" class="editor-btn editor-btn--text" data-cmd="h2" title="제목 2">H2</button>
+      <button type="button" class="editor-btn editor-btn--text" data-cmd="h3" title="제목 3">H3</button>
+      <div class="editor-sep"></div>
+      <button type="button" class="editor-btn" data-cmd="link" title="링크">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-link"></use></svg>
+      </button>
+      <button type="button" class="editor-btn" data-cmd="underline" title="밑줄">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-underline"></use></svg>
+      </button>
+      <button type="button" class="editor-btn" data-cmd="bold" title="굵게">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-bold"></use></svg>
+      </button>
+      <button type="button" class="editor-btn" data-cmd="italic" title="기울임">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-italic"></use></svg>
+      </button>
+      <button type="button" class="editor-btn" data-cmd="strike" title="취소선">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-strikethrough"></use></svg>
+      </button>
+      <div class="editor-sep"></div>
+      <button type="button" class="editor-btn" data-cmd="bulletList" title="글머리기호">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-list-bullet"></use></svg>
+      </button>
+      <button type="button" class="editor-btn" data-cmd="orderedList" title="번호매기기">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-list-ordered"></use></svg>
+      </button>
+      <div class="editor-sep"></div>
+      <button type="button" class="editor-btn" data-cmd="image" title="이미지 삽입">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-image-editor"></use></svg>
+      </button>
+      <input type="file" class="editor-img-input" accept="image/*" hidden>
+      <button type="button" class="editor-btn" data-cmd="codeBlock" title="코드 블록">
+        <svg width="12" height="12"><use href="/img/icons.svg#icon-code-block"></use></svg>
+      </button>
+    </div>
+    <div id="post-editor" class="editor-content" th:attr="data-content=${initialContent}"></div>
+  </div>
+  <input type="hidden" name="content" id="post-content">
+</th:block>
+
+</body>
+</html>

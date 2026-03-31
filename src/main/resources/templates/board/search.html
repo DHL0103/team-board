@@ -14,21 +14,34 @@
 
     <div class="search-header">
       <h2 class="search-title">보드 탐색</h2>
-      <form class="search-form-row" action="/board/search" method="get">
-        <input class="search-input" type="text" name="keyword" th:value="${keyword}" placeholder="보드 이름으로 검색">
-        <button type="submit" class="btn-search">
-          <svg width="13" height="13"><use href="/img/icons.svg#icon-search"></use></svg>
-          검색
-        </button>
-      </form>
+      <div class="search-input-wrap">
+        <svg width="13" height="13"><use href="/img/icons.svg#icon-search"></use></svg>
+        <input class="search-input" id="search-input" type="text" placeholder="보드 이름으로 검색" autocomplete="off">
+      </div>
+      <div class="search-filter-row">
+        <div class="post-list-sort-group">
+          <button class="post-list-sort-btn active" data-sort="recent">최근 생성 순</button>
+          <button class="post-list-sort-btn" data-sort="members">참여자 순</button>
+        </div>
+        <select class="search-status-select" id="search-status-select">
+          <option value="">전체</option>
+          <option value="ACTIVE">활성</option>
+          <option value="INACTIVE">비활성</option>
+        </select>
+      </div>
     </div>
 
-    <div class="search-empty" th:if="${#lists.isEmpty(boardList)}">
+    <div class="search-empty" id="search-empty" style="display:none;">
       검색 결과가 없습니다.
     </div>
 
-    <div class="search-card-list" th:unless="${#lists.isEmpty(boardList)}">
-      <div class="search-card" th:each="board : ${boardList}">
+    <div class="search-card-list" id="search-card-list">
+      <div class="search-card"
+           th:each="board : ${boardList}"
+           th:data-name="${board.name}"
+           th:data-member-count="${board.memberCount}"
+           th:data-id="${board.id}"
+           th:data-status="${board.status}">
 
         <div class="search-card-left">
           <span class="search-board-dot" th:classappend="${'dot-' + board.color}"></span>
@@ -61,6 +74,7 @@
 
   <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
   <script th:src="@{/js/common.js}"></script>
+  <script th:src="@{/js/pagination.js}"></script>
   <script th:src="@{/js/board-search.js}"></script>
 
 </body>
