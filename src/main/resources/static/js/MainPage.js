@@ -1,6 +1,11 @@
 class MainPage {
 
+    static #initialized = false;
+
     static init() {
+        if (MainPage.#initialized) { return; }
+        MainPage.#initialized = true;
+
         Modal.init();
         MainPage.#initKanban();
         MainPage.#initBoardFilter();

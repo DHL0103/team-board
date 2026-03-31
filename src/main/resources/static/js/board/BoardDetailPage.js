@@ -1,9 +1,13 @@
 class BoardDetailPage {
 
+    static #initialized = false;
     static #createFileAttachment;
     static #createAssigneePicker;
 
     static init() {
+        if (BoardDetailPage.#initialized) { return; }
+        BoardDetailPage.#initialized = true;
+
         DueChip.init();
         Modal.init();
         BoardDetailPage.#bindCardLinks();

@@ -1,11 +1,14 @@
 class SearchPage {
 
+    static #initialized = false;
     static #PAGE_SIZE = 10;
     static #allCards = [];
     static #currentPage = 1;
     static #currentSort = 'recent';
 
     static init() {
+        if (SearchPage.#initialized) { return; }
+        SearchPage.#initialized = true;
         SearchPage.#allCards = Array.from(document.querySelectorAll('.search-card'));
         SearchPage.#bindInputs();
         SearchPage.#render();

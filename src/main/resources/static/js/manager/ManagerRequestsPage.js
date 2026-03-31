@@ -1,6 +1,11 @@
 class ManagerRequestsPage {
 
+    static #initialized = false;
+
     static init() {
+        if (ManagerRequestsPage.#initialized) { return; }
+        ManagerRequestsPage.#initialized = true;
+
         ManagerRequestsPage.#bindRejectModal();
     }
 

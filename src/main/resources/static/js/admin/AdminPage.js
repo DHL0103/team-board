@@ -1,6 +1,11 @@
 class AdminPage {
 
+    static #initialized = false;
+
     static init() {
+        if (AdminPage.#initialized) { return; }
+        AdminPage.#initialized = true;
+
         Modal.init();
         AdminPage.#bindRejectModal();
         AdminPage.#bindCreateModal();

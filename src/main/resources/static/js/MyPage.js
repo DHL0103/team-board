@@ -1,6 +1,11 @@
 class MyPage {
 
+    static #initialized = false;
+
     static init() {
+        if (MyPage.#initialized) { return; }
+        MyPage.#initialized = true;
+
         MyPage.#initSidebarTabs();
         MyPage.#initPagination();
         new PasswordValidator('newPassword', 'newPasswordConfirm', 'mypage-input-error-msg', '새 비밀번호가 일치하지 않습니다.');

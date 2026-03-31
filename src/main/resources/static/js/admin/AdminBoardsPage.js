@@ -1,5 +1,6 @@
 class AdminBoardsPage {
 
+    static #initialized = false;
     static #PAGE_SIZE = 10;
     static #allRows = [];
     static #filteredRows = [];
@@ -7,6 +8,8 @@ class AdminBoardsPage {
     static #pendingStatusChange = null;
 
     static init() {
+        if (AdminBoardsPage.#initialized) { return; }
+        AdminBoardsPage.#initialized = true;
         AdminBoardsPage.#initTable();
         AdminBoardsPage.#initStatusChangeModal();
     }

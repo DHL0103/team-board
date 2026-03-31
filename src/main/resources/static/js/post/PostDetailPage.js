@@ -1,9 +1,13 @@
 class PostDetailPage {
 
+    static #initialized = false;
     static #editFileAttachment;
     static #editAssigneePicker;
 
     static init() {
+        if (PostDetailPage.#initialized) { return; }
+        PostDetailPage.#initialized = true;
+
         Modal.init();
         DueChip.init();
         PostDetailPage.#initEditModal();

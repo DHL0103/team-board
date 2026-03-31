@@ -1,5 +1,6 @@
 class PostListPage {
 
+    static #initialized = false;
     static #PAGE_SIZE = 10;
     static #cards = [];
     static #filteredCards = [];
@@ -8,6 +9,8 @@ class PostListPage {
     static #currentMineOnly = false;
 
     static init() {
+        if (PostListPage.#initialized) { return; }
+        PostListPage.#initialized = true;
         DueChip.init();
         PostListPage.#cards = Array.from(document.querySelectorAll('.post-list-card'));
         PostListPage.#bindSortButtons();

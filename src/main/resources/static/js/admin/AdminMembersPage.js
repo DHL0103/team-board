@@ -1,5 +1,6 @@
 class AdminMembersPage {
 
+    static #initialized = false;
     static #PAGE_SIZE = 10;
     static #ROLE_LABEL = { MANAGER: 'Manager', USER: 'User', REQUESTED: '가입 요청', INVITED: '초대됨' };
     static #ROLE_CLASS  = { MANAGER: 'role-manager', USER: 'role-user', REQUESTED: 'role-requested', INVITED: 'role-invited' };
@@ -17,6 +18,8 @@ class AdminMembersPage {
     static #btnRoleAction;
 
     static init() {
+        if (AdminMembersPage.#initialized) { return; }
+        AdminMembersPage.#initialized = true;
         AdminMembersPage.#tbody        = document.getElementById('member-tbody');
         AdminMembersPage.#searchInput  = document.getElementById('member-search');
         AdminMembersPage.#paginationWrap = document.getElementById('pagination-wrap');
