@@ -1,3 +1,65 @@
+// ── 페이지네이션 헬퍼 ──
+function makePaginator(items, paginationEl, pageSize) {
+    var currentPage = 1;
+
+    function render() {
+        var start = (currentPage - 1) * pageSize;
+        var end   = start + pageSize;
+        items.forEach(function (item, i) {
+            item.style.display = (i >= start && i < end) ? '' : 'none';
+        });
+        renderPagination();
+    }
+
+    function renderPagination() {
+        var totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+        paginationEl.innerHTML = '';
+        if (totalPages <= 1) { return; }
+
+        var prev = document.createElement('button');
+        prev.className = 'page-btn';
+        prev.textContent = '이전';
+        prev.disabled = currentPage === 1;
+        prev.addEventListener('click', function () { currentPage--; render(); });
+        paginationEl.appendChild(prev);
+
+        for (var i = 1; i <= totalPages; i++) {
+            (function (page) {
+                var btn = document.createElement('button');
+                btn.className = 'page-btn' + (page === currentPage ? ' active' : '');
+                btn.textContent = page;
+                btn.addEventListener('click', function () { currentPage = page; render(); });
+                paginationEl.appendChild(btn);
+            })(i);
+        }
+
+        var next = document.createElement('button');
+        next.className = 'page-btn';
+        next.textContent = '다음';
+        next.disabled = currentPage === totalPages;
+        next.addEventListener('click', function () { currentPage++; render(); });
+        paginationEl.appendChild(next);
+    }
+
+    render();
+}
+
+var PAGE_SIZE = 10;
+
+var assignedList      = document.getElementById('assigned-list');
+var assignedPagination = document.getElementById('assigned-pagination');
+if (assignedList && assignedPagination) {
+    var assignedItems = Array.from(assignedList.querySelectorAll('.assigned-card'));
+    makePaginator(assignedItems, assignedPagination, PAGE_SIZE);
+}
+
+var inviteList      = document.getElementById('invite-list');
+var invitePagination = document.getElementById('invite-pagination');
+if (inviteList && invitePagination) {
+    var inviteItems = Array.from(inviteList.children);
+    makePaginator(inviteItems, invitePagination, PAGE_SIZE);
+}
+
 // ── 사이드바 탭 전환 ──
 const sidebarItems = document.querySelectorAll('.sidebar-item');
 const sections = document.querySelectorAll('.mypage-section');

@@ -1,0 +1,33 @@
+@use "variables";
+
+// ── 리셋 & 기본 설정 ──
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  background-color: variables.$bg;
+  color: variables.$text;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+}
+
+// ── 공통 글자수 카운터 ──
+.char-count {
+  display: block;
+  text-align: right;
+  font-size: 11px;
+  color: variables.$text-muted;
+  margin-top: 3px;
+  &.near-limit { color: #dc2626; }
+}

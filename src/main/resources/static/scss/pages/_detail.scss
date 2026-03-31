@@ -19,9 +19,17 @@
   font-size: 12px;
   color: $text-muted;
   margin-bottom: 20px;
+  min-width: 0;
 
-  a { color: $text-muted; text-decoration: none; &:hover { color: $text-sub; } }
-  .breadcrumb-sep { opacity: 0.4; }
+  a { color: $text-muted; text-decoration: none; white-space: nowrap; &:hover { color: $text-sub; } }
+  .breadcrumb-sep { opacity: 0.4; flex-shrink: 0; }
+
+  span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+  }
 }
 
 
@@ -128,91 +136,6 @@
   }
 }
 
-// ── 배지 & 칩 ──
-.team-badge, .status-chip, .due-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 4px;
-}
-
-.team-badge {
-  .team-dot { width: 6px; height: 6px; border-radius: 50%; }
-  @each $key, $val in $palettes {
-    &.badge-#{$key} { background: var(--#{$key}-bg); color: var(--#{$key}-color); border: 1px solid var(--#{$key}-border); .team-dot { background: var(--#{$key}-color); } }
-  }
-}
-
-.status-chip {
-  &.chip-progress  { background: var(--status-progress-bg);  color: var(--status-progress-color); }
-  &.chip-requested { background: var(--status-requested-bg); color: var(--status-requested-color); }
-  &.chip-completed { background: var(--status-completed-bg); color: var(--status-completed-color); }
-  &.chip-rejected  { background: var(--status-rejected-bg);  color: var(--status-rejected-color); }
-}
-
-.due-chip {
-  svg { width: 10px; height: 10px; }
-  &.due-safe { background: var(--due-safe-bg); color: var(--due-safe); }
-  &.due-warn { background: var(--due-warn-bg); color: var(--due-warn); }
-  &.due-over { background: var(--due-over-bg); color: var(--due-over); }
-  &.due-none { background: $bg; color: $text-muted; border: 1px solid $border; }
-}
-
-// ── 담당자 칩 ──
-.assignee-chip-wrap {
-  position: relative;
-  display: inline-flex;
-  flex-shrink: 0;
-  margin-left: auto;
-}
-
-.assignee-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 8px;
-  border-radius: 4px;
-  background: $bg;
-  color: $text-muted;
-  border: 1px solid $border;
-  cursor: pointer;
-  transition: all 0.15s;
-  font-family: 'Inter', sans-serif;
-
-  &:hover { color: $text-sub; border-color: #d1d5db; }
-  svg { width: 12px; height: 12px; }
-}
-
-.assignee-chip-dropdown {
-  display: none;
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: 8px;
-  padding: 4px 0;
-  min-width: 130px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  z-index: 100;
-
-  &.open { display: block; }
-}
-
-.assignee-chip-item {
-  padding: 7px 14px;
-  font-size: 12px;
-  color: $text;
-  text-align: center;
-
-  &:not(:last-child) { border-bottom: 1px solid $border-soft; }
-}
-
 // ── 버튼 ──
 .btn-edit, .btn-delete, .btn-request {
   display: inline-flex;
@@ -249,162 +172,6 @@
   &:hover { background: #fef2f2; border-color: #fca5a5; }
 }
 
-
-// ── 삭제 확인 모달 ──
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 999;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
-  align-items: flex-start;
-  justify-content: center;
-  overflow-y: auto;
-  padding: 24px 0;
-
-  &.open { display: flex; }
-}
-
-.modal-box {
-  background: $surface;
-  border: 1px solid $border;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 380px;
-  padding: 32px;
-  margin: auto 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  animation: modalIn 0.2s ease both;
-}
-
-.modal-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.modal-title { font-size: 16px; font-weight: 700; color: $text; margin-bottom: 8px; }
-.modal-desc  { font-size: 14px; color: $text-sub; line-height: 1.5; margin-bottom: 24px; }
-.modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
-
-.btn-modal-cancel {
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: 1px solid $border;
-  background: $surface;
-  color: $text-sub;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.15s;
-  &:hover { background: $bg; color: $text; }
-}
-
-.btn-modal-delete {
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: none;
-  background: #dc2626;
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: background 0.15s;
-  &:hover { background: #b91c1c; }
-}
-
-.btn-modal-confirm {
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: background 0.15s;
-  &:hover { background: #1d4ed8; }
-}
-
-.modal-box--edit {
-  max-width: 480px;
-  .modal-title { margin-bottom: 20px; }
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-bottom: 14px;
-
-  label {
-    font-size: 12px;
-    font-weight: 500;
-    color: $text-sub;
-  }
-}
-
-.input-field {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid $border;
-  border-radius: 7px;
-  font-size: 13px;
-  color: $text;
-  background: $bg;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-  transition: border-color 0.15s;
-  &:focus { outline: none; border-color: #2563eb; }
-}
-
-.textarea-field {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid $border;
-  border-radius: 7px;
-  font-size: 13px;
-  color: $text;
-  background: $bg;
-  box-sizing: border-box;
-  font-family: 'Inter', sans-serif;
-  resize: vertical;
-  min-height: 100px;
-  transition: border-color 0.15s;
-  &:focus { outline: none; border-color: #2563eb; }
-}
-
-// ── 에러 토스트 ──
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1f2937;
-  color: white;
-  padding: 10px 18px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  display: none;
-  z-index: 1000;
-  white-space: nowrap;
-
-  &.show {
-    display: block;
-    animation: toastIn 0.2s ease;
-  }
-}
 
 // ── 댓글 섹션 ──
 .comment-section {
@@ -612,17 +379,55 @@
   right: 40px;
   width: 260px;
   z-index: 10;
-
-  @media (max-width: 768px) {
-    position: static;
-    width: 100%;
-    margin-bottom: 16px;
-  }
   background: var(--status-rejected-bg);
   border: 1px solid #fecdd3;
   border-radius: 10px;
   padding: 16px;
   animation: fadeUp 0.35s ease both;
+
+  @media (max-width: 768px) {
+    display: none;
+    position: static;
+    width: 100%;
+    margin-bottom: 16px;
+
+    &.mobile-open {
+      display: block;
+    }
+  }
+}
+
+.rejection-toggle-btn {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 500;
+    background: var(--status-rejected-bg);
+    color: var(--status-rejected-color);
+    border: 1px solid #fecdd3;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    flex-shrink: 0;
+    transition: background 0.15s;
+
+    &:hover { background: #ffe4e6; }
+    &.active { background: #fecdd3; }
+  }
+}
+
+.rejection-toggle-count {
+  background: white;
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+  padding: 0 5px;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .rejection-panel-header {
@@ -671,4 +476,30 @@
   font-size: 13px;
   color: $text;
   line-height: 1.5;
+
+  &.clamped {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &.expanded {
+    display: block;
+    overflow: visible;
+  }
+}
+
+.rejection-reason-toggle {
+  display: block;
+  margin-top: 4px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: $text-muted;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  &:hover { color: $text-sub; }
 }

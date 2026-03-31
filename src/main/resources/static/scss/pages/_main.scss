@@ -131,18 +131,6 @@ $design:   map-get($teams, design);
   }
 }
 
-.team-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 3px 9px;
-  border-radius: 5px;
-}
-
-.team-dot { width: 7px; height: 7px; border-radius: 50%; }
-
 .col-count {
   margin-left: auto;
   font-size: 12px;
@@ -218,6 +206,10 @@ $design:   map-get($teams, design);
   color: $text;
   letter-spacing: -0.2px;
   flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-content {
@@ -241,39 +233,6 @@ $design:   map-get($teams, design);
 }
 
 .card-left { display: flex; align-items: center; gap: 8px; }
-
-.status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 4px;
-  white-space: nowrap;
-
-  &.progress  { background: var(--status-progress-bg);  color: var(--status-progress-color); }
-  &.requested { background: var(--status-requested-bg); color: var(--status-requested-color); }
-  &.rejected  { background: var(--status-rejected-bg);  color: var(--status-rejected-color); }
-}
-
-.due-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 7px;
-  border-radius: 5px;
-  white-space: nowrap;
-  flex-shrink: 0;
-
-  svg { width: 10px; height: 10px; }
-  &.safe { background: var(--due-safe-bg); color: var(--due-safe); }
-  &.warn { background: var(--due-warn-bg); color: var(--due-warn); }
-  &.over { background: var(--due-over-bg); color: var(--due-over); }
-  &.none { background: $bg; color: $text-muted; border: 1px solid $border; }
-}
 
 .card-writer {
   display: flex;
@@ -309,121 +268,6 @@ $design:   map-get($teams, design);
   justify-content: center;
   font-size: 16px;
   margin-bottom: 4px;
-}
-
-// ── 작업 생성 모달 ──
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  overflow-y: auto;
-  padding: 24px 0;
-
-  &.open { display: flex; }
-
-  .modal-box {
-    background: $surface;
-    border: 1px solid $border;
-    border-radius: 12px;
-    width: 100%;
-    max-width: 460px;
-    padding: 28px;
-    margin: auto 16px;
-    animation: modalIn 0.2s ease both;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
-  }
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.modal-title-row { display: flex; align-items: center; gap: 8px; }
-
-.modal-title { font-size: 15px; font-weight: 700; letter-spacing: -0.3px; }
-
-.modal-team-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.modal-close {
-  width: 28px;
-  height: 28px;
-  border-radius: 6px;
-  border: 1px solid $border;
-  background: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $text-muted;
-  transition: all 0.15s;
-
-  &:hover { background: $bg; color: $text; }
-}
-
-// ── 폼 (모달 내부) ──
-.form-group { margin-bottom: 14px; }
-
-.form-label {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  color: $text;
-  margin-bottom: 5px;
-}
-
-.form-input {
-  width: 100%;
-  border: 1px solid $border;
-  border-radius: 7px;
-  padding: 9px 12px;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  color: $text;
-  background: $surface;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-
-  &:focus {
-    border-color: #9ca3af;
-    box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.1);
-  }
-  &::placeholder { color: $text-muted; }
-}
-
-textarea.form-input { resize: none; height: 78px; }
-
-.btn-submit {
-  width: 100%;
-  background: $text;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 11px;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 6px;
-  transition: background 0.15s, transform 0.15s;
-
-  &:hover { background: #374151; transform: translateY(-1px); }
 }
 
 // ── 날짜 피커 ──
@@ -650,16 +494,6 @@ textarea.form-input { resize: none; height: 78px; }
   justify-content: center;
 
   .board-grid-card-create:hover & { border-color: #9ca3af; }
-}
-
-// badge-pX (팀 배지 팔레트)
-@each $key, $val in $palettes {
-  .team-badge.badge-#{$key} {
-    background: map-get($val, bg);
-    color: map-get($val, color);
-    border: 1px solid map-get($val, border);
-    .team-dot { background: map-get($val, color); }
-  }
 }
 
 // 빈 상태

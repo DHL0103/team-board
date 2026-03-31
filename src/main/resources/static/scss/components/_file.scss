@@ -1,0 +1,53 @@
+@use "../abstract/variables" as *;
+
+// ── 파일 첨부 공통 UI ──
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: $text-sub;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  &:hover { border-color: #d1d5db; color: $text; }
+}
+
+.file-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.file-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: $text;
+  background: $bg;
+  border: 1px solid $border;
+  border-radius: 99px;
+  text-decoration: none;
+  transition: border-color 0.15s;
+  &:hover { border-color: #9ca3af; }
+}
+
+.file-chip-remove {
+  display: inline-flex;
+  align-items: center;
+  padding: 0;
+  background: none;
+  border: none;
+  color: $text-muted;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  &:hover { color: #ef4444; }
+}

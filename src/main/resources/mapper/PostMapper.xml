@@ -33,6 +33,7 @@
 
     <select id="getPostsByBoardId" resultType="kr.co.promptech.springboottutorial.model.Post">
         SELECT * FROM posts WHERE board_id = #{boardId}
+        ORDER BY created_at DESC
     </select>
 
     <select id="getPostsByBoardIdInProgress" resultType="kr.co.promptech.springboottutorial.model.Post">
