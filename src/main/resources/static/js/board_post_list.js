@@ -6,9 +6,11 @@
     var listBody       = document.querySelector('.post-list-body');
     var paginationWrap = document.getElementById('post-list-pagination');
     var sortBtns       = document.querySelectorAll('.post-list-sort-btn');
+    var btnMineFilter  = document.getElementById('btn-mine-filter');
     var cards          = Array.from(document.querySelectorAll('.post-list-card'));
     var currentSort    = 'newest';
     var currentPage    = 1;
+    var currentMineOnly = false;
     var filteredCards  = [];
 
     // ── 정렬 ──
@@ -60,12 +62,46 @@
         });
     }
 
-    // ── 검색 필터 ──
+    function renderPagination() {
+        if (!paginationWrap) { return; }
+        var totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
+        paginationWrap.innerHTML = '';
+
+        if (totalPages <= 1) { return; }
+
+        var prev = document.createElement('button');
+        prev.className = 'page-btn';
+        prev.textContent = '이전';
+        prev.disabled = currentPage === 1;
+        prev.addEventListener('click', function () { currentPage--; render(); });
+        paginationWrap.appendChild(prev);
+
+        for (var i = 1; i <= totalPages; i++) {
+            (function (page) {
+                var btn = document.createElement('button');
+                btn.className = 'page-btn' + (page === currentPage ? ' active' : '');
+                btn.textContent = page;
+                btn.addEventListener('click', function () { currentPage = page; render(); });
+                paginationWrap.appendChild(btn);
+            })(i);
+        }
+
+        var next = document.createElement('button');
+        next.className = 'page-btn';
+        next.textContent = '다음';
+        next.disabled = currentPage === totalPages;
+        next.addEventListener('click', function () { currentPage++; render(); });
+        paginationWrap.appendChild(next);
+    }
+
+    // ── 검색 + 내 담당 필터 ──
     function applySearch() {
         var query = searchInput ? searchInput.value.trim().toLowerCase() : '';
         filteredCards = cards.filter(function (card) {
             var titleEl = card.querySelector('.card-title');
-            return !query || (titleEl && titleEl.textContent.toLowerCase().includes(query));
+            var matchesSearch = !query || (titleEl && titleEl.textContent.toLowerCase().includes(query));
+            var matchesMine = !currentMineOnly || card.dataset.isMine === 'true';
+            return matchesSearch && matchesMine;
         });
         currentPage = 1;
         render();
@@ -85,6 +121,15 @@
     // ── 검색 입력 ──
     if (searchInput) {
         searchInput.addEventListener('input', applySearch);
+    }
+
+    // ── 내 담당 필터 ──
+    if (btnMineFilter) {
+        btnMineFilter.addEventListener('click', function () {
+            currentMineOnly = !currentMineOnly;
+            btnMineFilter.classList.toggle('active', currentMineOnly);
+            applySearch();
+        });
     }
 
     applySearch();

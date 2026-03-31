@@ -1,8 +1,9 @@
 @use "../abstract/variables" as *;
 
-.mypage-wrap {
+// ── 전체 레이아웃 ──
+.mypage-layout {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1060px;
   margin: 0 auto;
   padding: 40px 48px 72px;
   display: flex;
@@ -10,21 +11,94 @@
   align-items: flex-start;
 
   @media (max-width: 768px) {
-    flex-direction: column;
     padding: 20px 16px 48px;
+    gap: 16px;
   }
 }
 
-// ── 왼쪽: 내 정보 ──
+// ── 사이드바 ──
+.mypage-sidebar {
+  flex-shrink: 0;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: sticky;
+  top: 72px;
+
+  @media (max-width: 768px) {
+    width: 110px;
+    position: static;
+  }
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: none;
+  background: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-sub;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+
+  &:hover { background: $border-soft; color: $text; }
+
+  &.active {
+    background: $border-soft;
+    color: $text;
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+}
+
+.sidebar-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 18px;
+  min-width: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #eff6ff;
+  color: #3b82f6;
+  border: 1px solid #bfdbfe;
+
+}
+
+// ── 콘텐츠 영역 ──
+.mypage-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.mypage-section {
+  display: none;
+  animation: fadeUp 0.2s ease both;
+
+  &.active { display: block; }
+}
+
+// ── 내 정보 ──
 .mypage-profile {
-  flex: 0 0 340px;
   background: $surface;
   border: 1px solid $border;
   border-radius: 12px;
   overflow: hidden;
-  animation: fadeUp 0.3s ease both;
-
-  @media (max-width: 768px) { flex: none; width: 100%; }
 }
 
 .mypage-profile-header {
@@ -110,6 +184,7 @@
   @media (max-width: 768px) { width: 100%; }
 }
 
+// ── 섹션 공통 헤더 ──
 .mypage-section-header {
   display: flex;
   align-items: center;
@@ -120,6 +195,7 @@
   .section-count { font-size: 11px; font-weight: 500; background: $surface; color: $text-muted; padding: 1px 7px; border-radius: 20px; border: 1px solid $border; }
 }
 
+// ── 받은 초대 ──
 .invite-empty {
   background: $surface;
   border: 1px solid $border;
@@ -197,4 +273,82 @@
   cursor: pointer;
   transition: all 0.15s;
   &:hover { background: #fef2f2; }
+}
+
+// ── 내 담당 작업 ──
+.assigned-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.assigned-empty {
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 40px;
+  text-align: center;
+  font-size: 13px;
+  color: $text-muted;
+}
+
+.assigned-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: $surface;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-decoration: none;
+  color: $text;
+  transition: box-shadow 0.15s, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.15s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+    transform: translateY(-1px);
+    border-color: #d1d5db;
+    color: $text;
+  }
+}
+
+.assigned-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.assigned-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.assigned-card-board {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.assigned-board-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: $text-muted;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 120px;
+}
+
+.assigned-card-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  color: $text;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

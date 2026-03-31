@@ -1,3 +1,20 @@
+// ── 사이드바 탭 전환 ──
+const sidebarItems = document.querySelectorAll('.sidebar-item');
+const sections = document.querySelectorAll('.mypage-section');
+
+sidebarItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const target = item.dataset.section;
+
+        sidebarItems.forEach(i => i.classList.remove('active'));
+        sections.forEach(s => s.classList.remove('active'));
+
+        item.classList.add('active');
+        document.getElementById('section-' + target).classList.add('active');
+    });
+});
+
+// ── 비밀번호 변경 폼 검증 ──
 const newPasswordInput = document.getElementById('newPassword');
 const confirmInput = document.getElementById('newPasswordConfirm');
 

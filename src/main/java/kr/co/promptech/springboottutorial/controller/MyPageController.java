@@ -8,6 +8,7 @@ import kr.co.promptech.springboottutorial.model.dto.PasswordChangeDto;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.MemberService;
+import kr.co.promptech.springboottutorial.service.PostMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +24,7 @@ public class MyPageController {
 
     private final MemberService memberService;
     private final BoardMemberService boardMemberService;
+    private final PostMemberService postMemberService;
 
     @GetMapping
     public String myPage(@AuthenticationPrincipal CustomUser user,
@@ -61,6 +63,7 @@ public class MyPageController {
     private void populateMyPageModel(Model model, CustomUser user) {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("invitedBoards", boardMemberService.getInvitedBoards(user.getId()));
+        model.addAttribute("assignedPosts", postMemberService.getAssignedPosts(user.getId()));
     }
 
     /**
