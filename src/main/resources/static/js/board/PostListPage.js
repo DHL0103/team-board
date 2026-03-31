@@ -97,13 +97,17 @@ class PostListPage {
         dueChip.appendChild(dueLabel);
         cardLeft.appendChild(dueChip);
 
+        if (post.hasFiles) {
+            cardLeft.insertAdjacentHTML('beforeend',
+                '<svg class="card-indicator-icon" width="11" height="11" title="첨부파일 있음"><use href="/img/icons.svg#icon-file"></use></svg>');
+        }
+        if (post.content && post.content.includes('<img')) {
+            cardLeft.insertAdjacentHTML('beforeend',
+                '<svg class="card-indicator-icon" width="11" height="11" title="인라인 이미지 있음"><use href="/img/icons.svg#icon-image"></use></svg>');
+        }
+
         const cardRight = document.createElement('div');
         cardRight.className = 'card-right';
-
-        if (post.hasFiles) {
-            cardRight.insertAdjacentHTML('beforeend',
-                '<svg class="card-indicator-icon" width="12" height="12"><use href="/img/icons.svg#icon-file"></use></svg>');
-        }
 
         if (PostListPage.#myPostIds.has(post.id)) {
             cardRight.insertAdjacentHTML('beforeend',
