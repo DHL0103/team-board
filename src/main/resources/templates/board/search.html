@@ -72,8 +72,7 @@
 
   </div>
 
-  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/js/layout/Layout.js}"></script>
+  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
   <script th:src="@{/js/components/Pagination.js}"></script>
   <script th:src="@{/js/board/SearchPage.js}"></script>
 
