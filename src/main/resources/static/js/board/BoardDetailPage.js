@@ -9,7 +9,6 @@ class BoardDetailPage {
         BoardDetailPage.#initialized = true;
 
         DueChip.init();
-        Modal.init();
         BoardDetailPage.#bindCardLinks();
         BoardDetailPage.#initCreateModal();
     }

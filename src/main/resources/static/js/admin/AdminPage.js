@@ -6,7 +6,6 @@ class AdminPage {
         if (AdminPage.#initialized) { return; }
         AdminPage.#initialized = true;
 
-        Modal.init();
         AdminPage.#bindRejectModal();
         AdminPage.#bindCreateModal();
         AdminPage.#bindEditModal();

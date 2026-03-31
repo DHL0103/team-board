@@ -6,7 +6,6 @@ class MainPage {
         if (MainPage.#initialized) { return; }
         MainPage.#initialized = true;
 
-        Modal.init();
         MainPage.#initKanban();
         MainPage.#initBoardFilter();
         MainPage.#initCreateBoardModal();
