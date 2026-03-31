@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface PostMemberMapper {
@@ -23,7 +24,7 @@ public interface PostMemberMapper {
 
     void deleteByPostId(Long postId);
 
-    List<Long> findPostIdsByBoardIdAndMemberId(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
+    Set<Long> findPostIdsByBoardIdAndMemberId(@Param("boardId") Long boardId, @Param("memberId") Long memberId);
 
     List<MyAssignedPostDto> findAssignedPostsByMemberId(@Param("memberId") Long memberId);
 }

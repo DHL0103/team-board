@@ -15,7 +15,7 @@ import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
-import kr.co.promptech.springboottutorial.model.dto.PostCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.PostDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.PostResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -59,7 +59,7 @@ public class PostService {
     }
 
     @Transactional
-    public void createPost(PostCreateDto postCreateDto, Long memberId, List<MultipartFile> files) {
+    public void createPost(PostDto postCreateDto, Long memberId, List<MultipartFile> files) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {
@@ -120,7 +120,7 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(Long id, PostCreateDto postCreateDto, List<MultipartFile> files, List<Long> deleteFileIds) {
+    public void updatePost(Long id, PostDto postCreateDto, List<MultipartFile> files, List<Long> deleteFileIds) {
         String dueDateStr = postCreateDto.getDueDate();
         LocalDateTime dueDate = null;
         if (dueDateStr != null && !dueDateStr.isEmpty()) {

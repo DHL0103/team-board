@@ -176,6 +176,14 @@
   &:active { transform: translateY(0); }
 }
 
+// ── 오른쪽: 초대된 board 목록 ──
+.mypage-invites {
+  flex: 1;
+  animation: fadeUp 0.3s ease 0.06s both;
+
+  @media (max-width: 768px) { width: 100%; }
+}
+
 // ── 섹션 공통 헤더 ──
 .mypage-section-header {
   display: flex;

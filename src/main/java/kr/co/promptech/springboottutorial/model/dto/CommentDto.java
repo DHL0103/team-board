@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class CommentCreateDto {
+public class CommentDto {
     private Long postId;
     @NotBlank
     @Size(max = 256)
