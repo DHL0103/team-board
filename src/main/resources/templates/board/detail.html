@@ -149,10 +149,13 @@
     </div>
   </div>
 
-  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/js/common.js}"></script>
-  <script th:src="@{/js/board/detail.js}"></script>
-  <script type="module" th:src="@{/js/post/editor.js}"></script>
+  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <script th:src="@{/js/components/DatePicker.js}"></script>
+  <script th:src="@{/js/components/FileAttachment.js}"></script>
+  <script th:src="@{/js/components/AssigneePicker.js}"></script>
+  <script th:src="@{/js/components/CharCounter.js}"></script>
+  <script th:src="@{/js/board/BoardDetailPage.js}"></script>
+  <script type="module" th:src="@{/js/post/PostEditorPage.js}"></script>
 
 </body>
 

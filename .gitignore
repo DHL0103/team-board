@@ -64,3 +64,4 @@ src/main/resources/static/style.css.map
 CLAUDE.md
 
 .claude/
+/target/
