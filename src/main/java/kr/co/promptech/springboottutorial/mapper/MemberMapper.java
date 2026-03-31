@@ -22,8 +22,6 @@ public interface MemberMapper {
 
     void updatePassword(@Param("id") Long id, @Param("password") String encodedPassword);
 
-    List<Member> selectAllMembers();
-
     void updateRole(@Param("id") Long id, @Param("role") MemberRole role);
 
     List<Member> getMembersPaged(@Param("q") String q, @Param("filter") String filter,

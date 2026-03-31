@@ -9,7 +9,6 @@ import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.PostMemberService;
-import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
 import jakarta.validation.Valid;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/board")
 public class BoardController {
     private final BoardService boardService;
-    private final PostService postService;
     private final BoardMemberService boardMemberService;
     private final PostMemberService postMemberService;
 

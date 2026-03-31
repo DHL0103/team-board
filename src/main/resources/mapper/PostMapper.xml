@@ -31,19 +31,6 @@
         SELECT * FROM posts WHERE board_id = #{boardId} AND status = 'REQUESTED'
     </select>
 
-    <select id="getPostsByBoardId" resultType="kr.co.promptech.springboottutorial.model.Post">
-        SELECT * FROM posts WHERE board_id = #{boardId}
-        ORDER BY created_at DESC
-    </select>
-
-    <select id="getPostsByBoardIdInProgress" resultType="kr.co.promptech.springboottutorial.model.Post">
-        SELECT * FROM posts WHERE board_id = #{boardId} AND status IN ('PROGRESS', 'REJECTED')
-    </select>
-
-    <select id="getPostsByBoardIdAndStatus" resultType="kr.co.promptech.springboottutorial.model.Post">
-        SELECT * FROM posts WHERE board_id = #{boardId} AND status = #{status}
-    </select>
-
     <select id="getPostsPagedByBoardId" resultType="kr.co.promptech.springboottutorial.model.Post">
         SELECT posts.*, EXISTS(SELECT 1 FROM post_files WHERE post_id = posts.id AND inline = 0) AS has_files
         FROM posts

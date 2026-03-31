@@ -8,7 +8,6 @@ import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,14 +19,6 @@ public class MemberService {
     private final MemberMapper memberMapper;
     private final PasswordEncoder passwordEncoder;
     private final SessionRegistry sessionRegistry;
-
-    public Member getMemberById(Long id) {
-        return memberMapper.selectMemberById(id);
-    }
-
-    public MemberResponseDto getMemberByUsername(String username) {
-        return new MemberResponseDto(memberMapper.findByUsername(username));
-    }
 
     /**
      * @return true: 변경 성공, false: 현재 비밀번호 불일치
@@ -55,12 +46,6 @@ public class MemberService {
                 .build();
         memberMapper.insertMember(member);
         return true;
-    }
-
-    public List<MemberResponseDto> getAllMemberDto() {
-        return memberMapper.selectAllMembers().stream()
-                .map(MemberResponseDto::new)
-                .collect(Collectors.toList());
     }
 
     public MemberPageDto getMemberPage(String q, String filter, int page, int size) {

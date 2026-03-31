@@ -43,10 +43,6 @@ public class BoardService {
         return board.getId();
     }
 
-    public List<BoardResponseDto> getBoardDtosByMemberId(Long memberId) {
-        return boardMapper.getBoardsByMemberId(memberId);
-    }
-
     public List<BoardResponseDto> getBoardDtosByStatus(String status, String keyword, CustomUser user) {
         if (user.getRole() == MemberRole.ROLE_ADMIN) {
             return boardMapper.getAllBoardsByStatus(status, keyword);

@@ -1,6 +1,5 @@
 package kr.co.promptech.springboottutorial.mapper;
 
-import kr.co.promptech.springboottutorial.model.PostMember;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.MyAssignedPostDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -12,15 +11,11 @@ import java.util.Set;
 @Mapper
 public interface PostMemberMapper {
 
-    List<PostMember> findByPostId(Long postId);
-
     List<BoardMemberResponseDto> findAssigneesByPostId(Long postId);
 
     boolean existsByPostIdAndMemberId(@Param("postId") Long postId, @Param("memberId") Long memberId);
 
     void save(@Param("postId") Long postId, @Param("memberId") Long memberId);
-
-    void delete(@Param("postId") Long postId, @Param("memberId") Long memberId);
 
     void deleteByPostId(Long postId);
 

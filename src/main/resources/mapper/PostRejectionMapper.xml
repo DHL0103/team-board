@@ -8,10 +8,6 @@
         VALUES (#{postId}, #{reason}, #{rejectedBy}, #{createdAt})
     </insert>
 
-    <select id="findAllByPostId" resultType="kr.co.promptech.springboottutorial.model.PostRejection">
-        SELECT * FROM post_rejections WHERE post_id = #{postId} ORDER BY created_at DESC
-    </select>
-
     <select id="findAllByPostIdWithNames" resultType="kr.co.promptech.springboottutorial.model.dto.PostRejectionDto">
         SELECT pr.id, pr.post_id, pr.reason, pr.rejected_by, pr.created_at,
                m.username AS rejector_name

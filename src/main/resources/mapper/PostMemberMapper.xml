@@ -3,10 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.promptech.springboottutorial.mapper.PostMemberMapper">
 
-    <select id="findByPostId" resultType="kr.co.promptech.springboottutorial.model.PostMember">
-        SELECT * FROM post_members WHERE post_id = #{postId}
-    </select>
-
     <select id="findAssigneesByPostId" resultType="kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto">
         SELECT pm.member_id, m.username
         FROM post_members pm
@@ -45,9 +41,5 @@
     <insert id="save">
         INSERT INTO post_members (post_id, member_id) VALUES (#{postId}, #{memberId})
     </insert>
-
-    <delete id="delete">
-        DELETE FROM post_members WHERE post_id = #{postId} AND member_id = #{memberId}
-    </delete>
 
 </mapper>

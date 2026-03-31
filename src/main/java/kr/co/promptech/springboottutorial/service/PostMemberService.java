@@ -14,18 +14,6 @@ public class PostMemberService {
 
     private final PostMemberMapper postMemberMapper;
 
-    public boolean isAssignee(Long postId, Long memberId) {
-        return postMemberMapper.existsByPostIdAndMemberId(postId, memberId);
-    }
-
-    public void save(Long postId, Long memberId) {
-        postMemberMapper.save(postId, memberId);
-    }
-
-    public void delete(Long postId, Long memberId) {
-        postMemberMapper.delete(postId, memberId);
-    }
-
     public Set<Long> getMyPostIds(Long boardId, Long memberId) {
         return postMemberMapper.findPostIdsByBoardIdAndMemberId(boardId, memberId);
     }

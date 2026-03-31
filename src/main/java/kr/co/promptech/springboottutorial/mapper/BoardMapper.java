@@ -19,8 +19,6 @@ public interface BoardMapper {
 
     void createBoard(Board board);
 
-    List<BoardResponseDto> getBoardsByMemberId(Long memberId);
-
     List<BoardResponseDto> getBoardsByMemberIdAndStatus(@Param("memberId") Long memberId,
                                                         @Param("status") String status,
                                                         @Param("keyword") String keyword);

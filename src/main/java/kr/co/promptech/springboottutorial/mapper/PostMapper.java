@@ -22,12 +22,6 @@ public interface PostMapper {
 
     List<Post> getRequestedPostsByBoardId(Long boardId);
 
-    List<Post> getPostsByBoardId(Long boardId);
-
-    List<Post> getPostsByBoardIdInProgress(@Param("boardId") Long boardId);
-
-    List<Post> getPostsByBoardIdAndStatus(@Param("boardId") Long boardId, @Param("status") String status);
-
     List<Post> getPostsPagedByBoardId(@Param("boardId") Long boardId, @Param("status") String status,
                                       @Param("q") String q, @Param("sort") String sort,
                                       @Param("mineOnly") boolean mineOnly, @Param("memberId") Long memberId,

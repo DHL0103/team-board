@@ -1,7 +1,6 @@
 package kr.co.promptech.springboottutorial.service;
 
 import kr.co.promptech.springboottutorial.mapper.PostRejectionMapper;
-import kr.co.promptech.springboottutorial.model.PostRejection;
 import kr.co.promptech.springboottutorial.model.dto.PostRejectionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +17,6 @@ public class PostRejectionService {
 
     public void save(Long postId, String reason, Long rejectedBy) {
         postRejectionMapper.save(postId, reason, rejectedBy, LocalDateTime.now());
-    }
-
-    public List<PostRejection> getByPostId(Long postId) {
-        return postRejectionMapper.findAllByPostId(postId);
     }
 
     public List<PostRejectionDto> getDtosByPostId(Long postId) {

@@ -11,11 +11,9 @@ import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
-import kr.co.promptech.springboottutorial.mapper.PostRejectionMapper;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
-import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.PostPageDto;
@@ -49,11 +47,6 @@ public class PostService {
         }
         return post;
     }
-
-    public PostResponseDto getPostDtoById(Long id) {
-        return new PostResponseDto(getPostById(id));
-    }
-
 
     public List<PostResponseDto> getRequestedPostDtosByBoardId(Long boardId) {
         return postMapper.getRequestedPostsByBoardId(boardId).stream()
@@ -109,12 +102,6 @@ public class PostService {
     }
 
 
-    public List<PostResponseDto> getPostDtosByBoardId(Long boardId) {
-        return postMapper.getPostsByBoardId(boardId).stream()
-                .map(PostResponseDto::new)
-                .toList();
-    }
-
     public PostPageDto getPostPage(Long boardId, String status, String q, String sort,
                                    boolean mineOnly, Long memberId, int page, int size) {
         int offset = page * size;
@@ -123,13 +110,6 @@ public class PostService {
         List<Post> posts = hasMore ? raw.subList(0, size) : raw;
         long totalCount = postMapper.countPostsByBoardId(boardId, status, q, mineOnly, memberId);
         return new PostPageDto(posts.stream().map(PostResponseDto::new).toList(), hasMore, totalCount);
-    }
-
-    public List<PostResponseDto> getPostDtosByBoardIdAndStatus(Long boardId, String status) {
-        List<Post> posts = PostStatus.PROGRESS.name().equals(status)
-                ? postMapper.getPostsByBoardIdInProgress(boardId)
-                : postMapper.getPostsByBoardIdAndStatus(boardId, status);
-        return posts.stream().map(PostResponseDto::new).toList();
     }
 
     @Transactional
@@ -156,10 +136,6 @@ public class PostService {
 
         postFileService.deleteFiles(deleteFileIds);
         postFileService.saveFiles(files, id);
-    }
-
-    public List<BoardMemberResponseDto> getAssigneesByPostId(Long postId) {
-        return postMemberMapper.findAssigneesByPostId(postId);
     }
 
     public boolean isAssignee(Long postId, Long memberId) {
