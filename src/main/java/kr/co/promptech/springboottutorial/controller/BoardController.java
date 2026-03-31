@@ -4,7 +4,7 @@ import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.CustomUser;
-import kr.co.promptech.springboottutorial.model.dto.BoardCreateDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
@@ -121,7 +121,7 @@ public class BoardController {
      * 보드 생성 후 생성자를 해당 보드의 MANAGER로 board_members에 등록
      */
     @PostMapping("/create")
-    public String createBoard(@Valid @ModelAttribute BoardCreateDto boardCreateDto, @AuthenticationPrincipal CustomUser user) {
+    public String createBoard(@Valid @ModelAttribute BoardDto boardCreateDto, @AuthenticationPrincipal CustomUser user) {
         Long boardId = boardService.createBoard(boardCreateDto);
         boardMemberService.save(boardId, user.getId(), BoardRole.MANAGER);
         return "redirect:/board";

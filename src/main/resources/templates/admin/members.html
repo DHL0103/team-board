@@ -60,10 +60,9 @@
     </div>
   </div>
 
-  <script th:src="@{/js/common/core.js}"></script>
-  <script th:src="@{/js/common/ui.js}"></script>
-  <script th:src="@{/js/common/pagination.js}"></script>
-  <script th:src="@{/js/admin/members.js}"></script>
+  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <script th:src="@{/js/components/Pagination.js}"></script>
+  <script th:src="@{/js/admin/AdminMembersPage.js}"></script>
 
 </body>
 
