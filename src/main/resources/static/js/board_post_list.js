@@ -49,7 +49,8 @@
         });
 
         if (countLabel) { countLabel.textContent = filteredCards.length + '건'; }
-        renderPagination();
+        var totalPages = Math.max(1, Math.ceil(filteredCards.length / PAGE_SIZE));
+        createPagination(paginationWrap, currentPage, totalPages, function (p) { currentPage = p; render(); });
 
         // display:none이 브라우저에 반영된 다음 프레임에서 애니메이션 시작
         requestAnimationFrame(function () {

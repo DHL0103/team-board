@@ -4,15 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
-public class BoardUpdateDto {
+public class CommentUpdateDto {
     @NotBlank
-    @Size(max = 50)
-    private String name;
-    private String color;
-    @Size(max = 500)
-    private String description;
-    private String status;
+    @Size(max = 256)
+    private String content;
 }
