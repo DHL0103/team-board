@@ -11,7 +11,6 @@ class PostListPage {
     static init() {
         if (PostListPage.#initialized) { return; }
         PostListPage.#initialized = true;
-        DueChip.init();
         PostListPage.#cards = Array.from(document.querySelectorAll('.post-list-card'));
         PostListPage.#bindSortButtons();
         PostListPage.#bindSearch();

@@ -8,7 +8,6 @@ class BoardDetailPage {
         if (BoardDetailPage.#initialized) { return; }
         BoardDetailPage.#initialized = true;
 
-        DueChip.init();
         BoardDetailPage.#bindCardLinks();
         BoardDetailPage.#initCreateModal();
     }

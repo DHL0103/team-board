@@ -8,7 +8,6 @@ class PostDetailPage {
         if (PostDetailPage.#initialized) { return; }
         PostDetailPage.#initialized = true;
 
-        DueChip.init();
         PostDetailPage.#initEditModal();
         PostDetailPage.#initRejectModal();
         PostDetailPage.#initDeleteModal();
