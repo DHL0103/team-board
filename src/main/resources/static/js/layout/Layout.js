@@ -1,6 +1,11 @@
 class Layout {
 
+    static #initialized = false;
+
     static init() {
+        if (Layout.#initialized) { return; }
+        Layout.#initialized = true;
+
         Layout.#bindHamburger();
         Layout.#bindBoardDescription();
         Layout.#showErrorToast();
