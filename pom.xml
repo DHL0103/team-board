@@ -14,7 +14,7 @@
     <groupId>kr.co.promptech</groupId>
     <artifactId>spring-boot-tutorial</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <description>spring-boot-tutorial</description>
 
     <properties>
@@ -94,12 +94,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- WAR 배포용 (embedded Tomcat을 provided로) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <!-- Test -->
         <dependency>
