@@ -14,6 +14,8 @@ import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
 import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
+import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.PageSearchDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.PostPageDto;
@@ -102,13 +104,14 @@ public class PostService {
     }
 
 
-    public PostPageDto getPostPage(Long boardId, String status, String q, String sort,
-                                   boolean mineOnly, Long memberId, int page, int size) {
-        int offset = page * size;
-        List<Post> raw = postMapper.getPostsPagedByBoardId(boardId, status, q, sort, mineOnly, memberId, offset, size + 1);
+    public PostPageDto getPostPage(Long boardId, PageSearchDto search, boolean mineOnly, Long memberId) {
+        int size = search.getSize();
+        List<Post> raw = postMapper.getPostsPagedByBoardId(
+                boardId, search.getStatus(), search.getQ(), search.getSort(),
+                mineOnly, memberId, search.getOffset(), size + 1);
         boolean hasMore = raw.size() > size;
         List<Post> posts = hasMore ? raw.subList(0, size) : raw;
-        long totalCount = postMapper.countPostsByBoardId(boardId, status, q, mineOnly, memberId);
+        long totalCount = postMapper.countPostsByBoardId(boardId, search.getStatus(), search.getQ(), mineOnly, memberId);
         return new PostPageDto(posts.stream().map(PostResponseDto::new).toList(), hasMore, totalCount);
     }
 
