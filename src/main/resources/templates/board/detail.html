@@ -8,7 +8,7 @@
 
 <body th:data-board-id="${board.id}" th:data-my-post-ids="${myPostIds}">
 
-  <div th:replace="~{fragments/header :: back-header}"></div>
+  <div th:replace="~{fragments/header :: header('back')}"></div>
 
   <div class="toast" id="errorToast"
        th:text="${param.error != null ? (param.error[0] == 'last_manager' ? '마지막 매니저는 보드를 나갈 수 없습니다.' : param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.') : ''}">
@@ -162,7 +162,7 @@
     </div>
   </div>
 
-  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <th:block th:replace="~{fragments/scripts :: common-scripts}"></th:block>
   <script th:src="@{/js/components/DatePicker.js}"></script>
   <script th:src="@{/js/components/FileAttachment.js}"></script>
   <script th:src="@{/js/components/AssigneePicker.js}"></script>
