@@ -3,7 +3,7 @@
 
 <head>
   <title th:text="${board.name}">보드 상세</title>
-  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+  <th:block th:replace="~{fragments/head :: common-head}"></th:block>
 </head>
 
 <body th:data-board-id="${board.id}">
@@ -235,7 +235,7 @@
     </div>
   </div>
 
-  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <th:block th:replace="~{fragments/scripts :: common-scripts}"></th:block>
   <script th:src="@{/js/components/DatePicker.js}"></script>
   <script th:src="@{/js/components/FileAttachment.js}"></script>
   <script th:src="@{/js/components/AssigneePicker.js}"></script>
