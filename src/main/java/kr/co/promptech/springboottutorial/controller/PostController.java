@@ -21,6 +21,13 @@ public class PostController {
 
     private final PostService postService;
 
+    /**
+     * 게시글 상세 페이지 렌더링, post(PostResponseDto) 전달
+     * @param postId 조회할 게시글 ID
+     * @param model  뷰에 전달할 데이터 컨테이너
+     * @param user   현재 로그인한 사용자 정보
+     * @return post/detail 뷰
+     */
     @GetMapping("/{postId}")
     public String getPostDetailPage(@PathVariable Long postId, Model model, @AuthenticationPrincipal CustomUser user) {
         model.addAttribute("post", postService.getPostDetail(postId, user));

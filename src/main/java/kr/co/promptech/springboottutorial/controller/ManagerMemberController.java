@@ -17,11 +17,13 @@ public class ManagerMemberController {
     private final BoardService boardService;
 
     /**
-     * @param boardId 조회할 보드 ID
-     * @param model   뷰에 전달할 데이터 컨테이너
-     * @return manager/members 뷰
      * 해당 보드의 전체 멤버 목록(MANAGER / USER / REQUESTED) 반환
      * memberList(BoardMemberResponseDto) 전달
+     * search 파라미터가 있으면 초대 가능한 멤버 검색 결과(inviteResults)도 전달
+     * @param boardId 조회할 보드 ID
+     * @param search  초대할 멤버 검색어 (optional)
+     * @param model   뷰에 전달할 데이터 컨테이너
+     * @return manager/members 뷰
      */
     @GetMapping
     public String membersPage(@PathVariable Long boardId, @RequestParam(required = false) String search, Model model) {
@@ -36,10 +38,11 @@ public class ManagerMemberController {
 
 
     /**
+     * 멤버를 보드에 INVITED 상태로 초대
      * @param boardId  보드 ID
-     * @param memberId 승인할 멤버 ID
-     * @return manager/members 리다이렉트
-     * 가입 요청(REQUESTED) 멤버를 USER로 승인
+     * @param memberId 초대할 멤버 ID
+     * @param search   검색어 유지용 (optional)
+     * @return manager/members 리다이렉트 (search 파라미터가 있으면 유지)
      */
     @PostMapping("/invite/{memberId}")
     public String inviteMember(@PathVariable Long boardId, @PathVariable Long memberId,

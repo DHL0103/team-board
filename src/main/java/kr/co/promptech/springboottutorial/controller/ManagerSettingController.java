@@ -18,12 +18,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ManagerSettingController {
     private final BoardService boardService;
 
+    /**
+     * 보드 설정 페이지 렌더링, board(BoardResponseDto) 전달
+     * @param boardId 조회할 보드 ID
+     * @param model   뷰에 전달할 데이터 컨테이너
+     * @return manager/settings 뷰
+     */
     @GetMapping
     public String settingsPage(@PathVariable Long boardId, Model model) {
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         return "manager/settings";
     }
 
+    /**
+     * 보드 설정(이름, 색상, 설명) 수정
+     * @param boardId       수정할 보드 ID
+     * @param boardCreateDto 수정할 보드 정보 (name, color, description)
+     * @return manager/settings 리다이렉트
+     */
     @PostMapping
     public String updateSettings(@PathVariable Long boardId, @Valid @ModelAttribute BoardDto boardCreateDto) {
         boardService.updateBoard(boardId, boardCreateDto);

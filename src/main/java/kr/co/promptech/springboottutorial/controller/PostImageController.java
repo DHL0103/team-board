@@ -20,6 +20,11 @@ public class PostImageController {
 
     private static final long INLINE_MAX_SIZE = 5L * 1024 * 1024;
 
+    /**
+     * 에디터 본문 내 인라인 이미지 업로드 처리
+     * @param file 업로드할 인라인 이미지 파일 (최대 5MB)
+     * @return 성공 시 업로드된 이미지 URL (JSON), 초과 시 400 에러
+     */
     @PostMapping
     public ResponseEntity<Map<String, String>> uploadInlineImage(
             @RequestParam("file") MultipartFile file) {

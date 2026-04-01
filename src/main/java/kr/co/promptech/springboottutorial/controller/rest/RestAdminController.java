@@ -28,9 +28,12 @@ public class RestAdminController {
     private final BoardService boardService;
 
     /**
-     * @param memberId 조회할 멤버 ID
-     * @return 해당 멤버가 속한 보드 목록 (MemberBoardDto JSON)
-     * 멤버 상세 모달에서 소속 보드 및 역할을 lazy 로딩으로 조회
+     * 관리자용 멤버 목록 조회 (검색, 필터, 페이징 지원)
+     * @param q      검색어 (username 기준, optional)
+     * @param filter 필터 (active / suspended / all)
+     * @param page   페이지 번호 (0-based)
+     * @param size   페이지 크기
+     * @return 멤버 목록 페이지 (MemberPageDto JSON)
      */
     @GetMapping("/members")
     public ResponseEntity<MemberPageDto> getMembers(
@@ -41,17 +44,18 @@ public class RestAdminController {
         return ResponseEntity.ok(memberService.getMemberPage(q, filter, page, size));
     }
 
+    /**
+     * 멤버 상세 모달에서 소속 보드 및 역할을 lazy 로딩으로 조회
+     * @param memberId 조회할 멤버 ID
+     * @return 해당 멤버가 속한 보드 목록 (MemberBoardDto JSON)
+     */
     @GetMapping("/members/{memberId}/boards")
     public ResponseEntity<List<MemberBoardDto>> getMemberBoards(@PathVariable Long memberId) {
         return ResponseEntity.ok(boardMemberService.getBoardsByMemberId(memberId));
     }
 
     /**
-     * @param memberId 대상 멤버 ID
-     * @param role     변경할 역할 (ROLE_USER / ROLE_SUSPENDED)
-     * ROLE_ADMIN은 변경 불가 — 요청 시 400 반환
-     */
-    /**
+     * 관리자용 보드 활성/비활성 상태 변경
      * @param boardId 대상 보드 ID
      * @param status  변경할 상태 (ACTIVE / INACTIVE)
      */

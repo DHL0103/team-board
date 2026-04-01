@@ -33,10 +33,11 @@ public class ManagerRequestController {
     }
 
     /**
+     * 포스트 상태를 APPROVED로 변경
      * @param boardId 보드 ID
      * @param postId  승인할 포스트 ID
-     * @return manager/requests 리다이렉트
-     * 포스트 상태를 APPROVED로 변경
+     * @param source  호출 출처 ("detail"이면 포스트 상세로 리다이렉트, optional)
+     * @return source="detail"이면 포스트 상세 페이지, 아니면 manager/requests 리다이렉트
      */
     @PostMapping("/approve/{postId}")
     public String approve(@PathVariable Long boardId, @PathVariable Long postId,
@@ -49,12 +50,13 @@ public class ManagerRequestController {
     }
 
     /**
+     * 포스트 상태를 REJECTED로 변경하고 반려 사유 저장
      * @param boardId   보드 ID
      * @param postId    반려할 포스트 ID
      * @param reason    반려 사유
+     * @param source    호출 출처 ("detail"이면 포스트 상세로 리다이렉트, optional)
      * @param user      현재 로그인한 사용자 (반려자 기록용)
-     * @return manager/requests 리다이렉트
-     * 포스트 상태를 REJECTED로 변경하고 반려 사유 저장
+     * @return source="detail"이면 포스트 상세 페이지, 아니면 manager/requests 리다이렉트
      */
     @PostMapping("/reject/{postId}")
     public String reject(@PathVariable Long boardId, @PathVariable Long postId,

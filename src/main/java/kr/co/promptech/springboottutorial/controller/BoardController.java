@@ -74,10 +74,12 @@ public class BoardController {
     }
 
     /**
+     * 비활성(INACTIVE) 보드 안내 페이지 렌더링
+     * ACTIVE 보드이거나 시스템 관리자 또는 보드 매니저인 경우 보드 상세 페이지로 리다이렉트
      * @param boardId 조회할 보드 ID
+     * @param model   뷰에 전달할 데이터 컨테이너
      * @param user    현재 로그인한 사용자 정보
-     * @return board/request 페이지로 리다이렉트
-     * board_members 테이블에 role을 requested로 저장
+     * @return board/inactive 뷰 또는 board 상세 페이지로 리다이렉트
      */
     @GetMapping("/{boardId}/inactive")
     public String boardInactive(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
@@ -91,6 +93,12 @@ public class BoardController {
         return "board/inactive";
     }
 
+    /**
+     * board_members 테이블에 role을 REQUESTED로 저장 (보드 가입 요청)
+     * @param boardId 가입 요청할 보드 ID
+     * @param user    현재 로그인한 사용자 정보
+     * @return board/request 페이지로 리다이렉트
+     */
     @PostMapping("/{boardId}/request")
     public String boardRequestPost(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
         boardMemberService.save(boardId, user.getId(), BoardRole.REQUESTED);
@@ -98,11 +106,13 @@ public class BoardController {
     }
 
     /**
+     * 게시글 목록은 REST API(/api/board/{boardId}/posts)로 동적 로드
+     * board(BoardResponseDto), status, myPostIds 전달
      * @param boardId 조회할 보드 ID
      * @param status  필터링할 상태값 (PROGRESS / REQUESTED / APPROVED)
      * @param model   뷰에 전달할 데이터 컨테이너
+     * @param user    현재 로그인한 사용자 정보
      * @return board/post_list 뷰
-     * 게시글 목록은 REST API(/api/board/{boardId}/posts)로 동적 로드
      */
     @GetMapping("/{boardId}/post_list")
     public String postList(@PathVariable Long boardId, @RequestParam String status, Model model, @AuthenticationPrincipal CustomUser user) {
@@ -125,6 +135,12 @@ public class BoardController {
         return "redirect:/board";
     }
 
+    /**
+     * 현재 사용자를 보드에서 탈퇴 처리
+     * @param boardId 탈퇴할 보드 ID
+     * @param user    현재 로그인한 사용자 정보
+     * @return 메인 페이지로 리다이렉트, 유일 매니저인 경우 보드 상세로 리다이렉트(error=last_manager)
+     */
     @PostMapping("/{boardId}/leave")
     public String leaveBoard(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
         try {
