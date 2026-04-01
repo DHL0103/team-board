@@ -15,7 +15,7 @@
   </div>
 
   <div class="admin-wrap">
-    <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='보드 설정')}"></div>
+    <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='매니저 페이지')}"></div>
 
     <div th:replace="~{fragments/manager-nav :: manager-nav(boardId=${board.id}, activePage='settings')}"></div>
 
