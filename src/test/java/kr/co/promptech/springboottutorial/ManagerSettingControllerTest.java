@@ -1,11 +1,10 @@
 package kr.co.promptech.springboottutorial;
 
-import kr.co.promptech.springboottutorial.controller.ManagerRequestController;
+import kr.co.promptech.springboottutorial.controller.ManagerSettingController;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
-import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
 import kr.co.promptech.springboottutorial.service.BoardService;
@@ -20,9 +19,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -31,18 +31,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(ManagerRequestController.class)
-class ManagerRequestControllerTest {
+@WebMvcTest(ManagerSettingController.class)
+class ManagerSettingControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
-    @MockBean private PostService postService;
     @MockBean private BoardService boardService;
     @MockBean private BoardMemberService boardMemberService;
+    @MockBean private PostService postService;
     @MockBean private UserDetailsService userDetailsService;
 
     private static final Long BOARD_ID = 1L;
-    private static final Long POST_ID = 10L;
     private static final Long USER_ID = 1L;
 
     private CustomUser mockUser() {
@@ -59,48 +58,26 @@ class ManagerRequestControllerTest {
     }
 
     @Test
-    @DisplayName("GET /manager/requests - 승인 요청 목록")
-    void requestsPage() throws Exception {
+    @DisplayName("GET /manager/settings - 설정 페이지")
+    void settingsPage() throws Exception {
         given(boardService.getBoardDtoById(BOARD_ID))
-                .willReturn(new BoardResponseDto(BOARD_ID, "테스트", "설명", "p1", "ACTIVE", 3L));
-        given(postService.getRequestedPostDtosByBoardId(BOARD_ID)).willReturn(Collections.emptyList());
+                .willReturn(new BoardResponseDto(BOARD_ID, "보드", "설명", "p1", "ACTIVE", 3L));
 
-        mockMvc.perform(get("/board/{boardId}/manager/requests", BOARD_ID).with(user(mockUser())))
+        mockMvc.perform(get("/board/{boardId}/manager/settings", BOARD_ID).with(user(mockUser())))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("board", "requestList"))
-                .andExpect(view().name("manager/requests"));
+                .andExpect(model().attributeExists("board"))
+                .andExpect(view().name("manager/settings"));
     }
 
     @Test
-    @DisplayName("POST /manager/requests/approve/{postId} - 승인 후 목록으로")
-    void approve() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/requests/approve/{postId}", BOARD_ID, POST_ID)
+    @DisplayName("POST /manager/settings - 보드 설정 수정")
+    void updateSettings() throws Exception {
+        mockMvc.perform(post("/board/{boardId}/manager/settings", BOARD_ID)
+                        .param("name", "수정 보드").param("color", "p2").param("status", "ACTIVE")
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/requests"));
+                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/settings"));
 
-        verify(postService).updateStatus(POST_ID, PostStatus.APPROVED);
-    }
-
-    @Test
-    @DisplayName("POST /manager/requests/approve/{postId} - source=detail이면 상세로")
-    void approve_fromDetail() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/requests/approve/{postId}", BOARD_ID, POST_ID)
-                        .param("source", "detail")
-                        .with(user(mockUser())).with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/post/" + POST_ID));
-    }
-
-    @Test
-    @DisplayName("POST /manager/requests/reject/{postId} - 반려")
-    void reject() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/requests/reject/{postId}", BOARD_ID, POST_ID)
-                        .param("reason", "사유")
-                        .with(user(mockUser())).with(csrf()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/requests"));
-
-        verify(postService).rejectPost(POST_ID, "사유", USER_ID);
+        verify(boardService).updateBoard(eq(BOARD_ID), any());
     }
 }

@@ -1,72 +1,106 @@
 package kr.co.promptech.springboottutorial;
 
 import kr.co.promptech.springboottutorial.controller.MemberController;
-import kr.co.promptech.springboottutorial.model.Member;
-import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
+import kr.co.promptech.springboottutorial.service.BoardService;
 import kr.co.promptech.springboottutorial.service.MemberService;
 import kr.co.promptech.springboottutorial.service.PostService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import kr.co.promptech.springboottutorial.config.SecurityConfig;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(MemberController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@Import(SecurityConfig.class)
 class MemberControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @MockBean
-    private MemberService memberService;
-
-    @MockBean
-    private BoardMemberService boardMemberService;
-
-    @MockBean
-    private PostService postService;
+    @MockBean private MemberService memberService;
+    @MockBean private BoardService boardService;
+    @MockBean private BoardMemberService boardMemberService;
+    @MockBean private PostService postService;
+    @MockBean private UserDetailsService userDetailsService;
 
     @Test
-    @DisplayName("GET /member/login - 로그인 폼 뷰 반환")
-    void loginPage_returnsLoginForm() throws Exception {
+    @DisplayName("GET /member/login - 로그인 페이지")
+    void loginPage() throws Exception {
         mockMvc.perform(get("/member/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("login_form"));
     }
 
     @Test
-    @DisplayName("GET /member/{id} - 존재하는 멤버 조회 시 JSON 반환")
-    void getMember_returnsMemberJson() throws Exception {
-        Member member = Member.builder()
-                .id(1L)
-                .username("testUser")
-                .role(MemberRole.ROLE_USER)
-                .build();
-
-        given(memberService.getMemberById(1L)).willReturn(member);
-
-        mockMvc.perform(get("/member/1"))
+    @DisplayName("GET /member/signup - 회원가입 페이지")
+    void signupPage() throws Exception {
+        mockMvc.perform(get("/member/signup"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.username").value("testUser"))
-                .andExpect(jsonPath("$.role").value("ROLE_USER"));
+                .andExpect(view().name("signup"));
     }
 
     @Test
-    @DisplayName("GET /member/{id} - 존재하지 않는 멤버 조회 시 빈 응답 반환")
-    void getMember_notFound_returnsEmpty() throws Exception {
-        given(memberService.getMemberById(999L)).willReturn(null);
+    @DisplayName("POST /member/signup - 성공 시 로그인으로 리다이렉트")
+    void signup_success() throws Exception {
+        given(memberService.signup("testuser", "pass1234")).willReturn(true);
 
-        mockMvc.perform(get("/member/999"))
+        mockMvc.perform(post("/member/signup")
+                        .param("username", "testuser")
+                        .param("password", "pass1234")
+                        .param("passwordConfirm", "pass1234")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/member/login?registered=true"));
+
+        verify(memberService).signup("testuser", "pass1234");
+    }
+
+    @Test
+    @DisplayName("POST /member/signup - 비밀번호 불일치 시 signup 뷰 반환")
+    void signup_passwordMismatch() throws Exception {
+        mockMvc.perform(post("/member/signup")
+                        .param("username", "testuser")
+                        .param("password", "pass1234")
+                        .param("passwordConfirm", "different")
+                        .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(content().string(""));
+                .andExpect(view().name("signup"));
+    }
+
+    @Test
+    @DisplayName("POST /member/signup - 아이디 중복 시 signup 뷰 반환")
+    void signup_duplicateUsername() throws Exception {
+        given(memberService.signup("testuser", "pass1234")).willReturn(false);
+
+        mockMvc.perform(post("/member/signup")
+                        .param("username", "testuser")
+                        .param("password", "pass1234")
+                        .param("passwordConfirm", "pass1234")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("signup"));
+    }
+
+    @Test
+    @DisplayName("POST /member/signup - 유효성 검사 실패 시 signup 뷰 반환")
+    void signup_validationError() throws Exception {
+        mockMvc.perform(post("/member/signup")
+                        .param("username", "ab")   // 4자 미만
+                        .param("password", "pw")    // 4자 미만
+                        .param("passwordConfirm", "pw")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("signup"));
     }
 }
