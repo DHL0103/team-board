@@ -58,11 +58,15 @@ class RestBoardControllerTest {
     @Test
     @DisplayName("GET /api/boards/search - 보드 검색")
     void searchBoards() throws Exception {
-        given(boardService.getBoardPageForSearch("test", "", "recent", 1L, 0, 10))
+        given(boardService.getBoardPageForSearch(any(), eq(1L)))
                 .willReturn(new BoardPageDto(Collections.emptyList(), false, 0L));
 
         mockMvc.perform(get("/api/boards/search")
                         .param("q", "test")
+                        .param("status", "")
+                        .param("sort", "recent")
+                        .param("page", "0")
+                        .param("size", "10")
                         .with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalCount").value(0));

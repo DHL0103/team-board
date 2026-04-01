@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -55,11 +56,15 @@ class RestPostControllerTest {
     @Test
     @DisplayName("GET /api/board/{boardId}/posts - 게시글 목록 조회")
     void getPosts() throws Exception {
-        given(postService.getPostPage(BOARD_ID, "APPROVED", "", "newest", false, USER_ID, 0, 8))
+        given(postService.getPostPage(eq(BOARD_ID), any(), eq(false), eq(USER_ID)))
                 .willReturn(new PostPageDto(Collections.emptyList(), false, 0L));
 
         mockMvc.perform(get("/api/board/{boardId}/posts", BOARD_ID)
                         .param("status", "APPROVED")
+                        .param("q", "")
+                        .param("sort", "newest")
+                        .param("page", "0")
+                        .param("size", "8")
                         .with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalCount").value(0));
