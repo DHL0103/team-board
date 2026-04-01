@@ -44,7 +44,7 @@ out/
 mysql_data/
 
 # CSS 폴더 제외 (외부 라이브러리는 유지)
-src/main/resources/static/css/
+src/main/resources/static/css/*
 !src/main/resources/static/css/lib/
 
 # macOS 메타데이터
@@ -55,7 +55,12 @@ src/main/resources/static/css/
 uploads/
 
 # 로컬 설정 파일 (DB 정보 등 민감 정보 포함)
+src/main/resources/application.properties
 src/main/resources/application.yml
+
+# 개인 메모/문서
+erd-cloud.sql
+interview-prep.md
 
 #css 맵은 scss디버깅용 파일이라 불필요
 src/main/resources/static/style.css.map

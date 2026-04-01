@@ -3,7 +3,7 @@
 
 <head>
   <title>Admin · 멤버 관리</title>
-  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+  <th:block th:replace="~{fragments/head :: common-head}"></th:block>
 </head>
 
 <body>
@@ -12,7 +12,7 @@
 
   <div class="admin-wrap">
 
-    <div th:replace="~{fragments/header :: admin-nav('members')}"></div>
+    <div th:replace="~{fragments/admin-nav :: admin-nav('members')}"></div>
 
     <div class="admin-section">
       <div class="admin-section-header">
@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <th:block th:replace="~{fragments/scripts :: common-scripts}"></th:block>
   <script th:src="@{/js/components/Pagination.js}"></script>
   <script th:src="@{/js/admin/AdminMembersPage.js}"></script>
 

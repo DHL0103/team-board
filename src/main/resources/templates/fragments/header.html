@@ -2,16 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<th:block th:fragment="common-head">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet">
-  <link rel="stylesheet" th:href="@{/css/style.css}">
-</th:block>
-
 <header th:fragment="logo-header">
   <a href="/" class="logo">
     <div class="logo-icon">
@@ -54,17 +44,6 @@
   </div>
 </header>
 
-<nav th:fragment="admin-nav(activePage)" class="admin-nav">
-  <a href="/admin/members" class="admin-nav-item" th:classappend="${activePage == 'members'} ? 'active'">멤버 관리</a>
-  <a href="/admin/boards" class="admin-nav-item" th:classappend="${activePage == 'boards'} ? 'active'">보드 관리</a>
-</nav>
-
-<div th:fragment="board-breadcrumb(boardId, boardName, currentPage)" class="breadcrumb-row">
-  <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
-  <a th:href="@{'/board/' + ${boardId}}" th:text="${boardName}">보드명</a> <span class="breadcrumb-sep">›</span>
-  <span th:text="${currentPage}">현재 페이지</span>
-</div>
-
 <header th:fragment="main-header">
   <a href="/board" class="logo">
     <div class="logo-icon">
@@ -99,14 +78,5 @@
     </div>
   </div>
 </header>
-
-
-<th:block th:fragment="common-scripts">
-  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/js/layout/Layout.js}"></script>
-  <script th:src="@{/js/components/Modal.js}"></script>
-  <script th:src="@{/js/components/Toast.js}"></script>
-  <script th:src="@{/js/components/DueChip.js}"></script>
-</th:block>
 
 </html>

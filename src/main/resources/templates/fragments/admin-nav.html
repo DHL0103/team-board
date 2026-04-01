@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<nav th:fragment="admin-nav(activePage)" class="admin-nav">
+  <a href="/admin/members" class="admin-nav-item" th:classappend="${activePage == 'members'} ? 'active'">멤버 관리</a>
+  <a href="/admin/boards" class="admin-nav-item" th:classappend="${activePage == 'boards'} ? 'active'">보드 관리</a>
+</nav>
+
+</html>

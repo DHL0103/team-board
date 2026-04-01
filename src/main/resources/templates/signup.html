@@ -3,7 +3,7 @@
 
 <head>
   <title>회원가입 · Team Board</title>
-  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
+  <th:block th:replace="~{fragments/head :: common-head}"></th:block>
 </head>
 
 <body>
@@ -58,7 +58,7 @@
     </div>
   </div>
 
-  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <th:block th:replace="~{fragments/scripts :: common-scripts}"></th:block>
   <script th:src="@{/js/utils/PasswordValidator.js}"></script>
   <script th:src="@{/js/SignupPage.js}"></script>
 
