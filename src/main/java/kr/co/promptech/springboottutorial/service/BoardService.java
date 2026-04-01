@@ -62,10 +62,6 @@ public class BoardService {
         boardMapper.updateBoard(boardId, dto);
     }
 
-    public List<BoardSearchResultDto> searchBoards(String keyword, Long memberId) {
-        return boardMapper.searchBoards(keyword, memberId);
-    }
-
     public BoardPageDto getBoardPageForSearch(PageSearchDto search, Long memberId) {
         int size = search.getSize();
         List<BoardSearchResultDto> raw = boardMapper.getBoardsPagedForSearch(

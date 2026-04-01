@@ -39,11 +39,7 @@ public class RestBoardController {
 
     /**
      * 보드 탐색 페이지에서 사용하는 검색/필터/정렬/페이징 API
-     * @param q      보드명 검색어 (optional)
-     * @param status 보드 상태 필터 (optional)
-     * @param sort   정렬 기준 (recent 등)
-     * @param page   페이지 번호 (0-based)
-     * @param size   페이지 크기
+     * @param search 검색/필터/정렬/페이징 조건 (PageSearchDto)
      * @param user   현재 로그인 사용자
      * @return 검색 조건에 맞는 보드 페이지 (BoardPageDto JSON)
      */

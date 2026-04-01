@@ -24,12 +24,8 @@ public class RestPostController {
     /**
      * 보드별 게시글 목록 조회 (검색, 필터, 정렬, 페이징 지원)
      * @param boardId  조회할 보드 ID
-     * @param status   필터링할 상태값
-     * @param q        검색어 (optional)
-     * @param sort     정렬 기준 (newest 등)
+     * @param search   검색/필터/정렬/페이징 조건 (PageSearchDto)
      * @param mineOnly 내 게시글만 조회 여부
-     * @param page     페이지 번호 (0-based)
-     * @param size     페이지 크기
      * @param user     현재 로그인한 사용자 정보
      * @return 조건에 맞는 게시글 페이지 (PostPageDto JSON)
      */
