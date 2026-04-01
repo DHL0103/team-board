@@ -1,16 +1,20 @@
 package kr.co.promptech.springboottutorial.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.CommentDto;
 import kr.co.promptech.springboottutorial.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
 @Controller
+@Validated
 @RequiredArgsConstructor
 @RequestMapping("/board/{boardId}/post/{postId}/comment")
 public class CommentController {
@@ -30,9 +34,9 @@ public class CommentController {
     public String editComment(@PathVariable Long boardId,
                               @PathVariable Long postId,
                               @PathVariable Long commentId,
-                              @Valid @ModelAttribute CommentDto dto,
+                              @RequestParam @NotBlank @Size(max = 256) String content,
                               @AuthenticationPrincipal CustomUser user) {
-        commentService.update(commentId, user.getId(), dto.getContent());
+        commentService.update(commentId, user.getId(), content);
         return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
     }
 
