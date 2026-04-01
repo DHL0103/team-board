@@ -1,0 +1,1 @@
+ALTER TABLE post_files MODIFY stored_path VARCHAR(100) NOT NULL;
