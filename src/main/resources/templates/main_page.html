@@ -3,7 +3,7 @@
 
 <head>
   <title>Team Board</title>
-  <th:block th:replace="~{fragments/head :: common-head}"></th:block>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
 <body>
@@ -12,7 +12,7 @@
          th:text="${param.error != null ? (param.error[0] == 'fileSize' ? '파일 크기는 10MB를 초과할 수 없습니다.' : (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.')) : ''}">
     </div>
 
-    <div th:replace="~{fragments/header :: main-header}"></div>
+    <div th:replace="~{fragments/header :: header('main')}"></div>
 
     <div class="page-top">
         <div class="page-top-row">
