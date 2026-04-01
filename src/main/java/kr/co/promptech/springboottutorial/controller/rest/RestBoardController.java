@@ -3,11 +3,13 @@ package kr.co.promptech.springboottutorial.controller.rest;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardPageDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.PageSearchDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,12 +39,8 @@ public class RestBoardController {
 
     @GetMapping("/search")
     public ResponseEntity<BoardPageDto> searchBoards(
-            @RequestParam(defaultValue = "") String q,
-            @RequestParam(defaultValue = "") String status,
-            @RequestParam(defaultValue = "recent") String sort,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @ModelAttribute PageSearchDto search,
             @AuthenticationPrincipal CustomUser user) {
-        return ResponseEntity.ok(boardService.getBoardPageForSearch(q, status, sort, user.getId(), page, size));
+        return ResponseEntity.ok(boardService.getBoardPageForSearch(search, user.getId()));
     }
 }
