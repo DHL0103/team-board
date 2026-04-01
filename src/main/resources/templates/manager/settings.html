@@ -8,14 +8,14 @@
 
 <body>
 
-  <div th:replace="~{fragments/header :: back-header}"></div>
+  <div th:replace="~{fragments/header :: header('back')}"></div>
 
   <div class="toast" id="errorToast"
        th:text="${param.error != null ? (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.') : ''}">
   </div>
 
   <div class="admin-wrap">
-    <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='보드 설정')}"></div>
+    <div th:replace="~{fragments/breadcrumb :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='보드 설정')}"></div>
 
     <div th:replace="~{fragments/manager-nav :: manager-nav(boardId=${board.id}, activePage='settings')}"></div>
 
@@ -74,7 +74,7 @@
 
   </div>
 
-  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <th:block th:replace="~{fragments/scripts :: common-scripts}"></th:block>
   <script th:src="@{/js/components/CharCounter.js}"></script>
   <script th:src="@{/js/manager/ManagerSettingsPage.js}"></script>
 

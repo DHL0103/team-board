@@ -8,14 +8,14 @@
 
 <body>
 
-  <div th:replace="~{fragments/header :: back-header}"></div>
+  <div th:replace="~{fragments/header :: header('back')}"></div>
 
   <div class="toast" id="errorToast"
        th:text="${param.error != null and param.error[0] == 'last_manager' ? '마지막 매니저에게는 이 작업을 수행할 수 없습니다.' : ''}">
   </div>
 
   <div class="admin-wrap">
-    <div th:replace="~{fragments/header :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='매니저 페이지')}"></div>
+    <div th:replace="~{fragments/breadcrumb :: board-breadcrumb(boardId=${board.id}, boardName=${board.name}, currentPage='매니저 페이지')}"></div>
 
     <div th:replace="~{fragments/manager-nav :: manager-nav(boardId=${board.id}, activePage='members')}"></div>
 
@@ -140,7 +140,7 @@
 
   </div>
 
-  <th:block th:replace="~{fragments/header :: common-scripts}"></th:block>
+  <th:block th:replace="~{fragments/scripts :: common-scripts}"></th:block>
 
 </body>
 

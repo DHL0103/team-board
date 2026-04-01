@@ -8,30 +8,19 @@
   <meta name="_csrf" th:content="${_csrf.token}">
   <meta name="_csrf_header" th:content="${_csrf.headerName}">
   <meta name="_csrf_param" th:content="${_csrf.parameterName}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link th:href="@{/css/lib/inter.css}" rel="stylesheet">
   <link th:href="@{/css/lib/bootstrap.min.css}" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </th:block>
 
-<header th:fragment="logo-header">
-  <a href="/" class="logo">
+<header th:fragment="header(type)">
+  <a th:href="${type == 'logo'} ? '/' : '/board'" class="logo">
     <div class="logo-icon">
       <svg width="16" height="16"><use href="/img/icons.svg#icon-logo"></use></svg>
     </div>
     Team Board
   </a>
-</header>
-
-<header th:fragment="back-header">
-  <a href="/board" class="logo">
-    <div class="logo-icon">
-      <svg width="16" height="16"><use href="/img/icons.svg#icon-logo"></use></svg>
-    </div>
-    Team Board
-  </a>
-  <div class="header-right">
+  <div class="header-right" th:if="${type != 'logo'}">
     <span class="nav-username" sec:authentication="name">username</span>
     <button class="hamburger" id="hamburger" type="button" aria-label="메뉴 열기">
       <span></span><span></span><span></span>
@@ -49,51 +38,11 @@
         <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
         마이페이지
       </a>
-      <a href="/board" class="btn-back">
+      <a th:if="${type == 'back'}" href="/board" class="btn-back">
         <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
         메인으로
       </a>
-    </div>
-  </div>
-</header>
-
-<nav th:fragment="admin-nav(activePage)" class="admin-nav">
-  <a href="/admin/members" class="admin-nav-item" th:classappend="${activePage == 'members'} ? 'active'">멤버 관리</a>
-  <a href="/admin/boards" class="admin-nav-item" th:classappend="${activePage == 'boards'} ? 'active'">보드 관리</a>
-</nav>
-
-<div th:fragment="board-breadcrumb(boardId, boardName, currentPage)" class="breadcrumb-row">
-  <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
-  <a th:href="@{'/board/' + ${boardId}}" th:text="${boardName}">보드명</a> <span class="breadcrumb-sep">›</span>
-  <span th:text="${currentPage}">현재 페이지</span>
-</div>
-
-<header th:fragment="main-header">
-  <a href="/board" class="logo">
-    <div class="logo-icon">
-      <svg width="16" height="16"><use href="/img/icons.svg#icon-logo"></use></svg>
-    </div>
-    Team Board
-  </a>
-  <div class="header-right">
-    <span class="nav-username" sec:authentication="name">username</span>
-    <button class="hamburger" id="hamburger" type="button" aria-label="메뉴 열기">
-      <span></span><span></span><span></span>
-    </button>
-    <div class="nav-menu" id="nav-menu">
-      <a sec:authorize="hasRole('ADMIN')" href="/admin/members" class="btn-back">
-        <svg width="12" height="12"><use href="/img/icons.svg#icon-admin"></use></svg>
-        관리자
-      </a>
-      <a href="/board/search" class="btn-back">
-        <svg width="12" height="12"><use href="/img/icons.svg#icon-search"></use></svg>
-        보드 탐색
-      </a>
-      <a href="/member/mypage" class="btn-back">
-        <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
-        마이페이지
-      </a>
-      <form th:action="@{/member/logout}" method="post" style="margin:0;">
+      <form th:if="${type == 'main'}" th:action="@{/member/logout}" method="post" style="margin:0;">
         <button type="submit" class="btn-back">
           <svg width="12" height="12"><use href="/img/icons.svg#icon-logout"></use></svg>
           로그아웃
@@ -102,14 +51,5 @@
     </div>
   </div>
 </header>
-
-
-<th:block th:fragment="common-scripts">
-  <script th:src="@{/js/lib/bootstrap.bundle.min.js}"></script>
-  <script th:src="@{/js/layout/Layout.js}"></script>
-  <script th:src="@{/js/components/Modal.js}"></script>
-  <script th:src="@{/js/components/Toast.js}"></script>
-  <script th:src="@{/js/components/DueChip.js}"></script>
-</th:block>
 
 </html>
