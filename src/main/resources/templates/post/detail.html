@@ -3,7 +3,7 @@
 
 <head>
   <title>작업 상세</title>
-  <th:block th:replace="~{fragments/head :: common-head}"></th:block>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
 <body th:data-member-id="${post.memberId}"
@@ -12,7 +12,7 @@
       th:data-due-date="${post.dueDate != null ? #temporals.format(post.dueDate, 'yyyy-MM-dd') : ''}"
       th:data-current-member-id="${post.currentMemberId}">
 
-<div th:replace="~{fragments/header :: back-header}"></div>
+<div th:replace="~{fragments/header :: header('back')}"></div>
 
 <div class="detail-wrap" th:with="palette=${post.boardColor}">
   <div th:replace="~{fragments/breadcrumb :: board-breadcrumb(boardId=${post.boardId}, boardName=${post.boardName}, currentPage=${post.title})}"></div>

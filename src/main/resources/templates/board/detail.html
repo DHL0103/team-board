@@ -3,12 +3,12 @@
 
 <head>
   <title th:text="${board.name}">보드 상세</title>
-  <th:block th:replace="~{fragments/head :: common-head}"></th:block>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
 <body th:data-board-id="${board.id}">
 
-  <div th:replace="~{fragments/header :: back-header}"></div>
+  <div th:replace="~{fragments/header :: header('back')}"></div>
 
   <div class="toast" id="errorToast"
        th:text="${param.error != null ? (param.error[0] == 'validation' ? '입력값이 올바르지 않습니다.' : '오류가 발생했습니다.') : ''}">

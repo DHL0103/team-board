@@ -3,12 +3,12 @@
 
 <head>
   <title th:text="${board.name}">보드</title>
-  <th:block th:replace="~{fragments/head :: common-head}"></th:block>
+  <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
 <body>
 
-  <div th:replace="~{fragments/header :: back-header}"></div>
+  <div th:replace="~{fragments/header :: header('back')}"></div>
 
   <th:block th:replace="~{fragments/board-header :: board-header(${board}, null)}"></th:block>
 
