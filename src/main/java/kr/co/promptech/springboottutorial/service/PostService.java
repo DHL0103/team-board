@@ -16,7 +16,7 @@ import kr.co.promptech.springboottutorial.model.enums.BoardRole;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import kr.co.promptech.springboottutorial.model.dto.BoardMemberResponseDto;
-import kr.co.promptech.springboottutorial.model.dto.PageSearchParam;
+import kr.co.promptech.springboottutorial.model.dto.PageSearchDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDto;
 import kr.co.promptech.springboottutorial.model.dto.PostDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.PostPageDto;
@@ -116,7 +116,7 @@ public class PostService {
                 .toList();
     }
 
-    public PostPageDto getPostPage(Long boardId, PageSearchParam search, boolean mineOnly, Long memberId) {
+    public PostPageDto getPostPage(Long boardId, PageSearchDto search, boolean mineOnly, Long memberId) {
         int size = search.getSize();
         List<Post> raw = postMapper.getPostsPagedByBoardId(
                 boardId, search.getStatus(), search.getQ(), search.getSort(),

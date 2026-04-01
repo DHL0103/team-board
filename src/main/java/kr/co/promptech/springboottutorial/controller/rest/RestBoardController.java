@@ -3,7 +3,7 @@ package kr.co.promptech.springboottutorial.controller.rest;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardPageDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
-import kr.co.promptech.springboottutorial.model.dto.PageSearchParam;
+import kr.co.promptech.springboottutorial.model.dto.PageSearchDto;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +39,7 @@ public class RestBoardController {
 
     @GetMapping("/search")
     public ResponseEntity<BoardPageDto> searchBoards(
-            @ModelAttribute PageSearchParam search,
+            @ModelAttribute PageSearchDto search,
             @AuthenticationPrincipal CustomUser user) {
         return ResponseEntity.ok(boardService.getBoardPageForSearch(search, user.getId()));
     }

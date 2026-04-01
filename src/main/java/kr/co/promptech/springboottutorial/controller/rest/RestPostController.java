@@ -1,7 +1,7 @@
 package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.model.CustomUser;
-import kr.co.promptech.springboottutorial.model.dto.PageSearchParam;
+import kr.co.promptech.springboottutorial.model.dto.PageSearchDto;
 import kr.co.promptech.springboottutorial.model.dto.PostPageDto;
 import kr.co.promptech.springboottutorial.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class RestPostController {
     @GetMapping("/{boardId}/posts")
     public ResponseEntity<PostPageDto> getPosts(
             @PathVariable Long boardId,
-            @ModelAttribute PageSearchParam search,
+            @ModelAttribute PageSearchDto search,
             @RequestParam(defaultValue = "false") boolean mineOnly,
             @AuthenticationPrincipal CustomUser user) {
         return ResponseEntity.ok(postService.getPostPage(boardId, search, mineOnly, user.getId()));

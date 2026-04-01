@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class PageSearchParam {
+public class PageSearchDto {
     private String q = "";
     private String status = "";
     private String sort = "";
