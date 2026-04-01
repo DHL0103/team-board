@@ -8,12 +8,12 @@
 | 구분 | 기술 |
 |---|---|
 | Backend | Spring Boot 3.3.3, Java 17 |
-| ORM | MyBatis (Annotation 기반) |
+| ORM | MyBatis (XML 기반) |
 | DB | MySQL 8.0 (Docker) |
 | DB 마이그레이션 | Flyway |
 | Template | Thymeleaf |
 | Security | Spring Security 6 |
-| Build | Gradle |
+| Build | Maven |
 | Frontend | SCSS, Bootstrap 5 |
 
 ## 권한 체계
@@ -69,27 +69,33 @@
 
 ## DB 스키마
 
-```
-boards ──< board_members >── members
-boards ──< posts ──< comments
-                └─< post_files
-                └─< post_members >── members
-                └─< post_rejections
-```
+![ERD](docs/erd.png)
 
 ## 프로젝트 구조
 
 ```
 src/main/
 ├── java/.../
-│   ├── config/       # SecurityConfig
-│   ├── controller/   # AdminController, BoardController, PostController 등
-│   ├── model/        # Board, Post, Member, BoardMember, PostMember 등
-│   │   └── dto/
-│   ├── service/      # 비즈니스 로직
-│   └── mapper/       # MyBatis 매퍼 인터페이스
+│   ├── config/        # SecurityConfig
+│   ├── controller/    # BoardController, PostController 등
+│   │   └── rest/      # REST API 컨트롤러
+│   ├── exception/     # 커스텀 예외
+│   ├── interceptor/   # 요청 인터셉터
+│   ├── mapper/        # MyBatis 매퍼 인터페이스
+│   ├── model/         # Board, Post, Member 등
+│   │   ├── dto/       # 계층 간 데이터 전달 객체
+│   │   └── enums/     # BoardRole, PostStatus, MemberRole
+│   ├── scheduler/     # 스케줄러
+│   ├── service/       # 비즈니스 로직
+│   └── util/          # 유틸리티
 └── resources/
-    ├── db/migration/ # Flyway SQL 마이그레이션
-    ├── templates/    # Thymeleaf 템플릿
-    └── static/       # SCSS, JS
+    ├── db/migration/  # Flyway SQL 마이그레이션
+    ├── mapper/        # MyBatis XML 매퍼
+    ├── templates/     # Thymeleaf 템플릿
+    └── static/
+        ├── css/       # 컴파일된 CSS
+        ├── scss/      # SCSS 소스
+        ├── js/        # JavaScript
+        ├── img/       # 이미지, SVG 스프라이트
+        └── fonts/     # 로컬 웹폰트
 ```
