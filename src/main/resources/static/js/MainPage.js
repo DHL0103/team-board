@@ -32,11 +32,11 @@ class MainPage {
         return a;
     }
 
-    static async #loadBoards(status, keyword) {
+    static async #loadBoards(status, boardName) {
         const boardGrid      = document.getElementById('board-grid');
         const boardCountLabel = document.getElementById('board-count-label');
 
-        const params = new URLSearchParams({ status, boardName: keyword || '' });
+        const params = new URLSearchParams({ status, boardName: boardName || '' });
         const res    = await fetch(`/api/board?${params}`);
         const boards = await res.json();
 

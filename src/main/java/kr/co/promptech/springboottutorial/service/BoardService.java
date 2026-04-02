@@ -52,11 +52,11 @@ public class BoardService {
         return boardMapper.getBoardsByMemberId(memberId);
     }
 
-    public List<BoardResponseDto> getBoardDtosByStatus(String status, String keyword, CustomUser user) {
+    public List<BoardResponseDto> getBoardDtosByStatus(String status, String boardName, CustomUser user) {
         if (user.getRole() == MemberRole.ROLE_ADMIN) {
-            return boardMapper.getAllBoardsByStatus(status, keyword);
+            return boardMapper.getAllBoardsByStatus(status, boardName);
         }
-        return boardMapper.getBoardsByMemberIdAndStatus(user.getId(), status, keyword);
+        return boardMapper.getBoardsByMemberIdAndStatus(user.getId(), status, boardName);
     }
 
     public void updateStatus(Long boardId, BoardStatus status) {

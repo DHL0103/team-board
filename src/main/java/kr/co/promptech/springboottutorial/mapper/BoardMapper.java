@@ -26,10 +26,10 @@ public interface BoardMapper {
 
     List<BoardResponseDto> getBoardsByMemberIdAndStatus(@Param("memberId") Long memberId,
                                                         @Param("status") String status,
-                                                        @Param("keyword") String keyword);
+                                                        @Param("boardName") String boardName);
 
     List<BoardResponseDto> getAllBoardsByStatus(@Param("status") String status,
-                                               @Param("keyword") String keyword);
+                                               @Param("boardName") String boardName);
 
     void updateStatus(@Param("id") Long id, @Param("status") BoardStatus status);
 
