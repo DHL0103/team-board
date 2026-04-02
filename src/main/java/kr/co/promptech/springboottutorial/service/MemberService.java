@@ -5,6 +5,7 @@ import kr.co.promptech.springboottutorial.model.Member;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.model.dto.MemberPageDto;
 import kr.co.promptech.springboottutorial.model.dto.MemberResponseDto;
+import kr.co.promptech.springboottutorial.model.dto.MemberSearchParam;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 
 import java.util.List;
@@ -63,12 +64,12 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
-    public MemberPageDto getMemberPage(String q, String filter, int page, int size) {
-        int offset = page * size;
-        List<Member> raw = memberMapper.getMembersPaged(q, filter, offset, size + 1);
+    public MemberPageDto getMemberPage(MemberSearchParam search) {
+        int size = search.getSize();
+        List<Member> raw = memberMapper.getMembersPaged(search, size + 1);
         boolean hasMore = raw.size() > size;
         List<Member> members = hasMore ? raw.subList(0, size) : raw;
-        long totalCount = memberMapper.countMembers(q, filter);
+        long totalCount = memberMapper.countMembers(search);
         return new MemberPageDto(members.stream().map(MemberResponseDto::new).toList(), hasMore, totalCount);
     }
 

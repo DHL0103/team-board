@@ -39,20 +39,20 @@
     <select id="getMembersPaged" resultType="kr.co.promptech.springboottutorial.model.Member">
         SELECT * FROM members
         <where>
-            <if test="q != null and q != ''">username LIKE CONCAT('%', #{q}, '%')</if>
-            <if test='filter == "active"'>AND role != 'ROLE_SUSPENDED'</if>
-            <if test='filter == "suspended"'>AND role = 'ROLE_SUSPENDED'</if>
+            <if test="search.username != null and search.username != ''">username LIKE CONCAT('%', #{search.username}, '%')</if>
+            <if test='search.filter == "active"'>AND role != 'ROLE_SUSPENDED'</if>
+            <if test='search.filter == "suspended"'>AND role = 'ROLE_SUSPENDED'</if>
         </where>
         ORDER BY id
-        LIMIT #{size} OFFSET #{offset}
+        LIMIT #{size} OFFSET #{search.offset}
     </select>
 
     <select id="countMembers" resultType="_long">
         SELECT COUNT(*) FROM members
         <where>
-            <if test="q != null and q != ''">username LIKE CONCAT('%', #{q}, '%')</if>
-            <if test='filter == "active"'>AND role != 'ROLE_SUSPENDED'</if>
-            <if test='filter == "suspended"'>AND role = 'ROLE_SUSPENDED'</if>
+            <if test="search.username != null and search.username != ''">username LIKE CONCAT('%', #{search.username}, '%')</if>
+            <if test='search.filter == "active"'>AND role != 'ROLE_SUSPENDED'</if>
+            <if test='search.filter == "suspended"'>AND role = 'ROLE_SUSPENDED'</if>
         </where>
     </select>
 
