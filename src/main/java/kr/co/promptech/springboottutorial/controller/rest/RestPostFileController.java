@@ -1,4 +1,4 @@
-package kr.co.promptech.springboottutorial.controller;
+package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.model.dto.FileDownloadDto;
 import kr.co.promptech.springboottutorial.service.PostFileService;
@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping("/api/files")
 @RequiredArgsConstructor
-public class PostFileController {
+public class RestPostFileController {
 
     private final PostFileService postFileService;
 

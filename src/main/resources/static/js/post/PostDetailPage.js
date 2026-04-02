@@ -210,14 +210,28 @@ class PostDetailPage {
 
                 contentDiv.style.display = 'none';
 
+                const MAX = 256;
                 const editArea = document.createElement('div');
                 editArea.className = 'comment-edit-area';
-                editArea.innerHTML = '<textarea class="comment-edit-textarea">' + currentText + '</textarea>'
+                editArea.innerHTML = '<div class="comment-edit-header">'
+                    + '<span class="comment-char-count">' + currentText.length + '/' + MAX + '</span>'
+                    + '</div>'
+                    + '<textarea class="comment-edit-textarea" maxlength="256">' + currentText + '</textarea>'
                     + '<div class="comment-edit-actions">'
                     + '<button type="button" class="btn-comment-edit-cancel">취소</button>'
                     + '<button type="button" class="btn-comment-edit-save">저장</button>'
                     + '</div>';
                 contentDiv.insertAdjacentElement('afterend', editArea);
+
+                const editTextarea = editArea.querySelector('.comment-edit-textarea');
+                const editCharCount = editArea.querySelector('.comment-char-count');
+                editCharCount.classList.toggle('near-limit', currentText.length >= MAX - 16);
+
+                editTextarea.addEventListener('input', function () {
+                    const len = this.value.length;
+                    editCharCount.textContent = len + '/' + MAX;
+                    editCharCount.classList.toggle('near-limit', len >= MAX - 16);
+                });
 
                 editArea.querySelector('.btn-comment-edit-cancel').addEventListener('click', () => {
                     contentDiv.style.display = '';
@@ -226,7 +240,7 @@ class PostDetailPage {
 
                 editArea.querySelector('.btn-comment-edit-save').addEventListener('click', () => {
                     const content = editArea.querySelector('.comment-edit-textarea').value.trim();
-                    if (!content) { return; }
+                    if (!content || content.length > MAX) { return; }
                     const form = document.createElement('form');
                     form.method = 'POST';
                     form.action = '/boards/' + boardId + '/posts/' + postId + '/comments/' + commentId + '/edit';

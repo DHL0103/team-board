@@ -71,7 +71,7 @@
       </div>
       <div class="file-chip-list">
         <a class="file-chip" th:each="file : ${post.postFiles}"
-           th:href="@{/files/{storedPath}(storedPath=${file.storedPath}, name=${file.originalName})}"
+           th:href="@{/api/files/{storedPath}(storedPath=${file.storedPath}, name=${file.originalName})}"
            th:text="${file.originalName}"
            target="_blank"></a>
       </div>

@@ -94,7 +94,7 @@ public class PostFileService {
         }
     }
 
-    private static final Pattern INLINE_IMG_PATTERN = Pattern.compile("/files/([^\"'\\s]+)");
+    private static final Pattern INLINE_IMG_PATTERN = Pattern.compile("/api/files/([^\"'\\s]+)");
 
     private List<String> extractStoredPaths(String content) {
         List<String> paths = new ArrayList<>();
@@ -168,7 +168,7 @@ public class PostFileService {
                     .build();
             postFileMapper.saveFile(postFile);
 
-            return "/files/" + savedName;
+            return "/api/files/" + savedName;
         } catch (IOException e) {
             throw new RuntimeException("인라인 이미지 저장 실패", e);
         }

@@ -249,6 +249,17 @@
   .comment-edit-area {
     margin-top: 4px;
 
+    .comment-edit-header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 4px;
+    }
+    .comment-char-count {
+      font-size: 11px;
+      color: $text-muted;
+      &.near-limit { color: #dc2626; }
+    }
+
     .comment-edit-textarea {
       width: 100%; resize: none; border: 1px solid $border; border-radius: 8px;
       padding: 6px 10px; font-family: 'Inter', sans-serif; font-size: 13px;
