@@ -62,7 +62,7 @@ class AdminBoardsPage {
         });
 
         try {
-            const res  = await fetch(`/api/boards/search?${params}`);
+            const res  = await fetch(`/api/board/search?${params}`);
             const data = await res.json();
 
             if (AdminBoardsPage.#countMeta) { AdminBoardsPage.#countMeta.textContent = data.totalCount + '개'; }

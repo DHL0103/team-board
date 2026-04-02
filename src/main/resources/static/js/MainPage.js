@@ -37,7 +37,7 @@ class MainPage {
         const boardCountLabel = document.getElementById('board-count-label');
 
         const params = new URLSearchParams({ status, boardName: keyword || '' });
-        const res    = await fetch(`/api/boards?${params}`);
+        const res    = await fetch(`/api/board?${params}`);
         const boards = await res.json();
 
         boardGrid.querySelectorAll('.board-grid-card').forEach(el => el.remove());
