@@ -42,7 +42,7 @@ public class BoardController {
      * @param model   뷰에 전달할 데이터 컨테이너
      * @param user    현재 로그인한 사용자 정보
      * @return board/detail 뷰
-     * 인터셉터(BoardAuthInterceptor)에서 비멤버를 /board/{boardId}/request로 리다이렉트하므로
+     * 인터셉터(BoardAuthInterceptor)에서 비멤버를 /boards/{boardId}/request로 리다이렉트하므로
      * 이 메서드에 도달한 사용자는 항상 보드 멤버임이 보장됨
      * board(BoardResponseDto), postList(PostResponseDto) 전달
      */
@@ -106,7 +106,7 @@ public class BoardController {
     }
 
     /**
-     * 게시글 목록은 REST API(/api/board/{boardId}/posts)로 동적 로드
+     * 게시글 목록은 REST API(/api/boards/{boardId}/posts)로 동적 로드
      * board(BoardResponseDto), status, myPostIds 전달
      * @param boardId 조회할 보드 ID
      * @param status  필터링할 상태값 (PROGRESS / REQUESTED / APPROVED)
