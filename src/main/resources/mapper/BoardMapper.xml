@@ -42,8 +42,8 @@
         JOIN board_members bm ON b.id = bm.board_id AND bm.member_id = #{memberId} AND bm.board_role IN ('USER', 'MANAGER')
         LEFT JOIN board_members bm2 ON b.id = bm2.board_id AND bm2.board_role IN ('USER', 'MANAGER')
         WHERE b.status = #{status}
-        <if test="keyword != null and keyword != ''">
-            AND b.name LIKE CONCAT('%', #{keyword}, '%')
+        <if test="boardName != null and boardName != ''">
+            AND b.name LIKE CONCAT('%', #{boardName}, '%')
         </if>
         GROUP BY b.id
     </select>
@@ -54,8 +54,8 @@
         FROM boards b
         LEFT JOIN board_members bm ON b.id = bm.board_id AND bm.board_role IN ('USER', 'MANAGER')
         WHERE b.status = #{status}
-        <if test="keyword != null and keyword != ''">
-            AND b.name LIKE CONCAT('%', #{keyword}, '%')
+        <if test="boardName != null and boardName != ''">
+            AND b.name LIKE CONCAT('%', #{boardName}, '%')
         </if>
         GROUP BY b.id
     </select>

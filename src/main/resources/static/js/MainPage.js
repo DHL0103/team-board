@@ -32,12 +32,12 @@ class MainPage {
         return a;
     }
 
-    static async #loadBoards(status, keyword) {
+    static async #loadBoards(status, boardName) {
         const boardGrid      = document.getElementById('board-grid');
         const boardCountLabel = document.getElementById('board-count-label');
 
-        const params = new URLSearchParams({ status, q: keyword || '' });
-        const res    = await fetch(`/api/boards?${params}`);
+        const params = new URLSearchParams({ status, q: boardName || '' });
+        const res    = await fetch(`/api/board?${params}`);
         const boards = await res.json();
 
         boardGrid.querySelectorAll('.board-grid-card').forEach(el => el.remove());

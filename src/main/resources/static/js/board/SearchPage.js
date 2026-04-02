@@ -102,7 +102,7 @@ class SearchPage {
         });
 
         try {
-            const res  = await fetch(`/api/boards/search?${params}`);
+            const res  = await fetch(`/api/board/search?${params}`);
             const data = await res.json();
 
             SearchPage.#container.innerHTML = '';

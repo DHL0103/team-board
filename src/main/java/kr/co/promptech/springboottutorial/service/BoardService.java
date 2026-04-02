@@ -44,11 +44,11 @@ public class BoardService {
         return board.getId();
     }
 
-    public List<BoardResponseDto> getBoardDtosByStatus(String status, String keyword, CustomUser user) {
+    public List<BoardResponseDto> getBoardDtosByStatus(String status, String boardName, CustomUser user) {
         if (user.getRole() == MemberRole.ROLE_ADMIN) {
-            return boardMapper.getAllBoardsByStatus(status, keyword);
+            return boardMapper.getAllBoardsByStatus(status, boardName);
         }
-        return boardMapper.getBoardsByMemberIdAndStatus(user.getId(), status, keyword);
+        return boardMapper.getBoardsByMemberIdAndStatus(user.getId(), status, boardName);
     }
 
     public void updateStatus(Long boardId, BoardStatus status) {
@@ -60,10 +60,6 @@ public class BoardService {
             throw new IllegalArgumentException("유효하지 않은 상태값입니다: " + dto.getStatus());
         }
         boardMapper.updateBoard(boardId, dto);
-    }
-
-    public List<BoardSearchResultDto> searchBoards(String keyword, Long memberId) {
-        return boardMapper.searchBoards(keyword, memberId);
     }
 
     public BoardPageDto getBoardPageForSearch(PageSearchDto search, Long memberId) {
