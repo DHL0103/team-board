@@ -9,7 +9,7 @@ import kr.co.promptech.springboottutorial.model.dto.BoardDetailDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardPageDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardSearchResultDto;
-import kr.co.promptech.springboottutorial.model.dto.PageSearchDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardSearchParam;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import lombok.RequiredArgsConstructor;
@@ -74,14 +74,12 @@ public class BoardService {
         return boardMapper.searchBoards(keyword, memberId);
     }
 
-    public BoardPageDto getBoardPageForSearch(PageSearchDto search, Long memberId) {
+    public BoardPageDto getBoardPageForSearch(BoardSearchParam search, Long memberId) {
         int size = search.getSize();
-        List<BoardSearchResultDto> raw = boardMapper.getBoardsPagedForSearch(
-                memberId, search.getQ(), search.getStatus(), search.getSort(),
-                search.getOffset(), size + 1);
+        List<BoardSearchResultDto> raw = boardMapper.getBoardsPagedForSearch(search, memberId, size + 1);
         boolean hasMore = raw.size() > size;
         List<BoardSearchResultDto> boards = hasMore ? raw.subList(0, size) : raw;
-        long totalCount = boardMapper.countBoardsForSearch(search.getQ(), search.getStatus());
+        long totalCount = boardMapper.countBoardsForSearch(search);
         return new BoardPageDto(boards, hasMore, totalCount);
     }
 

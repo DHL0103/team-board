@@ -127,7 +127,7 @@ class BoardDetailPage {
             loading = true;
 
             try {
-                const res  = await fetch(`/api/board/${BoardDetailPage.#boardId}/posts?status=${col.status}&page=${page}&size=${BoardDetailPage.#PAGE_SIZE}`);
+                const res  = await fetch(`/api/board/${BoardDetailPage.#boardId}/posts?postStatus=${col.status}&page=${page}&size=${BoardDetailPage.#PAGE_SIZE}`);
                 const data = await res.json();
 
                 if (page === 0 && countEl) {

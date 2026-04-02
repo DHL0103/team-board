@@ -54,9 +54,9 @@ class AdminBoardsPage {
     static async #fetchAndRender() {
         const searchInput = document.getElementById('board-search');
         const params = new URLSearchParams({
-            q:      searchInput ? searchInput.value.trim() : '',
-            status: '',
-            sort:   'recent',
+            boardName:   searchInput ? searchInput.value.trim() : '',
+            boardStatus: '',
+            sort:        'recent',
             page:   AdminBoardsPage.#currentPage - 1,
             size:   AdminBoardsPage.#PAGE_SIZE,
         });

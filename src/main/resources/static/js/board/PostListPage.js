@@ -121,9 +121,9 @@ class PostListPage {
 
     static async #fetchAndRender() {
         const params = new URLSearchParams({
-            status:   PostListPage.#status,
-            q:        PostListPage.#currentQuery,
-            sort:     PostListPage.#currentSort,
+            postStatus: PostListPage.#status,
+            postTitle:  PostListPage.#currentQuery,
+            sort:       PostListPage.#currentSort,
             mineOnly: PostListPage.#currentMineOnly,
             page:     PostListPage.#currentPage - 1,
             size:     PostListPage.#PAGE_SIZE,

@@ -94,9 +94,9 @@ class SearchPage {
         const statusSelect = document.getElementById('search-status-select');
 
         const params = new URLSearchParams({
-            q:      searchInput ? searchInput.value.trim() : '',
-            status: statusSelect ? statusSelect.value : '',
-            sort:   SearchPage.#currentSort,
+            boardName:   searchInput ? searchInput.value.trim() : '',
+            boardStatus: statusSelect ? statusSelect.value : '',
+            sort:        SearchPage.#currentSort,
             page:   SearchPage.#currentPage - 1,
             size:   SearchPage.#PAGE_SIZE,
         });
