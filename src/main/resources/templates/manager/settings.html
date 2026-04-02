@@ -27,7 +27,7 @@
         </div>
       </div>
 
-      <form th:action="@{'/board/' + ${board.id} + '/manager/settings'}" method="post" class="settings-form">
+      <form th:action="@{'/boards/' + ${board.id} + '/manager/settings'}" method="post" class="settings-form">
         <div class="form-group">
           <label class="form-label">이름</label>
           <input class="form-input" type="text" name="name" id="settingsName" th:value="${board.name}" maxlength="50" required>

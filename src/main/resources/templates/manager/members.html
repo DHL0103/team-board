@@ -25,7 +25,7 @@
           <div class="admin-section-title">유저 초대</div>
         </div>
       </div>
-      <form th:action="@{'/board/' + ${board.id} + '/manager/members'}" method="get" class="invite-search-form">
+      <form th:action="@{'/boards/' + ${board.id} + '/manager/members'}" method="get" class="invite-search-form">
         <input type="text" name="search" th:value="${search}" class="form-input" placeholder="아이디로 검색">
         <button type="submit" class="btn-admin-edit">검색</button>
       </form>
@@ -38,7 +38,7 @@
             <span th:if="${result.boardRole == 'USER'}" class="role-badge role-user">User</span>
             <span th:if="${result.boardRole == 'REQUESTED'}" class="role-badge role-requested">가입 요청 중</span>
             <span th:if="${result.boardRole == 'INVITED'}" class="role-badge role-invited">초대됨</span>
-            <form th:if="${result.boardRole == null}" th:action="@{'/board/' + ${boardId} + '/manager/members/invite/' + ${result.memberId}}" method="post" style="margin:0;">
+            <form th:if="${result.boardRole == null}" th:action="@{'/boards/' + ${boardId} + '/manager/members/invite/' + ${result.memberId}}" method="post" style="margin:0;">
               <input type="hidden" name="search" th:value="${search}">
               <button type="submit" class="btn-invite-action">초대</button>
             </form>
@@ -78,10 +78,10 @@
             <td th:text="${member.username}">username</td>
             <td><span class="role-badge role-manager">Manager</span></td>
             <td style="display:flex; gap:8px; align-items:center;">
-              <form th:action="@{'/board/' + ${board.id} + '/manager/members/demote/' + ${member.memberId}}" method="post" style="margin:0;">
+              <form th:action="@{'/boards/' + ${board.id} + '/manager/members/demote/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-edit">멤버로 변경</button>
               </form>
-              <form th:action="@{'/board/' + ${board.id} + '/manager/members/remove/' + ${member.memberId}}" method="post" style="margin:0;">
+              <form th:action="@{'/boards/' + ${board.id} + '/manager/members/remove/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-danger">내보내기</button>
               </form>
             </td>
@@ -100,10 +100,10 @@
             <td th:text="${member.username}">username</td>
             <td><span class="role-badge role-user">User</span></td>
             <td style="display:flex; gap:8px; align-items:center;">
-              <form th:action="@{'/board/' + ${board.id} + '/manager/members/promote/' + ${member.memberId}}" method="post" style="margin:0;">
+              <form th:action="@{'/boards/' + ${board.id} + '/manager/members/promote/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-edit">매니저로 변경</button>
               </form>
-              <form th:action="@{'/board/' + ${board.id} + '/manager/members/remove/' + ${member.memberId}}" method="post" style="margin:0;">
+              <form th:action="@{'/boards/' + ${board.id} + '/manager/members/remove/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-danger">내보내기</button>
               </form>
             </td>
@@ -122,10 +122,10 @@
             <td th:text="${member.username}">username</td>
             <td><span class="role-badge role-requested">Requested</span></td>
             <td style="display:flex; gap:8px; align-items:center;">
-              <form th:action="@{'/board/' + ${board.id} + '/manager/members/approve/' + ${member.memberId}}" method="post" style="margin:0;">
+              <form th:action="@{'/boards/' + ${board.id} + '/manager/members/approve/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-primary">승인</button>
               </form>
-              <form th:action="@{'/board/' + ${board.id} + '/manager/members/remove/' + ${member.memberId}}" method="post" style="margin:0;">
+              <form th:action="@{'/boards/' + ${board.id} + '/manager/members/remove/' + ${member.memberId}}" method="post" style="margin:0;">
                 <button type="submit" class="btn-admin-danger">거절</button>
               </form>
             </td>

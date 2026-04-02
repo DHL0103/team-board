@@ -3,7 +3,7 @@ package kr.co.promptech.springboottutorial.controller.rest;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.BoardPageDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
-import kr.co.promptech.springboottutorial.model.dto.PageSearchDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardSearchParam;
 import kr.co.promptech.springboottutorial.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/board")
+@RequestMapping("/api/boards")
 public class RestBoardController {
 
     private final BoardService boardService;
@@ -26,14 +26,14 @@ public class RestBoardController {
     @GetMapping
     public ResponseEntity<List<BoardResponseDto>> getBoards(
             @RequestParam String status,
-            @RequestParam(defaultValue = "") String q,
+            @RequestParam(defaultValue = "") String boardName,
             @AuthenticationPrincipal CustomUser user) {
-        return ResponseEntity.ok(boardService.getBoardDtosByStatus(status, q, user));
+        return ResponseEntity.ok(boardService.getBoardDtosByStatus(status, boardName, user));
     }
 
     @GetMapping("/search")
     public ResponseEntity<BoardPageDto> searchBoards(
-            @ModelAttribute PageSearchDto search,
+            @ModelAttribute BoardSearchParam search,
             @AuthenticationPrincipal CustomUser user) {
         return ResponseEntity.ok(boardService.getBoardPageForSearch(search, user.getId()));
     }

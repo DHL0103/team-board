@@ -40,7 +40,7 @@ public class PostAuthInterceptor implements HandlerInterceptor {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUser user)) {
-            response.sendRedirect("/member/login");
+            response.sendRedirect("/members/login");
             return false;
         }
 

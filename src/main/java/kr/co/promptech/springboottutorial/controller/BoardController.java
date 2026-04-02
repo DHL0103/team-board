@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/board")
+@RequestMapping("/boards")
 public class BoardController {
     private final BoardService boardService;
     private final BoardMemberService boardMemberService;
@@ -65,7 +65,7 @@ public class BoardController {
     @GetMapping("/{boardId}/request")
     public String boardRequest(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
         if (boardMemberService.isMember(boardId, user.getId()) || MemberRole.ROLE_ADMIN == user.getRole()) {
-            return "redirect:/board/" + boardId;
+            return "redirect:/boards/" + boardId;
         }
         model.addAttribute("board", boardService.getBoardDtoById(boardId));
         model.addAttribute("isRequested", boardMemberService.isRequested(boardId, user.getId()));
@@ -85,7 +85,7 @@ public class BoardController {
         if (board == null || BoardStatus.ACTIVE.name().equals(board.getStatus())
                 || MemberRole.ROLE_ADMIN == user.getRole()
                 || boardMemberService.isManager(boardId, user.getId())) {
-            return "redirect:/board/" + boardId;
+            return "redirect:/boards/" + boardId;
         }
         model.addAttribute("board", board);
         return "board/inactive";
@@ -94,7 +94,7 @@ public class BoardController {
     @PostMapping("/{boardId}/request")
     public String boardRequestPost(@PathVariable Long boardId, @AuthenticationPrincipal CustomUser user) {
         boardMemberService.save(boardId, user.getId(), BoardRole.REQUESTED);
-        return "redirect:/board/" + boardId + "/request";
+        return "redirect:/boards/" + boardId + "/request";
     }
 
     /**
@@ -122,7 +122,7 @@ public class BoardController {
     public String createBoard(@Valid @ModelAttribute BoardDto boardCreateDto, @AuthenticationPrincipal CustomUser user) {
         Long boardId = boardService.createBoard(boardCreateDto);
         boardMemberService.save(boardId, user.getId(), BoardRole.MANAGER);
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
     @PostMapping("/{boardId}/leave")
@@ -130,9 +130,9 @@ public class BoardController {
         try {
             boardMemberService.leaveBoard(boardId, user.getId());
         } catch (IllegalStateException e) {
-            return "redirect:/board/" + boardId + "?error=last_manager";
+            return "redirect:/boards/" + boardId + "?error=last_manager";
         }
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
     /**

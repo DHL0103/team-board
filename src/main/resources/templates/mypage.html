@@ -45,7 +45,7 @@
         <div class="mypage-profile-body">
           <div class="section-title">비밀번호 변경</div>
 
-          <form th:action="@{/member/mypage/password}" th:object="${passwordChangeDto}" method="post">
+          <form th:action="@{/members/mypage/password}" th:object="${passwordChangeDto}" method="post">
 
             <div class="mypage-form-group">
               <label for="currentPassword">현재 비밀번호</label>
@@ -91,7 +91,7 @@
       <div class="assigned-list" id="assigned-list" th:unless="${#lists.isEmpty(assignedPosts)}">
         <a class="assigned-card"
            th:each="post : ${assignedPosts}"
-           th:href="@{'/board/' + ${post.boardId} + '/post/' + ${post.id}}">
+           th:href="@{'/boards/' + ${post.boardId} + '/posts/' + ${post.id}}">
           <div class="assigned-card-top">
             <div class="assigned-card-board">
               <span class="invite-board-dot" th:classappend="${'dot-' + post.boardColor}"></span>
@@ -129,15 +129,15 @@
       <div id="invite-list">
         <div th:each="board : ${invitedBoards}">
           <div class="invite-card">
-            <a class="invite-board-info" th:href="@{'/board/' + ${board.boardId}}">
+            <a class="invite-board-info" th:href="@{'/boards/' + ${board.boardId}}">
               <span class="invite-board-dot" th:classappend="${'dot-' + board.boardColor}"></span>
               <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
             </a>
             <div class="invite-actions">
-              <form th:action="@{/member/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
+              <form th:action="@{/members/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
                 <button type="submit" class="btn-invite-accept">수락</button>
               </form>
-              <form th:action="@{/member/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
+              <form th:action="@{/members/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
                 <button type="submit" class="btn-invite-reject">거절</button>
               </form>
             </div>

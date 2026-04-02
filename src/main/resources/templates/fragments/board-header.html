@@ -15,7 +15,7 @@
       <button type="button" class="btn-desc-toggle" id="btnDescToggle" style="display:none;">자세히 보기</button>
     </div>
     <div th:if="${isManager != null}" class="board-detail-header__action" style="display:flex; gap:8px;">
-      <a th:if="${isManager}" th:href="@{'/board/' + ${board.id} + '/manager/members'}" class="btn-edit">
+      <a th:if="${isManager}" th:href="@{'/boards/' + ${board.id} + '/manager/members'}" class="btn-edit">
         <svg width="14" height="14"><use href="/img/icons.svg#icon-settings"></use></svg>
         매니저 페이지
       </a>

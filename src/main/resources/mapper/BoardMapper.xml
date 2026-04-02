@@ -86,23 +86,23 @@
         LEFT JOIN board_members bm_me ON b.id = bm_me.board_id AND bm_me.member_id = #{memberId}
         LEFT JOIN board_members bm2 ON b.id = bm2.board_id AND bm2.board_role IN ('USER', 'MANAGER')
         <where>
-            <if test="q != null and q != ''">b.name LIKE CONCAT('%', #{q}, '%')</if>
-            <if test="status != null and status != ''">AND b.status = #{status}</if>
+            <if test="search.boardName != null and search.boardName != ''">b.name LIKE CONCAT('%', #{search.boardName}, '%')</if>
+            <if test="search.boardStatus != null and search.boardStatus != ''">AND b.status = #{search.boardStatus}</if>
         </where>
         GROUP BY b.id
         <choose>
-            <when test='sort == "members"'>ORDER BY member_count DESC, b.id DESC</when>
+            <when test='search.sort == "members"'>ORDER BY member_count DESC, b.id DESC</when>
             <otherwise>ORDER BY b.id DESC</otherwise>
         </choose>
-        LIMIT #{size} OFFSET #{offset}
+        LIMIT #{size} OFFSET #{search.offset}
     </select>
 
     <select id="countBoardsForSearch" resultType="_long">
         SELECT COUNT(*)
         FROM boards b
         <where>
-            <if test="q != null and q != ''">b.name LIKE CONCAT('%', #{q}, '%')</if>
-            <if test="status != null and status != ''">AND b.status = #{status}</if>
+            <if test="search.boardName != null and search.boardName != ''">b.name LIKE CONCAT('%', #{search.boardName}, '%')</if>
+            <if test="search.boardStatus != null and search.boardStatus != ''">AND b.status = #{search.boardStatus}</if>
         </where>
     </select>
 

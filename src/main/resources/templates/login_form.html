@@ -34,7 +34,7 @@
         <span>비밀번호가 변경됐습니다. 다시 로그인해 주세요.</span>
       </div>
 
-      <form th:action="@{/member/login}" method="post">
+      <form th:action="@{/members/login}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" th:if="${_csrf != null}" />
 
         <div class="form-group">
@@ -54,7 +54,7 @@
 
       <hr class="divider">
       <div class="login-footer">
-        계정이 없으신가요? <a th:href="@{/member/signup}">회원가입</a>
+        계정이 없으신가요? <a th:href="@{/members/signup}">회원가입</a>
       </div>
 
     </div>

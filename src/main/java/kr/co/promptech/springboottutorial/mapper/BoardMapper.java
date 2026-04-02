@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.dto.BoardResponseDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardSearchResultDto;
 import kr.co.promptech.springboottutorial.model.dto.BoardDto;
+import kr.co.promptech.springboottutorial.model.dto.BoardSearchParam;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -30,12 +31,9 @@ public interface BoardMapper {
 
     void updateBoard(@Param("id") Long id, @Param("dto") BoardDto dto);
 
-    List<BoardSearchResultDto> getBoardsPagedForSearch(@Param("memberId") Long memberId,
-                                                       @Param("q") String q,
-                                                       @Param("status") String status,
-                                                       @Param("sort") String sort,
-                                                       @Param("offset") int offset,
+    List<BoardSearchResultDto> getBoardsPagedForSearch(@Param("search") BoardSearchParam search,
+                                                       @Param("memberId") Long memberId,
                                                        @Param("size") int size);
 
-    long countBoardsForSearch(@Param("q") String q, @Param("status") String status);
+    long countBoardsForSearch(@Param("search") BoardSearchParam search);
 }

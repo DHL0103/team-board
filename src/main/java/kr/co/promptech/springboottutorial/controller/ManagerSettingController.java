@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("board/{boardId}/manager/settings")
+@RequestMapping("boards/{boardId}/manager/settings")
 @RequiredArgsConstructor
 public class ManagerSettingController {
     private final BoardService boardService;
@@ -27,6 +27,6 @@ public class ManagerSettingController {
     @PostMapping
     public String updateSettings(@PathVariable Long boardId, @Valid @ModelAttribute BoardDto boardCreateDto) {
         boardService.updateBoard(boardId, boardCreateDto);
-        return "redirect:/board/" + boardId + "/manager/settings";
+        return "redirect:/boards/" + boardId + "/manager/settings";
     }
 }

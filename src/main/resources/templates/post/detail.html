@@ -85,11 +85,11 @@
       </div>
       <div class="post-actions-right">
         <button th:if="${post.canModify}" class="btn-edit" id="btn-edit">수정</button>
-        <form th:if="${post.canModify and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/board/{boardId}/post/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
+        <form th:if="${post.canModify and (post.status == 'PROGRESS' or post.status == 'REJECTED')}" th:action="@{/boards/{boardId}/posts/request/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="margin:0;">
           <button type="submit" class="btn-request">✓ 완료 요청</button>
         </form>
         <form th:if="${post.canModify and post.status == 'REQUESTED'}"
-              th:action="@{/board/{b}/manager/requests/approve/{id}(b=${post.boardId},id=${post.id})}"
+              th:action="@{/boards/{b}/manager/requests/approve/{id}(b=${post.boardId},id=${post.id})}"
               method="post" style="margin:0;">
           <input type="hidden" name="source" value="detail">
           <button type="submit" class="btn-approve">승인</button>
@@ -144,7 +144,7 @@
                   th:if="${!comment.deleted and comment.memberId == post.currentMemberId}">수정</button>
           <form th:unless="${comment.deleted}"
                 th:if="${comment.memberId == post.currentMemberId or post.currentUserIsManagerOrAdmin}"
-                th:action="@{/board/{b}/post/{p}/comment/{c}/delete(b=${post.boardId},p=${post.id},c=${comment.id})}"
+                th:action="@{/boards/{b}/posts/{p}/comments/{c}/delete(b=${post.boardId},p=${post.id},c=${comment.id})}"
                 method="post" class="comment-delete-form">
             <button type="submit" class="btn-comment-delete">삭제</button>
           </form>
@@ -157,7 +157,7 @@
     </div>
 
     <div class="comment-form">
-      <form th:action="@{/board/{boardId}/post/{postId}/comment(boardId=${post.boardId},postId=${post.id})}" method="post" id="commentForm">
+      <form th:action="@{/boards/{boardId}/posts/{postId}/comments(boardId=${post.boardId},postId=${post.id})}" method="post" id="commentForm">
         <input type="hidden" name="postId" th:value="${post.id}">
         <input type="hidden" name="parentId" id="commentParentId" value="">
         <input type="hidden" name="groupId" id="commentGroupId" value="">
@@ -189,7 +189,7 @@
         <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
       </button>
     </div>
-    <form id="edit-post-form" th:action="@{/board/{boardId}/post/update/{id}(boardId=${post.boardId},id=${post.id})}" method="post" enctype="multipart/form-data">
+    <form id="edit-post-form" th:action="@{/boards/{boardId}/posts/update/{id}(boardId=${post.boardId},id=${post.id})}" method="post" enctype="multipart/form-data">
       <div class="form-group">
         <label class="form-label">제목</label>
         <input type="text" name="title" id="edit-title" th:value="${post.title}" class="form-input" maxlength="100" required />
@@ -284,7 +284,7 @@
     <div class="modal-desc">삭제된 데이터는 복구할 수 없습니다.</div>
     <div class="modal-actions">
       <button class="btn-modal-cancel" id="btn-delete-cancel">취소</button>
-      <form th:action="@{/board/{boardId}/post/delete/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="display:inline;">
+      <form th:action="@{/boards/{boardId}/posts/delete/{id}(boardId=${post.boardId},id=${post.id})}" method="post" style="display:inline;">
         <button type="submit" class="btn-modal-delete">삭제 승인</button>
       </form>
     </div>

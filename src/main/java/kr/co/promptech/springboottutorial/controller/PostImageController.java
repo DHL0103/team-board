@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/post/image")
+@RequestMapping("/posts/image")
 @RequiredArgsConstructor
 public class PostImageController {
 

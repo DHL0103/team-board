@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Post;
+import kr.co.promptech.springboottutorial.model.dto.PostSearchParam;
 import kr.co.promptech.springboottutorial.model.enums.PostStatus;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,13 +23,10 @@ public interface PostMapper {
 
     List<Post> getRequestedPostsByBoardId(Long boardId);
 
-    List<Post> getPostsPagedByBoardId(@Param("boardId") Long boardId, @Param("status") String status,
-                                      @Param("q") String q, @Param("sort") String sort,
-                                      @Param("mineOnly") boolean mineOnly, @Param("memberId") Long memberId,
-                                      @Param("offset") int offset, @Param("size") int size);
+    List<Post> getPostsPagedByBoardId(@Param("boardId") Long boardId, @Param("search") PostSearchParam search,
+                                      @Param("memberId") Long memberId, @Param("size") int size);
 
-    long countPostsByBoardId(@Param("boardId") Long boardId, @Param("status") String status,
-                             @Param("q") String q, @Param("mineOnly") boolean mineOnly,
+    long countPostsByBoardId(@Param("boardId") Long boardId, @Param("search") PostSearchParam search,
                              @Param("memberId") Long memberId);
 
     void updateStatus(Long id, PostStatus status);

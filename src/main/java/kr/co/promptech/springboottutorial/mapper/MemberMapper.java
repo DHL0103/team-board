@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.mapper;
 
 import kr.co.promptech.springboottutorial.model.Member;
+import kr.co.promptech.springboottutorial.model.dto.MemberSearchParam;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -24,8 +25,7 @@ public interface MemberMapper {
 
     void updateRole(@Param("id") Long id, @Param("role") MemberRole role);
 
-    List<Member> getMembersPaged(@Param("q") String q, @Param("filter") String filter,
-                                 @Param("offset") int offset, @Param("size") int size);
+    List<Member> getMembersPaged(@Param("search") MemberSearchParam search, @Param("size") int size);
 
-    long countMembers(@Param("q") String q, @Param("filter") String filter);
+    long countMembers(@Param("search") MemberSearchParam search);
 }

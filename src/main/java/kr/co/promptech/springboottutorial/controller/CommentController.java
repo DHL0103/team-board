@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @Validated
 @RequiredArgsConstructor
-@RequestMapping("/board/{boardId}/post/{postId}/comment")
+@RequestMapping("/boards/{boardId}/posts/{postId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
@@ -27,7 +27,7 @@ public class CommentController {
                              @Valid @ModelAttribute CommentDto dto,
                              @AuthenticationPrincipal CustomUser user) {
         commentService.save(user.getId(), dto);
-        return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
+        return "redirect:/boards/" + boardId + "/posts/" + postId + "#comment-section";
     }
 
     @PostMapping("/{commentId}/edit")
@@ -37,7 +37,7 @@ public class CommentController {
                               @RequestParam @NotBlank @Size(max = 256) String content,
                               @AuthenticationPrincipal CustomUser user) {
         commentService.update(commentId, user.getId(), content);
-        return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
+        return "redirect:/boards/" + boardId + "/posts/" + postId + "#comment-section";
     }
 
     @PostMapping("/{commentId}/delete")
@@ -46,6 +46,6 @@ public class CommentController {
                                 @PathVariable Long commentId,
                                 @AuthenticationPrincipal CustomUser user) {
         commentService.delete(commentId, user.getId(), user.getRole(), boardId);
-        return "redirect:/board/" + boardId + "/post/" + postId + "#comment-section";
+        return "redirect:/boards/" + boardId + "/posts/" + postId + "#comment-section";
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("board/{boardId}/manager/members")
+@RequestMapping("boards/{boardId}/manager/members")
 public class ManagerMemberController {
 
     private final BoardMemberService boardMemberService;
@@ -46,9 +46,9 @@ public class ManagerMemberController {
                                @RequestParam(required = false) String search) {
         boardMemberService.save(boardId, memberId, BoardRole.INVITED);
         if (search != null && !search.isBlank()) {
-            return "redirect:/board/" + boardId + "/manager/members?search=" + search;
+            return "redirect:/boards/" + boardId + "/manager/members?search=" + search;
         }
-        return "redirect:/board/" + boardId + "/manager/members";
+        return "redirect:/boards/" + boardId + "/manager/members";
     }
 
     /**
@@ -60,7 +60,7 @@ public class ManagerMemberController {
     @PostMapping("/approve/{memberId}")
     public String approveMember(@PathVariable Long boardId, @PathVariable Long memberId) {
         boardMemberService.updateRole(boardId, memberId, BoardRole.USER);
-        return "redirect:/board/" + boardId + "/manager/members";
+        return "redirect:/boards/" + boardId + "/manager/members";
     }
 
     /**
@@ -72,7 +72,7 @@ public class ManagerMemberController {
     @PostMapping("/promote/{memberId}")
     public String promoteMember(@PathVariable Long boardId, @PathVariable Long memberId) {
         boardMemberService.updateRole(boardId, memberId, BoardRole.MANAGER);
-        return "redirect:/board/" + boardId + "/manager/members";
+        return "redirect:/boards/" + boardId + "/manager/members";
     }
 
     /**
@@ -86,9 +86,9 @@ public class ManagerMemberController {
         try {
             boardMemberService.demoteMember(boardId, memberId);
         } catch (IllegalStateException e) {
-            return "redirect:/board/" + boardId + "/manager/members?error=last_manager";
+            return "redirect:/boards/" + boardId + "/manager/members?error=last_manager";
         }
-        return "redirect:/board/" + boardId + "/manager/members";
+        return "redirect:/boards/" + boardId + "/manager/members";
     }
 
     /**
@@ -102,8 +102,8 @@ public class ManagerMemberController {
         try {
             boardMemberService.removeMember(boardId, memberId);
         } catch (IllegalStateException e) {
-            return "redirect:/board/" + boardId + "/manager/members?error=last_manager";
+            return "redirect:/boards/" + boardId + "/manager/members?error=last_manager";
         }
-        return "redirect:/board/" + boardId + "/manager/members";
+        return "redirect:/boards/" + boardId + "/manager/members";
     }
 }
