@@ -36,7 +36,7 @@ class MainPage {
         const boardGrid      = document.getElementById('board-grid');
         const boardCountLabel = document.getElementById('board-count-label');
 
-        const params = new URLSearchParams({ status, q: keyword || '' });
+        const params = new URLSearchParams({ status, boardName: keyword || '' });
         const res    = await fetch(`/api/boards?${params}`);
         const boards = await res.json();
 

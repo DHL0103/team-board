@@ -23,18 +23,12 @@ public class RestBoardController {
 
     private final BoardService boardService;
 
-    /**
-     * @param status ACTIVE | INACTIVE
-     * @param q      보드명 검색어 (선택)
-     * @param user   현재 로그인 사용자
-     * @return 상태와 검색어 조건에 맞는 보드 목록 (JSON)
-     */
     @GetMapping
     public ResponseEntity<List<BoardResponseDto>> getBoards(
             @RequestParam String status,
-            @RequestParam(defaultValue = "") String q,
+            @RequestParam(defaultValue = "") String boardName,
             @AuthenticationPrincipal CustomUser user) {
-        return ResponseEntity.ok(boardService.getBoardDtosByStatus(status, q, user));
+        return ResponseEntity.ok(boardService.getBoardDtosByStatus(status, boardName, user));
     }
 
     @GetMapping("/search")
