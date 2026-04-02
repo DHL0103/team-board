@@ -109,7 +109,7 @@ class PostEditorPage {
 
             const formData = new FormData();
             formData.append('file', file);
-            fetch('/post/image', { method: 'POST', body: formData })
+            fetch('/posts/image', { method: 'POST', body: formData })
                 .then(res => res.json())
                 .then(data => {
                     editor.chain().focus().setImage({ src: data.url }).run();

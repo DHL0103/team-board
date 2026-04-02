@@ -80,7 +80,7 @@ class SearchPage {
 
         const goBtn = document.createElement('a');
         goBtn.className = 'btn-board-go';
-        goBtn.href = `/board/${board.id}`;
+        goBtn.href = `/boards/${board.id}`;
         goBtn.textContent = '보드로 이동';
         right.appendChild(goBtn);
 
@@ -102,7 +102,7 @@ class SearchPage {
         });
 
         try {
-            const res  = await fetch(`/api/board/search?${params}`);
+            const res  = await fetch(`/api/boards/search?${params}`);
             const data = await res.json();
 
             SearchPage.#container.innerHTML = '';

@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <div th:fragment="board-breadcrumb(boardId, boardName, currentPage)" class="breadcrumb-row">
-  <a href="/board">보드</a> <span class="breadcrumb-sep">›</span>
-  <a th:href="@{'/board/' + ${boardId}}" th:text="${boardName}">보드명</a> <span class="breadcrumb-sep">›</span>
+  <a href="/boards">보드</a> <span class="breadcrumb-sep">›</span>
+  <a th:href="@{'/boards/' + ${boardId}}" th:text="${boardName}">보드명</a> <span class="breadcrumb-sep">›</span>
   <span th:text="${currentPage}">현재 페이지</span>
 </div>
 

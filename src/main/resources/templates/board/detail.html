@@ -22,7 +22,7 @@
       <!-- 진행 중 + 반려 -->
       <div class="col-md-4">
         <div class="kanban-col">
-          <a class="col-header col-p1" th:href="@{'/board/' + ${board.id} + '/post_list?status=PROGRESS'}">
+          <a class="col-header col-p1" th:href="@{'/boards/' + ${board.id} + '/post_list?status=PROGRESS'}">
             <span class="team-badge badge-p1">
               <span class="team-dot"></span>
               진행 중
@@ -38,7 +38,7 @@
       <!-- 승인 요청 -->
       <div class="col-md-4">
         <div class="kanban-col">
-          <a class="col-header col-p2" th:href="@{'/board/' + ${board.id} + '/post_list?status=REQUESTED'}">
+          <a class="col-header col-p2" th:href="@{'/boards/' + ${board.id} + '/post_list?status=REQUESTED'}">
             <span class="team-badge badge-p2">
               <span class="team-dot"></span>
               승인 요청
@@ -54,7 +54,7 @@
       <!-- 완료 -->
       <div class="col-md-4">
         <div class="kanban-col">
-          <a class="col-header col-p4" th:href="@{'/board/' + ${board.id} + '/post_list?status=APPROVED'}">
+          <a class="col-header col-p4" th:href="@{'/boards/' + ${board.id} + '/post_list?status=APPROVED'}">
             <span class="team-badge badge-p4">
               <span class="team-dot"></span>
               완료
@@ -82,7 +82,7 @@
           <svg width="10" height="10"><use href="/img/icons.svg#icon-close"></use></svg>
         </button>
       </div>
-      <form id="create-post-form" th:action="@{'/board/' + ${board.id} + '/post/create'}" method="post" enctype="multipart/form-data">
+      <form id="create-post-form" th:action="@{'/boards/' + ${board.id} + '/posts/create'}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="boardId" th:value="${board.id}">
         <div class="form-group">
           <label class="form-label">제목</label>

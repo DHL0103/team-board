@@ -57,7 +57,7 @@ class PostDetailPage {
         if (btnReject) {
             btnReject.addEventListener('click', () => {
                 document.getElementById('rejectForm').action =
-                    '/board/' + boardId + '/manager/requests/reject/' + btnReject.dataset.postId;
+                    '/boards/' + boardId + '/manager/requests/reject/' + btnReject.dataset.postId;
                 Modal.open('rejectModal');
             });
         }
@@ -229,7 +229,7 @@ class PostDetailPage {
                     if (!content) { return; }
                     const form = document.createElement('form');
                     form.method = 'POST';
-                    form.action = '/board/' + boardId + '/post/' + postId + '/comment/' + commentId + '/edit';
+                    form.action = '/boards/' + boardId + '/posts/' + postId + '/comments/' + commentId + '/edit';
                     const input = document.createElement('input');
                     input.type  = 'hidden';
                     input.name  = 'content';

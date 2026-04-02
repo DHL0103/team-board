@@ -31,7 +31,7 @@
 
             <div class="request-list" th:unless="${#lists.isEmpty(requestList)}">
                 <div class="request-card" th:each="post : ${requestList}">
-                    <a class="request-card-info" th:href="@{'/board/' + ${board.id} + '/post/' + ${post.id}}">
+                    <a class="request-card-info" th:href="@{'/boards/' + ${board.id} + '/posts/' + ${post.id}}">
                         <div class="request-card-title" th:text="${post.title}">작업 제목</div>
                         <div class="request-card-meta">
                             <span th:text="${#temporals.format(post.createdAt, 'MM.dd 등록')}">01.01 등록</span>
@@ -44,7 +44,7 @@
                         </div>
                     </a>
                     <div class="request-card-actions">
-                        <form th:action="@{'/board/' + ${board.id} + '/manager/requests/approve/' + ${post.id}}" method="post" style="display:inline;">
+                        <form th:action="@{'/boards/' + ${board.id} + '/manager/requests/approve/' + ${post.id}}" method="post" style="display:inline;">
                             <button type="submit" class="btn-approve">승인</button>
                         </form>
                         <button type="button" class="btn-reject"

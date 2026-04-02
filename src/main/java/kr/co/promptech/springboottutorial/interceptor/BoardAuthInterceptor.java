@@ -26,7 +26,7 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 1. URL에서 boardId 추출 (예: /board/5 -> 5)
+        // 1. URL에서 boardId 추출 (예: /boards/5 -> 5)
         Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long boardId = Long.parseLong(pathVariables.get("boardId"));
 
@@ -46,14 +46,14 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
         Board board = boardService.getBoardById(boardId);
         if (board != null && BoardStatus.INACTIVE == board.getStatus()) {
             if (!boardMemberService.isManager(boardId, user.getId())) {
-                response.sendRedirect("/board/" + boardId + "/inactive");
+                response.sendRedirect("/boards/" + boardId + "/inactive");
                 return false;
             }
         }
 
         // 4. 멤버 여부 확인
         if (!boardMemberService.isMember(boardId, user.getId())) {
-            response.sendRedirect("/board/" + boardId + "/request");
+            response.sendRedirect("/boards/" + boardId + "/request");
             return false;
         }
 

@@ -22,17 +22,17 @@
     <th:block th:if="${isInvited}">
       <div class="board-request-actions">
         <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/accept'}" method="post" style="margin:0;">
-          <input type="hidden" name="redirectUrl" th:value="@{'/board/' + ${board.id}}">
+          <input type="hidden" name="redirectUrl" th:value="@{'/boards/' + ${board.id}}">
           <button type="submit" class="btn-invite-accept">수락</button>
         </form>
         <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/reject'}" method="post" style="margin:0;">
-          <input type="hidden" name="redirectUrl" value="/board">
+          <input type="hidden" name="redirectUrl" value="/boards">
           <button type="submit" class="btn-invite-reject">거절</button>
         </form>
       </div>
     </th:block>
 
-    <form th:unless="${isRequested or isInvited}" th:action="@{'/board/' + ${board.id} + '/request'}" method="post" style="margin:0;">
+    <form th:unless="${isRequested or isInvited}" th:action="@{'/boards/' + ${board.id} + '/request'}" method="post" style="margin:0;">
       <button type="submit" class="btn-request">가입 요청</button>
     </form>
 
@@ -40,7 +40,7 @@
       이미 가입 요청을 보냈습니다
     </div>
 
-    <a href="/board" class="btn-edit" style="margin-top:4px;">
+    <a href="/boards" class="btn-edit" style="margin-top:4px;">
       <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
       보드 목록으로
     </a>

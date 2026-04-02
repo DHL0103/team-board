@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("board/{boardId}/post")
+@RequestMapping("boards/{boardId}/posts")
 public class PostController {
 
     private final PostService postService;
@@ -39,7 +39,7 @@ public class PostController {
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @AuthenticationPrincipal CustomUser user) {
         postService.createPost(postCreateDto, user.getId(), files);
-        return "redirect:/board/{boardId}";
+        return "redirect:/boards/{boardId}";
     }
 
     /**
@@ -50,7 +50,7 @@ public class PostController {
     @PostMapping("/delete/{id}")
     public String deletePost(@PathVariable Long boardId, @PathVariable Long id) {
         postService.deletePost(id);
-        return "redirect:/board/" + boardId;
+        return "redirect:/boards/" + boardId;
     }
 
     /**
@@ -68,7 +68,7 @@ public class PostController {
                              @RequestParam(value = "files", required = false) List<MultipartFile> files,
                              @RequestParam(value = "deleteFileIds", required = false) List<Long> deleteFileIds) {
         postService.updatePost(id, postCreateDto, files, deleteFileIds);
-        return "redirect:/board/" + boardId + "/post/" + id;
+        return "redirect:/boards/" + boardId + "/posts/" + id;
     }
 
     /**
@@ -79,6 +79,6 @@ public class PostController {
     @PostMapping("/request/{id}")
     public String requestPost(@PathVariable Long boardId, @PathVariable Long id) {
         postService.updateStatus(id, PostStatus.REQUESTED);
-        return "redirect:/board/" + boardId + "/post/" + id;
+        return "redirect:/boards/" + boardId + "/posts/" + id;
     }
 }

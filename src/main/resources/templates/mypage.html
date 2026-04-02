@@ -91,7 +91,7 @@
       <div class="assigned-list" id="assigned-list" th:unless="${#lists.isEmpty(assignedPosts)}">
         <a class="assigned-card"
            th:each="post : ${assignedPosts}"
-           th:href="@{'/board/' + ${post.boardId} + '/post/' + ${post.id}}">
+           th:href="@{'/boards/' + ${post.boardId} + '/posts/' + ${post.id}}">
           <div class="assigned-card-top">
             <div class="assigned-card-board">
               <span class="invite-board-dot" th:classappend="${'dot-' + post.boardColor}"></span>
@@ -129,7 +129,7 @@
       <div id="invite-list">
         <div th:each="board : ${invitedBoards}">
           <div class="invite-card">
-            <a class="invite-board-info" th:href="@{'/board/' + ${board.boardId}}">
+            <a class="invite-board-info" th:href="@{'/boards/' + ${board.boardId}}">
               <span class="invite-board-dot" th:classappend="${'dot-' + board.boardColor}"></span>
               <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
             </a>
