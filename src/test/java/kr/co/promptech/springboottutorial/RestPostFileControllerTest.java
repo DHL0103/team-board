@@ -1,6 +1,6 @@
 package kr.co.promptech.springboottutorial;
 
-import kr.co.promptech.springboottutorial.controller.PostFileController;
+import kr.co.promptech.springboottutorial.controller.rest.RestPostFileController;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.FileDownloadDto;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
@@ -25,8 +25,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PostFileController.class)
-class PostFileControllerTest {
+@WebMvcTest(RestPostFileController.class)
+class RestPostFileControllerTest {
 
     @Autowired private MockMvc mockMvc;
 
@@ -42,7 +42,7 @@ class PostFileControllerTest {
     }
 
     @Test
-    @DisplayName("GET /files/{filename} - 파일 다운로드 성공")
+    @DisplayName("GET /api/files/{filename} - 파일 다운로드 성공")
     void serveFile_success() throws Exception {
         byte[] content = "file-content".getBytes();
         FileDownloadDto dto = new FileDownloadDto(
@@ -50,7 +50,7 @@ class PostFileControllerTest {
 
         given(postFileService.getFileForDownload("abc-uuid.pdf", "test.pdf")).willReturn(dto);
 
-        mockMvc.perform(get("/files/abc-uuid.pdf")
+        mockMvc.perform(get("/api/files/abc-uuid.pdf")
                         .param("name", "test.pdf")
                         .with(user(mockUser())))
                 .andExpect(status().isOk())
@@ -59,17 +59,17 @@ class PostFileControllerTest {
     }
 
     @Test
-    @DisplayName("GET /files/{filename} - 파일 없으면 404")
+    @DisplayName("GET /api/files/{filename} - 파일 없으면 404")
     void serveFile_notFound() throws Exception {
         given(postFileService.getFileForDownload("no-file.pdf", null)).willReturn(null);
 
-        mockMvc.perform(get("/files/no-file.pdf")
+        mockMvc.perform(get("/api/files/no-file.pdf")
                         .with(user(mockUser())))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    @DisplayName("GET /files/{filename} - name 없이 인라인 다운로드")
+    @DisplayName("GET /api/files/{filename} - name 없이 인라인 다운로드")
     void serveFile_inline() throws Exception {
         byte[] content = "img-content".getBytes();
         FileDownloadDto dto = new FileDownloadDto(
@@ -77,7 +77,7 @@ class PostFileControllerTest {
 
         given(postFileService.getFileForDownload("uuid-img.png", null)).willReturn(dto);
 
-        mockMvc.perform(get("/files/uuid-img.png")
+        mockMvc.perform(get("/api/files/uuid-img.png")
                         .with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(header().string("Content-Type", "image/png"));

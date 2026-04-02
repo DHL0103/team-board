@@ -88,6 +88,18 @@ class CommentControllerTest {
     }
 
     @Test
+    @DisplayName("POST /comments/{commentId}/edit - 256자 초과 시 validation 에러 리다이렉트")
+    void editComment_tooLong() throws Exception {
+        String longContent = "a".repeat(257);
+
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/comments/{commentId}/edit", BOARD_ID, POST_ID, COMMENT_ID)
+                        .param("content", longContent)
+                        .with(user(mockUser())).with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/boards?error=validation"));
+    }
+
+    @Test
     @DisplayName("POST /comments/{commentId}/delete - 댓글 삭제 후 리다이렉트")
     void deleteComment() throws Exception {
         mockMvc.perform(post("/boards/{boardId}/posts/{postId}/comments/{commentId}/delete", BOARD_ID, POST_ID, COMMENT_ID)

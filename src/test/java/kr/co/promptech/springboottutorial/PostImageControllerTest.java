@@ -48,13 +48,13 @@ class PostImageControllerTest {
         MockMultipartFile file = new MockMultipartFile(
                 "file", "test.png", "image/png", new byte[1024]);
 
-        given(postFileService.saveInlineImage(any())).willReturn("/files/uuid-test.png");
+        given(postFileService.saveInlineImage(any())).willReturn("/api/files/uuid-test.png");
 
         mockMvc.perform(multipart("/posts/image")
                         .file(file)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.url").value("/files/uuid-test.png"));
+                .andExpect(jsonPath("$.url").value("/api/files/uuid-test.png"));
     }
 
     @Test

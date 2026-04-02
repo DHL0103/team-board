@@ -1,6 +1,7 @@
 package kr.co.promptech.springboottutorial.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,6 +28,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({PostNotFoundException.class, BoardNotFoundException.class})
     public String handleNotFound() {
         return "error/404";
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public String handleConstraintViolation(HttpServletRequest request) {
+        String path = refererPath(request);
+        if (path != null) {
+            return "redirect:" + path + "?error=validation";
+        }
+        return "redirect:/boards?error=validation";
     }
 
     @ExceptionHandler(BindException.class)
