@@ -66,6 +66,8 @@ class RestAdminControllerTest {
                 .willReturn(new MemberPageDto(Collections.emptyList(), false, 0L));
 
         mockMvc.perform(get("/api/admin/members")
+                        .param("page", "0")
+                        .param("size", "10")
                         .with(user(adminUser())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalCount").value(0));

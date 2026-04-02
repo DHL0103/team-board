@@ -4,6 +4,7 @@ import kr.co.promptech.springboottutorial.controller.rest.RestPostController;
 import kr.co.promptech.springboottutorial.model.Board;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.dto.PostPageDto;
+import kr.co.promptech.springboottutorial.model.dto.PostSearchParam;
 import kr.co.promptech.springboottutorial.model.enums.BoardStatus;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
@@ -56,7 +57,7 @@ class RestPostControllerTest {
     @Test
     @DisplayName("GET /api/boards/{boardId}/posts - 게시글 목록 조회")
     void getPosts() throws Exception {
-        given(postService.getPostPage(eq(BOARD_ID), any(), eq(false), eq(USER_ID)))
+        given(postService.getPostPage(eq(BOARD_ID), any(PostSearchParam.class), eq(USER_ID)))
                 .willReturn(new PostPageDto(Collections.emptyList(), false, 0L));
 
         mockMvc.perform(get("/api/boards/{boardId}/posts", BOARD_ID)

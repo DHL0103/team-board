@@ -49,7 +49,7 @@ class RestBoardControllerTest {
                 .willReturn(List.of(new BoardResponseDto(1L, "보드", "설명", "p1", "ACTIVE", 3L)));
 
         mockMvc.perform(get("/api/boards")
-                        .param("boardStatus", "ACTIVE")
+                        .param("status", "ACTIVE")
                         .with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("보드"));

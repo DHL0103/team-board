@@ -153,7 +153,7 @@ class BoardControllerTest {
         given(boardService.getBoardDtoById(BOARD_ID)).willReturn(mockBoardDto());
 
         mockMvc.perform(get("/boards/{boardId}/post_list", BOARD_ID)
-                        .param("postStatus", "PROGRESS")
+                        .param("status", "PROGRESS")
                         .with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("status", "PROGRESS"))
