@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
         if (path != null) {
             return "redirect:" + path + "?error=validation";
         }
-        return "redirect:/board?error=validation";
+        return "redirect:/boards?error=validation";
     }
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
         if (path != null) {
             return "redirect:" + path + "?error=fileSize";
         }
-        return "redirect:/board?error=fileSize";
+        return "redirect:/boards?error=fileSize";
     }
 
     @ExceptionHandler({DuplicateKeyException.class, IllegalStateException.class})
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
         if (path != null) {
             return "redirect:" + path;
         }
-        return "redirect:/board";
+        return "redirect:/boards";
     }
 
     @ExceptionHandler(Exception.class)

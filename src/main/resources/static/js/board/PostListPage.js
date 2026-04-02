@@ -58,7 +58,7 @@ class PostListPage {
     static #createCard(post) {
         const a = document.createElement('a');
         a.className = 'post-list-card';
-        a.href = `/board/${PostListPage.#boardId}/post/${post.id}`;
+        a.href = `/boards/${PostListPage.#boardId}/posts/${post.id}`;
 
         const top = document.createElement('div');
         top.className = 'card-top';
@@ -130,8 +130,8 @@ class PostListPage {
 
     static async #fetchAndRender() {
         const params = new URLSearchParams({
-            status:   PostListPage.#status,
-            q:        PostListPage.#currentQuery,
+            postStatus: PostListPage.#status,
+            postTitle:  PostListPage.#currentQuery,
             sort:     PostListPage.#currentSort,
             mineOnly: PostListPage.#currentMineOnly,
             page:     PostListPage.#currentPage - 1,
@@ -139,7 +139,7 @@ class PostListPage {
         });
 
         try {
-            const res  = await fetch(`/api/board/${PostListPage.#boardId}/posts?${params}`);
+            const res  = await fetch(`/api/boards/${PostListPage.#boardId}/posts?${params}`);
             const data = await res.json();
 
             if (PostListPage.#countLabel) { PostListPage.#countLabel.textContent = data.totalCount + '건'; }

@@ -15,7 +15,7 @@ class ManagerRequestsPage {
         document.querySelectorAll('.btn-reject').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.getElementById('rejectForm').action =
-                    '/board/' + boardId + '/manager/requests/reject/' + btn.dataset.postId;
+                    '/boards/' + boardId + '/manager/requests/reject/' + btn.dataset.postId;
                 Modal.open('rejectModal');
             });
         });

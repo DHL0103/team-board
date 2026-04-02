@@ -15,7 +15,7 @@ class MainPage {
     static #createBoardCard(board) {
         const a = document.createElement('a');
         a.className = `board-grid-card palette-${board.color}`;
-        a.href = `/board/${board.id}`;
+        a.href = `/boards/${board.id}`;
         a.innerHTML =
             '<div class="board-grid-card-bar"></div>' +
             '<div class="board-grid-card-body">' +
@@ -32,11 +32,11 @@ class MainPage {
         return a;
     }
 
-    static async #loadBoards(status, keyword) {
+    static async #loadBoards(status, boardName) {
         const boardGrid      = document.getElementById('board-grid');
         const boardCountLabel = document.getElementById('board-count-label');
 
-        const params = new URLSearchParams({ status, q: keyword || '' });
+        const params = new URLSearchParams({ status, boardName: boardName || '' });
         const res    = await fetch(`/api/boards?${params}`);
         const boards = await res.json();
 

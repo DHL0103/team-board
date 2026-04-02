@@ -39,7 +39,7 @@ class AdminBoardsPage {
         const isActive = board.status === 'ACTIVE';
         tr.innerHTML =
             `<td><span class="board-color-dot dot-${board.color}"></span></td>` +
-            `<td><a href="/board/${board.id}" class="admin-board-link">${board.name}</a></td>` +
+            `<td><a href="/boards/${board.id}" class="admin-board-link">${board.name}</a></td>` +
             `<td style="color:var(--text-sub); max-width:300px; font-size:12px; word-break:break-word;">${board.description ?? '-'}</td>` +
             `<td>${board.memberCount}</td>` +
             `<td style="text-align:center;">` +
@@ -54,8 +54,8 @@ class AdminBoardsPage {
     static async #fetchAndRender() {
         const searchInput = document.getElementById('board-search');
         const params = new URLSearchParams({
-            q:      searchInput ? searchInput.value.trim() : '',
-            status: '',
+            boardName:   searchInput ? searchInput.value.trim() : '',
+            boardStatus: '',
             sort:   'recent',
             page:   AdminBoardsPage.#currentPage - 1,
             size:   AdminBoardsPage.#PAGE_SIZE,
@@ -105,7 +105,7 @@ class AdminBoardsPage {
         AdminBoardsPage.#tbody.addEventListener('click', e => {
             if (e.target.closest('.status-badge--toggle')) { return; }
             const row = e.target.closest('tr[data-board-id]');
-            if (row) { window.location.href = '/board/' + row.dataset.boardId; }
+            if (row) { window.location.href = '/boards/' + row.dataset.boardId; }
         });
     }
 

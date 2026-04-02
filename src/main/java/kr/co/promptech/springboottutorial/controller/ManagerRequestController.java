@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("board/{boardId}/manager/requests")
+@RequestMapping("boards/{boardId}/manager/requests")
 public class ManagerRequestController {
 
     private final PostService postService;
@@ -44,9 +44,9 @@ public class ManagerRequestController {
                           @RequestParam(required = false) String source) {
         postService.updateStatus(postId, PostStatus.APPROVED);
         if ("detail".equals(source)) {
-            return "redirect:/board/" + boardId + "/post/" + postId;
+            return "redirect:/boards/" + boardId + "/posts/" + postId;
         }
-        return "redirect:/board/" + boardId + "/manager/requests";
+        return "redirect:/boards/" + boardId + "/manager/requests";
     }
 
     /**
@@ -65,8 +65,8 @@ public class ManagerRequestController {
                          @AuthenticationPrincipal CustomUser user) {
         postService.rejectPost(postId, reason, user.getId());
         if ("detail".equals(source)) {
-            return "redirect:/board/" + boardId + "/post/" + postId;
+            return "redirect:/boards/" + boardId + "/posts/" + postId;
         }
-        return "redirect:/board/" + boardId + "/manager/requests";
+        return "redirect:/boards/" + boardId + "/manager/requests";
     }
 }

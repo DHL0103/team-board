@@ -49,7 +49,7 @@ class BoardDetailPage {
         const boardId = BoardDetailPage.#boardId;
         const card = document.createElement('div');
         card.className = 'board-card';
-        card.dataset.href = `/board/${boardId}/post/${post.id}`;
+        card.dataset.href = `/boards/${boardId}/posts/${post.id}`;
 
         const top = document.createElement('div');
         top.className = 'card-top';
@@ -137,7 +137,7 @@ class BoardDetailPage {
             loading = true;
 
             try {
-                const res  = await fetch(`/api/board/${BoardDetailPage.#boardId}/posts?status=${col.status}&page=${page}&size=${BoardDetailPage.#PAGE_SIZE}`);
+                const res  = await fetch(`/api/boards/${BoardDetailPage.#boardId}/posts?postStatus=${col.status}&page=${page}&size=${BoardDetailPage.#PAGE_SIZE}`);
                 const data = await res.json();
 
                 if (page === 0 && countEl) {

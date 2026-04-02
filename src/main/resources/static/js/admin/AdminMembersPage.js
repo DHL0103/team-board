@@ -59,7 +59,7 @@ class AdminMembersPage {
     static async #fetchAndRender() {
         const searchInput = document.getElementById('member-search');
         const params = new URLSearchParams({
-            q:      searchInput ? searchInput.value.trim() : '',
+            username: searchInput ? searchInput.value.trim() : '',
             filter: AdminMembersPage.#currentFilter,
             page:   AdminMembersPage.#currentPage - 1,
             size:   AdminMembersPage.#PAGE_SIZE,
@@ -197,7 +197,7 @@ class AdminMembersPage {
                     const label = AdminMembersPage.#ROLE_LABEL[b.boardRole] ?? b.boardRole;
                     const cls   = AdminMembersPage.#ROLE_CLASS[b.boardRole] ?? '';
                     return `<tr>
-                        <td><a href="/board/${b.boardId}" class="admin-board-link">${b.boardName}</a></td>
+                        <td><a href="/boards/${b.boardId}" class="admin-board-link">${b.boardName}</a></td>
                         <td><span class="role-badge ${cls}">${label}</span></td>
                     </tr>`;
                 }).join('');

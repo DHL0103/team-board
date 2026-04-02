@@ -18,7 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/member/mypage")
+@RequestMapping("/members/mypage")
 @RequiredArgsConstructor
 public class MyPageController {
 
@@ -70,7 +70,7 @@ public class MyPageController {
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/member/login?passwordChanged=true";
+        return "redirect:/members/login?passwordChanged=true";
     }
 
     private void populateMyPageModel(Model model, CustomUser user) {
@@ -91,10 +91,10 @@ public class MyPageController {
                                @PathVariable Long boardId,
                                @RequestParam(required = false) String redirectUrl) {
         if (!boardMemberService.isInvited(boardId, user.getId())) {
-            return "redirect:/member/mypage";
+            return "redirect:/members/mypage";
         }
         boardMemberService.updateRole(boardId, user.getId(), BoardRole.USER);
-        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/member/mypage";
+        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/members/mypage";
     }
 
     /**
@@ -109,6 +109,6 @@ public class MyPageController {
                                @PathVariable Long boardId,
                                @RequestParam(required = false) String redirectUrl) {
         boardMemberService.rejectInvite(boardId, user.getId());
-        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/member/mypage";
+        return redirectUrl != null ? "redirect:" + redirectUrl : "redirect:/members/mypage";
     }
 }
