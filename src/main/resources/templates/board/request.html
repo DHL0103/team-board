@@ -21,11 +21,11 @@
 
     <th:block th:if="${isInvited}">
       <div class="board-request-actions">
-        <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/accept'}" method="post" style="margin:0;">
+        <form th:action="@{'/members/mypage/boards/' + ${board.id} + '/accept'}" method="post" style="margin:0;">
           <input type="hidden" name="redirectUrl" th:value="@{'/boards/' + ${board.id}}">
           <button type="submit" class="btn-invite-accept">수락</button>
         </form>
-        <form th:action="@{'/member/mypage/boards/' + ${board.id} + '/reject'}" method="post" style="margin:0;">
+        <form th:action="@{'/members/mypage/boards/' + ${board.id} + '/reject'}" method="post" style="margin:0;">
           <input type="hidden" name="redirectUrl" value="/boards">
           <button type="submit" class="btn-invite-reject">거절</button>
         </form>

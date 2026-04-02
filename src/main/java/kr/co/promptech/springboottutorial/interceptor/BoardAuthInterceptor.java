@@ -33,7 +33,7 @@ public class BoardAuthInterceptor implements HandlerInterceptor {
         // 2. 로그인 사용자 정보
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUser user)) {
-            response.sendRedirect("/member/login");
+            response.sendRedirect("/members/login");
             return false;
         }
 

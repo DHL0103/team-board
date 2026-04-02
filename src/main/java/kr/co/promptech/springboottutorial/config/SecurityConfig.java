@@ -26,20 +26,20 @@ public class SecurityConfig {
         http
                 .formLogin(
                         (formLogin) -> formLogin
-                                .loginPage("/member/login")
-                                .loginProcessingUrl("/member/login")  // POST 요청 처리
+                                .loginPage("/members/login")
+                                .loginProcessingUrl("/members/login")  // POST 요청 처리
                                 .failureHandler(authenticationFailureHandler())    // 실패 시 이 URL로
                                 .defaultSuccessUrl("/boards", true)
                 )
                 .logout(
                         (logout) -> logout
-                                .logoutUrl("/member/logout")
-                                .logoutSuccessUrl("/member/login")
+                                .logoutUrl("/members/logout")
+                                .logoutSuccessUrl("/members/login")
                                 .invalidateHttpSession(true)
                 )
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) ->  authorizeHttpRequests
-                                .requestMatchers("/member/login", "/member/signup").permitAll()
+                                .requestMatchers("/members/login", "/members/signup").permitAll()
                                 .requestMatchers("/css/**", "/js/**", "/img/**", "/fonts/**").permitAll()
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
@@ -49,7 +49,7 @@ public class SecurityConfig {
                         .sessionConcurrency(concurrency -> concurrency
                                 .maximumSessions(-1)
                                 .sessionRegistry(sessionRegistry())
-                                .expiredUrl("/member/login?error=suspended")
+                                .expiredUrl("/members/login?error=suspended")
                         )
                 )
                 .csrf((csrf) -> csrf.disable()) // 테스트 시에는 CSRF를 꺼두어야 Postman POST 요청이 잘 들어갑니다.
@@ -67,9 +67,9 @@ public class SecurityConfig {
         return (request, response, exception) -> {
             String redirectUrl;
             if (exception instanceof LockedException) {
-                redirectUrl = "/member/login?error=suspended";
+                redirectUrl = "/members/login?error=suspended";
             } else {
-                redirectUrl = "/member/login?error=true";
+                redirectUrl = "/members/login?error=true";
             }
             response.sendRedirect(redirectUrl);
         };

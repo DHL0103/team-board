@@ -45,7 +45,7 @@
         <div class="mypage-profile-body">
           <div class="section-title">비밀번호 변경</div>
 
-          <form th:action="@{/member/mypage/password}" th:object="${passwordChangeDto}" method="post">
+          <form th:action="@{/members/mypage/password}" th:object="${passwordChangeDto}" method="post">
 
             <div class="mypage-form-group">
               <label for="currentPassword">현재 비밀번호</label>
@@ -134,10 +134,10 @@
               <span class="invite-board-name" th:text="${board.boardName}">보드명</span>
             </a>
             <div class="invite-actions">
-              <form th:action="@{/member/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
+              <form th:action="@{/members/mypage/boards/{id}/accept(id=${board.boardId})}" method="post" style="margin:0;">
                 <button type="submit" class="btn-invite-accept">수락</button>
               </form>
-              <form th:action="@{/member/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
+              <form th:action="@{/members/mypage/boards/{id}/reject(id=${board.boardId})}" method="post" style="margin:0;">
                 <button type="submit" class="btn-invite-reject">거절</button>
               </form>
             </div>

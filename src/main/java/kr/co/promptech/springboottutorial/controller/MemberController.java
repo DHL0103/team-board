@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/member")
+@RequestMapping("/members")
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
@@ -48,6 +48,6 @@ public class MemberController {
             bindingResult.rejectValue("username", "duplicate", "이미 사용 중인 아이디입니다.");
             return "signup";
         }
-        return "redirect:/member/login?registered=true";
+        return "redirect:/members/login?registered=true";
     }
 }

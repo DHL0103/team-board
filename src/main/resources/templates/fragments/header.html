@@ -31,7 +31,7 @@
         <svg width="12" height="12"><use href="/img/icons.svg#icon-search"></use></svg>
         보드 탐색
       </a>
-      <a href="/member/mypage" class="btn-back">
+      <a href="/members/mypage" class="btn-back">
         <svg width="12" height="12"><use href="/img/icons.svg#icon-user"></use></svg>
         마이페이지
       </a>
@@ -39,7 +39,7 @@
         <svg width="12" height="12"><use href="/img/icons.svg#icon-arrow-left"></use></svg>
         메인으로
       </a>
-      <form th:if="${type == 'main'}" th:action="@{/member/logout}" method="post" style="margin:0;">
+      <form th:if="${type == 'main'}" th:action="@{/members/logout}" method="post" style="margin:0;">
         <button type="submit" class="btn-back">
           <svg width="12" height="12"><use href="/img/icons.svg#icon-logout"></use></svg>
           로그아웃
