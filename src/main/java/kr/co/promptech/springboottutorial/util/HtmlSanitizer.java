@@ -15,9 +15,9 @@ public class HtmlSanitizer {
         if (html == null || html.isBlank()) {
             return "";
         }
-        // base URI 제공 → /files/uuid가 https://placeholder.local/files/uuid로 절대화되어 프로토콜 체크 통과
+        // base URI 제공 → /api/files/uuid가 https://placeholder.local/api/files/uuid로 절대화되어 프로토콜 체크 통과
         // jsoup이 출력도 절대경로로 변환하므로 후처리로 다시 상대경로로 복원
         String cleaned = Jsoup.clean(html, "https://placeholder.local", SAFELIST);
-        return cleaned.replace("https://placeholder.local/files/", "/files/");
+        return cleaned.replace("https://placeholder.local/api/files/", "/api/files/");
     }
 }

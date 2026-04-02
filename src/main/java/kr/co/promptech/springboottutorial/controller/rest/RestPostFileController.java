@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @RestController
-@RequestMapping("/files")
+@RequestMapping("/api/files")
 @RequiredArgsConstructor
 public class RestPostFileController {
 
