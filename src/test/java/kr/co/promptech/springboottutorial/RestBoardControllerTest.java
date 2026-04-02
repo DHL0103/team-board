@@ -49,7 +49,7 @@ class RestBoardControllerTest {
                 .willReturn(List.of(new BoardResponseDto(1L, "보드", "설명", "p1", "ACTIVE", 3L)));
 
         mockMvc.perform(get("/api/boards")
-                        .param("status", "ACTIVE")
+                        .param("boardStatus", "ACTIVE")
                         .with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("보드"));
@@ -62,8 +62,8 @@ class RestBoardControllerTest {
                 .willReturn(new BoardPageDto(Collections.emptyList(), false, 0L));
 
         mockMvc.perform(get("/api/boards/search")
-                        .param("q", "test")
-                        .param("status", "")
+                        .param("boardName", "test")
+                        .param("boardStatus", "")
                         .param("sort", "recent")
                         .param("page", "0")
                         .param("size", "10")

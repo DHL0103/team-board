@@ -63,7 +63,7 @@ class ManagerSettingControllerTest {
         given(boardService.getBoardDtoById(BOARD_ID))
                 .willReturn(new BoardResponseDto(BOARD_ID, "보드", "설명", "p1", "ACTIVE", 3L));
 
-        mockMvc.perform(get("/board/{boardId}/manager/settings", BOARD_ID).with(user(mockUser())))
+        mockMvc.perform(get("/boards/{boardId}/manager/settings", BOARD_ID).with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("board"))
                 .andExpect(view().name("manager/settings"));
@@ -72,11 +72,11 @@ class ManagerSettingControllerTest {
     @Test
     @DisplayName("POST /manager/settings - 보드 설정 수정")
     void updateSettings() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/settings", BOARD_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/settings", BOARD_ID)
                         .param("name", "수정 보드").param("color", "p2").param("status", "ACTIVE")
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/settings"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/settings"));
 
         verify(boardService).updateBoard(eq(BOARD_ID), any());
     }

@@ -54,14 +54,14 @@ class RestPostControllerTest {
     }
 
     @Test
-    @DisplayName("GET /api/board/{boardId}/posts - 게시글 목록 조회")
+    @DisplayName("GET /api/boards/{boardId}/posts - 게시글 목록 조회")
     void getPosts() throws Exception {
         given(postService.getPostPage(eq(BOARD_ID), any(), eq(false), eq(USER_ID)))
                 .willReturn(new PostPageDto(Collections.emptyList(), false, 0L));
 
-        mockMvc.perform(get("/api/board/{boardId}/posts", BOARD_ID)
-                        .param("status", "APPROVED")
-                        .param("q", "")
+        mockMvc.perform(get("/api/boards/{boardId}/posts", BOARD_ID)
+                        .param("postStatus", "APPROVED")
+                        .param("postTitle", "")
                         .param("sort", "newest")
                         .param("page", "0")
                         .param("size", "8")

@@ -66,20 +66,20 @@ class BoardControllerTest {
         given(postMemberService.getMyPostIds(BOARD_ID, USER_ID)).willReturn(Set.of());
     }
 
-    // ── GET /board ──
+    // ── GET /boards ──
 
     @Test
-    @DisplayName("GET /board - 메인 페이지 반환")
+    @DisplayName("GET /boards - 메인 페이지 반환")
     void getMainPage() throws Exception {
-        mockMvc.perform(get("/board").with(user(mockUser(MemberRole.ROLE_USER))))
+        mockMvc.perform(get("/boards").with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("main_page"));
     }
 
-    // ── GET /board/{boardId} ──
+    // ── GET /boards/{boardId} ──
 
     @Test
-    @DisplayName("GET /board/{boardId} - 보드 상세 페이지 반환")
+    @DisplayName("GET /boards/{boardId} - 보드 상세 페이지 반환")
     void boardDetail() throws Exception {
         given(boardService.getBoardDetail(eq(BOARD_ID), any(CustomUser.class)))
                 .willReturn(BoardDetailDto.builder()
@@ -87,23 +87,23 @@ class BoardControllerTest {
                         .status("ACTIVE").memberCount(3).isManager(true).isMember(true)
                         .boardUserList(Collections.emptyList()).build());
 
-        mockMvc.perform(get("/board/{boardId}", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
+        mockMvc.perform(get("/boards/{boardId}", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("board", "myPostIds"))
                 .andExpect(view().name("board/detail"));
     }
 
-    // ── GET /board/{boardId}/request ──
+    // ── GET /boards/{boardId}/request ──
 
     @Test
-    @DisplayName("GET /board/{boardId}/request - 비멤버는 request 뷰 반환")
+    @DisplayName("GET /boards/{boardId}/request - 비멤버는 request 뷰 반환")
     void boardRequest_nonMember() throws Exception {
         given(boardMemberService.isMember(BOARD_ID, USER_ID)).willReturn(false);
         given(boardMemberService.isRequested(BOARD_ID, USER_ID)).willReturn(false);
         given(boardMemberService.isInvited(BOARD_ID, USER_ID)).willReturn(false);
         given(boardService.getBoardDtoById(BOARD_ID)).willReturn(mockBoardDto());
 
-        mockMvc.perform(get("/board/{boardId}/request", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
+        mockMvc.perform(get("/boards/{boardId}/request", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("isRequested", false))
                 .andExpect(model().attribute("isInvited", false))
@@ -111,102 +111,102 @@ class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("GET /board/{boardId}/request - 이미 멤버면 리다이렉트")
+    @DisplayName("GET /boards/{boardId}/request - 이미 멤버면 리다이렉트")
     void boardRequest_alreadyMember() throws Exception {
-        mockMvc.perform(get("/board/{boardId}/request", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
+        mockMvc.perform(get("/boards/{boardId}/request", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID));
     }
 
-    // ── POST /board/{boardId}/request ──
+    // ── POST /boards/{boardId}/request ──
 
     @Test
-    @DisplayName("POST /board/{boardId}/request - 가입 요청 후 리다이렉트")
+    @DisplayName("POST /boards/{boardId}/request - 가입 요청 후 리다이렉트")
     void boardRequestPost() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/request", BOARD_ID)
+        mockMvc.perform(post("/boards/{boardId}/request", BOARD_ID)
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/request"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/request"));
 
         verify(boardMemberService).save(BOARD_ID, USER_ID, BoardRole.REQUESTED);
     }
 
-    // ── GET /board/{boardId}/inactive ──
+    // ── GET /boards/{boardId}/inactive ──
 
     @Test
-    @DisplayName("GET /board/{boardId}/inactive - 비활성 보드 페이지")
+    @DisplayName("GET /boards/{boardId}/inactive - 비활성 보드 페이지")
     void boardInactive() throws Exception {
         given(boardService.getBoardDtoById(BOARD_ID))
                 .willReturn(new BoardResponseDto(BOARD_ID, "테스트보드", "설명", "p1", "INACTIVE", 3L));
         given(boardMemberService.isManager(BOARD_ID, USER_ID)).willReturn(false);
 
-        mockMvc.perform(get("/board/{boardId}/inactive", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
+        mockMvc.perform(get("/boards/{boardId}/inactive", BOARD_ID).with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/inactive"));
     }
 
-    // ── GET /board/{boardId}/post_list ──
+    // ── GET /boards/{boardId}/post_list ──
 
     @Test
-    @DisplayName("GET /board/{boardId}/post_list - 상태별 포스트 목록")
+    @DisplayName("GET /boards/{boardId}/post_list - 상태별 포스트 목록")
     void postList() throws Exception {
         given(boardService.getBoardDtoById(BOARD_ID)).willReturn(mockBoardDto());
 
-        mockMvc.perform(get("/board/{boardId}/post_list", BOARD_ID)
-                        .param("status", "PROGRESS")
+        mockMvc.perform(get("/boards/{boardId}/post_list", BOARD_ID)
+                        .param("postStatus", "PROGRESS")
                         .with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("status", "PROGRESS"))
                 .andExpect(view().name("board/post_list"));
     }
 
-    // ── POST /board/create ──
+    // ── POST /boards/create ──
 
     @Test
-    @DisplayName("POST /board/create - 보드 생성 후 MANAGER 등록")
+    @DisplayName("POST /boards/create - 보드 생성 후 MANAGER 등록")
     void createBoard() throws Exception {
         given(boardService.createBoard(any())).willReturn(BOARD_ID);
 
-        mockMvc.perform(post("/board/create")
+        mockMvc.perform(post("/boards/create")
                         .param("name", "새 보드").param("color", "p1")
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board"));
+                .andExpect(redirectedUrl("/boards"));
 
         verify(boardMemberService).save(BOARD_ID, USER_ID, BoardRole.MANAGER);
     }
 
-    // ── POST /board/{boardId}/leave ──
+    // ── POST /boards/{boardId}/leave ──
 
     @Test
-    @DisplayName("POST /board/{boardId}/leave - 보드 탈퇴 성공")
+    @DisplayName("POST /boards/{boardId}/leave - 보드 탈퇴 성공")
     void leaveBoard() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/leave", BOARD_ID)
+        mockMvc.perform(post("/boards/{boardId}/leave", BOARD_ID)
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board"));
+                .andExpect(redirectedUrl("/boards"));
 
         verify(boardMemberService).leaveBoard(BOARD_ID, USER_ID);
     }
 
     @Test
-    @DisplayName("POST /board/{boardId}/leave - 마지막 매니저 에러")
+    @DisplayName("POST /boards/{boardId}/leave - 마지막 매니저 에러")
     void leaveBoard_lastManager() throws Exception {
         doThrow(new IllegalStateException("last_manager"))
                 .when(boardMemberService).leaveBoard(BOARD_ID, USER_ID);
 
-        mockMvc.perform(post("/board/{boardId}/leave", BOARD_ID)
+        mockMvc.perform(post("/boards/{boardId}/leave", BOARD_ID)
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "?error=last_manager"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "?error=last_manager"));
     }
 
-    // ── GET /board/search ──
+    // ── GET /boards/search ──
 
     @Test
-    @DisplayName("GET /board/search - 보드 탐색 페이지")
+    @DisplayName("GET /boards/search - 보드 탐색 페이지")
     void searchBoards() throws Exception {
-        mockMvc.perform(get("/board/search").with(user(mockUser(MemberRole.ROLE_USER))))
+        mockMvc.perform(get("/boards/search").with(user(mockUser(MemberRole.ROLE_USER))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("board/search"));
     }

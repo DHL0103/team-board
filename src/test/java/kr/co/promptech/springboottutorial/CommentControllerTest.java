@@ -63,37 +63,37 @@ class CommentControllerTest {
     }
 
     @Test
-    @DisplayName("POST /comment - 댓글 작성 후 리다이렉트")
+    @DisplayName("POST /comments - 댓글 작성 후 리다이렉트")
     void addComment() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/post/{postId}/comment", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/comments", BOARD_ID, POST_ID)
                         .param("postId", POST_ID.toString()).param("content", "댓글 내용")
                         .param("depth", "0")
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/post/" + POST_ID + "#comment-section"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/posts/" + POST_ID + "#comment-section"));
 
         verify(commentService).save(eq(USER_ID), any());
     }
 
     @Test
-    @DisplayName("POST /comment/{commentId}/edit - 댓글 수정 후 리다이렉트")
+    @DisplayName("POST /comments/{commentId}/edit - 댓글 수정 후 리다이렉트")
     void editComment() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/post/{postId}/comment/{commentId}/edit", BOARD_ID, POST_ID, COMMENT_ID)
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/comments/{commentId}/edit", BOARD_ID, POST_ID, COMMENT_ID)
                         .param("content", "수정 댓글")
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/post/" + POST_ID + "#comment-section"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/posts/" + POST_ID + "#comment-section"));
 
         verify(commentService).update(COMMENT_ID, USER_ID, "수정 댓글");
     }
 
     @Test
-    @DisplayName("POST /comment/{commentId}/delete - 댓글 삭제 후 리다이렉트")
+    @DisplayName("POST /comments/{commentId}/delete - 댓글 삭제 후 리다이렉트")
     void deleteComment() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/post/{postId}/comment/{commentId}/delete", BOARD_ID, POST_ID, COMMENT_ID)
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/comments/{commentId}/delete", BOARD_ID, POST_ID, COMMENT_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/post/" + POST_ID + "#comment-section"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/posts/" + POST_ID + "#comment-section"));
 
         verify(commentService).delete(COMMENT_ID, USER_ID, MemberRole.ROLE_USER, BOARD_ID);
     }

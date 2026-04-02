@@ -57,34 +57,34 @@ class MyPageControllerTest {
     }
 
     @Test
-    @DisplayName("GET /member/mypage - 마이페이지")
+    @DisplayName("GET /members/mypage - 마이페이지")
     void myPage() throws Exception {
-        mockMvc.perform(get("/member/mypage").with(user(mockUser())))
+        mockMvc.perform(get("/members/mypage").with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("username", "invitedBoards", "assignedPosts"))
                 .andExpect(view().name("mypage"));
     }
 
     @Test
-    @DisplayName("POST /member/mypage/password - 비밀번호 변경 성공")
+    @DisplayName("POST /members/mypage/password - 비밀번호 변경 성공")
     void changePassword_success() throws Exception {
         given(memberService.changePassword(USER_ID, "oldpw", "newpw1234")).willReturn(true);
 
-        mockMvc.perform(post("/member/mypage/password")
+        mockMvc.perform(post("/members/mypage/password")
                         .param("currentPassword", "oldpw")
                         .param("newPassword", "newpw1234")
                         .param("newPasswordConfirm", "newpw1234")
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/member/login?passwordChanged=true"));
+                .andExpect(redirectedUrl("/members/login?passwordChanged=true"));
     }
 
     @Test
-    @DisplayName("POST /member/mypage/password - 현재 비밀번호 불일치")
+    @DisplayName("POST /members/mypage/password - 현재 비밀번호 불일치")
     void changePassword_wrongCurrent() throws Exception {
         given(memberService.changePassword(USER_ID, "wrong", "newpw1234")).willReturn(false);
 
-        mockMvc.perform(post("/member/mypage/password")
+        mockMvc.perform(post("/members/mypage/password")
                         .param("currentPassword", "wrong")
                         .param("newPassword", "newpw1234")
                         .param("newPasswordConfirm", "newpw1234")
@@ -94,36 +94,36 @@ class MyPageControllerTest {
     }
 
     @Test
-    @DisplayName("POST /member/mypage/boards/{boardId}/accept - 초대 수락")
+    @DisplayName("POST /members/mypage/boards/{boardId}/accept - 초대 수락")
     void acceptInvite() throws Exception {
         given(boardMemberService.isInvited(BOARD_ID, USER_ID)).willReturn(true);
 
-        mockMvc.perform(post("/member/mypage/boards/{boardId}/accept", BOARD_ID)
+        mockMvc.perform(post("/members/mypage/boards/{boardId}/accept", BOARD_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/member/mypage"));
+                .andExpect(redirectedUrl("/members/mypage"));
 
         verify(boardMemberService).updateRole(BOARD_ID, USER_ID, BoardRole.USER);
     }
 
     @Test
-    @DisplayName("POST /member/mypage/boards/{boardId}/accept - 초대 안 된 경우 리다이렉트")
+    @DisplayName("POST /members/mypage/boards/{boardId}/accept - 초대 안 된 경우 리다이렉트")
     void acceptInvite_notInvited() throws Exception {
         given(boardMemberService.isInvited(BOARD_ID, USER_ID)).willReturn(false);
 
-        mockMvc.perform(post("/member/mypage/boards/{boardId}/accept", BOARD_ID)
+        mockMvc.perform(post("/members/mypage/boards/{boardId}/accept", BOARD_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/member/mypage"));
+                .andExpect(redirectedUrl("/members/mypage"));
     }
 
     @Test
-    @DisplayName("POST /member/mypage/boards/{boardId}/reject - 초대 거절")
+    @DisplayName("POST /members/mypage/boards/{boardId}/reject - 초대 거절")
     void rejectInvite() throws Exception {
-        mockMvc.perform(post("/member/mypage/boards/{boardId}/reject", BOARD_ID)
+        mockMvc.perform(post("/members/mypage/boards/{boardId}/reject", BOARD_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/member/mypage"));
+                .andExpect(redirectedUrl("/members/mypage"));
 
         verify(boardMemberService).rejectInvite(BOARD_ID, USER_ID);
     }

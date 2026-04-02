@@ -66,7 +66,7 @@ class ManagerMemberControllerTest {
                 .willReturn(new BoardResponseDto(BOARD_ID, "보드", "설명", "p1", "ACTIVE", 3L));
         given(boardMemberService.getMembersByBoardId(BOARD_ID)).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/board/{boardId}/manager/members", BOARD_ID).with(user(mockUser())))
+        mockMvc.perform(get("/boards/{boardId}/manager/members", BOARD_ID).with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("board", "memberList"))
                 .andExpect(view().name("manager/members"));
@@ -75,10 +75,10 @@ class ManagerMemberControllerTest {
     @Test
     @DisplayName("POST /manager/members/invite/{memberId} - 초대")
     void inviteMember() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/members/invite/{memberId}", BOARD_ID, MEMBER_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/members/invite/{memberId}", BOARD_ID, MEMBER_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/members"));
 
         verify(boardMemberService).save(BOARD_ID, MEMBER_ID, BoardRole.INVITED);
     }
@@ -86,10 +86,10 @@ class ManagerMemberControllerTest {
     @Test
     @DisplayName("POST /manager/members/approve/{memberId} - 가입 승인")
     void approveMember() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/members/approve/{memberId}", BOARD_ID, MEMBER_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/members/approve/{memberId}", BOARD_ID, MEMBER_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/members"));
 
         verify(boardMemberService).updateRole(BOARD_ID, MEMBER_ID, BoardRole.USER);
     }
@@ -97,10 +97,10 @@ class ManagerMemberControllerTest {
     @Test
     @DisplayName("POST /manager/members/promote/{memberId} - 매니저 승격")
     void promoteMember() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/members/promote/{memberId}", BOARD_ID, MEMBER_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/members/promote/{memberId}", BOARD_ID, MEMBER_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/members"));
 
         verify(boardMemberService).updateRole(BOARD_ID, MEMBER_ID, BoardRole.MANAGER);
     }
@@ -108,10 +108,10 @@ class ManagerMemberControllerTest {
     @Test
     @DisplayName("POST /manager/members/demote/{memberId} - 매니저 강등")
     void demoteMember() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/members/demote/{memberId}", BOARD_ID, MEMBER_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/members/demote/{memberId}", BOARD_ID, MEMBER_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/members"));
 
         verify(boardMemberService).demoteMember(BOARD_ID, MEMBER_ID);
     }
@@ -122,19 +122,19 @@ class ManagerMemberControllerTest {
         doThrow(new IllegalStateException("last_manager"))
                 .when(boardMemberService).demoteMember(BOARD_ID, MEMBER_ID);
 
-        mockMvc.perform(post("/board/{boardId}/manager/members/demote/{memberId}", BOARD_ID, MEMBER_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/members/demote/{memberId}", BOARD_ID, MEMBER_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members?error=last_manager"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/members?error=last_manager"));
     }
 
     @Test
     @DisplayName("POST /manager/members/remove/{memberId} - 멤버 제거")
     void removeMember() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/members/remove/{memberId}", BOARD_ID, MEMBER_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/members/remove/{memberId}", BOARD_ID, MEMBER_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/members"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/members"));
 
         verify(boardMemberService).removeMember(BOARD_ID, MEMBER_ID);
     }

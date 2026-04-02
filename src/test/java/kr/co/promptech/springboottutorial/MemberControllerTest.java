@@ -35,41 +35,41 @@ class MemberControllerTest {
     @MockBean private UserDetailsService userDetailsService;
 
     @Test
-    @DisplayName("GET /member/login - 로그인 페이지")
+    @DisplayName("GET /members/login - 로그인 페이지")
     void loginPage() throws Exception {
-        mockMvc.perform(get("/member/login"))
+        mockMvc.perform(get("/members/login"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("login_form"));
     }
 
     @Test
-    @DisplayName("GET /member/signup - 회원가입 페이지")
+    @DisplayName("GET /members/signup - 회원가입 페이지")
     void signupPage() throws Exception {
-        mockMvc.perform(get("/member/signup"))
+        mockMvc.perform(get("/members/signup"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("signup"));
     }
 
     @Test
-    @DisplayName("POST /member/signup - 성공 시 로그인으로 리다이렉트")
+    @DisplayName("POST /members/signup - 성공 시 로그인으로 리다이렉트")
     void signup_success() throws Exception {
         given(memberService.signup("testuser", "pass1234")).willReturn(true);
 
-        mockMvc.perform(post("/member/signup")
+        mockMvc.perform(post("/members/signup")
                         .param("username", "testuser")
                         .param("password", "pass1234")
                         .param("passwordConfirm", "pass1234")
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/member/login?registered=true"));
+                .andExpect(redirectedUrl("/members/login?registered=true"));
 
         verify(memberService).signup("testuser", "pass1234");
     }
 
     @Test
-    @DisplayName("POST /member/signup - 비밀번호 불일치 시 signup 뷰 반환")
+    @DisplayName("POST /members/signup - 비밀번호 불일치 시 signup 뷰 반환")
     void signup_passwordMismatch() throws Exception {
-        mockMvc.perform(post("/member/signup")
+        mockMvc.perform(post("/members/signup")
                         .param("username", "testuser")
                         .param("password", "pass1234")
                         .param("passwordConfirm", "different")
@@ -79,11 +79,11 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("POST /member/signup - 아이디 중복 시 signup 뷰 반환")
+    @DisplayName("POST /members/signup - 아이디 중복 시 signup 뷰 반환")
     void signup_duplicateUsername() throws Exception {
         given(memberService.signup("testuser", "pass1234")).willReturn(false);
 
-        mockMvc.perform(post("/member/signup")
+        mockMvc.perform(post("/members/signup")
                         .param("username", "testuser")
                         .param("password", "pass1234")
                         .param("passwordConfirm", "pass1234")
@@ -93,9 +93,9 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("POST /member/signup - 유효성 검사 실패 시 signup 뷰 반환")
+    @DisplayName("POST /members/signup - 유효성 검사 실패 시 signup 뷰 반환")
     void signup_validationError() throws Exception {
-        mockMvc.perform(post("/member/signup")
+        mockMvc.perform(post("/members/signup")
                         .param("username", "ab")   // 4자 미만
                         .param("password", "pw")    // 4자 미만
                         .param("passwordConfirm", "pw")

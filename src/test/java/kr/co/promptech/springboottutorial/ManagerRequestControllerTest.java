@@ -65,7 +65,7 @@ class ManagerRequestControllerTest {
                 .willReturn(new BoardResponseDto(BOARD_ID, "테스트", "설명", "p1", "ACTIVE", 3L));
         given(postService.getRequestedPostDtosByBoardId(BOARD_ID)).willReturn(Collections.emptyList());
 
-        mockMvc.perform(get("/board/{boardId}/manager/requests", BOARD_ID).with(user(mockUser())))
+        mockMvc.perform(get("/boards/{boardId}/manager/requests", BOARD_ID).with(user(mockUser())))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("board", "requestList"))
                 .andExpect(view().name("manager/requests"));
@@ -74,10 +74,10 @@ class ManagerRequestControllerTest {
     @Test
     @DisplayName("POST /manager/requests/approve/{postId} - 승인 후 목록으로")
     void approve() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/requests/approve/{postId}", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/requests/approve/{postId}", BOARD_ID, POST_ID)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/requests"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/requests"));
 
         verify(postService).updateStatus(POST_ID, PostStatus.APPROVED);
     }
@@ -85,21 +85,21 @@ class ManagerRequestControllerTest {
     @Test
     @DisplayName("POST /manager/requests/approve/{postId} - source=detail이면 상세로")
     void approve_fromDetail() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/requests/approve/{postId}", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/requests/approve/{postId}", BOARD_ID, POST_ID)
                         .param("source", "detail")
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/post/" + POST_ID));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/posts/" + POST_ID));
     }
 
     @Test
     @DisplayName("POST /manager/requests/reject/{postId} - 반려")
     void reject() throws Exception {
-        mockMvc.perform(post("/board/{boardId}/manager/requests/reject/{postId}", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/manager/requests/reject/{postId}", BOARD_ID, POST_ID)
                         .param("reason", "사유")
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/board/" + BOARD_ID + "/manager/requests"));
+                .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/manager/requests"));
 
         verify(postService).rejectPost(POST_ID, "사유", USER_ID);
     }

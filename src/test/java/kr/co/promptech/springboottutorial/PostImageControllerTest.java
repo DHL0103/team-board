@@ -43,14 +43,14 @@ class PostImageControllerTest {
     }
 
     @Test
-    @DisplayName("POST /post/image - 인라인 이미지 업로드 성공")
+    @DisplayName("POST /posts/image - 인라인 이미지 업로드 성공")
     void uploadImage_success() throws Exception {
         MockMultipartFile file = new MockMultipartFile(
                 "file", "test.png", "image/png", new byte[1024]);
 
         given(postFileService.saveInlineImage(any())).willReturn("/files/uuid-test.png");
 
-        mockMvc.perform(multipart("/post/image")
+        mockMvc.perform(multipart("/posts/image")
                         .file(file)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().isOk())
@@ -58,12 +58,12 @@ class PostImageControllerTest {
     }
 
     @Test
-    @DisplayName("POST /post/image - 5MB 초과 시 400")
+    @DisplayName("POST /posts/image - 5MB 초과 시 400")
     void uploadImage_tooLarge() throws Exception {
         MockMultipartFile file = new MockMultipartFile(
                 "file", "big.png", "image/png", new byte[6 * 1024 * 1024]);
 
-        mockMvc.perform(multipart("/post/image")
+        mockMvc.perform(multipart("/posts/image")
                         .file(file)
                         .with(user(mockUser())).with(csrf()))
                 .andExpect(status().isBadRequest())

@@ -21,6 +21,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 
+import kr.co.promptech.springboottutorial.model.dto.MemberSearchParam;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -60,7 +62,7 @@ class RestAdminControllerTest {
     @Test
     @DisplayName("GET /api/admin/members - 멤버 목록 조회")
     void getMembers() throws Exception {
-        given(memberService.getMemberPage("", "active", 0, 10))
+        given(memberService.getMemberPage(any(MemberSearchParam.class)))
                 .willReturn(new MemberPageDto(Collections.emptyList(), false, 0L));
 
         mockMvc.perform(get("/api/admin/members")
