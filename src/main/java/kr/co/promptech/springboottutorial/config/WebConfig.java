@@ -32,9 +32,9 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(postMemberAuthInterceptor)
                 .addPathPatterns(
-                        "/boards/{boardId}/posts/delete/{id}",
-                        "/boards/{boardId}/posts/update/{id}",
-                        "/boards/{boardId}/posts/request/{id}"
+                        "/boards/{boardId}/posts/{postId}/delete",
+                        "/boards/{boardId}/posts/{postId}/update",
+                        "/boards/{boardId}/posts/{postId}/request"
                 );
     }
 }

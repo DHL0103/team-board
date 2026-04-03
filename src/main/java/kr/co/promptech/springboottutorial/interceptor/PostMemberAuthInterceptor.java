@@ -28,7 +28,7 @@ public class PostMemberAuthInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Map<String, String> pathVariables = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long boardId = Long.parseLong(pathVariables.get("boardId"));
-        Long postId = Long.parseLong(pathVariables.get("id"));
+        Long postId = Long.parseLong(pathVariables.get("postId"));
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof CustomUser user)) {

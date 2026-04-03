@@ -100,12 +100,12 @@ class PostControllerTest {
         verify(postService).createPost(any(), eq(USER_ID), any());
     }
 
-    // ── POST /boards/{boardId}/posts/delete/{id} ──
+    // ── POST /boards/{boardId}/posts/{postId}/delete ──
 
     @Test
-    @DisplayName("POST /boards/{boardId}/posts/delete/{id} - 삭제 후 리다이렉트")
+    @DisplayName("POST /boards/{boardId}/posts/{postId}/delete - 삭제 후 리다이렉트")
     void deletePost() throws Exception {
-        mockMvc.perform(post("/boards/{boardId}/posts/delete/{id}", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/delete", BOARD_ID, POST_ID)
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/boards/" + BOARD_ID));
@@ -114,21 +114,21 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("POST /boards/{boardId}/posts/delete/{id} - REQUESTED 상태 담당자는 403")
+    @DisplayName("POST /boards/{boardId}/posts/{postId}/delete - REQUESTED 상태 담당자는 403")
     void deletePost_requested_forbidden() throws Exception {
         given(postService.getPostById(POST_ID)).willReturn(mockPost("REQUESTED"));
 
-        mockMvc.perform(post("/boards/{boardId}/posts/delete/{id}", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/delete", BOARD_ID, POST_ID)
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().isForbidden());
     }
 
-    // ── POST /boards/{boardId}/posts/update/{id} ──
+    // ── POST /boards/{boardId}/posts/{postId}/update ──
 
     @Test
-    @DisplayName("POST /boards/{boardId}/posts/update/{id} - 수정 후 상세로 리다이렉트")
+    @DisplayName("POST /boards/{boardId}/posts/{postId}/update - 수정 후 상세로 리다이렉트")
     void updatePost() throws Exception {
-        mockMvc.perform(post("/boards/{boardId}/posts/update/{id}", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/update", BOARD_ID, POST_ID)
                         .param("title", "수정").param("content", "수정내용")
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().is3xxRedirection())
@@ -137,12 +137,12 @@ class PostControllerTest {
         verify(postService).updatePost(eq(POST_ID), any(), any(), any());
     }
 
-    // ── POST /boards/{boardId}/posts/request/{id} ──
+    // ── POST /boards/{boardId}/posts/{postId}/request ──
 
     @Test
-    @DisplayName("POST /boards/{boardId}/posts/request/{id} - 승인 요청")
+    @DisplayName("POST /boards/{boardId}/posts/{postId}/request - 승인 요청")
     void requestPost() throws Exception {
-        mockMvc.perform(post("/boards/{boardId}/posts/request/{id}", BOARD_ID, POST_ID)
+        mockMvc.perform(post("/boards/{boardId}/posts/{postId}/request", BOARD_ID, POST_ID)
                         .with(user(mockUser(MemberRole.ROLE_USER))).with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/boards/" + BOARD_ID + "/posts/" + POST_ID));
