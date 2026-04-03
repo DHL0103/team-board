@@ -96,7 +96,7 @@ class AdminBoardsPage {
                 AdminBoardsPage.#debounceTimer = setTimeout(() => {
                     AdminBoardsPage.#currentPage = 1;
                     AdminBoardsPage.#fetchAndRender();
-                }, 250);
+                }, 300);
             });
         }
     }

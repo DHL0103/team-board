@@ -143,7 +143,7 @@ class SearchPage {
                 SearchPage.#debounceTimer = setTimeout(() => {
                     SearchPage.#currentPage = 1;
                     SearchPage.#fetchAndRender();
-                }, 250);
+                }, 300);
             });
         }
 

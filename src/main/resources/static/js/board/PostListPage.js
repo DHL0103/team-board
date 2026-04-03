@@ -193,7 +193,7 @@ class PostListPage {
                     PostListPage.#currentQuery = searchInput.value.trim();
                     PostListPage.#currentPage = 1;
                     PostListPage.#fetchAndRender();
-                }, 250);
+                }, 300);
             });
         }
     }

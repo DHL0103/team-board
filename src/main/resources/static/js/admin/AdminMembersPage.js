@@ -124,7 +124,7 @@ class AdminMembersPage {
                 AdminMembersPage.#debounceTimer = setTimeout(() => {
                     AdminMembersPage.#currentPage = 1;
                     AdminMembersPage.#fetchAndRender();
-                }, 250);
+                }, 300);
             });
         }
     }
