@@ -57,12 +57,12 @@ class PostEditorPage {
 
     static #bindToolbar(editor, toolbar, inputEl, editorEl) {
         toolbar.querySelector('[data-cmd="h1"]')
-            .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 1 }).run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 1 }).run());
         toolbar.querySelector('[data-cmd="h2"]')
-            .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 2 }).run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 2 }).run());
         toolbar.querySelector('[data-cmd="h3"]')
-            .addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 3 }).run());
-        toolbar.querySelector('[data-cmd="link"]').addEventListener('click', () => {
+            ?.addEventListener('click', () => editor.chain().focus().toggleHeading({ level: 3 }).run());
+        toolbar.querySelector('[data-cmd="link"]')?.addEventListener('click', () => {
             if (editor.isActive('link')) {
                 editor.chain().focus().unsetLink().run();
                 return;
@@ -74,19 +74,19 @@ class PostEditorPage {
             }
         });
         toolbar.querySelector('[data-cmd="underline"]')
-            .addEventListener('click', () => editor.chain().focus().toggleUnderline().run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleUnderline().run());
         toolbar.querySelector('[data-cmd="bold"]')
-            .addEventListener('click', () => editor.chain().focus().toggleBold().run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleBold().run());
         toolbar.querySelector('[data-cmd="italic"]')
-            .addEventListener('click', () => editor.chain().focus().toggleItalic().run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleItalic().run());
         toolbar.querySelector('[data-cmd="strike"]')
-            .addEventListener('click', () => editor.chain().focus().toggleStrike().run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleStrike().run());
         toolbar.querySelector('[data-cmd="bulletList"]')
-            .addEventListener('click', () => editor.chain().focus().toggleBulletList().run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleBulletList().run());
         toolbar.querySelector('[data-cmd="orderedList"]')
-            .addEventListener('click', () => editor.chain().focus().toggleOrderedList().run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleOrderedList().run());
         toolbar.querySelector('[data-cmd="codeBlock"]')
-            .addEventListener('click', () => editor.chain().focus().toggleCodeBlock().run());
+            ?.addEventListener('click', () => editor.chain().focus().toggleCodeBlock().run());
     }
 
     static #bindImageUpload(editor, toolbar) {
@@ -120,11 +120,17 @@ class PostEditorPage {
             const formData = new FormData();
             formData.append('file', file);
             fetch('/posts/image', { method: 'POST', headers, body: formData })
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) { throw new Error('upload failed'); }
+                    return res.json();
+                })
                 .then(data => {
                     editor.chain().focus().setImage({ src: data.url }).run();
                     const endPos = editor.state.doc.content.size;
                     editor.chain().insertContentAt(endPos, { type: 'paragraph' }).run();
+                })
+                .catch(() => {
+                    Toast.show('이미지 업로드에 실패했습니다.');
                 });
             imgInput.value = '';
         });

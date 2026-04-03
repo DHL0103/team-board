@@ -37,12 +37,17 @@ class MainPage {
         const boardCountLabel = document.getElementById('board-count-label');
 
         const params = new URLSearchParams({ status, boardName: boardName || '' });
-        const res    = await fetch(`/api/boards?${params}`);
-        const boards = await res.json();
+        try {
+            const res    = await fetch(`/api/boards?${params}`);
+            const boards = await res.json();
 
-        boardGrid.querySelectorAll('.board-grid-card').forEach(el => el.remove());
-        boards.forEach(board => boardGrid.appendChild(MainPage.#createBoardCard(board)));
-        boardCountLabel.textContent = `총 ${boards.length}개의 보드`;
+            boardGrid.querySelectorAll('.board-grid-card').forEach(el => el.remove());
+            boards.forEach(board => boardGrid.appendChild(MainPage.#createBoardCard(board)));
+            boardCountLabel.textContent = `총 ${boards.length}개의 보드`;
+        } catch (e) {
+            console.error('보드 목록 로드 실패', e);
+            Toast.show('보드 목록을 불러오지 못했습니다.');
+        }
     }
 
     static #initBoardFilter() {

@@ -228,9 +228,15 @@ class AdminMembersPage {
         if (csrfHeader && csrfToken) { headers[csrfHeader] = csrfToken; }
         fetch(`/api/admin/members/${memberId}/role?role=${newRole}`, { method: 'POST', headers })
             .then(res => {
-                if (!res.ok) { return; }
+                if (!res.ok) {
+                    Toast.show('역할 변경에 실패했습니다.');
+                    return;
+                }
                 AdminMembersPage.#closeDetailModal();
                 AdminMembersPage.#fetchAndRender();
+            })
+            .catch(() => {
+                Toast.show('역할 변경에 실패했습니다.');
             });
     }
 }
