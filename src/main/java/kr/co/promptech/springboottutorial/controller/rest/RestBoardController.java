@@ -23,6 +23,13 @@ public class RestBoardController {
 
     private final BoardService boardService;
 
+    /**
+     * 상태별 보드 목록 조회
+     * @param status    조회할 보드 상태
+     * @param boardName 보드명 검색어 (기본값: 빈 문자열)
+     * @param user      현재 로그인 사용자
+     * @return 조건에 맞는 보드 목록 (BoardResponseDto JSON)
+     */
     @GetMapping
     public ResponseEntity<List<BoardResponseDto>> getBoards(
             @RequestParam String status,

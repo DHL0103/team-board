@@ -24,6 +24,7 @@ public class RestPostFileController {
     private final PostFileService postFileService;
 
     /**
+     * 파일 다운로드 또는 인라인 제공
      * @param filename 서버에 저장된 파일명 (UUID 기반)
      * @param name     다운로드 시 표시할 원본 파일명 (optional)
      * @return 파일 리소스 응답 (Content-Disposition: attachment)

@@ -22,10 +22,9 @@ public class RestPostController {
 
     /**
      * 보드별 게시글 목록 조회 (검색, 필터, 정렬, 페이징 지원)
-     * @param boardId  조회할 보드 ID
-     * @param search   검색/필터/정렬/페이징 조건 (PostSearchParam)
-     * @param mineOnly 내 게시글만 조회 여부
-     * @param user     현재 로그인한 사용자 정보
+     * @param boardId 조회할 보드 ID
+     * @param search  검색/필터/정렬/페이징 조건 (PostSearchParam)
+     * @param user    현재 로그인한 사용자 정보
      * @return 조건에 맞는 게시글 페이지 (PostPageDto JSON)
      */
     @GetMapping("/{boardId}/posts")

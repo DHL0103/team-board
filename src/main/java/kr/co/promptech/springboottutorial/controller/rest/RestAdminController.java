@@ -29,12 +29,18 @@ public class RestAdminController {
     private final MemberService memberService;
     private final BoardService boardService;
 
+    /**
+     * 관리자용 멤버 목록 페이징 조회
+     * @param search 검색/페이징 조건
+     * @return 멤버 페이지 정보 (MemberPageDto JSON)
+     */
     @GetMapping("/members")
     public ResponseEntity<MemberPageDto> getMembers(@ModelAttribute MemberSearchParam search) {
         return ResponseEntity.ok(memberService.getMemberPage(search));
     }
 
     /**
+     * 멤버가 속한 보드 목록 조회
      * @param memberId 조회할 멤버 ID
      * @return 해당 멤버가 속한 보드 목록 (MemberBoardDto JSON)
      */
@@ -43,6 +49,12 @@ public class RestAdminController {
         return ResponseEntity.ok(boardMemberService.getBoardsByMemberId(memberId));
     }
 
+    /**
+     * 보드 상태 변경
+     * @param boardId 대상 보드 ID
+     * @param status  변경할 상태
+     * @return 200 OK
+     */
     @PostMapping("/boards/{boardId}/status")
     public ResponseEntity<Void> updateBoardStatus(@PathVariable Long boardId,
                                                    @RequestParam BoardStatus status) {
@@ -51,9 +63,10 @@ public class RestAdminController {
     }
 
     /**
+     * 멤버 역할 변경 (ROLE_ADMIN은 변경 불가 — 요청 시 400 반환)
      * @param memberId 대상 멤버 ID
      * @param role     변경할 역할 (ROLE_USER / ROLE_SUSPENDED)
-     * ROLE_ADMIN은 변경 불가 — 요청 시 400 반환
+     * @return 200 OK, ROLE_ADMIN 요청 시 400 Bad Request
      */
     @PostMapping("/members/{memberId}/role")
     public ResponseEntity<Void> updateMemberRole(@PathVariable Long memberId,

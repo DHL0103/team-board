@@ -35,11 +35,11 @@ public class PostController {
     }
 
     /**
+     * 게시글 생성 후 첨부파일 저장. 파일 저장 실패 시 게시글은 유지
      * @param postCreateDto 게시글 생성 데이터 (제목, 내용, 보드ID 등)
      * @param files         첨부파일 목록 (optional)
      * @param user          현재 로그인한 사용자 정보
      * @return 보드 상세 페이지로 리다이렉트
-     * 게시글 생성 후 첨부파일 저장. 파일 저장 실패 시 게시글은 유지
      */
     @PostMapping("/create")
     public String createPost(@Valid PostDto postCreateDto,
@@ -50,9 +50,10 @@ public class PostController {
     }
 
     /**
-     * @param postId 삭제할 게시글 PK
+     * 게시글 삭제 처리. 권한 검증은 PostMemberAuthInterceptor에서 처리
+     * @param boardId 게시글이 속한 보드 ID
+     * @param postId  삭제할 게시글 PK
      * @return 보드 상세 페이지로 리다이렉트
-     * 권한 검증은 PostMemberAuthInterceptor에서 처리
      */
     @PostMapping("/{postId}/delete")
     public String deletePost(@PathVariable Long boardId, @PathVariable Long postId) {
@@ -61,12 +62,13 @@ public class PostController {
     }
 
     /**
+     * 게시글 수정 처리. 권한 검증은 PostMemberAuthInterceptor에서 처리
+     * @param boardId       게시글이 속한 보드 ID
      * @param postId        수정할 게시글 PK
      * @param postCreateDto 수정할 게시글 데이터
      * @param files         새로 추가할 첨부파일 목록 (optional)
      * @param deleteFileIds 삭제할 첨부파일 ID 목록 (optional)
      * @return 게시글 상세 페이지로 리다이렉트
-     * 권한 검증은 PostMemberAuthInterceptor에서 처리
      */
     @PostMapping("/{postId}/update")
     public String updatePost(@PathVariable Long boardId,
@@ -79,9 +81,10 @@ public class PostController {
     }
 
     /**
-     * @param postId 승인 요청할 게시글 PK
+     * 게시글 승인 요청 처리. 권한 검증은 PostMemberAuthInterceptor에서 처리
+     * @param boardId 게시글이 속한 보드 ID
+     * @param postId  승인 요청할 게시글 PK
      * @return 게시글 상세 페이지로 리다이렉트
-     * 권한 검증은 PostMemberAuthInterceptor에서 처리
      */
     @PostMapping("/{postId}/request")
     public String requestPost(@PathVariable Long boardId, @PathVariable Long postId) {

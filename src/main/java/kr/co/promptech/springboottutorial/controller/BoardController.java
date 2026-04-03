@@ -30,6 +30,7 @@ public class BoardController {
     private final PostMemberService postMemberService;
 
     /**
+     * 메인 페이지 렌더링
      * @return main_page 뷰
      */
     @GetMapping
@@ -38,13 +39,14 @@ public class BoardController {
     }
 
     /**
+     * 보드 상세 페이지 렌더링
+     * 인터셉터(BoardAuthInterceptor)에서 비멤버를 /boards/{boardId}/request로 리다이렉트하므로
+     * 이 메서드에 도달한 사용자는 항상 보드 멤버임이 보장됨
+     * board(BoardResponseDto), postList(PostResponseDto) 전달
      * @param boardId 조회할 보드 ID
      * @param model   뷰에 전달할 데이터 컨테이너
      * @param user    현재 로그인한 사용자 정보
      * @return board/detail 뷰
-     * 인터셉터(BoardAuthInterceptor)에서 비멤버를 /boards/{boardId}/request로 리다이렉트하므로
-     * 이 메서드에 도달한 사용자는 항상 보드 멤버임이 보장됨
-     * board(BoardResponseDto), postList(PostResponseDto) 전달
      */
     @GetMapping("/{boardId}")
     public String boardDetail(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
@@ -54,13 +56,14 @@ public class BoardController {
     }
 
     /**
+     * 보드 가입 요청 페이지 렌더링
+     * 인터셉터가 비멤버를 이 URL로 리다이렉트함
+     * 해당 board 소속 멤버 혹은 시스템 레벨 관리자인 경우 보드 상세 페이지로 리다이렉트
+     * board(BoardResponseDto) 전달
      * @param boardId 조회할 보드 ID
      * @param model   뷰에 전달할 데이터 컨테이너
      * @param user    현재 로그인한 사용자 정보
      * @return board/request 뷰
-     * 인터셉터가 비멤버를 이 URL로 리다이렉트함
-     * 해당 board 소속 멤버 혹은 시스템 레벨 관리자인 경우 보드 상세 페이지로 리다이렉트
-     * board(BoardResponseDto) 전달
      */
     @GetMapping("/{boardId}/request")
     public String boardRequest(@PathVariable Long boardId, Model model, @AuthenticationPrincipal CustomUser user) {
@@ -123,10 +126,10 @@ public class BoardController {
     }
 
     /**
+     * 보드 생성 후 생성자를 해당 보드의 MANAGER로 board_members에 등록
      * @param boardCreateDto 생성할 보드 정보 (name, color, description)
      * @param user           현재 로그인한 사용자 정보
      * @return 메인 페이지로 리다이렉트
-     * 보드 생성 후 생성자를 해당 보드의 MANAGER로 board_members에 등록
      */
     @PostMapping("/create")
     public String createBoard(@Valid @ModelAttribute BoardDto boardCreateDto, @AuthenticationPrincipal CustomUser user) {
@@ -152,7 +155,8 @@ public class BoardController {
     }
 
     /**
-     * @return board/search 보드 탐색 페이지 반환
+     * 보드 탐색 페이지 렌더링
+     * @return board/search 뷰
      */
     @GetMapping("/search")
     public String searchBoards() {

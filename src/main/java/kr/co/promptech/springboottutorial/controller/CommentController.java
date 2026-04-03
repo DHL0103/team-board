@@ -22,6 +22,7 @@ public class CommentController {
     private final CommentService commentService;
 
     /**
+     * 댓글 작성 처리
      * @param boardId 보드 ID
      * @param postId  댓글이 달릴 게시글 ID
      * @param dto     댓글 데이터 (postId, content)
@@ -38,6 +39,7 @@ public class CommentController {
     }
 
     /**
+     * 댓글 수정 처리 (본인 댓글만 수정 가능)
      * @param boardId   보드 ID
      * @param postId    게시글 ID
      * @param commentId 수정할 댓글 ID
@@ -56,6 +58,7 @@ public class CommentController {
     }
 
     /**
+     * 댓글 삭제 처리 (본인 댓글 또는 매니저/관리자만 삭제 가능)
      * @param boardId   보드 ID
      * @param postId    게시글 ID
      * @param commentId 삭제할 댓글 ID

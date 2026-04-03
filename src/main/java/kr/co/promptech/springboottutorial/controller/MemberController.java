@@ -15,8 +15,8 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
-     * @return 로그인 폼 뷰 이름 (login_form)
      * 로그인 페이지 렌더링, 실제 인증 처리는 Spring Security가 담당
+     * @return 로그인 폼 뷰 이름 (login_form)
      */
     @GetMapping("/login")
     public String loginPage() {
@@ -24,6 +24,7 @@ public class MemberController {
     }
 
     /**
+     * 회원가입 페이지 렌더링
      * @param signupRequestDto Thymeleaf 폼 바인딩용 빈 DTO
      * @return 회원가입 폼 뷰 이름 (signup)
      */
@@ -33,7 +34,7 @@ public class MemberController {
     }
 
     /**
-     * @Valid 로 필드 제약조건 검사 후 BindingResult로 오류 처리
+     * 회원가입 처리 -- 필드 제약조건 검사 후 BindingResult로 오류 처리
      * 비밀번호 불일치 및 아이디 중복도 BindingResult에 추가
      * @param dto           회원가입 입력 데이터 (username, password, passwordConfirm)
      * @param bindingResult 검증 오류 결과
