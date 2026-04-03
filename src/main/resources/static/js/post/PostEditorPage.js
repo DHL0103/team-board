@@ -43,10 +43,12 @@ class PostEditorPage {
 
         editor.on('selectionUpdate', () => PostEditorPage.#updateToolbar(editor, toolbar));
         editor.on('transaction',     () => {
+            PostEditorPage.#updateCharCounter(editor);
             PostEditorPage.#updateToolbar(editor, toolbar);
             PostEditorPage.#updateImageCounter(editor, toolbar);
-            PostEditorPage.#updateCharCounter(editor, editorEl);
         });
+
+        PostEditorPage.#updateCharCounter(editor);
 
         editorEl.closest('form').addEventListener('submit', () => {
             inputEl.value = editor.getHTML();
@@ -142,8 +144,8 @@ class PostEditorPage {
 
     static #MAX_CHARS = 10000;
 
-    static #updateCharCounter(editor, editorEl) {
-        const counterEl = editorEl.parentElement.querySelector('.post-editor-char-counter');
+    static #updateCharCounter(editor) {
+        const counterEl = document.getElementById('post-editor-char-counter');
         if (!counterEl) { return; }
         const charCount = editor.state.doc.textContent.length;
         counterEl.textContent = charCount.toLocaleString() + ' / ' + PostEditorPage.#MAX_CHARS.toLocaleString();
