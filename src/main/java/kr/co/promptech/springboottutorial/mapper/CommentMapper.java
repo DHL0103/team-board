@@ -19,4 +19,6 @@ public interface CommentMapper {
     Comment findById(@Param("id") Long id);
 
     void softDelete(@Param("id") Long id);
+
+    void deleteByPostId(@Param("postId") Long postId);
 }

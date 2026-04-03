@@ -8,6 +8,7 @@ import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.Post;
 import kr.co.promptech.springboottutorial.mapper.BoardMapper;
 import kr.co.promptech.springboottutorial.mapper.BoardMemberMapper;
+import kr.co.promptech.springboottutorial.mapper.CommentMapper;
 import kr.co.promptech.springboottutorial.mapper.MemberMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMapper;
 import kr.co.promptech.springboottutorial.mapper.PostMemberMapper;
@@ -33,6 +34,7 @@ import java.util.List;
 public class PostService {
     private final PostMapper postMapper;
     private final PostFileService postFileService;
+    private final CommentMapper commentMapper;
     private final PostMemberMapper postMemberMapper;
     private final BoardMemberMapper boardMemberMapper;
     private final BoardMemberService boardMemberService;
@@ -100,6 +102,7 @@ public class PostService {
     @Transactional
     public void deletePost(Long id) {
         postFileService.deleteFilesByPostId(id);
+        commentMapper.deleteByPostId(id);
         postMapper.deletePost(id);
     }
 

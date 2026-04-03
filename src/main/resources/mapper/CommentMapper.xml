@@ -60,4 +60,8 @@
         ORDER BY COALESCE(c.group_id, c.id), c.created_at
     </select>
 
+    <delete id="deleteByPostId">
+        DELETE FROM comments WHERE post_id = #{postId}
+    </delete>
+
 </mapper>
