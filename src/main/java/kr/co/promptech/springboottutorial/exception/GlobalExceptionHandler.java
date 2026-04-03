@@ -7,6 +7,7 @@ import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 
@@ -23,6 +24,17 @@ public class GlobalExceptionHandler {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public String handleResponseStatus(ResponseStatusException ex) {
+        if (ex.getStatusCode().value() == 403) {
+            return "error/403";
+        }
+        if (ex.getStatusCode().value() == 404) {
+            return "error/404";
+        }
+        return "error/500";
     }
 
     @ExceptionHandler({PostNotFoundException.class, BoardNotFoundException.class})

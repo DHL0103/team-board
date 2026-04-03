@@ -29,6 +29,9 @@
 }
 
 .status-chip {
+  flex-shrink: 0;
+  white-space: nowrap;
+
   // .chip-* 형태 (detail, board 페이지)
   &.chip-progress  { background: var(--status-progress-bg);  color: var(--status-progress-color); }
   &.chip-requested { background: var(--status-requested-bg); color: var(--status-requested-color); }

@@ -54,6 +54,14 @@
       gap: 8px;
       flex-wrap: nowrap;
       margin-bottom: 14px;
+
+      @media (max-width: 768px) {
+        gap: 5px;
+        .team-badge, .status-chip, .due-chip, .rejection-toggle-btn {
+          font-size: 10px;
+          padding: 2px 6px;
+        }
+      }
     }
 
     .post-title {
@@ -425,6 +433,7 @@
     cursor: pointer;
     font-family: 'Inter', sans-serif;
     flex-shrink: 0;
+    white-space: nowrap;
     transition: background 0.15s;
 
     &:hover { background: #ffe4e6; }
