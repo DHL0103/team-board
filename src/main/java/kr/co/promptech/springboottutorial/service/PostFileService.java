@@ -94,7 +94,7 @@ public class PostFileService {
         }
     }
 
-    private static final Pattern INLINE_IMG_PATTERN = Pattern.compile("/api/files/([^\"'\\s]+)");
+    private static final Pattern INLINE_IMG_PATTERN = Pattern.compile("/(?:api/)?files/([^\"'\\s]+)");
 
     private List<String> extractStoredPaths(String content) {
         List<String> paths = new ArrayList<>();
