@@ -92,38 +92,14 @@ class PostDetailPage {
         const btnRejectionToggle = document.getElementById('btn-rejection-toggle');
         if (!rejectionPanel) { return; }
 
-        const detailWrap = document.querySelector('.detail-wrap');
-
-        function adjustRejectionPanel() {
-            if (window.innerWidth <= 768) {
-                rejectionPanel.style.position = '';
-                rejectionPanel.style.top      = '';
-                rejectionPanel.style.right    = '';
-                rejectionPanel.style.width    = '';
-                rejectionPanel.style.marginBottom = '';
-                return;
-            }
-            rejectionPanel.classList.remove('mobile-open');
-            if (btnRejectionToggle) { btnRejectionToggle.classList.remove('active'); }
-
-            const spaceRight = window.innerWidth - detailWrap.getBoundingClientRect().right;
-            if (spaceRight >= 276) {
-                rejectionPanel.style.position     = 'fixed';
-                rejectionPanel.style.top          = '140px';
-                rejectionPanel.style.right        = '40px';
-                rejectionPanel.style.width        = '260px';
-                rejectionPanel.style.marginBottom = '';
-            } else {
-                rejectionPanel.style.position     = 'static';
-                rejectionPanel.style.top          = '';
-                rejectionPanel.style.right        = '';
-                rejectionPanel.style.width        = '100%';
-                rejectionPanel.style.marginBottom = '16px';
+        function onResize() {
+            if (window.innerWidth >= 1240) {
+                rejectionPanel.classList.remove('mobile-open');
+                if (btnRejectionToggle) { btnRejectionToggle.classList.remove('active'); }
             }
         }
 
-        window.addEventListener('resize', adjustRejectionPanel);
-        adjustRejectionPanel();
+        window.addEventListener('resize', onResize);
 
         if (btnRejectionToggle) {
             btnRejectionToggle.addEventListener('click', () => {
