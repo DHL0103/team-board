@@ -31,4 +31,11 @@ public class PostDetailDto {
     private Long currentMemberId;
     private String currentMemberName;
     private boolean currentUserIsManagerOrAdmin;
+
+    public long getTotalFileSize() {
+        if (postFiles == null) {
+            return 0;
+        }
+        return postFiles.stream().mapToLong(PostFile::getFileSize).sum();
+    }
 }

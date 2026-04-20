@@ -123,18 +123,64 @@
   }
 
   .post-files {
-    padding: 12px 36px;
+    padding: 14px 36px 18px;
     border-top: 1px solid $border-soft;
 
-    .post-files-label {
+    .post-files-head {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       font-size: 11px;
       font-weight: 500;
       color: $text-muted;
       margin-bottom: 8px;
-      svg { width: 12px; height: 12px; flex-shrink: 0; }
+      svg { width: 11px; height: 11px; flex-shrink: 0; }
+    }
+
+    .post-files-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-file-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 0;
+      border-bottom: 1px dashed $border-soft;
+      text-decoration: none;
+      color: inherit;
+      font-size: 12.5px;
+
+      &:last-child { border-bottom: none; }
+
+      .ic {
+        width: 14px;
+        height: 14px;
+        color: $text-muted;
+        flex-shrink: 0;
+      }
+
+      .fn {
+        flex: 1;
+        min-width: 0;
+        color: $text;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .sz {
+        flex-shrink: 0;
+        font-size: 10.5px;
+        color: $text-muted;
+        font-family: 'JetBrains Mono', monospace;
+      }
+
+      &:hover .fn {
+        color: #2563eb;
+        text-decoration: underline;
+      }
     }
   }
 

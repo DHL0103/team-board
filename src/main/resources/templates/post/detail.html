@@ -65,15 +65,22 @@
     </div>
 
     <div class="post-files" th:if="${post.postFiles != null and !#lists.isEmpty(post.postFiles)}">
-      <div class="post-files-label">
-        <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
-        첨부파일
+      <div class="post-files-head">
+        <svg width="11" height="11"><use href="/img/icons.svg#icon-upload"></use></svg>
+        <span>
+          첨부파일 <span th:text="${#lists.size(post.postFiles)}">0</span>개
+          · <span th:text="${#numbers.formatDecimal(post.totalFileSize / 1048576.0, 1, 1)} + 'MB'">0.0MB</span>
+        </span>
       </div>
-      <div class="file-chip-list">
-        <a class="file-chip" th:each="file : ${post.postFiles}"
+      <div class="post-files-list">
+        <a class="post-file-row"
+           th:each="file : ${post.postFiles}"
            th:href="@{/api/files/{storedPath}(storedPath=${file.storedPath}, name=${file.originalName})}"
-           th:text="${file.originalName}"
-           target="_blank"></a>
+           target="_blank">
+          <svg class="ic" width="14" height="14"><use href="/img/icons.svg#icon-file"></use></svg>
+          <span class="fn" th:text="${file.originalName}">filename</span>
+          <span class="sz" th:text="${#numbers.formatDecimal(file.fileSize / 1048576.0, 1, 1)} + 'MB'">0.0MB</span>
+        </a>
       </div>
     </div>
 
