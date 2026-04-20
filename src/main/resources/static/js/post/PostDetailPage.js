@@ -31,6 +31,13 @@ class PostDetailPage {
         const existingDueDateStr = document.body.dataset.dueDate || '';
         new DatePicker('edit', { initialDate: existingDueDateStr });
         PostDetailPage.#editFileAttachment = new FileAttachment('edit-file-input', 'btn-edit-file-attach', 'edit-file-chip-list');
+        PostDetailPage.#editFileAttachment.setExistingSizeFn(() => {
+            let size = 0;
+            document.querySelectorAll('#edit-file-stack .existing-file-item:not(.will-delete)').forEach(r => {
+                size += parseInt(r.dataset.size || '0');
+            });
+            return size;
+        });
         PostDetailPage.#editAssigneePicker = new AssigneePicker({
             addBtnId:      'btn-edit-add-assignee',
             dropdownId:    'edit-assignee-dropdown',
@@ -40,12 +47,79 @@ class PostDetailPage {
             pickerId:      'edit-assignee-picker',
             formId:        'edit-post-form',
         });
+
+        // -- Existing file checkbox toggle UI --
+        document.querySelectorAll('#edit-file-stack .existing-file-item').forEach(row => {
+            const cb = row.querySelector('input[name="deleteFileIds"]');
+            if (!cb) { return; }
+            row.addEventListener('click', e => {
+                if (e.target.tagName === 'INPUT') { return; }
+                cb.checked = !cb.checked;
+                cb.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+            const sizeMB = (parseInt(row.dataset.size || '0') / (1024 * 1024)).toFixed(1);
+            cb.addEventListener('change', () => {
+                row.classList.toggle('will-delete', cb.checked);
+                const state = row.querySelector('.state');
+                state.className = 'state ' + (cb.checked ? 'del' : 'keep');
+                state.textContent = cb.checked ? '삭제' : '유지';
+                const sub = row.querySelector('.sub');
+                if (sub) {
+                    sub.textContent = cb.checked
+                        ? '저장 시 삭제됨 · ' + sizeMB + 'MB · 다시 클릭 시 되돌리기'
+                        : '기존 파일 · ' + sizeMB + 'MB · 클릭 시 삭제 표시';
+                }
+                window.updateFileHint();
+            });
+        });
+
+        // -- File count/hint update --
+        const fa = PostDetailPage.#editFileAttachment;
+        window.updateFileHint = function() {
+            const stack = document.getElementById('edit-file-stack');
+            if (!stack) { return; }
+            const keepRows = stack.querySelectorAll('.existing-file-item:not(.will-delete)');
+            const delRows  = stack.querySelectorAll('.existing-file-item.will-delete');
+            const newCount = fa ? fa.newFilesCount : 0;
+            const total    = keepRows.length + delRows.length + newCount;
+
+            let keepSize = 0;
+            keepRows.forEach(r => { keepSize += parseInt(r.dataset.size || '0'); });
+            const newSize   = fa ? fa.newFilesTotalSize : 0;
+            const totalSize = keepSize + newSize;
+            const limitBytes = 50 * 1024 * 1024;
+
+            const countEl = document.getElementById('edit-file-count');
+            const hintEl  = document.getElementById('edit-file-hint');
+            if (countEl) { countEl.textContent = total; }
+            if (hintEl) {
+                const sizeMB  = (totalSize / (1024 * 1024)).toFixed(1);
+                const limitMB = '50';
+                hintEl.textContent = sizeMB + ' / ' + limitMB + 'MB';
+                hintEl.classList.toggle('over-limit', totalSize > limitBytes);
+            }
+        };
+        window.updateFileHint();
     }
 
     static #closeEditModal() {
         Modal.close('editModal');
         if (PostDetailPage.#editFileAttachment) { PostDetailPage.#editFileAttachment.reset(); }
         if (PostDetailPage.#editAssigneePicker) { PostDetailPage.#editAssigneePicker.reset(); }
+        // Reset existing file toggle state
+        document.querySelectorAll('#edit-file-stack .existing-file-item').forEach(row => {
+            const cb = row.querySelector('input[name="deleteFileIds"]');
+            if (cb) { cb.checked = false; }
+            row.classList.remove('will-delete');
+            const state = row.querySelector('.state');
+            if (state) { state.className = 'state keep'; state.textContent = '유지'; }
+            const sub = row.querySelector('.sub');
+            if (sub) {
+                const sizeMB = (parseInt(row.dataset.size || '0') / (1024 * 1024)).toFixed(1);
+                sub.textContent = '기존 파일 · ' + sizeMB + 'MB · 클릭 시 삭제 표시';
+            }
+        });
+        if (typeof window.updateFileHint === 'function') { window.updateFileHint(); }
     }
 
     static #initRejectModal() {

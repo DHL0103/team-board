@@ -221,52 +221,80 @@
           <button type="button" class="due-clear-btn" id="btn-edit-clear-due">선택 초기화</button>
         </div>
       </div>
-      <div class="form-group" th:if="${post.boardUserList != null and !post.boardUserList.isEmpty()}">
-        <label class="form-label">담당자 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
-        <div class="selected-assignee-list" id="edit-selected-assignee-list">
-          <span class="selected-assignee-chip"
-                th:each="assignee : ${post.postAssignees}"
-                th:data-member-id="${assignee.memberId}"
-                th:data-username="${assignee.username}">
-            <span class="assignee-chip-name" th:text="${assignee.username}"></span>
-            <button type="button" class="selected-assignee-remove" th:data-member-id="${assignee.memberId}">×</button>
+      <!-- Assignee panel -->
+      <div class="editor-panel" th:if="${post.boardUserList != null and !post.boardUserList.isEmpty()}">
+        <div class="editor-panel-head">
+          <span class="editor-panel-title">
+            <svg><use href="/img/icons.svg#icon-user"></use></svg>
+            담당자
+            <span class="editor-panel-count" id="edit-assignee-count"
+                  th:text="${post.postAssignees != null ? #lists.size(post.postAssignees) : 0}">0</span>
           </span>
         </div>
-        <div class="assignee-picker" id="edit-assignee-picker">
-          <button type="button" class="assignee-add-btn" id="btn-edit-add-assignee">
-            <svg width="10" height="10"><use href="/img/icons.svg#icon-plus"></use></svg>
-            담당자 추가
-          </button>
-          <div class="assignee-dropdown" id="edit-assignee-dropdown">
-            <input type="text" class="assignee-search-input" id="edit-assignee-search"
-                   placeholder="이름으로 검색" autocomplete="off">
-            <div class="assignee-option-list" id="edit-assignee-option-list">
-              <button type="button" class="assignee-option"
-                      th:each="member : ${post.boardUserList}"
-                      th:data-member-id="${member.memberId}"
-                      th:data-username="${member.username}"
-                      th:text="${member.username}">
-              </button>
+        <div class="editor-panel-body">
+          <div class="assignee-grid" id="edit-selected-assignee-list">
+            <span class="assignee-grid-chip selected-assignee-chip"
+                  th:each="assignee : ${post.postAssignees}"
+                  th:data-member-id="${assignee.memberId}"
+                  th:data-username="${assignee.username}">
+              <span class="nm assignee-chip-name" th:text="${assignee.username}"></span>
+              <button type="button" class="x selected-assignee-remove"
+                      th:data-member-id="${assignee.memberId}">×</button>
+            </span>
+          </div>
+          <div class="assignee-picker" id="edit-assignee-picker" style="display:block;margin-top:6px;">
+            <button type="button" class="assignee-grid-add" id="btn-edit-add-assignee" style="width:100%;">
+              <svg><use href="/img/icons.svg#icon-plus"></use></svg>
+              담당자 추가
+            </button>
+            <div class="assignee-dropdown" id="edit-assignee-dropdown">
+              <input type="text" class="assignee-search-input" id="edit-assignee-search"
+                     placeholder="이름으로 검색" autocomplete="off">
+              <div class="assignee-option-list" id="edit-assignee-option-list">
+                <button type="button" class="assignee-option"
+                        th:each="member : ${post.boardUserList}"
+                        th:data-member-id="${member.memberId}"
+                        th:data-username="${member.username}"
+                        th:text="${member.username}">
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="form-group" th:if="${post.postFiles != null and !#lists.isEmpty(post.postFiles)}">
-        <label class="form-label">기존 첨부파일 <span style="color:var(--text-muted);font-weight:400;">(체크 시 삭제)</span></label>
-        <div class="existing-file-list">
-          <label class="existing-file-item" th:each="file : ${post.postFiles}">
-            <input type="checkbox" name="deleteFileIds" th:value="${file.id}">
-            <span class="file-name" th:text="${file.originalName}">파일명</span>
-          </label>
+
+      <!-- Attachment panel -->
+      <div class="editor-panel">
+        <div class="editor-panel-head">
+          <span class="editor-panel-title">
+            <svg><use href="/img/icons.svg#icon-upload"></use></svg>
+            첨부파일
+            <span class="editor-panel-count" id="edit-file-count">0</span>
+          </span>
+          <span class="editor-panel-hint" id="edit-file-hint"></span>
         </div>
-      </div>
-      <div class="form-group">
-        <input type="file" name="files" id="edit-file-input" multiple hidden>
-        <button type="button" class="file-upload-btn" id="btn-edit-file-attach">
-          <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
-          파일 추가
-        </button>
-        <div class="file-chip-list" id="edit-file-chip-list"></div>
+        <div class="editor-panel-body">
+          <div class="file-stack" id="edit-file-stack">
+            <div class="file-row existing-file-item"
+                 th:each="file : ${post.postFiles}"
+                 th:data-size="${file.fileSize}">
+              <span class="ic"><svg><use href="/img/icons.svg#icon-file"></use></svg></span>
+              <span class="meta">
+                <span class="fn file-name" th:text="${file.originalName}">파일명</span>
+                <span class="sub" th:text="'기존 파일 · ' + ${#numbers.formatDecimal(file.fileSize / 1048576.0, 1, 1)} + 'MB · 클릭 시 삭제 표시'">기존 파일</span>
+              </span>
+              <span class="state keep">유지</span>
+              <input type="checkbox" name="deleteFileIds" th:value="${file.id}" hidden>
+            </div>
+            <div id="edit-file-chip-list"></div>
+          </div>
+          <input type="file" name="files" id="edit-file-input" multiple hidden>
+          <button type="button" class="assignee-grid-add" id="btn-edit-file-attach"
+                  style="width:100%;margin-top:8px;">
+            <svg><use href="/img/icons.svg#icon-plus"></use></svg>
+            파일 추가
+          </button>
+        </div>
       </div>
 
       <button type="submit" class="btn-submit">수정 완료</button>

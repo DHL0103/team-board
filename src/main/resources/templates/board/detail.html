@@ -127,35 +127,59 @@
             <button type="button" class="due-clear-btn" id="btn-create-clear-due">선택 초기화</button>
           </div>
         </div>
-        <div class="form-group" th:if="${!board.boardUserList.isEmpty()}">
-          <label class="form-label">담당자 <span style="color:var(--text-muted);font-weight:400;">(선택)</span></label>
-          <div class="selected-assignee-list" id="selected-assignee-list"></div>
-          <div class="assignee-picker" id="assignee-picker">
-            <button type="button" class="assignee-add-btn" id="btn-add-assignee">
-              <svg width="10" height="10"><use href="/img/icons.svg#icon-plus"></use></svg>
-              담당자 추가
-            </button>
-            <div class="assignee-dropdown" id="assignee-dropdown">
-              <input type="text" class="assignee-search-input" id="create-assignee-search"
-                     placeholder="이름으로 검색" autocomplete="off">
-              <div class="assignee-option-list" id="assignee-option-list">
-                <button type="button" class="assignee-option"
-                        th:each="member : ${board.boardUserList}"
-                        th:data-member-id="${member.memberId}"
-                        th:data-username="${member.username}"
-                        th:text="${member.username}">
-                </button>
+        <!-- Assignee panel -->
+        <div class="editor-panel" th:if="${!board.boardUserList.isEmpty()}">
+          <div class="editor-panel-head">
+            <span class="editor-panel-title">
+              <svg><use href="/img/icons.svg#icon-user"></use></svg>
+              담당자
+              <span class="editor-panel-count" id="assignee-count">0</span>
+            </span>
+          </div>
+          <div class="editor-panel-body">
+            <div class="assignee-grid" id="selected-assignee-list"></div>
+            <div class="assignee-picker" id="assignee-picker" style="display:block;margin-top:6px;">
+              <button type="button" class="assignee-grid-add" id="btn-add-assignee" style="width:100%;">
+                <svg><use href="/img/icons.svg#icon-plus"></use></svg>
+                담당자 추가
+              </button>
+              <div class="assignee-dropdown" id="assignee-dropdown">
+                <input type="text" class="assignee-search-input" id="create-assignee-search"
+                       placeholder="이름으로 검색" autocomplete="off">
+                <div class="assignee-option-list" id="assignee-option-list">
+                  <button type="button" class="assignee-option"
+                          th:each="member : ${board.boardUserList}"
+                          th:data-member-id="${member.memberId}"
+                          th:data-username="${member.username}"
+                          th:text="${member.username}">
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <input type="file" name="files" id="create-file-input" multiple hidden>
-          <button type="button" class="file-upload-btn" id="btn-create-file-attach">
-            <svg width="12" height="12"><use href="/img/icons.svg#icon-upload"></use></svg>
-            파일 첨부
-          </button>
-          <div class="file-chip-list" id="create-file-chip-list"></div>
+
+        <!-- Attachment panel -->
+        <div class="editor-panel">
+          <div class="editor-panel-head">
+            <span class="editor-panel-title">
+              <svg><use href="/img/icons.svg#icon-upload"></use></svg>
+              첨부파일
+              <span class="editor-panel-count" id="create-file-count">0</span>
+            </span>
+            <span class="editor-panel-hint" id="create-file-hint"></span>
+          </div>
+          <div class="editor-panel-body">
+            <div class="file-stack">
+              <div id="create-file-chip-list"></div>
+            </div>
+            <input type="file" name="files" id="create-file-input" multiple hidden>
+            <button type="button" class="assignee-grid-add" id="btn-create-file-attach"
+                    style="width:100%;margin-top:8px;">
+              <svg><use href="/img/icons.svg#icon-plus"></use></svg>
+              파일 첨부
+            </button>
+          </div>
         </div>
         <button type="submit" class="btn-submit">작업 추가</button>
       </form>

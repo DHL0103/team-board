@@ -1,0 +1,210 @@
+@use "../abstract/variables" as *;
+
+// -- Common panel (assignee / attachments) --
+.editor-panel {
+  border: 1px solid $border;
+  border-radius: 10px;
+  background: $surface;
+  & + & { margin-top: 10px; }
+}
+
+.editor-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 14px;
+  background: $bg;
+  border-bottom: 1px solid $border;
+  border-radius: 9px 9px 0 0;
+}
+
+.editor-panel-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $text;
+
+  svg { width: 12px; height: 12px; color: $text-sub; }
+}
+
+.editor-panel-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 4px;
+  border-radius: 9px;
+  background: $text;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.editor-panel-hint {
+  font-size: 10.5px;
+  color: $text-muted;
+  font-family: 'JetBrains Mono', monospace;
+
+  &.over-limit { color: #dc2626; font-weight: 600; }
+}
+
+.editor-panel-body { padding: 14px; }
+
+// -- Assignee grid (2-column fixed) --
+.assignee-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+
+.assignee-grid-chip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 7px 8px 7px 12px;
+  border-radius: 7px;
+  background: $bg;
+  border: 1px solid $border;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: $text;
+  min-width: 0;
+
+  .nm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .x {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: none;
+    background: none;
+    color: $text-muted;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &:hover { background: #fef2f2; color: #dc2626; }
+  }
+}
+
+.assignee-grid-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 12px;
+  border: 1px dashed $border;
+  border-radius: 7px;
+  background: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: $text-sub;
+  cursor: pointer;
+  transition: all 0.15s;
+
+  &:hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+
+  svg { width: 10px; height: 10px; }
+}
+
+// -- File stack (state badges) --
+.file-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid $border;
+  border-radius: 8px;
+  background: $surface;
+  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+
+  .ic {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: #eff6ff;
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    svg { width: 14px; height: 14px; }
+  }
+
+  .meta { flex: 1; min-width: 0; }
+
+  .fn {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: $text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .sub {
+    display: block;
+    font-size: 11px;
+    color: $text-muted;
+    margin-top: 1px;
+  }
+
+  .state {
+    font-size: 10.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+
+    &.keep { background: $bg; color: $text-sub; border: 1px solid $border; }
+    &.del  { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    &.new  { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
+  }
+
+  .x {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    border: 1px solid $border;
+    background: $surface;
+    color: $text-sub;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    &:hover { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
+  }
+
+  &:hover { border-color: #d1d5db; }
+
+  &.will-delete {
+    background: #fef2f2;
+    border-color: #fecaca;
+    .fn { color: $text-muted; text-decoration: line-through; }
+  }
+}

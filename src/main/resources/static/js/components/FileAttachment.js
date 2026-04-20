@@ -5,6 +5,7 @@ class FileAttachment {
     #counter;
     #maxSize;
     #dataTransfer = new DataTransfer();
+    #existingSizeFn = null;
 
     static #TOTAL_MAX_SIZE = 50 * 1024 * 1024;
 
@@ -29,17 +30,22 @@ class FileAttachment {
         this.#chipList.addEventListener('click', e => this.#onChipRemove(e));
     }
 
+    setExistingSizeFn(fn) {
+        this.#existingSizeFn = fn;
+    }
+
     #onFileChange(maxSizeMB) {
         for (const file of this.#fileInput.files) {
             if (file.size > this.#maxSize) {
                 Toast.show(file.name + ': 파일 크기는 ' + (maxSizeMB ?? 10) + 'MB를 초과할 수 없습니다.');
                 continue;
             }
-            let currentTotal = 0;
+            let newTotal = 0;
             for (let i = 0; i < this.#dataTransfer.files.length; i++) {
-                currentTotal += this.#dataTransfer.files[i].size;
+                newTotal += this.#dataTransfer.files[i].size;
             }
-            if (currentTotal + file.size > FileAttachment.#TOTAL_MAX_SIZE) {
+            const existingSize = this.#existingSizeFn ? this.#existingSizeFn() : 0;
+            if (existingSize + newTotal + file.size > FileAttachment.#TOTAL_MAX_SIZE) {
                 Toast.show('총 첨부 용량은 50MB를 초과할 수 없습니다.');
                 continue;
             }
@@ -67,19 +73,31 @@ class FileAttachment {
         for (let i = 0; i < this.#dataTransfer.files.length; i++) {
             const file = this.#dataTransfer.files[i];
             totalSize += file.size;
-            const chip = document.createElement('span');
-            chip.className = 'file-chip';
-            chip.innerHTML = file.name + '<button type="button" class="file-chip-remove" data-index="' + i + '">×</button>';
-            this.#chipList.appendChild(chip);
+            const row = document.createElement('div');
+            row.className = 'file-row new';
+            row.innerHTML = '<span class="ic"><svg width="14" height="14"><use href="/img/icons.svg#icon-file"></use></svg></span>'
+                + '<span class="meta">'
+                + '<span class="fn">' + file.name + '</span>'
+                + '<span class="sub">새 파일 · ' + (file.size / (1024 * 1024)).toFixed(1) + 'MB</span>'
+                + '</span>'
+                + '<span class="state new">추가</span>'
+                + '<button type="button" class="x file-chip-remove" data-index="' + i + '">×</button>';
+            this.#chipList.appendChild(row);
         }
-        const count = this.#dataTransfer.files.length;
-        if (count > 0) {
-            const sizeMB = (totalSize / (1024 * 1024)).toFixed(1);
-            this.#counter.textContent = count + '개 첨부 · ' + sizeMB + 'MB / 50MB';
-            this.#counter.style.display = '';
-        } else {
-            this.#counter.style.display = 'none';
+        this.#counter.style.display = 'none';
+        if (typeof window.updateFileHint === 'function') { window.updateFileHint(); }
+    }
+
+    get newFilesTotalSize() {
+        let total = 0;
+        for (let i = 0; i < this.#dataTransfer.files.length; i++) {
+            total += this.#dataTransfer.files[i].size;
         }
+        return total;
+    }
+
+    get newFilesCount() {
+        return this.#dataTransfer.files.length;
     }
 
     reset() {

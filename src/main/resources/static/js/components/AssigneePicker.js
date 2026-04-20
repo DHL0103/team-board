@@ -7,6 +7,7 @@ class AssigneePicker {
     #selectedList;
     #form;
     #inputName;
+    #counterId;
     #selected = new Map();
     #original = new Map();
 
@@ -18,6 +19,9 @@ class AssigneePicker {
         this.#selectedList = document.getElementById(selectedListId);
         this.#form         = formId ? document.getElementById(formId) : null;
         this.#inputName    = inputName;
+
+        const prefix = selectedListId.replace(/-?selected-assignee-list$/, '');
+        this.#counterId = (prefix ? prefix + '-' : '') + 'assignee-count';
 
         if (!this.#addBtn || !this.#dropdown || !this.#optionList || !this.#selectedList) { return; }
 
@@ -84,13 +88,15 @@ class AssigneePicker {
         this.#selectedList.innerHTML = '';
         this.#selected.forEach((username, memberId) => {
             const chip = document.createElement('span');
-            chip.className = 'selected-assignee-chip';
+            chip.className = 'assignee-grid-chip selected-assignee-chip';
             chip.dataset.memberId = memberId;
             chip.dataset.username = username;
-            chip.innerHTML = `<span class="assignee-chip-name">${username}</span>`
-                + `<button type="button" class="selected-assignee-remove" data-member-id="${memberId}">×</button>`;
+            chip.innerHTML = `<span class="nm assignee-chip-name">${username}</span>`
+                + `<button type="button" class="x selected-assignee-remove" data-member-id="${memberId}">×</button>`;
             this.#selectedList.appendChild(chip);
         });
+        const counter = document.getElementById(this.#counterId);
+        if (counter) { counter.textContent = this.#selected.size; }
     }
 
     #injectInputs() {

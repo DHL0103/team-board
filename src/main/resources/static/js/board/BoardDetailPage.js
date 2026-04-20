@@ -185,6 +185,27 @@ class BoardDetailPage {
 
         new DatePicker('create', { formatDisplay: (m, d) => `${parseInt(m)}/${parseInt(d)}` });
         BoardDetailPage.#createFileAttachment = new FileAttachment('create-file-input', 'btn-create-file-attach', 'create-file-chip-list');
+
+        // File count + size hint for create modal
+        const cfa = BoardDetailPage.#createFileAttachment;
+        const createFileCount = document.getElementById('create-file-count');
+        const createFileHint  = document.getElementById('create-file-hint');
+        const createFileChipList = document.getElementById('create-file-chip-list');
+        if (createFileChipList && createFileCount) {
+            new MutationObserver(() => {
+                const count = cfa ? cfa.newFilesCount : 0;
+                createFileCount.textContent = count;
+                if (createFileHint) {
+                    if (count > 0) {
+                        const sizeMB = (cfa.newFilesTotalSize / (1024 * 1024)).toFixed(1);
+                        createFileHint.textContent = sizeMB + ' / 50MB';
+                    } else {
+                        createFileHint.textContent = '';
+                    }
+                }
+            }).observe(createFileChipList, { childList: true });
+        }
+
         BoardDetailPage.#createAssigneePicker = new AssigneePicker({
             addBtnId:      'btn-add-assignee',
             dropdownId:    'assignee-dropdown',
