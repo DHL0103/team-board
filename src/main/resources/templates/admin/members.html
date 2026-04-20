@@ -22,9 +22,11 @@
           <div class="admin-section-title">멤버 목록</div>
           <div class="admin-section-meta" id="member-count-meta">-</div>
         </div>
-        <div style="display:flex; align-items:center; gap:8px;">
-          <button type="button" class="btn-admin-edit filter-btn active" id="btn-filter-active">활성</button>
-          <button type="button" class="btn-admin-edit filter-btn" id="btn-filter-suspended">정지</button>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="segment" role="tablist" aria-label="멤버 상태 필터">
+            <button type="button" class="seg active" id="btn-filter-active" role="tab" aria-selected="true">활성</button>
+            <button type="button" class="seg" id="btn-filter-suspended" role="tab" aria-selected="false">정지</button>
+          </div>
           <input type="text" id="member-search" class="form-input" placeholder="아이디 검색" style="max-width:200px;">
         </div>
       </div>

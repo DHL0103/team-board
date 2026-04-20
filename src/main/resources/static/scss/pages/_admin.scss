@@ -372,13 +372,34 @@
   }
 }
 
-// ── 필터 버튼 ──
-.filter-btn {
-  white-space: nowrap;
-  &.active {
-    background: $text;
-    color: white;
-    border-color: $text;
+// ── 세그먼트 컨트롤 (활성/정지 필터) ──
+.segment {
+  display: inline-flex;
+  background: $bg;
+  border: 1px solid $border;
+  border-radius: 8px;
+  padding: 3px;
+
+  .seg {
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: $text-sub;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    border-radius: 5px;
+    white-space: nowrap;
+    transition: color 0.15s, background 0.15s, box-shadow 0.15s;
+
+    &:hover { color: $text; }
+
+    &.active {
+      color: $text;
+      background: $surface;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 0.5px rgba(0, 0, 0, 0.04);
+    }
   }
 }
 
