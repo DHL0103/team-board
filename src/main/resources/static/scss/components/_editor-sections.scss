@@ -202,9 +202,4 @@
 
   &:hover { border-color: #d1d5db; }
 
-  &.will-delete {
-    background: #fef2f2;
-    border-color: #fecaca;
-    .fn { color: $text-muted; text-decoration: line-through; }
-  }
 }

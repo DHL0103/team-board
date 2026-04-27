@@ -48,27 +48,15 @@ class PostDetailPage {
             formId:        'edit-post-form',
         });
 
-        // -- Existing file checkbox toggle UI --
+        // -- Existing file X button: hide row + mark for deletion --
         document.querySelectorAll('#edit-file-stack .existing-file-item').forEach(row => {
+            const btn = row.querySelector('[data-action="remove-existing-file"]');
             const cb = row.querySelector('input[name="deleteFileIds"]');
-            if (!cb) { return; }
-            row.addEventListener('click', e => {
-                if (e.target.tagName === 'INPUT') { return; }
-                cb.checked = !cb.checked;
-                cb.dispatchEvent(new Event('change', { bubbles: true }));
-            });
-            const sizeMB = (parseInt(row.dataset.size || '0') / (1024 * 1024)).toFixed(1);
-            cb.addEventListener('change', () => {
-                row.classList.toggle('will-delete', cb.checked);
-                const state = row.querySelector('.state');
-                state.className = 'state ' + (cb.checked ? 'del' : 'keep');
-                state.textContent = cb.checked ? '삭제' : '유지';
-                const sub = row.querySelector('.sub');
-                if (sub) {
-                    sub.textContent = cb.checked
-                        ? '저장 시 삭제됨 · ' + sizeMB + 'MB · 다시 클릭 시 되돌리기'
-                        : '기존 파일 · ' + sizeMB + 'MB · 클릭 시 삭제 표시';
-                }
+            if (!btn || !cb) { return; }
+            btn.addEventListener('click', () => {
+                cb.checked = true;
+                row.classList.add('removed');
+                row.style.display = 'none';
                 window.updateFileHint();
             });
         });
@@ -78,8 +66,8 @@ class PostDetailPage {
         window.updateFileHint = function() {
             const stack = document.getElementById('edit-file-stack');
             if (!stack) { return; }
-            const keepRows = stack.querySelectorAll('.existing-file-item:not(.will-delete)');
-            const delRows  = stack.querySelectorAll('.existing-file-item.will-delete');
+            const keepRows = stack.querySelectorAll('.existing-file-item:not(.removed)');
+            const delRows  = stack.querySelectorAll('.existing-file-item.removed');
             const newCount = fa ? fa.newFilesCount : 0;
             const total    = keepRows.length + delRows.length + newCount;
 
@@ -106,18 +94,12 @@ class PostDetailPage {
         Modal.close('editModal');
         if (PostDetailPage.#editFileAttachment) { PostDetailPage.#editFileAttachment.reset(); }
         if (PostDetailPage.#editAssigneePicker) { PostDetailPage.#editAssigneePicker.reset(); }
-        // Reset existing file toggle state
+        // Reset existing file removal state
         document.querySelectorAll('#edit-file-stack .existing-file-item').forEach(row => {
             const cb = row.querySelector('input[name="deleteFileIds"]');
             if (cb) { cb.checked = false; }
-            row.classList.remove('will-delete');
-            const state = row.querySelector('.state');
-            if (state) { state.className = 'state keep'; state.textContent = '유지'; }
-            const sub = row.querySelector('.sub');
-            if (sub) {
-                const sizeMB = (parseInt(row.dataset.size || '0') / (1024 * 1024)).toFixed(1);
-                sub.textContent = '기존 파일 · ' + sizeMB + 'MB · 클릭 시 삭제 표시';
-            }
+            row.classList.remove('removed');
+            row.style.display = '';
         });
         if (typeof window.updateFileHint === 'function') { window.updateFileHint(); }
     }

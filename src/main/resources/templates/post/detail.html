@@ -288,9 +288,9 @@
               <span class="ic"><svg><use href="/img/icons.svg#icon-file"></use></svg></span>
               <span class="meta">
                 <span class="fn file-name" th:text="${file.originalName}">파일명</span>
-                <span class="sub" th:text="'기존 파일 · ' + ${#numbers.formatDecimal(file.fileSize / 1048576.0, 1, 1)} + 'MB · 클릭 시 삭제 표시'">기존 파일</span>
+                <span class="sub" th:text="'기존 파일 · ' + ${#numbers.formatDecimal(file.fileSize / 1048576.0, 1, 1)} + 'MB'">기존 파일</span>
               </span>
-              <span class="state keep">유지</span>
+              <button type="button" class="x" data-action="remove-existing-file">&times;</button>
               <input type="checkbox" name="deleteFileIds" th:value="${file.id}" hidden>
             </div>
             <div id="edit-file-chip-list"></div>
