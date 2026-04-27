@@ -6,7 +6,7 @@
   <th:block th:replace="~{fragments/header :: common-head}"></th:block>
 </head>
 
-<body th:data-board-id="${board.id}" th:data-my-post-ids="${myPostIds}">
+<body th:data-board-id="${board.id}" th:data-my-id="${#authentication.principal.id}" th:data-my-post-ids="${myPostIds}">
 
   <div th:replace="~{fragments/header :: header('back')}"></div>
 

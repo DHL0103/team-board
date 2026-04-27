@@ -214,6 +214,7 @@ class BoardDetailPage {
             selectedListId:'selected-assignee-list',
             pickerId:      'assignee-picker',
             formId:        'create-post-form',
+            autoSelectId:  document.body.dataset.myId,
         });
         new CharCounter(document.getElementById('create-title'), document.getElementById('createTitleCount'), 100, 90);
     }

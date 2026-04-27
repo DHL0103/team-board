@@ -39,7 +39,7 @@
     </select>
 
     <insert id="save">
-        INSERT INTO post_members (post_id, member_id) VALUES (#{postId}, #{memberId})
+        INSERT IGNORE INTO post_members (post_id, member_id) VALUES (#{postId}, #{memberId})
     </insert>
 
 </mapper>

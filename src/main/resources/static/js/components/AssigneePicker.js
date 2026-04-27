@@ -11,7 +11,7 @@ class AssigneePicker {
     #selected = new Map();
     #original = new Map();
 
-    constructor({ addBtnId, dropdownId, searchId, optionListId, selectedListId, pickerId, formId, inputName = 'assigneeIds' }) {
+    constructor({ addBtnId, dropdownId, searchId, optionListId, selectedListId, pickerId, formId, inputName = 'assigneeIds', autoSelectId = null }) {
         this.#addBtn       = document.getElementById(addBtnId);
         this.#dropdown     = document.getElementById(dropdownId);
         this.#search       = searchId ? document.getElementById(searchId) : null;
@@ -30,6 +30,16 @@ class AssigneePicker {
             const opt = this.#optionList.querySelector(`[data-member-id="${chip.dataset.memberId}"]`);
             if (opt) { opt.style.display = 'none'; }
         });
+
+        if (autoSelectId && !this.#selected.has(autoSelectId)) {
+            const opt = this.#optionList.querySelector(`[data-member-id="${autoSelectId}"]`);
+            if (opt) {
+                this.#selected.set(autoSelectId, opt.dataset.username);
+                opt.style.display = 'none';
+                this.#renderChips();
+            }
+        }
+
         this.#original = new Map(this.#selected);
 
         this.#addBtn.addEventListener('click', e => {
