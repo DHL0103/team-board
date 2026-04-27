@@ -1,4 +1,4 @@
-package kr.co.promptech.springboottutorial.controller;
+package kr.co.promptech.springboottutorial.controller.rest;
 
 import kr.co.promptech.springboottutorial.service.PostFileService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/posts/image")
 @RequiredArgsConstructor
-public class PostImageController {
+public class RestPostImageController {
 
     private final PostFileService postFileService;
 

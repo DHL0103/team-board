@@ -1,6 +1,6 @@
 package kr.co.promptech.springboottutorial;
 
-import kr.co.promptech.springboottutorial.controller.PostImageController;
+import kr.co.promptech.springboottutorial.controller.rest.RestPostImageController;
 import kr.co.promptech.springboottutorial.model.CustomUser;
 import kr.co.promptech.springboottutorial.model.enums.MemberRole;
 import kr.co.promptech.springboottutorial.service.BoardMemberService;
@@ -26,7 +26,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(PostImageController.class)
+@WebMvcTest(RestPostImageController.class)
 class PostImageControllerTest {
 
     @Autowired private MockMvc mockMvc;
